@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy name="ping-proxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
+    <target>
+        <inSequence>
+            <log level="full"/>
+            <respond/>
+        </inSequence>
+        <outSequence>
+            <send/>
+        </outSequence>
+        <faultSequence/>
+    </target>
+</proxy>

@@ -1,0 +1,3 @@
+<data name="ping-demo" serviceNamespace="demo" serviceGroup="demo">
+    <description>base data service used to initialize into composite application</description>
+</data>
