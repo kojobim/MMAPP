@@ -6,4 +6,11 @@
             <mediaType>text/html</mediaType>
         </item>
     </artifact>
+    <artifact name="datasource" groupId="com.bim.resource" version="1.0.0" type="registry/resource" serverRole="EnterpriseIntegrator">
+        <item>
+            <file>datasource.xml</file>
+            <path>/_system/governance/env</path>
+            <mediaType>application/xml</mediaType>
+        </item>
+    </artifact>
 </artifacts>
