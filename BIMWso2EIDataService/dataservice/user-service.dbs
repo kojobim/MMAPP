@@ -1,0 +1,77 @@
+<data name="user-service" serviceNamespace="user" serviceGroup="user">
+	<description>base data service to get user information</description>
+	
+	<config id="BIMDB">
+		<property name="carbon_datasource_name">bim_db</property>
+	</config>
+	
+	<query id="getUserInfo" useConfig="BIMDB">
+		<sql>EXEC NBUSUARICON
+			@Usu_Numero = :userNumber,
+			@Usu_UsuAdm = :userAdm,
+			@Usu_Clave = :key,
+			@Usu_Passwo = :password,
+			@Usu_Client = :userClient,
+			@Usu_FolNip = :userFolNip,
+			@Usu_FolTok = :userFolTok,
+			@Usu_Status = :userStatus,
+			@Usu_CuCaCo = :userCuCaCo,
+			@Usu_SucMod = :userSucMod,
+			@Tip_Consul = :typeConsult,
+			@NumTransac = :numTransaction,
+			@Transaccio = :transaction,
+			@Usuario = :user,
+			@FechaSis = :dateSys,
+			@SucOrigen = :sucOrigin,
+			@SucDestino = :sucDestiny,
+			@Modulo = :module
+		</sql>
+		<param name="userNumber" ordinal="1" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="userAdm" ordinal="2" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="key" ordinal="3" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="password" ordinal="4" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="userClient" ordinal="5" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="userFolNip" ordinal="6" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="userFolTok" ordinal="7" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="userStatus" ordinal="8" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="userCuCaCo" ordinal="9" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="userSucMod" ordinal="10" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="typeConsult" ordinal="11" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransaction" ordinal="12" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaction" ordinal="13" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="user" ordinal="14" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="dateSys" ordinal="15" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigin" ordinal="16" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestiny" ordinal="17" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="module" ordinal="18" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result escapeNonPrintableChar="true" outputType="json">
+        {
+        	"user": {
+	      		"userNumber":"$Usu_Numero",                        
+	      		"userFolNip":"$Usu_FolNip(type:integer)"
+      		}
+        }
+        </result>
+        <operation name="getUserInfoOp">
+        	<call-query href="getUserInfo">
+        		<with-param name="userNumber" query-param="userNumber"/>
+        		<with-param name="userAdm" query-param="userAdm"/>
+        		<with-param name="key" query-param="key"/>
+        		<with-param name="password" query-param="password"/>
+        		<with-param name="userClient" query-param="userClient"/>
+        		<with-param name="userFolNip" query-param="userFolNip"/>
+        		<with-param name="userFolTok" query-param="userFolTok"/>
+        		<with-param name="userStatus" query-param="userStatus"/>
+        		<with-param name="userCuCaCo" query-param="userCuCaCo"/>
+        		<with-param name="userSucMod" query-param="userSucMod"/>
+        		<with-param name="typeConsult" query-param="typeConsult"/>
+        		<with-param name="numTransaction" query-param="numTransaction"/>
+        		<with-param name="transaction" query-param="transaction"/>
+        		<with-param name="user" query-param="user"/>
+        		<with-param name="dateSys" query-param="dateSys"/>
+        		<with-param name="sucOrigin" query-param="sucOrigin"/>
+        		<with-param name="sucDestiny" query-param="sucDestiny"/>
+        		<with-param name="module" query-param="module"/>
+        	</call-query>
+        </operation>
+	</query>
