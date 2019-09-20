@@ -1,0 +1,50 @@
+<data name="configuration-service" serviceNamespace="configuration-service" serviceGroup="configuration-service">
+	<description>Service used to expose configuration functionality</description>
+	
+	<config id="BIMDB">
+		<property name="carbon_datasource_name">bim_db</property>
+    </config>
+    
+    <query id="getBankConfiguration" useConfig="BIMDB">
+    	<sql>
+    		EXECUTE NBPARAMECON @Tip_Consul= :tipConsul, @NumTransac= :numTransac, @Transaccio= :transaccio, @Usuario= :usuario, @FechaSis= :fechaSis, @SucOrigen= :sucOrigen, @SucDestino= :sucDestino, @Modulo = :modulo
+    	</sql>
+        <param name="tipConsul" ordinal="1" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" ordinal="2" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" ordinal="3" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" ordinal="4" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" ordinal="5" paramType="SCALAR" sqlType="TIMESTAMP" type="IN"/>
+        <param name="sucOrigen" ordinal="6" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" ordinal="7" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" ordinal="8" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result escapeNonPrintableChar="true" outputType="json">
+	      	{
+	      		"bankConfigurations": {
+	      			"bankConfiguration": [
+	      				{
+				      		"Par_FecAct": "$Par_FecAct(type:smalldatetime)",
+				      		"Par_FeOpEs": "$Par_FeOpEs(type:smalldatetime)",
+				      		"Par_Acceso": "$Par_Acceso(type:string)",
+				      		"Par_HoInSP": "$Par_HoInSP(type:smalldatetime)",
+				      		"Par_FeDiNa": "$Par_FeDiNa(type:smalldatetime)",
+				      		"Par_HoCaPI": "$Par_HoCaPI(type:smalldatetime)",
+				      		"Par_MiCuDe": "$Par_MiCuDe(type:integer)"
+			      		}
+	      			]
+	      		}
+	      	}
+	    </result>
+    </query>
+    <operation name="getBankConfigurationOp">
+        <call-query href="getBankConfiguration">
+            <with-param name="tipConsul" query-param="Tip_Consul" />
+            <with-param name="numTransac" query-param="NumTransac" />
+            <with-param name="transaccio" query-param="Transaccio" />
+            <with-param name="usuario" query-param="Usuario" />
+            <with-param name="fechaSis" query-param="FechaSis" />
+            <with-param name="sucOrigen" query-param="SucOrigen" />
+            <with-param name="sucDestino" query-param="SucDestino" />
+            <with-param name="modulo" query-param="Modulo" />
+        </call-query>
+    </operation>
+</data>
