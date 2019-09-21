@@ -9,6 +9,10 @@
   <name>bim-Wso2-integratorCompositeApplication</name>
   <description>bim-Wso2-integratorCompositeApplication</description>
   <properties>
+    <com.bim.proxy-service_._user-proxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._user-proxy>
+    <com.bim.sequence_._USER>capp/EnterpriseServiceBus</com.bim.sequence_._USER>
+    <com.bim.dataservice_._user-service>capp/DataServicesServer</com.bim.dataservice_._user-service>
+    
     <com.bim.proxy-service_._ping-proxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._ping-proxy>
     <com.bim.sequence_._PING>capp/EnterpriseServiceBus</com.bim.sequence_._PING>
     <com.bim.resource_._datasource>capp/EnterpriseIntegrator</com.bim.resource_._datasource>
@@ -32,6 +36,18 @@
     <dependency>
       <groupId>com.bim.proxy-service</groupId>
       <artifactId>ping-proxy</artifactId>
+      <version>1.0.0</version>
+      <type>xml</type>
+    </dependency>
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>user-service</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+    <dependency>
+      <groupId>com.bim.proxy-service</groupId>
+      <artifactId>user-proxy</artifactId>
       <version>1.0.0</version>
       <type>xml</type>
     </dependency>

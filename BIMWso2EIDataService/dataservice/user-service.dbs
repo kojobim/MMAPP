@@ -1,0 +1,80 @@
+<data name="user-service" serviceNamespace="user" serviceGroup="user">
+    <description>base data service to update user information</description>
+  
+    <config id="BIMDB">
+		<property name="carbon_datasource_name">bim_db</property>
+    </config>
+        
+    <query id="updateUser" useConfig="BIMDB">
+        <sql>EXECUTE NBUSUARIACT
+		        @Usu_Numero= :Usu_Numero,
+		        @Usu_Clave= :Usu_Clave,
+		        @Usu_Passwo= :Usu_Passwo,
+		        @Usu_Status= :Usu_Status,
+		        @Usu_Email= :Usu_Email,
+		        @Usu_UsuAdm= :Usu_UsuAdm,
+		        @Usu_FolTok= :Usu_FolTok,
+		        @Usu_Client= :Usu_Client,
+		        @Usu_SucMod= :Usu_SucMod,
+		        @Usu_FolNip= :Usu_FolNip,
+		        @Usu_Nombre= :Usu_Nombre,
+		        @Tip_Actual= :Tip_Actual,
+		        @NumTransac= :NumTransac,
+		        @Transaccio= :Transaccio,
+		        @Usuario= :Usuario,
+		        @FechaSis= :FechaSis,
+		        @SucOrigen= :SucOrigen,
+		        @SucDestino= :SucDestino,
+		        @Modulo= :Modulo
+		</sql>
+        <param name="Usu_Numero" ordinal="1" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="Usu_Clave" ordinal="2" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="Usu_Passwo" ordinal="3" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="Usu_Status" ordinal="4" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="Usu_Email" ordinal="5" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="Usu_UsuAdm" ordinal="6" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="Usu_FolTok" ordinal="7" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="Usu_Client" ordinal="8" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="Usu_SucMod" ordinal="9" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="Usu_FolNip" ordinal="10" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="Usu_Nombre" ordinal="11" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="Tip_Actual" ordinal="12" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="NumTransac" ordinal="13" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="Transaccio" ordinal="14" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="Usuario" ordinal="15" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="FechaSis" ordinal="16" paramType="SCALAR" sqlType="TIMESTAMP" type="IN"/>
+        <param name="SucOrigen" ordinal="17" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="SucDestino" ordinal="18" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="Modulo" ordinal="19" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result escapeNonPrintableChar="true" outputType="json">
+      	{                      
+      		"user": {
+      			"Usu_CoAcNe":"$Usu_CoAcNe"
+      			}
+      	}
+      </result>
+    </query>
+    <operation returnRequestStatus="true" name="updateUserOp">
+        <call-query href="updateUser">
+            <with-param name="Usu_Numero" query-param="Usu_Numero"/>
+            <with-param name="Usu_Clave" query-param="Usu_Clave"/>
+            <with-param name="Usu_Passwo" query-param="Usu_Passwo"/>
+            <with-param name="Usu_Status" query-param="Usu_Status"/>
+			<with-param name="Usu_Email" query-param="Usu_Email"/>
+            <with-param name="Usu_UsuAdm" query-param="Usu_UsuAdm"/>
+            <with-param name="Usu_FolTok" query-param="Usu_FolTok"/>
+            <with-param name="Usu_Client" query-param="Usu_Client"/>
+            <with-param name="Usu_SucMod" query-param="Usu_SucMod"/>
+            <with-param name="Usu_FolNip" query-param="Usu_FolNip"/>
+            <with-param name="Usu_Nombre" query-param="Usu_Nombre"/>
+            <with-param name="Tip_Actual" query-param="Tip_Actual"/>
+            <with-param name="NumTransac" query-param="NumTransac"/>
+            <with-param name="Transaccio" query-param="Transaccio"/>
+            <with-param name="Usuario" query-param="Usuario"/>
+            <with-param name="FechaSis" query-param="FechaSis"/>
+            <with-param name="SucOrigen" query-param="SucOrigen"/>
+            <with-param name="SucDestino" query-param="SucDestino"/>
+            <with-param name="Modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>
