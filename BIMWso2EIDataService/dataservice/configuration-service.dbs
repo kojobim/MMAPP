@@ -5,7 +5,7 @@
 		<property name="carbon_datasource_name">bim_db</property>
     </config>
     
-    <query id="getBankConfigurationQuery" useConfig="BIMDB">
+    <query id="getBankConfigurationSQL" useConfig="BIMDB">
     	<sql>
     		EXECUTE NBPARAMECON
     		@Tip_Consul= :tipConsul,
@@ -27,7 +27,7 @@
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
         
-        <result element="configurations" rowName="configuration">
+        <result element="bankConfigurations" rowName="bankConfiguration">
 			<element name="Par_FecAct" column="Par_FecAct" xsdType="xs:datetime" optional="true" />
 			<element name="Par_FeOpEs" column="Par_FeOpEs" xsdType="xs:datetime" optional="true" />
 		    <element name="Par_Acceso" column="Par_Acceso" xsdType="xs:string" optional="true" />
@@ -40,8 +40,8 @@
 		    <element name="Par_RECAFA" column="Par_RECAFA" xsdType="xs:string" optional="true" />
 		</result>
     </query>
-    <operation name="getBankConfiguration">
-        <call-query href="getBankConfigurationQuery">
+    <operation name="getBankConfigurationSQLOp">
+        <call-query href="getBankConfigurationSQL">
             <with-param name="tipConsul" query-param="Tip_Consul" />
             <with-param name="numTransac" query-param="NumTransac" />
             <with-param name="transaccio" query-param="Transaccio" />
