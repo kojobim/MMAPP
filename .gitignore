@@ -23,6 +23,8 @@ BIMWso2EIDataService/target/capp/artifacts/dataservice/ping-demo/target/
 
 BIMWso2EIDataService/target/capp/pom.xml
 
+BIMWso2EIDataService/target/
+
 BIMWso2EIRegistry/.project
 
 BIMWso2EIRegistry/target/.meta/~.xml
@@ -52,3 +54,4 @@ BIMWso2EICompositeApplication/bin
 BIMWso2EIDataService/target
 
 BIMWso2EIRegistry/target
+BIMWso2EIDataService/.project
