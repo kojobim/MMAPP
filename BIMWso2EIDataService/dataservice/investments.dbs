@@ -1,0 +1,42 @@
+<data name="investments" serviceNamespace="investments" serviceGroup="investments">
+    <description>base data service used to investments operation into composite application</description>
+  
+    <config id="BIMDB">
+		<property name="carbon_datasource_name">bim_db</property>
+    </config>
+    
+    <query id="getInvestmentsSQL" useConfig="BIMDB">
+        <sql>EXECUTE NBSALCEDCON @Inv_Client = :invClient, @Inv_Moneda = :invMoneda, 
+        	@NumTransac = :numTransac, @Transaccio = :transaccio, @Usuario = :usuario,
+        	@FechaSis = :fechaSis, @SucOrigen = :sucOrigen, @SucDestino = :sucDestino,
+        	@Modulo = :modulo</sql>
+        <param name="invClient" ordinal="1" paramType="SCALAR" sqlType="STRING" type="IN" />
+        <param name="invMoneda" ordinal="2" paramType="SCALAR" sqlType="STRING" type="IN" />
+        <param name="numTransac" ordinal="3" paramType="SCALAR" sqlType="STRING" type="IN" />
+        <param name="transaccio" ordinal="4" paramType="SCALAR" sqlType="STRING" type="IN" />
+        <param name="usuario" ordinal="5" paramType="SCALAR" sqlType="STRING" type="IN" />
+        <param name="fechaSis" ordinal="6" paramType="SCALAR" sqlType="STRING" type="IN" />
+        <param name="sucOrigen" ordinal="7" paramType="SCALAR" sqlType="STRING" type="IN" />
+        <param name="sucDestino" ordinal="8" paramType="SCALAR" sqlType="STRING" type="IN" />
+        <param name="modulo" ordinal="9" paramType="SCALAR" sqlType="STRING" type="IN" />
+        <result element="investments" rowName="investment">
+        	<element name="Inv_Numero" column="Inv_Numero" xsdType="xs:string" />
+        	<element name="Inv_GAT" column="Inv_GAT" xsdType="xs:decimal" />
+      	</result>
+    </query>
+    
+    <operation returnRequestStatus="true" name="getInvestmentOp">
+        <call-query href="getInvestmentsSQL">
+            <with-param name="invClient" query-param="Inv_Client"/>
+            <with-param name="invMoneda" query-param="Inv_Moneda"/>
+            <with-param name="numTransac" query-param="Num_Transac"/>
+            <with-param name="transaccio" query-param="Transaccio" />
+            <with-param name="usuario" query-param="Usuario" />
+            <with-param name="fechaSis" query-param="Fecha_Sis" />
+            <with-param name="sucOrigen" query-param="Suc_Origen" />
+            <with-param name="sucDestino" query-param="Suc_Destino" />
+            <with-param name="modulo" query-param="Modulo" />
+        </call-query>
+    </operation>
+    
+</data>
