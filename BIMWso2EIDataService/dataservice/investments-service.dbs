@@ -1,4 +1,4 @@
-<data name="investments" serviceNamespace="investments" serviceGroup="investments">
+<data name="investments-service" serviceNamespace="investments-service" serviceGroup="investments-service">
     <description>base data service used to investments operation into composite application</description>
   
     <config id="BIMDB">

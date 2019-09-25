@@ -2,8 +2,8 @@
     <artifact name="ping-demo" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/ping-demo.dbs</file>
     </artifact>
-    <artifact name="investments" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
-        <file>dataservice/investments.dbs</file>
+    <artifact name="investments-service" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/investments-service.dbs</file>
     </artifact>
     <artifact name="configuration-service" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/configuration-service.dbs</file>
