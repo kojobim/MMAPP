@@ -42,7 +42,6 @@
       <version>1.0.0</version>
       <type>xml</type>
     </dependency>
-    
     <dependency>
       <groupId>com.bim.dataservice</groupId>
       <artifactId>configuration-service</artifactId>
@@ -55,7 +54,6 @@
       <version>1.0.0</version>
       <type>xml</type>
     </dependency>
-    
     <dependency>
       <groupId>com.bim.dataservice</groupId>
       <artifactId>user-service</artifactId>
