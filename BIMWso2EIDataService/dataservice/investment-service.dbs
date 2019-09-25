@@ -1,0 +1,65 @@
+<data name="investment-service" serviceNamespace="investment" serviceGroup="investment">
+    <description>base data service used to initialize into composite application</description>
+  
+    <config id="BIMDB">
+		<property name="carbon_datasource_name">bim_db</property>
+    </config>
+    
+    <query id="getInvestmentsInfoSQL" useConfig="BIMDB">
+        <sql>EXECUTE NBINVERSCON
+        	@Inv_Numero = :invNumero,
+        	@Inv_Usuari = :invUsuari,
+        	@Tip_Consul = :tipConsul,
+        	@NumTransac = :numTransac,
+        	@Transaccio = :transaccio,
+        	@Usuario = :usuario,
+        	@FechaSis = :fechaSis,
+        	@SucOrigen = :sucOrigen,
+        	@SucDestino = :sucDestino,
+        	@Modulo = :modulo
+        </sql>
+        <param name="invNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invUsuari" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="TIMESTAMP" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result element="investments" rowName="investment">
+        	<element name="Inv_Numero" column="Inv_Numero" xsdType="xs:string" optional="true" />
+        	<element name="Inv_FecIni" column="Inv_FecIni" xsdType="xs:dateTime" optional="true" />
+        	<element name="Inv_FecVen" column="Inv_FecVen" xsdType="xs:dateTime" optional="true" />
+        	<element name="Inv_Cantid" column="Inv_Cantid" xsdType="xs:decimal" optional="true" />
+        	<element name="Inv_Tasa" column="Inv_Tasa" xsdType="xs:double" optional="true" />
+        	<element name="Inv_Cuenta" column="Inv_Cuenta" xsdType="xs:string" optional="true" />
+        	<element name="Inv_ISR" column="Inv_ISR" xsdType="xs:decimal" optional="true" />
+        	<element name="Inv_TBruta" column="Inv_TBruta" xsdType="xs:double" optional="true" />
+        	<element name="Adi_InsLiq" column="Adi_InsLiq" xsdType="xs:string" optional="true" />
+        	<element name="Mon_Descri" column="Mon_Descri" xsdType="xs:string" optional="true" />
+        	<element name="Inv_Plazo" column="Inv_Plazo" xsdType="xs:integer" optional="true" />
+        	<element name="Inv_GAT" column="Inv_GAT" xsdType="xs:decimal" optional="true" />
+        	<element name="Inv_GATRea" column="Inv_GATRea" xsdType="xs:decimal" optional="true" />
+        	<element name="Gar_ComFon" column="Gar_ComFon" xsdType="xs:string" optional="true" />
+        	<element name="Imp_ISR" column="Imp_ISR" xsdType="xs:decimal" optional="true" />
+        	<element name="Imp_Intere" column="Imp_Intere" xsdType="xs:double" optional="true" />
+        	<element name="Inv_Total" column="Inv_Total" xsdType="xs:double" optional="true" />
+        </result>
+    </query>
+    <operation name="getInvestmentsInfoSQLOp">
+        <call-query href="getInvestmentsInfoSQL">
+            <with-param name="invNumero" query-param="Inv_Numero"/>
+            <with-param name="invUsuari" query-param="Inv_Usuari"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>
