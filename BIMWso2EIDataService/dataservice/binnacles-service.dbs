@@ -8,9 +8,10 @@
 	<query id="createBinnacleSQL" useConfig="BIMDB">
 		<sql>
 			EXECUTE NBBITACOALT
-			@Bit_Usuario = :bitUsuario,
+			@Bit_Usuari = :bitUsuari,
 			@Bit_Fecha = :bitFecha,
 			@Bit_NumTra = :bitNumTra,
+			@Bit_TipOpe = :bitTipOpe,
 			@Bit_CueOri = :bitCueOri,
 			@Bit_CueDes = :bitCueDes,
 			@Bit_Monto = :bitMonto,
@@ -26,33 +27,36 @@
 			@Modulo = :modulo
 		</sql>
 		
-		<param name="bitUsuario" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="bitFecha" paramType="SCALAR" sqlType="DATETIME" type="IN" />
-		<param name="bitNumTra" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="bitCueOri" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="bitCueDes" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="bitMonto" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="bitProRef" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="bitSegRef" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="bitDireIP" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN" />
-		<param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="bitUsuari" defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="bitFecha"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="bitNumTra"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="bitTipOpe"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="bitCueOri"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="bitCueDes"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="bitMonto"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="NUMERIC" type="IN" />
+		<param name="bitPriRef"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="bitSegRef"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="bitDireIP"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="numTransac"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="transaccio"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="usuario"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="fechaSis"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="sucOrigen"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="sucDestino"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
+		<param name="modulo"  defaultValue="#{NULL}" paramType="SCALAR" sqlType="STRING" type="IN" />
 	</query>
 	
 	<operation returnRequestStatus="true" name="creationBinnacleOp">
 		<call-query href="createBinnacleSQL">
-			<with-param name="bitUsuario" query-param="Bit_Usuario" />
+			<with-param name="bitUsuari" query-param="Bit_Usuari" />
 			<with-param name="bitFecha" query-param="Bit_Fecha" />
 			<with-param name="bitNumTra" query-param="Bit_NumTra" />
+			<with-param name="bitTipOpe" query-param="Bit_TipOpe" />
 			<with-param name="bitCueOri" query-param="Bit_CueOri" />
 			<with-param name="bitCueDes" query-param="Bit_CueDes" />
 			<with-param name="bitMonto" query-param="Bit_Monto" />
-			<with-param name="bitProRef" query-param="Bit_ProRef" />
+			<with-param name="bitPriRef" query-param="Bit_PriRef" />
+			<with-param name="bitSegRef" query-param="Bit_SegRef" />
 			<with-param name="bitDireIP" query-param="Bit_DireIP" />
 			<with-param name="numTransac" query-param="NumTransac" />
 			<with-param name="transaccio" query-param="Transaccio" />
