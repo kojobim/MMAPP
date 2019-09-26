@@ -47,6 +47,12 @@ BIMWso2EIRegistry/target/registry_resources/INDEX_1.0.0/registry-info.xml
 
 BIMWso2EIRegistry/target/registry_resources/INDEX_1.0.0/resources/INDEX.html
 
+.project
+
+BIMWso2EICompositeApplication/bin
+
+BIMWso2EIRegistry/target
+
 BIMWso2EIDataService/.project
 
 BIMWso2EICommons/.classpath
@@ -58,9 +64,5 @@ BIMWso2EI/.project
 BIMWso2EICompositeApplication/.classpath
 
 BIMWso2EICompositeApplication/.settings/
-
-BIMWso2EIRegistry/target/
-
-BIMWso2EICompositeApplication/bin/
 
 BIMWso2EICompositeApplication/target/
