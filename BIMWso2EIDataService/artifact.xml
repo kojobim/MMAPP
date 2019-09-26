@@ -5,4 +5,7 @@
     <artifact name="configuration-service" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/configuration-service.dbs</file>
     </artifact>
+    <artifact name="binnacles-service" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/binnacles-service.dbs</file>
+    </artifact>
 </artifacts>
