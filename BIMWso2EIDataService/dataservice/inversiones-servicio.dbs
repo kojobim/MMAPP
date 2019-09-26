@@ -1,11 +1,11 @@
-<data name="investments-service" serviceNamespace="investments-service" serviceGroup="investments-service">
-    <description>base data service used to investments operation into composite application</description>
+<data name="inversiones-servicio" serviceNamespace="inversiones-servicio" serviceGroup="inversiones-servicio">
+    <description>servicio de datos usado para las operaciones de inversiones en aplicaciones compuestas</description>
   
     <config id="BIMDB">
 		<property name="carbon_datasource_name">bim_db</property>
     </config>
     
-    <query id="getInvestmentsSQL" useConfig="BIMDB">
+    <query id="obtenerInversionesLCE" useConfig="BIMDB">
         <sql>EXECUTE NBSALCEDCON @Inv_Client = :invClient, @Inv_Moneda = :invMoneda, 
         	@NumTransac = :numTransac, @Transaccio = :transaccio, @Usuario = :usuario,
         	@FechaSis = :fechaSis, @SucOrigen = :sucOrigen, @SucDestino = :sucDestino,
@@ -19,7 +19,7 @@
         <param name="sucOrigen" ordinal="7" paramType="SCALAR" sqlType="STRING" type="IN" />
         <param name="sucDestino" ordinal="8" paramType="SCALAR" sqlType="STRING" type="IN" />
         <param name="modulo" ordinal="9" paramType="SCALAR" sqlType="STRING" type="IN" />
-        <result element="investments" rowName="investment">
+        <result element="inversiones" rowName="inversion">
         	<element name="Inv_Numero" column="Inv_Numero" xsdType="xs:string" />
             <element name="Inv_ForTas" column="Inv_ForTas" xsdType="xs:string" optional="true" />
             <element name="Inv_FecIni" column="Inv_FecIni" xsdType="xs:string" optional="true" />
@@ -48,7 +48,7 @@
       	</result>
     </query>
     
-    <query id="getInvestmentsByUserNumberSQL" useConfig="BIMDB">
+    <query id="obtenerInversionesPorNumeroDeUsuarioLCE" useConfig="BIMDB">
         <sql>EXECUTE NBINVERSCON
         	@Inv_Numero = :invNumero,
         	@Inv_Usuari = :invUsuari,
@@ -71,7 +71,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/getInvestmentsByUserNumberNS" element="investments" rowName="investment">
+        <result defaultNamespace="http://bem.com/obtenerInversionesPorNumeroDeUsuarioNE" element="inversiones" rowName="inversion">
         	<element name="Inv_Numero" column="Inv_Numero" xsdType="xs:string" optional="true" />
         	<element name="Inv_FecIni" column="Inv_FecIni" xsdType="xs:dateTime" optional="true" />
         	<element name="Inv_FecVen" column="Inv_FecVen" xsdType="xs:dateTime" optional="true" />
@@ -92,8 +92,8 @@
         </result>
     </query>
     
-    <operation name="getInvestmentOp">
-        <call-query href="getInvestmentsSQL">
+    <operation name="obtenerInversionesOp">
+        <call-query href="obtenerInversionesLCE">
             <with-param name="invClient" query-param="Inv_Client"/>
             <with-param name="invMoneda" query-param="Inv_Moneda"/>
             <with-param name="numTransac" query-param="Num_Transac"/>
@@ -106,8 +106,8 @@
         </call-query>
     </operation>
     
-    <operation name="getInvestmentsByUserNumberOp">
-        <call-query href="getInvestmentsByUserNumberSQL">
+    <operation name="obtenerInversionesPorNumeroDeUsuarioOp">
+        <call-query href="obtenerInversionesPorNumeroDeUsuarioLCE">
             <with-param name="invNumero" query-param="Inv_Numero"/>
             <with-param name="invUsuari" query-param="Inv_Usuari"/>
             <with-param name="tipConsul" query-param="Tip_Consul"/>
