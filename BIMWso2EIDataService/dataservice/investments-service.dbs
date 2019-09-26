@@ -21,11 +21,34 @@
         <param name="modulo" ordinal="9" paramType="SCALAR" sqlType="STRING" type="IN" />
         <result element="investments" rowName="investment">
         	<element name="Inv_Numero" column="Inv_Numero" xsdType="xs:string" />
-        	<element name="Inv_GAT" column="Inv_GAT" xsdType="xs:decimal" />
+            <element name="Inv_ForTas" column="Inv_ForTas" xsdType="xs:string" optional="true" />
+            <element name="Inv_FecIni" column="Inv_FecIni" xsdType="xs:string" optional="true" />
+            <element name="Inv_FecVen" column="Inv_FecVen" xsdType="xs:string" optional="true" />
+            <element name="Inv_Cantid" column="Inv_Cantid" xsdType="xs:decimal" optional="true" />
+            <element name="Amo_Tasa" column="Amo_Tasa" xsdType="xs:double" optional="true" />
+            <element name="Amo_ISR" column="Amo_Tasa" xsdType="xs:double" optional="true" />
+            <element name="Amo_FecIni" column="Amo_FecIni" xsdType="xs:string" optional="true" />
+            <element name="Amo_FecVen" column="Amo_FecVen" xsdType="xs:string" optional="true" />
+            <element name="Amo_Numero" column="Amo_Numero" xsdType="xs:string" optional="true" />
+            <element name="Inv_Cantid" column="Inv_Cantid" xsdType="xs:decimal" optional="true" />
+            <element name="Imp_Intere" column="Imp_Intere" xsdType="xs:decimal" optional="true" />
+            <element name="Imp_ISR" column="Imp_ISR" xsdType="xs:decimal" optional="true" />
+            <element name="Plazo" column="Plazo" xsdType="xs:integer" optional="true" />
+            <element name="Pla_Intere" column="Pla_Intere" xsdType="xs:integer" optional="true" />
+            <element name="Imp_Total" column="Imp_Total" xsdType="xs:decimal" optional="true" />
+            <element name="Fot_Descri" column="Fot_Descri" xsdType="xs:string" optional="true" />
+            <element name="Inv_Tipo" column="Inv_Tipo" xsdType="xs:string" optional="true" />
+            <element name="Inv_Gat" column="Inv_Gat" xsdType="xs:double"  optional="true" />
+            <element name="Inv_GatRea" column="Inv_GatRea" xsdType="xs:double" optional="true" />
+            <element name="Inv_IntBru" column="Inv_IntBru" xsdType="xs:decimal" optional="true" />
+            <element name="Inv_IntNet" column="Inv_IntNet" xsdType="xs:decimal" optional="true" />
+            <element name="Inv_ISRTot" column="Inv_ISRTot" xsdType="xs:decimal" optional="true" />
+            <element name="Inv_Total" column="Inv_Total" xsdType="xs:decimal" optional="true" />
+            <element name="Inv_Esquema" column="Inv_Esquema" xsdType="xs:string" optional="true" />
       	</result>
     </query>
     
-    <operation returnRequestStatus="true" name="getInvestmentOp">
+    <operation name="getInvestmentOp">
         <call-query href="getInvestmentsSQL">
             <with-param name="invClient" query-param="Inv_Client"/>
             <with-param name="invMoneda" query-param="Inv_Moneda"/>
