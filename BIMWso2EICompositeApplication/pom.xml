@@ -19,6 +19,7 @@
     <com.bim.dataservice_._ping-demo>capp/DataServicesServer</com.bim.dataservice_._ping-demo>
     <com.bim.dataservice_._investments-service>capp/DataServicesServer</com.bim.dataservice_._investments-service>
     <com.bim.dataservice_._configuration-service>capp/DataServicesServer</com.bim.dataservice_._configuration-service>
+    <com.bim.dataservice_._binnacles-service>capp/DataServicesServer</com.bim.dataservice_._binnacles-service>
   </properties>
   <dependencies>
     <dependency>
@@ -27,18 +28,36 @@
       <version>1.0.0</version>
       <type>zip</type>
     </dependency>
+    <!-- data services -->
     <dependency>
       <groupId>com.bim.dataservice</groupId>
       <artifactId>ping-demo</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
+    
     <dependency>
     	<groupId>com.bim.dataservice</groupId>
     	<artifactId>investments-service</artifactId>
     	<version>1.0.0</version>
     	<type>dbs</type>
     </dependency>
+
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>configuration-service</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>binnacles-service</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+
+    <!--  proxy services -->
     <dependency>
       <groupId>com.bim.proxy-service</groupId>
       <artifactId>ping-proxy</artifactId>
@@ -46,12 +65,6 @@
       <type>xml</type>
     </dependency>
     
-    <dependency>
-      <groupId>com.bim.dataservice</groupId>
-      <artifactId>configuration-service</artifactId>
-      <version>1.0.0</version>
-      <type>dbs</type>
-    </dependency>
     <dependency>
       <groupId>com.bim.proxy-service</groupId>
       <artifactId>configuration-proxy</artifactId>
