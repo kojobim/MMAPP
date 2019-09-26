@@ -16,7 +16,8 @@
     <com.bim.resource_._datasource>capp/EnterpriseIntegrator</com.bim.resource_._datasource>
     <com.bim.resource_._INDEX>capp/EnterpriseIntegrator</com.bim.resource_._INDEX>
     <artifact.types>jaggery/app=zip,synapse/priority-executor=xml,synapse/inbound-endpoint=xml,service/rule=aar,synapse/message-store=xml,event/stream=json,service/meta=xml,datasource/datasource=xml,synapse/proxy-service=xml,bpel/workflow=zip,synapse/sequence=xml,synapse/endpointTemplate=xml,carbon/application=car,wso2/gadget=dar,synapse/api=xml,synapse/event-source=xml,synapse/message-processors=xml,event/receiver=xml,lib/dataservice/validator=jar,synapse/template=xml,synapse/endpoint=xml,lib/carbon/ui=jar,lib/synapse/mediator=jar,event/publisher=xml,synapse/local-entry=xml,synapse/task=xml,webapp/jaxws=war,registry/resource=zip,synapse/configuration=xml,service/axis2=aar,synapse/lib=zip,synapse/sequenceTemplate=xml,event/execution-plan=siddhiql,service/dataservice=dbs,web/application=war,lib/library/bundle=jar</artifact.types>
-    <!-- <com.bim.dataservice_._ping-demo>capp/DataServicesServer</com.bim.dataservice_._ping-demo> -->
+    <com.bim.dataservice_._ping-demo>capp/DataServicesServer</com.bim.dataservice_._ping-demo>
+    <com.bim.dataservice_._investments-service>capp/DataServicesServer</com.bim.dataservice_._investments-service>
     <com.bim.dataservice_._configuration-service>capp/DataServicesServer</com.bim.dataservice_._configuration-service>
     <com.bim.dataservice_._binnacles-service>capp/DataServicesServer</com.bim.dataservice_._binnacles-service>
   </properties>
@@ -28,13 +29,20 @@
       <type>zip</type>
     </dependency>
     <!-- data services -->
-    <!-- <dependency>
+    <dependency>
       <groupId>com.bim.dataservice</groupId>
       <artifactId>ping-demo</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
-    </dependency> -->
+    </dependency>
     
+    <dependency>
+    	<groupId>com.bim.dataservice</groupId>
+    	<artifactId>investments-service</artifactId>
+    	<version>1.0.0</version>
+    	<type>dbs</type>
+    </dependency>
+
     <dependency>
       <groupId>com.bim.dataservice</groupId>
       <artifactId>configuration-service</artifactId>
