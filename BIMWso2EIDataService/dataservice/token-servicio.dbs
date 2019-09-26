@@ -1,11 +1,11 @@
 <data name="token-service" serviceNamespace="token-service" serviceGroup="token-service">
-	<description>Service used for verify token</description>
+	<description>Servicio utilizado para la configuracion de inicio de sesion</description>
 
 	<config id="BIMDB">
 		<property name="carbon_datasource_name">bim_db</property>
     </config>
     
-    <query id="verifyTokenSQL" useConfig="BIMDB">
+    <query id="verificarTokenSQL" useConfig="BIMDB">
     	<sql>
     		EXECUTE NBTOKVENCON
 			@Tov_Serie = :tovSerie,
@@ -27,12 +27,12 @@
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
         
- 		<result element="verifyToken">
+ 		<result element="verificarToken">
  			<element name="Tov_FecVen" column="Tov_FecVen" xsdType="xs:dateTime" optional="true" />
  		</result>
     </query>
     
-    <query id="updateAttemptsSQL" useConfig="BIMDB">
+    <query id="actualizacionIntentosSQL" useConfig="BIMDB">
     	<sql>
     		EXECUTE NBTOKENACT
 			@Tok_Folio = :tokFolio,
@@ -63,8 +63,8 @@
     	<param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN" />   	
 	</query>
 	
-    <operation returnRequestStatus="true" name="verifyTokenOp">
-    	<call-query href="verifyTokenSQL">
+    <operation returnRequestStatus="true" name="verificarTokenOp">
+    	<call-query href="verificarTokenSQL">
     		<with-param name="tovSerie" query-param="Tov_Serie" />
     		<with-param name="numTransac" query-param="NumTransac" />
             <with-param name="transaccio" query-param="Transaccio" />
@@ -76,8 +76,8 @@
         </call-query>
     </operation>
     
-    <operation returnRequestStatus="true" name="updateAttemptsOp">
-    	<call-query href="updateAttemptsSQL">
+    <operation returnRequestStatus="true" name="actualizacionIntentosOp">
+    	<call-query href="actualizacionIntentosSQL">
     		<with-param name="tokFolio" query-param="Tok_Folio" />
     		<with-param name="tokUsuAdm" query-param="Tok_UsuAdm" />
             <with-param name="tokUsuari" query-param="Tok_Usuari" />

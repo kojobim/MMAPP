@@ -20,7 +20,7 @@
     <com.bim.dataservice_._ping-demo>capp/DataServicesServer</com.bim.dataservice_._ping-demo>
     <com.bim.dataservice_._investments-service>capp/DataServicesServer</com.bim.dataservice_._investments-service>
     <com.bim.dataservice_._configuration-service>capp/DataServicesServer</com.bim.dataservice_._configuration-service>
-    <com.bim.dataservice_._token-service>capp/DataServicesServer</com.bim.dataservice_._token-service>
+    <com.bim.dataservice_._token-servicio>capp/DataServicesServer</com.bim.dataservice_._token-servicio>
     <com.bim.dataservice_._binnacles-service>capp/DataServicesServer</com.bim.dataservice_._binnacles-service>
   </properties>
   <dependencies>
@@ -76,7 +76,7 @@
 
     <dependency>
       <groupId>com.bim.dataservice</groupId>
-      <artifactId>token-service</artifactId>
+      <artifactId>token-servicio</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
