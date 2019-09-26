@@ -28,6 +28,7 @@
       <version>1.0.0</version>
       <type>zip</type>
     </dependency>
+    
     <!-- data services -->
     <!-- <dependency>
       <groupId>com.bim.dataservice</groupId>
@@ -42,14 +43,14 @@
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
-    
-    <!-- dataservice -->
+	
     <dependency>
       <groupId>com.bim.dataservice</groupId>
       <artifactId>binnacles-service</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>    
+    
     <dependency>
       <groupId>com.bim.dataservice</groupId>
       <artifactId>investment-service</artifactId>
