@@ -22,7 +22,7 @@
     	<param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <param name="fechaSis" paramType="SCALAR" sqlType="TIMESTAMP" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
