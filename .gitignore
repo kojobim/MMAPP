@@ -60,3 +60,7 @@ BIMWso2EICompositeApplication/.classpath
 BIMWso2EICompositeApplication/.settings/
 
 BIMWso2EIRegistry/target/
+
+BIMWso2EICompositeApplication/bin/
+
+BIMWso2EICompositeApplication/target/
