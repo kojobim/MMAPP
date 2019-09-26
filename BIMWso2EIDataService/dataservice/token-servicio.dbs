@@ -1,4 +1,4 @@
-<data name="token-service" serviceNamespace="token-service" serviceGroup="token-service">
+<data name="token-servicio" serviceNamespace="token-servicio" serviceGroup="token-servicio">
 	<description>Servicio utilizado para la configuracion de inicio de sesion</description>
 
 	<config id="BIMDB">
