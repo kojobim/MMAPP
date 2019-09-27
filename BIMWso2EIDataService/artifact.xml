@@ -2,10 +2,19 @@
     <artifact name="ping-demo" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/ping-demo.dbs</file>
     </artifact>
-    <artifact name="user-service" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
-        <file>dataservice/user-service.dbs</file>
+    <artifact name="usuario-servicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/usuario-servicio.dbs</file>
 	</artifact>
+    <artifact name="inversiones-servicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/inversiones-servicio.dbs</file>
+    </artifact>
     <artifact name="configuration-service" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/configuration-service.dbs</file>
+    </artifact>
+    <artifact name="token-servicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/token-servicio.dbs</file>
+    </artifact>
+    <artifact name="binnacles-service" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/binnacles-service.dbs</file>
     </artifact>
 </artifacts>

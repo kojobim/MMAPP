@@ -1,11 +1,11 @@
-<data name="user-service" serviceNamespace="user" serviceGroup="user">
-    <description>base data service to update user information</description>
+<data name="usuario-servicio" serviceNamespace="usuario-servicio" serviceGroup="usuario-servicio">
+    <description>Servicio que realiza la actualizacion del usuario</description>
   
     <config id="BIMDB">
 		<property name="carbon_datasource_name">bim_db</property>
     </config>
         
-    <query id="updateUserSQL" useConfig="BIMDB">
+    <query id="actualizacionUsuarioSQL" useConfig="BIMDB">
         <sql>
     		EXECUTE NBUSUARIACT
 	        @Usu_Numero= :usuNumero,
@@ -49,13 +49,13 @@
         <param name="sucDestino" ordinal="18" paramType="SCALAR" sqlType="STRING" type="IN" />
         <param name="modulo" ordinal="19" paramType="SCALAR" sqlType="STRING" type="IN" />
       	
-      	<result element="user">
+      	<result element="usuario">
         	<element name="Usu_CoAcNe" column="Usu_CoAcNe" xsdType="xs:integer" optional="true" />
       	</result>
     </query>
     
-    <operation returnRequestStatus="true" name="updateUserSQLOp">
-        <call-query href="updateUserSQL">
+    <operation returnRequestStatus="true" name="actualizacionUsuarioOp">
+        <call-query href="actualizacionUsuarioSQL">
             <with-param name="usuNumero" query-param="Usu_Numero" />
             <with-param name="usuClave" query-param="Usu_Clave" />
             <with-param name="usuPasswo" query-param="Usu_Passwo" />
