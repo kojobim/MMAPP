@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy name="inveriones-listado-proxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
+    <target>
+        <inSequence>
+            <log level="full"/>
+            <property name="usuario" expression="json-eval($.usuario)" />
+            <property name="sucOrigen" expression="json-eval($.sucOrigen)" />
+            <property name="sucDestino" expression="json-eval($.sucDestino)" />
+            <send>
+            	
+                <endpoint>
+                    <http method="get" uri-template="http://localhost:8280/services/configuration-service/getBankConfigurationOp?Tip_Consul=erilofe1@gmail.com"/>
+                </endpoint>
+                <endpoint>
+                    <http method="get" uri-template="http://localhost:8280/services/configuration-service/getBankConfigurationOp?Tip_Consul=erilofe1@gmail.com"/>
+                </endpoint>
+            </send>
+        </inSequence>
+        <outSequence>
+            <send/>
+        </outSequence>
+        <faultSequence/>
+    </target>
+</proxy>
