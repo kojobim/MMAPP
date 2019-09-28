@@ -6,4 +6,8 @@
     <artifact name="configuration-proxy" groupId="com.bim.proxy-service" version="1.0.0" type="synapse/proxy-service" serverRole="EnterpriseServiceBus">
         <file>src/main/synapse-config/proxy-services/configuration-proxy.xml</file>
     </artifact>
+    
+    <artifact name="InversionesListadoProxy" groupId="com.bim.proxy-service" version="1.0.0" type="synapse/proxy-service" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/proxy-services/InversionesListadoProxy.xml</file>
+    </artifact>
 </artifacts>

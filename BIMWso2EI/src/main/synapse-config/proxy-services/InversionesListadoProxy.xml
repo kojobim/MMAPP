@@ -3,20 +3,36 @@
     <target>
         <inSequence>
             <log level="full"/>
+            <property name="tipConsul" expression="json-eval($.tipConsul)" />
+            <property name="numTransac" expression="json-eval($.numTransac)" />
+            <property name="transaccio" expression="json-eval($.transaccio)" />
             <property name="usuario" expression="json-eval($.usuario)" />
+            <property name="fechaSis" expression="json-eval($.fechaSis)" />
             <property name="sucOrigen" expression="json-eval($.sucOrigen)" />
             <property name="sucDestino" expression="json-eval($.sucDestino)" />
+            <property name="modulo" expression="json-eval($.modulo)" />
+            <!-- 			<clone xmlns="http://ws.apache.org/ns/synapse"> -->
+<!-- 			   <target> -->
+<!-- 			      <endpoint> -->
+<!-- 			         <address uri="http://localhost:8280/services/configuration-service/getBankConfigurationSQLOp" /> -->
+<!-- 			      </endpoint> -->
+<!-- 			   </target> -->
+<!-- 			</clone> -->
+            <enrich>
+                <source type="body"/>
+                <target type="property" property="ORIGINAL_REQ"/>
+            </enrich>
             <send>
-            	
-                <endpoint>
-                    <http method="get" uri-template="http://localhost:8280/services/configuration-service/getBankConfigurationOp?Tip_Consul=erilofe1@gmail.com"/>
-                </endpoint>
-                <endpoint>
-                    <http method="get" uri-template="http://localhost:8280/services/configuration-service/getBankConfigurationOp?Tip_Consul=erilofe1@gmail.com"/>
-                </endpoint>
+            	<endpoint>
+		        	<address uri="http://localhost:8280/services/configuration-service/getBankConfigurationSQLOp" />
+		      	</endpoint>
             </send>
         </inSequence>
         <outSequence>
+        	<log>
+                <property name="Original Request Symbol" expression="get-property('ORIGINAL_REQ')"/>
+                <property name="Response Payload" expression="get-property('body')"/>
+            </log>
             <send/>
         </outSequence>
         <faultSequence/>
