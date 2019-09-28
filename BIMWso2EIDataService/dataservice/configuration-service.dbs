@@ -1,12 +1,10 @@
-<data name="configuration-service" serviceNamespace="configuration-service" serviceGroup="configuration-service">
-	<description>Service used to expose configuration functionality</description>
-	
-	<config id="BIMDB">
-		<property name="carbon_datasource_name">bim_db</property>
+<data name="configuration-service" serviceGroup="configuration-service" serviceNamespace="configuration-service">
+    <description>Service used to expose configuration functionality</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
     </config>
-    
     <query id="getBankConfigurationSQL" useConfig="BIMDB">
-    	<sql>
+        <sql>
     		EXECUTE NBPARAMECON
     		@Tip_Consul= :tipConsul,
     		@NumTransac= :numTransac,
@@ -17,39 +15,37 @@
     		@SucDestino= :sucDestino,
     		@Modulo = :modulo
     	</sql>
-    	
         <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <param name="fechaSis" paramType="SCALAR" sqlType="TIMESTAMP" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        
         <result element="bankConfigurations" rowName="bankConfiguration">
-			<element name="Par_FecAct" column="Par_FecAct" xsdType="xs:datetime" optional="true" />
-			<element name="Par_FeOpEs" column="Par_FeOpEs" xsdType="xs:datetime" optional="true" />
-		    <element name="Par_Acceso" column="Par_Acceso" xsdType="xs:string" optional="true" />
-		    <element name="Par_HoInSP" column="Par_HoInSP" xsdType="xs:datetime" optional="true" />
-		    <element name="Par_FeDiNa" column="Par_FeDiNa" xsdType="xs:datetime" optional="true" />
-		    <element name="Par_HoCaPI" column="Par_HoCaPI" xsdType="xs:datetime" optional="true" />
-		    <element name="Par_MiCuDe" column="Par_MiCuDe" xsdType="xs:integer" optional="true" />
-		    <element name="Par_RECAMo" column="Par_RECAMo" xsdType="xs:string" optional="true" />
-		    <element name="Par_RECAFi" column="Par_RECAFi" xsdType="xs:string" optional="true" />
-		    <element name="Par_RECAFA" column="Par_RECAFA" xsdType="xs:string" optional="true" />
-		</result>
+            <element column="Par_FecAct" name="Par_FecAct" xsdType="xs:datetime" optional="true"/>
+            <element column="Par_FeOpEs" name="Par_FeOpEs" xsdType="xs:datetime" optional="true"/>
+            <element column="Par_Acceso" name="Par_Acceso" xsdType="xs:string" optional="true"/>
+            <element column="Par_HoInSP" name="Par_HoInSP" xsdType="xs:datetime" optional="true"/>
+            <element column="Par_FeDiNa" name="Par_FeDiNa" xsdType="xs:datetime" optional="true"/>
+            <element column="Par_HoCaPI" name="Par_HoCaPI" xsdType="xs:datetime" optional="true"/>
+            <element column="Par_MiCuDe" name="Par_MiCuDe" xsdType="xs:integer" optional="true"/>
+            <element column="Par_RECAMo" name="Par_RECAMo" xsdType="xs:string" optional="true"/>
+            <element column="Par_RECAFi" name="Par_RECAFi" xsdType="xs:string" optional="true"/>
+            <element column="Par_RECAFA" name="Par_RECAFA" xsdType="xs:string" optional="true"/>
+        </result>
     </query>
     <operation name="getBankConfigurationSQLOp">
         <call-query href="getBankConfigurationSQL">
-            <with-param name="tipConsul" query-param="Tip_Consul" />
-            <with-param name="numTransac" query-param="NumTransac" />
-            <with-param name="transaccio" query-param="Transaccio" />
-            <with-param name="usuario" query-param="Usuario" />
-            <with-param name="fechaSis" query-param="FechaSis" />
-            <with-param name="sucOrigen" query-param="SucOrigen" />
-            <with-param name="sucDestino" query-param="SucDestino" />
-            <with-param name="modulo" query-param="Modulo" />
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
 </data>
