@@ -1,37 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<proxy name="inveriones-listado-proxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
+<proxy name="InversionesListadoProxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
     <target>
         <inSequence>
             <log level="full"/>
-            <property name="tipConsul" expression="json-eval($.tipConsul)" />
-            <property name="numTransac" expression="json-eval($.numTransac)" />
-            <property name="transaccio" expression="json-eval($.transaccio)" />
-            <property name="usuario" expression="json-eval($.usuario)" />
-            <property name="fechaSis" expression="json-eval($.fechaSis)" />
-            <property name="sucOrigen" expression="json-eval($.sucOrigen)" />
-            <property name="sucDestino" expression="json-eval($.sucDestino)" />
-            <property name="modulo" expression="json-eval($.modulo)" />
-            <!-- 			<clone xmlns="http://ws.apache.org/ns/synapse"> -->
-<!-- 			   <target> -->
-<!-- 			      <endpoint> -->
-<!-- 			         <address uri="http://localhost:8280/services/configuration-service/getBankConfigurationSQLOp" /> -->
-<!-- 			      </endpoint> -->
-<!-- 			   </target> -->
-<!-- 			</clone> -->
+            <property expression="json-eval($.tipConsul)" name="tipConsul" scope="default" type="STRING"/>
+            <property expression="json-eval($.numTransac)" name="numTransac" scope="default" type="STRING"/>
+            <property expression="json-eval($.transaccio)" name="transaccio" scope="default" type="STRING"/>
+            <property expression="json-eval($.usuario)" name="usuario" scope="default" type="STRING"/>
+            <property expression="json-eval($.fechaSis)" name="fechaSis" scope="default" type="STRING"/>
+            <property expression="json-eval($.sucOrigen)" name="sucOrigen" scope="default" type="STRING"/>
+            <property expression="json-eval($.sucDestino)" name="sucDestino" scope="default" type="STRING"/>
+            <property expression="json-eval($.modulo)" name="modulo" scope="default" type="STRING"/>
             <enrich>
-                <source type="body"/>
-                <target type="property" property="ORIGINAL_REQ"/>
+                <source clone="true" type="body"/>
+                <target property="ORIGINAL_REQ" type="property"/>
             </enrich>
             <send>
-            	<endpoint>
-		        	<address uri="http://localhost:8280/services/configuration-service/getBankConfigurationSQLOp" />
-		      	</endpoint>
+                <endpoint>
+                    <address uri="http://localhost:8280/services/configuration-service/getBankConfigurationSQLOp"/>
+                </endpoint>
             </send>
         </inSequence>
         <outSequence>
-        	<log>
-                <property name="Original Request Symbol" expression="get-property('ORIGINAL_REQ')"/>
-                <property name="Response Payload" expression="get-property('body')"/>
+            <log>
+                <property expression="get-property('ORIGINAL_REQ')" name="Original Request Symbol"/>
+                <property expression="get-property('body')" name="Response Payload"/>
             </log>
             <send/>
         </outSequence>
