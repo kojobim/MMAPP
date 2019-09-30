@@ -23,6 +23,7 @@
     <com.bim.dataservice_._ConfiguracionServicio>capp/DataServicesServer</com.bim.dataservice_._ConfiguracionServicio>
     <com.bim.dataservice_._TokenServicio>capp/DataServicesServer</com.bim.dataservice_._TokenServicio>
     <com.bim.dataservice_._BitacoraServicio>capp/DataServicesServer</com.bim.dataservice_._BitacoraServicio>
+    <com.bim.dataservice_._CuestionarioSeguridadServicio>capp/DataServicesServer</com.bim.dataservice_._CuestionarioSeguridadServicio>
   </properties>
   <dependencies>
     <dependency>
@@ -68,6 +69,13 @@
       <type>dbs</type>
     </dependency>
 
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>CuestionarioSeguridadServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+    
     <!--  proxy services -->
     <dependency>
       <groupId>com.bim.proxy-service</groupId>
