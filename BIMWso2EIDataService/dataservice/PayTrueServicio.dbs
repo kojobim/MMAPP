@@ -1,5 +1,5 @@
-<data name="SesionServicio" serviceGroup="SesionServicio" serviceNamespace="SesionServicio">
-    <description>Servicio encargado de crear los registros de login</description>
+<data name="PayTrueServicio" serviceGroup="PayTrueServicio" serviceNamespace="PayTrueServicio">
+    <description>Servicios de PayTrue</description>
     <config id="BIMDB">
         <property name="carbon_datasource_name">bim_db</property>
     </config>
