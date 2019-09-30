@@ -1,9 +1,9 @@
-<data name="PreguntasSeguridadServicio" serviceGroup="PreguntasSeguridadServicio" serviceNamespace="PreguntasSeguridadServicio">
-    <description>Servicio encargado de validar las respuestas de las preguntas de seguridad</description>
+<data name="CuestionarioSeguridadServicio" serviceGroup="CuestionarioSeguridadServicio" serviceNamespace="CuestionarioSeguridadServicio">
+    <description>Servicio encargado de validar las respuestas del cuestionario de seguridad</description>
     <config id="BIMDB">
         <property name="carbon_datasource_name">bim_db</property>
     </config>
-    <query id="preguntasSeguridadValidarSQL" useConfig="BIMDB">
+    <query id="cuestionarioSeguridadValidarSQL" useConfig="BIMDB">
         <sql>
     		EXECUTE NBPARUSUACT
     		@Pau_Usuari = :pauUsuari,
@@ -68,8 +68,8 @@
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
     </query>
-    <operation returnRequestStatus="true" name="preguntasSeguridadValidarOp">
-        <call-query href="preguntasSeguridadValidarSQL">
+    <operation returnRequestStatus="true" name="cuestionarioSeguridadValidarOp">
+        <call-query href="cuestionarioSeguridadValidarSQL">
             <with-param name="pauUsuari" query-param="Pau_Usuari"/>
             <with-param name="pauOpMeHa" query-param="Pau_OpMeHa"/>
             <with-param name="pauImaSeg" query-param="Pau_ImaSeg"/>
