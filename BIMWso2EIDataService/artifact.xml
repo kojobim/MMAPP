@@ -14,4 +14,7 @@
     <artifact name="BitacoraServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/BitacoraServicio.dbs</file>
     </artifact>
+    <artifact name="PreguntasSeguridadServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/PreguntasSeguridadServicio.dbs</file>
+    </artifact>
 </artifacts>
