@@ -12,6 +12,7 @@
     <com.bim.proxy-service_._PingProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._PingProxy>
     <com.bim.proxy-service_._ConfiguracionDetalleProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._ConfiguracionDetalleProxy>
     <com.bim.proxy-service_._InversionesListadoProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._InversionesListadoProxy>
+    <com.bim.proxy-service_._InversionesDetalleProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._InversionesDetalleProxy>
     <com.bim.sequence_._PING>capp/EnterpriseServiceBus</com.bim.sequence_._PING>
     <com.bim.sequence_._CONFIGURATION>capp/EnterpriseServiceBus</com.bim.sequence_._CONFIGURATION>
     <com.bim.sequence_._TOKEN>capp/EnterpriseServiceBus</com.bim.sequence_._TOKEN>
@@ -90,6 +91,13 @@
       <type>xml</type>
     </dependency>
         
+    <dependency>
+      <groupId>com.bim.proxy-service</groupId>
+      <artifactId>InversionesDetalleProxy</artifactId>
+      <version>1.0.0</version>
+      <type>xml</type>
+    </dependency>
+    
     <dependency>
       <groupId>com.bim.resource</groupId>
       <artifactId>INDEX</artifactId>

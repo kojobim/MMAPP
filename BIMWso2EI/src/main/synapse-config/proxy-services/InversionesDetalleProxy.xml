@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<proxy name="InversionesListadoProxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
+<proxy name="InversionesDetalleProxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
     <target>
         <inSequence>
             <log level="full"/>
+            <property expression="json-eval($.Inv_Client)" name="Inv_Client" scope="default" type="STRING"/>
+            <property expression="json-eval($.Inv_Moneda)" name="Inv_Moneda" scope="default" type="STRING"/>
+            <property expression="json-eval($.Num_Transac)" name="Num_Transac" scope="default" type="STRING"/>
+            <property expression="json-eval($.Transaccio)" name="Transaccio" scope="default" type="STRING"/>
+            <property expression="json-eval($.Usuario)" name="Usuario" scope="default" type="STRING"/>
+            <property expression="json-eval($.Fecha_Sis)" name="Fecha_Sis" scope="default" type="STRING"/>
+            <property expression="json-eval($.Suc_Origen)" name="Suc_Origen" scope="default" type="STRING"/>
+            <property expression="json-eval($.Suc_Destino)" name="Suc_Destino" scope="default" type="STRING"/>
+            <property expression="json-eval($.Modulo)" name="Modulo" scope="default" type="STRING"/>
             <log>
                 <property expression="json-eval($)" name="Request"/>
             </log>
