@@ -1,0 +1,105 @@
+<data name="CuestionarioSeguridadServicio" serviceGroup="CuestionarioSeguridadServicio" serviceNamespace="CuestionarioSeguridadServicio">
+    <description>Servicio encargado de validar las respuestas del cuestionario de seguridad</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="cuestionarioSeguridadValidarSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE NBPARUSUACT
+    		@Pau_Usuari = :pauUsuari,
+			@Pau_OpMeHa = :pauOpMeHa,
+			@Pau_ImaSeg = :pauImaSeg,
+			@Pau_FraSeg = :pauFraSeg,
+			@Pau_PanIni = :pauPanIni,
+			@Pau_PrPrSe = :pauPrPrSe,
+			@Pau_PrPrPe = :pauPrPrPe,
+			@Pau_PrReSe = :pauPrReSe,
+			@Pau_SePrSe = :pauSePrSe,
+			@Pau_SePrPe = :pauSePrPe,
+			@Pau_SeReSe = :pauSeReSe,
+			@Pau_TipAcc = :pauTipAcc,
+			@Pau_ConCue = :pauConCue,
+			@Pau_AltCue = :pauAltCue,
+			@Pau_CarCue = :pauCarCue,
+			@Pau_Solici = :pauSolici,
+			@Pau_Autori = :pauAutori,
+			@Pau_NivFir = :pauNivFir,
+			@Pau_UlPrSe = :pauUlPrSe,
+			@Pau_OrCuOr = :pauOrCuOr,
+			@Pau_OrCuDe = :pauOrCuDe,
+			@Pau_ArMeHa = :pauArMeHa,
+			@Tip_Actual = :tipActual,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+    		@FechaSis = :fechaSis,
+    		@SucOrigen = :sucOrigen,
+    		@SucDestino = :sucDestino,
+    		@Modulo = :modulo
+    	</sql>
+        <param name="pauUsuari" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauOpMeHa" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauImaSeg" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauFraSeg" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauPanIni" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauPrPrSe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauPrPrPe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauPrReSe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauSePrSe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauSePrPe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauSeReSe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauTipAcc" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauConCue" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauAltCue" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauCarCue" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauSolici" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauAutori" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauNivFir" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauUlPrSe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauOrCuOr" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauOrCuDe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauArMeHa" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipActual" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
+    <operation returnRequestStatus="true" name="cuestionarioSeguridadValidarOp">
+        <call-query href="cuestionarioSeguridadValidarSQL">
+            <with-param name="pauUsuari" query-param="Pau_Usuari"/>
+            <with-param name="pauOpMeHa" query-param="Pau_OpMeHa"/>
+            <with-param name="pauImaSeg" query-param="Pau_ImaSeg"/>
+            <with-param name="pauFraSeg" query-param="Pau_FraSeg"/>
+            <with-param name="pauPanIni" query-param="Pau_PanIni"/>
+            <with-param name="pauPrPrSe" query-param="Pau_PrPrSe"/>
+            <with-param name="pauPrPrPe" query-param="Pau_PrPrPe"/>
+            <with-param name="pauPrReSe" query-param="Pau_PrReSe"/>
+            <with-param name="pauSePrSe" query-param="Pau_SePrSe"/>
+            <with-param name="pauSePrPe" query-param="Pau_SePrPe"/>
+            <with-param name="pauSeReSe" query-param="Pau_SeReSe"/>
+            <with-param name="pauTipAcc" query-param="Pau_TipAcc"/>
+            <with-param name="pauConCue" query-param="Pau_ConCue"/>
+            <with-param name="pauAltCue" query-param="Pau_AltCue"/>
+            <with-param name="pauCarCue" query-param="Pau_CarCue"/>
+            <with-param name="pauSolici" query-param="Pau_Solici"/>
+            <with-param name="pauAutori" query-param="Pau_Autori"/>
+            <with-param name="pauNivFir" query-param="Pau_NivFir"/>
+            <with-param name="pauUlPrSe" query-param="Pau_UlPrSe"/>
+            <with-param name="pauOrCuOr" query-param="Pau_OrCuOr"/>
+            <with-param name="pauOrCuDe" query-param="Pau_OrCuDe"/>
+            <with-param name="pauArMeHa" query-param="Pau_ArMeHa"/>
+            <with-param name="tipActual" query-param="Tip_Actual"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>
