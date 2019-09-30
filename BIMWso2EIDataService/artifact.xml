@@ -17,4 +17,7 @@
     <artifact name="CuestionarioSeguridadServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/CuestionarioSeguridadServicio.dbs</file>
     </artifact>
+    <artifact name="SesionServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/SesionServicio.dbs</file>
+    </artifact>
 </artifacts>
