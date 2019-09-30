@@ -9,21 +9,23 @@
   <name>bim-Wso2-integratorCompositeApplication</name>
   <description>bim-Wso2-integratorCompositeApplication</description>
   <properties>
-    <com.bim.proxy-service_._ping-proxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._ping-proxy>
-    <com.bim.proxy-service_._configuration-proxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._configuration-proxy>
+    <com.bim.proxy-service_._PingProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._PingProxy>
+    <com.bim.proxy-service_._ConfiguracionDetalleProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._ConfiguracionDetalleProxy>
+    <com.bim.proxy-service_._InversionesListadoProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._InversionesListadoProxy>
+    <com.bim.proxy-service_._InversionesPagareListadoProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._InversionesPagareListadoProxy>
     <com.bim.sequence_._PING>capp/EnterpriseServiceBus</com.bim.sequence_._PING>
-    <com.bim.sequence_._USUARIO>capp/EnterpriseServiceBus</com.bim.sequence_._USUARIO>
     <com.bim.sequence_._CONFIGURATION>capp/EnterpriseServiceBus</com.bim.sequence_._CONFIGURATION>
     <com.bim.sequence_._TOKEN>capp/EnterpriseServiceBus</com.bim.sequence_._TOKEN>
     <com.bim.resource_._datasource>capp/EnterpriseIntegrator</com.bim.resource_._datasource>
     <com.bim.resource_._INDEX>capp/EnterpriseIntegrator</com.bim.resource_._INDEX>
     <artifact.types>jaggery/app=zip,synapse/priority-executor=xml,synapse/inbound-endpoint=xml,service/rule=aar,synapse/message-store=xml,event/stream=json,service/meta=xml,datasource/datasource=xml,synapse/proxy-service=xml,bpel/workflow=zip,synapse/sequence=xml,synapse/endpointTemplate=xml,carbon/application=car,wso2/gadget=dar,synapse/api=xml,synapse/event-source=xml,synapse/message-processors=xml,event/receiver=xml,lib/dataservice/validator=jar,synapse/template=xml,synapse/endpoint=xml,lib/carbon/ui=jar,lib/synapse/mediator=jar,event/publisher=xml,synapse/local-entry=xml,synapse/task=xml,webapp/jaxws=war,registry/resource=zip,synapse/configuration=xml,service/axis2=aar,synapse/lib=zip,synapse/sequenceTemplate=xml,event/execution-plan=siddhiql,service/dataservice=dbs,web/application=war,lib/library/bundle=jar</artifact.types>
-    <com.bim.dataservice_._ping-demo>capp/DataServicesServer</com.bim.dataservice_._ping-demo>
-    <com.bim.dataservice_._usuario-servicio>capp/DataServicesServer</com.bim.dataservice_._usuario-servicio>
-    <com.bim.dataservice_._inversiones-servicio>capp/DataServicesServer</com.bim.dataservice_._inversiones-servicio>
-    <com.bim.dataservice_._configuration-service>capp/DataServicesServer</com.bim.dataservice_._configuration-service>
-    <com.bim.dataservice_._token-servicio>capp/DataServicesServer</com.bim.dataservice_._token-servicio>
-    <com.bim.dataservice_._binnacles-service>capp/DataServicesServer</com.bim.dataservice_._binnacles-service>
+    <com.bim.dataservice_._PingServicio>capp/DataServicesServer</com.bim.dataservice_._PingServicio>
+    <com.bim.dataservice_._UsuarioServicio>capp/DataServicesServer</com.bim.dataservice_._UsuarioServicio>
+    <com.bim.dataservice_._InversionesServicio>capp/DataServicesServer</com.bim.dataservice_._InversionesServicio>
+    <com.bim.dataservice_._ConfiguracionServicio>capp/DataServicesServer</com.bim.dataservice_._ConfiguracionServicio>
+    <com.bim.dataservice_._TokenServicio>capp/DataServicesServer</com.bim.dataservice_._TokenServicio>
+    <com.bim.dataservice_._BitacoraServicio>capp/DataServicesServer</com.bim.dataservice_._BitacoraServicio>
+    <com.bim.dataservice_._CuestionarioSeguridadServicio>capp/DataServicesServer</com.bim.dataservice_._CuestionarioSeguridadServicio>
   </properties>
   <dependencies>
     <dependency>
@@ -36,57 +38,78 @@
     <!-- data services -->
     <dependency>
       <groupId>com.bim.dataservice</groupId>
-      <artifactId>ping-demo</artifactId>
+      <artifactId>PingServicio</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
 
     <dependency>
       <groupId>com.bim.dataservice</groupId>
-      <artifactId>usuario-servicio</artifactId>
+      <artifactId>UsuarioServicio</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
 
     <dependency>
     	<groupId>com.bim.dataservice</groupId>
-    	<artifactId>inversiones-servicio</artifactId>
+    	<artifactId>InversionesServicio</artifactId>
     	<version>1.0.0</version>
     	<type>dbs</type>
     </dependency>
 
     <dependency>
       <groupId>com.bim.dataservice</groupId>
-      <artifactId>configuration-service</artifactId>
+      <artifactId>ConfiguracionServicio</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
 
     <dependency>
       <groupId>com.bim.dataservice</groupId>
-      <artifactId>token-servicio</artifactId>
+      <artifactId>TokenServicio</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
 	
     <dependency>
       <groupId>com.bim.dataservice</groupId>
-      <artifactId>binnacles-service</artifactId>
+      <artifactId>BitacoraServicio</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
 
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>CuestionarioSeguridadServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+    
     <!--  proxy services -->
     <dependency>
       <groupId>com.bim.proxy-service</groupId>
-      <artifactId>ping-proxy</artifactId>
+      <artifactId>PingProxy</artifactId>
+      <version>1.0.0</version>
+      <type>xml</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.bim.proxy-service</groupId>
+      <artifactId>ConfiguracionDetalleProxy</artifactId>
+      <version>1.0.0</version>
+      <type>xml</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.bim.proxy-service</groupId>
+      <artifactId>InversionesListadoProxy</artifactId>
       <version>1.0.0</version>
       <type>xml</type>
     </dependency>
 
     <dependency>
       <groupId>com.bim.proxy-service</groupId>
-      <artifactId>configuration-proxy</artifactId>
+      <artifactId>InversionesPagareListadoProxy</artifactId>
       <version>1.0.0</version>
       <type>xml</type>
     </dependency>
