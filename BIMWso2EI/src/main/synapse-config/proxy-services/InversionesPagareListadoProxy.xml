@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy name="InversionesPagareListadoProxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
+    <target>
+        <inSequence>
+            <log level="full"/>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="ORIGINAL_REQ" type="property"/>
+            </enrich>
+            <send>
+                <endpoint>
+                    <address uri="http://localhost:8280/services/InversionesServicio/inversionesPagareNumeroUsuarioObtenerOp"/>
+                </endpoint>
+            </send>
+        </inSequence>
+        <outSequence>
+            <log>
+                <property expression="get-property('ORIGINAL_REQ')" name="Original Request"/>
+                <property expression="json-eval($.)" name="Response Payload"/>
+            </log>
+            <send/>
+        </outSequence>
+        <faultSequence/>
+    </target>
+</proxy>

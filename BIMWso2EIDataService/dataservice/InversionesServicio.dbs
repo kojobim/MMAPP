@@ -8,16 +8,16 @@
         	@NumTransac = :numTransac, @Transaccio = :transaccio, @Usuario = :usuario,
         	@FechaSis = :fechaSis, @SucOrigen = :sucOrigen, @SucDestino = :sucDestino,
         	@Modulo = :modulo</sql>
-        <param name="invClient" ordinal="1" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <param name="invMoneda" ordinal="2" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <param name="numTransac" ordinal="3" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <param name="transaccio" ordinal="4" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <param name="usuario" ordinal="5" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <param name="fechaSis" ordinal="6" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <param name="sucOrigen" ordinal="7" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <param name="sucDestino" ordinal="8" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <param name="modulo" ordinal="9" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result element="inversiones" rowName="inversion">
+        <param name="invClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invMoneda" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/inversionesObtenerNE" element="inversiones" rowName="inversion">
             <element column="Inv_Numero" name="Inv_Numero" xsdType="xs:string"/>
             <element column="Inv_ForTas" name="Inv_ForTas" xsdType="xs:string" optional="true"/>
             <element column="Inv_FecIni" name="Inv_FecIni" xsdType="xs:string" optional="true"/>
@@ -45,7 +45,7 @@
             <element column="Inv_Esquema" name="Inv_Esquema" xsdType="xs:string" optional="true"/>
         </result>
     </query>
-    <query id="inversionesPorNumeroDeUsuarioObtenerSQL" useConfig="BIMDB">
+    <query id="inversionesPagareNumeroUsuarioObtenerSQL" useConfig="BIMDB">
         <sql>EXECUTE NBINVERSCON
         	@Inv_Numero = :invNumero,
         	@Inv_Usuari = :invUsuari,
@@ -68,7 +68,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/obtenerInversionesPorNumeroDeUsuarioNE" element="inversiones" rowName="inversion">
+        <result defaultNamespace="http://bem.com/inversionesPagareNumeroUsuarioObtenerNE" element="inversiones" rowName="inversion">
             <element column="Inv_Numero" name="Inv_Numero" xsdType="xs:string" optional="true"/>
             <element column="Inv_FecIni" name="Inv_FecIni" xsdType="xs:dateTime" optional="true"/>
             <element column="Inv_FecVen" name="Inv_FecVen" xsdType="xs:dateTime" optional="true"/>
@@ -92,17 +92,17 @@
         <call-query href="inversionesObtenerSQL">
             <with-param name="invClient" query-param="Inv_Client"/>
             <with-param name="invMoneda" query-param="Inv_Moneda"/>
-            <with-param name="numTransac" query-param="Num_Transac"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
-            <with-param name="fechaSis" query-param="Fecha_Sis"/>
-            <with-param name="sucOrigen" query-param="Suc_Origen"/>
-            <with-param name="sucDestino" query-param="Suc_Destino"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <operation name="inversionesPorNumeroDeUsuarioObtenerOp">
-        <call-query href="inversionesPorNumeroDeUsuarioObtenerSQL">
+    <operation name="inversionesPagareNumeroUsuarioObtenerOp">
+        <call-query href="inversionesPagareNumeroUsuarioObtenerSQL">
             <with-param name="invNumero" query-param="Inv_Numero"/>
             <with-param name="invUsuari" query-param="Inv_Usuari"/>
             <with-param name="tipConsul" query-param="Tip_Consul"/>
