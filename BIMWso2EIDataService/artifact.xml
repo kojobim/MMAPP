@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?><artifacts>
-    <artifact name="ping-demo" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
-        <file>dataservice/ping-demo.dbs</file>
+    <artifact name="PingServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/PingServicio.dbs</file>
     </artifact>
-    <artifact name="inversiones-servicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
-        <file>dataservice/inversiones-servicio.dbs</file>
+    <artifact name="InversionesServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/InversionesServicio.dbs</file>
     </artifact>
-    <artifact name="configuration-service" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
-        <file>dataservice/configuration-service.dbs</file>
+    <artifact name="ConfiguracionServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/ConfiguracionServicio.dbs</file>
     </artifact>
-    <artifact name="token-servicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
-        <file>dataservice/token-servicio.dbs</file>
+    <artifact name="TokenServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/TokenServicio.dbs</file>
     </artifact>
-    <artifact name="binnacles-service" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
-        <file>dataservice/binnacles-service.dbs</file>
+    <artifact name="BitacoraServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/BitacoraServicio.dbs</file>
     </artifact>
 </artifacts>

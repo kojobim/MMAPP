@@ -1,9 +1,9 @@
-<data name="configuration-service" serviceGroup="configuration-service" serviceNamespace="configuration-service">
+<data name="ConfiguracionServicio" serviceGroup="ConfiguracionServicio" serviceNamespace="ConfiguracionServicio">
     <description>Service used to expose configuration functionality</description>
     <config id="BIMDB">
         <property name="carbon_datasource_name">bim_db</property>
     </config>
-    <query id="getBankConfigurationSQL" useConfig="BIMDB">
+    <query id="configuracionBancoDetalleSQL" useConfig="BIMDB">
         <sql>
     		EXECUTE NBPARAMECON
     		@Tip_Consul= :tipConsul,
@@ -36,8 +36,8 @@
             <element column="Par_RECAFA" name="Par_RECAFA" xsdType="xs:string" optional="true"/>
         </result>
     </query>
-    <operation name="getBankConfigurationSQLOp">
-        <call-query href="getBankConfigurationSQL">
+    <operation name="configuracionBancoDetalleOp">
+        <call-query href="configuracionBancoDetalleSQL">
             <with-param name="tipConsul" query-param="Tip_Consul"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>

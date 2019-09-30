@@ -1,0 +1,87 @@
+<data name="TokenServicio" serviceGroup="TokenServicio" serviceNamespace="TokenServicio">
+    <description>Servicio utilizado para la configuracion de inicio de sesion</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="tokenVerificarSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE NBTOKVENCON
+			@Tov_Serie = :tovSerie,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+    		@FechaSis = :fechaSis,
+    		@SucOrigen = :sucOrigen,
+    		@SucDestino = :sucDestino,
+    		@Modulo = :modulo
+    	</sql>
+        <param name="tovSerie" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result element="tokenVerificar">
+            <element column="Tov_FecVen" name="Tov_FecVen" xsdType="xs:dateTime" optional="true"/>
+        </result>
+    </query>
+    <query id="intentosActualizacionSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE NBTOKENACT
+			@Tok_Folio = :tokFolio,
+			@Tok_UsuAdm	= :tokUsuAdm,
+			@Tok_Usuari	= :tokUsuari,
+			@Tok_ComCan = :tokComCan,
+			@Tip_Actual	= :tipActual,
+			@NumTransac = :numTransac,
+			@Transaccio	= :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+    		@SucDestino = :sucDestino,
+    		@Modulo = :modulo
+    	</sql>
+        <param name="tokFolio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tokUsuAdm" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tokUsuari" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tokComCan" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipActual" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
+    <operation returnRequestStatus="true" name="tokenVerificarOp">
+        <call-query href="verificarTokenSQL">
+            <with-param name="tovSerie" query-param="Tov_Serie"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="intentosActualizacionOp">
+        <call-query href="intentosActualizacionSQL">
+            <with-param name="tokFolio" query-param="Tok_Folio"/>
+            <with-param name="tokUsuAdm" query-param="Tok_UsuAdm"/>
+            <with-param name="tokUsuari" query-param="Tok_Usuari"/>
+            <with-param name="tokComCan" query-param="Tok_ComCan"/>
+            <with-param name="tipActual" query-param="Tip_Actual"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>
