@@ -57,7 +57,7 @@
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
     </query>
     <operation returnRequestStatus="true" name="tokenVerificarOp">
-        <call-query href="verificarTokenSQL">
+        <call-query href="tokenVerificarSQL">
             <with-param name="tovSerie" query-param="Tov_Serie"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
