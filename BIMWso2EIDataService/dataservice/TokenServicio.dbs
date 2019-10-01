@@ -56,6 +56,19 @@
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
     </query>
+    <query id="logCreacionSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE NBLOGTOKALT
+			@serieToken = :serieToken,
+			@respuesta = :respuesta,
+			@scriptName = :scriptName,
+			@valueEnter = :valueEnter
+    	</sql>
+        <param name="serieToken" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="respuesta" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="scriptName" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="valueEnter" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
     <operation returnRequestStatus="true" name="tokenVerificarOp">
         <call-query href="tokenVerificarSQL">
             <with-param name="tovSerie" query-param="Tov_Serie"/>
@@ -82,6 +95,14 @@
             <with-param name="sucOrigen" query-param="SucOrigen"/>
             <with-param name="sucDestino" query-param="SucDestino"/>
             <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="logCreacionOp">
+        <call-query href="logCreacionSQL">
+            <with-param name="serieToken" query-param="serieToken"/>
+            <with-param name="respuesta" query-param="respuesta"/>
+            <with-param name="scriptName" query-param="scriptName"/>
+            <with-param name="valueEnter" query-param="valueEnter"/>
         </call-query>
     </operation>
 </data>
