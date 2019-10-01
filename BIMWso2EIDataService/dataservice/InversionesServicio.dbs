@@ -1,0 +1,118 @@
+<data name="InversionesServicio" serviceGroup="InversionesServicio" serviceNamespace="InversionesServicio">
+    <description>servicio de datos usado para las operaciones de inversiones en aplicaciones compuestas</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="inversionesObtenerSQL" useConfig="BIMDB">
+        <sql>EXECUTE NBSALCEDCON @Inv_Client = :invClient, @Inv_Moneda = :invMoneda, 
+        	@NumTransac = :numTransac, @Transaccio = :transaccio, @Usuario = :usuario,
+        	@FechaSis = :fechaSis, @SucOrigen = :sucOrigen, @SucDestino = :sucDestino,
+        	@Modulo = :modulo</sql>
+        <param name="invClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invMoneda" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/inversionesObtenerNE" element="inversiones" rowName="inversion">
+            <element column="Inv_Numero" name="Inv_Numero" xsdType="xs:string"/>
+            <element column="Inv_ForTas" name="Inv_ForTas" xsdType="xs:string" optional="true"/>
+            <element column="Inv_FecIni" name="Inv_FecIni" xsdType="xs:string" optional="true"/>
+            <element column="Inv_FecVen" name="Inv_FecVen" xsdType="xs:string" optional="true"/>
+            <element column="Inv_Cantid" name="Inv_Cantid" xsdType="xs:decimal" optional="true"/>
+            <element column="Amo_Tasa" name="Amo_Tasa" xsdType="xs:double" optional="true"/>
+            <element column="Amo_Tasa" name="Amo_ISR" xsdType="xs:double" optional="true"/>
+            <element column="Amo_FecIni" name="Amo_FecIni" xsdType="xs:string" optional="true"/>
+            <element column="Amo_FecVen" name="Amo_FecVen" xsdType="xs:string" optional="true"/>
+            <element column="Amo_Numero" name="Amo_Numero" xsdType="xs:string" optional="true"/>
+            <element column="Inv_Cantid" name="Inv_Cantid" xsdType="xs:decimal" optional="true"/>
+            <element column="Imp_Intere" name="Imp_Intere" xsdType="xs:decimal" optional="true"/>
+            <element column="Imp_ISR" name="Imp_ISR" xsdType="xs:decimal" optional="true"/>
+            <element column="Plazo" name="Plazo" xsdType="xs:integer" optional="true"/>
+            <element column="Pla_Intere" name="Pla_Intere" xsdType="xs:integer" optional="true"/>
+            <element column="Imp_Total" name="Imp_Total" xsdType="xs:decimal" optional="true"/>
+            <element column="Fot_Descri" name="Fot_Descri" xsdType="xs:string" optional="true"/>
+            <element column="Inv_Tipo" name="Inv_Tipo" xsdType="xs:string" optional="true"/>
+            <element column="Inv_Gat" name="Inv_Gat" xsdType="xs:double" optional="true"/>
+            <element column="Inv_GatRea" name="Inv_GatRea" xsdType="xs:double" optional="true"/>
+            <element column="Inv_IntBru" name="Inv_IntBru" xsdType="xs:decimal" optional="true"/>
+            <element column="Inv_IntNet" name="Inv_IntNet" xsdType="xs:decimal" optional="true"/>
+            <element column="Inv_ISRTot" name="Inv_ISRTot" xsdType="xs:decimal" optional="true"/>
+            <element column="Inv_Total" name="Inv_Total" xsdType="xs:decimal" optional="true"/>
+            <element column="Inv_Esquema" name="Inv_Esquema" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <query id="inversionesPagareNumeroUsuarioObtenerSQL" useConfig="BIMDB">
+        <sql>EXECUTE NBINVERSCON
+        	@Inv_Numero = :invNumero,
+        	@Inv_Usuari = :invUsuari,
+        	@Tip_Consul = :tipConsul,
+        	@NumTransac = :numTransac,
+        	@Transaccio = :transaccio,
+        	@Usuario = :usuario,
+        	@FechaSis = :fechaSis,
+        	@SucOrigen = :sucOrigen,
+        	@SucDestino = :sucDestino,
+        	@Modulo = :modulo
+        </sql>
+        <param name="invNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invUsuari" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/inversionesPagareNumeroUsuarioObtenerNE" element="inversiones" rowName="inversion">
+            <element column="Inv_Numero" name="Inv_Numero" xsdType="xs:string" optional="true"/>
+            <element column="Inv_FecIni" name="Inv_FecIni" xsdType="xs:dateTime" optional="true"/>
+            <element column="Inv_FecVen" name="Inv_FecVen" xsdType="xs:dateTime" optional="true"/>
+            <element column="Inv_Cantid" name="Inv_Cantid" xsdType="xs:decimal" optional="true"/>
+            <element column="Inv_Tasa" name="Inv_Tasa" xsdType="xs:double" optional="true"/>
+            <element column="Inv_Cuenta" name="Inv_Cuenta" xsdType="xs:string" optional="true"/>
+            <element column="Inv_ISR" name="Inv_ISR" xsdType="xs:decimal" optional="true"/>
+            <element column="Inv_TBruta" name="Inv_TBruta" xsdType="xs:double" optional="true"/>
+            <element column="Adi_InsLiq" name="Adi_InsLiq" xsdType="xs:string" optional="true"/>
+            <element column="Mon_Descri" name="Mon_Descri" xsdType="xs:string" optional="true"/>
+            <element column="Inv_Plazo" name="Inv_Plazo" xsdType="xs:integer" optional="true"/>
+            <element column="Inv_GAT" name="Inv_GAT" xsdType="xs:decimal" optional="true"/>
+            <element column="Inv_GATRea" name="Inv_GATRea" xsdType="xs:decimal" optional="true"/>
+            <element column="Gar_ComFon" name="Gar_ComFon" xsdType="xs:string" optional="true"/>
+            <element column="Imp_ISR" name="Imp_ISR" xsdType="xs:decimal" optional="true"/>
+            <element column="Imp_Intere" name="Imp_Intere" xsdType="xs:double" optional="true"/>
+            <element column="Inv_Total" name="Inv_Total" xsdType="xs:double" optional="true"/>
+        </result>
+    </query>
+    <operation name="inversionesObtenerOp">
+        <call-query href="inversionesObtenerSQL">
+            <with-param name="invClient" query-param="Inv_Client"/>
+            <with-param name="invMoneda" query-param="Inv_Moneda"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation name="inversionesPagareNumeroUsuarioObtenerOp">
+        <call-query href="inversionesPagareNumeroUsuarioObtenerSQL">
+            <with-param name="invNumero" query-param="Inv_Numero"/>
+            <with-param name="invUsuari" query-param="Inv_Usuari"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>
