@@ -1,11 +1,9 @@
-<data name="ping-demo" serviceNamespace="demo" serviceGroup="demo">
+<data name="PingServicio" serviceGroup="PingServicio" serviceNamespace="PingServicio">
     <description>base data service used to initialize into composite application</description>
-  
     <config id="BIMDB">
-		<property name="carbon_datasource_name">bim_db</property>
+        <property name="carbon_datasource_name">bim_db</property>
     </config>
-    
-    <query id="getUserByEmail" useConfig="BIMDB">
+    <query id="usuarioPorCorreoObtenerSQL" useConfig="BIMDB">
         <sql>EXECUTE GET_USER_BY_EMAIL @USER_EMAIL= :email</sql>
         <param name="email" ordinal="1" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <result escapeNonPrintableChar="true" outputType="json">
@@ -19,21 +17,21 @@
       	}
       </result>
     </query>
-    <query id="basicCreateUser" useConfig="BIMDB">
+    <query id="usuarioBasicoCrearSQL" useConfig="BIMDB">
         <sql>EXECUTE CREATE_BASIC_USER @EMAIL= :email, @USERNAME = :username, @AGE = :age</sql>
         <param name="email" ordinal="1" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="username" ordinal="2" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="age" ordinal="3" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
     </query>
-    <operation returnRequestStatus="true" name="createUserOp">
-        <call-query href="basicCreateUser">
+    <operation returnRequestStatus="true" name="usuarioCrearOp">
+        <call-query href="usuarioBasicoCrearSQL">
             <with-param name="email" query-param="email"/>
             <with-param name="username" query-param="username"/>
             <with-param name="age" query-param="age"/>
         </call-query>
     </operation>
-    <operation name="getUserByEmailOp">
-        <call-query href="getUserByEmail">
+    <operation name="usuarioPorCorreoObtenerOP">
+        <call-query href="usuarioPorCorreoObtenerSQL">
             <with-param name="email" query-param="email"/>
         </call-query>
     </operation>

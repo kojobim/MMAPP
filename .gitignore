@@ -46,9 +46,23 @@ BIMWso2EIRegistry/target/capp/pom.xml
 BIMWso2EIRegistry/target/registry_resources/INDEX_1.0.0/registry-info.xml
 
 BIMWso2EIRegistry/target/registry_resources/INDEX_1.0.0/resources/INDEX.html
+
+.project
+
+BIMWso2EICompositeApplication/bin
+
+BIMWso2EIRegistry/target
+
 BIMWso2EIDataService/.project
+
 BIMWso2EICommons/.classpath
 
 .project
+
 BIMWso2EI/.project
-BIMWso2EIRegistry/target/
+
+BIMWso2EICompositeApplication/.classpath
+
+BIMWso2EICompositeApplication/.settings/
+
+BIMWso2EICompositeApplication/target/

@@ -1,0 +1,188 @@
+<data name="UsuarioServicio" serviceGroup="UsuarioServicio" serviceNamespace="UsuarioServicio">
+    <description>Servicio que realiza la actualizacion del usuario</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="usuarioConsultarSQL" useConfig="BIMDB">
+        <sql>EXEC NBUSUARICON
+			@Usu_Numero = :usuNumero,
+			@Usu_UsuAdm = :usuUsuAdm,
+			@Usu_Clave = :usuClave,
+			@Usu_Passwo = :usuPasswo,
+			@Usu_Client = :usuClient,
+			@Usu_FolNip = :usuFolNip,
+			@Usu_FolTok = :usuFolTok,
+			@Usu_Status = :usuStatus,
+			@Usu_CuCaCo = :usuCuCaCo,
+			@Usu_SucMod = :usuSucMod,
+			@Tip_Consul = :tipConsul,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="usuNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuUsuAdm" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuClave" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuPasswo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuFolNip" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="usuFolTok" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuStatus" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuCuCaCo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuSucMod" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/usuarioConsultarNE" element="usuario">
+            <element column="Usu_Numero" name="Usu_Numero" xsdType="xs:string" optional="true"/>
+            <element column="Usu_UsuAdm" name="Usu_UsuAdm" xsdType="xs:string" optional="true"/>
+            <element column="Usu_Client" name="Usu_Client" xsdType="xs:string" optional="true"/>
+            <element column="Usu_CuCaCo" name="Usu_CuCaCo" xsdType="xs:string" optional="true"/>
+            <element column="Usu_Nombre" name="Usu_Nombre" xsdType="xs:string" optional="true"/>
+            <element column="Usu_Clave" name="Usu_Clave" xsdType="xs:string" optional="true"/>
+            <element column="Usu_Passwo" name="Usu_Passwo" xsdType="xs:string" optional="true"/>
+            <element column="Usu_Seguro" name="Usu_Seguro" xsdType="xs:string" optional="true"/>
+            <element column="Usu_Tipo" name="Usu_Tipo" xsdType="xs:string" optional="true"/>
+            <element column="Usu_Origen" name="Usu_Origen" xsdType="xs:string" optional="true"/>
+            <element column="Usu_TipSer" name="Usu_TipSer" xsdType="xs:string" optional="true"/>
+            <element column="Usu_Status" name="Usu_Status" xsdType="xs:string" optional="true"/>
+            <element column="Usu_FolNip" name="Usu_FolNip" xsdType="xs:integer" optional="true"/>
+            <element column="Usu_FolTok" name="Usu_FolTok" xsdType="xs:string" optional="true"/>
+            <element column="Usu_StaTok" name="Usu_StaTok" xsdType="xs:string" optional="true"/>
+            <element column="Usu_Email" name="Usu_Email" xsdType="xs:string" optional="true"/>
+            <element column="Usu_FeUlAc" name="Usu_FeUlAc" xsdType="xs:string" optional="true"/>
+            <element column="Usu_FeAcPa" name="Usu_FeAcPa" xsdType="xs:string" optional="true"/>
+            <element column="Usu_FecAlt" name="Usu_FecAlt" xsdType="xs:string" optional="true"/>
+            <element column="Usu_FecCan" name="Usu_FecCan" xsdType="xs:string" optional="true"/>
+            <element column="Usu_MotCan" name="Usu_MotCan" xsdType="xs:string" optional="true"/>
+            <element column="Usu_CoAcNe" name="Usu_CoAcNe" xsdType="xs:integer" optional="true"/>
+            <element column="Usu_ToAcNe" name="Usu_ToAcNe" xsdType="xs:integer" optional="true"/>
+            <element column="Usu_StaSes" name="Usu_StaSes" xsdType="xs:string" optional="true"/>
+            <element column="Usu_CoDeNe" name="Usu_CoDeNe" xsdType="xs:integer" optional="true"/>
+            <element column="Usu_CoPaNe" name="Usu_CoPaNe" xsdType="xs:integer" optional="true"/>
+            <element column="Pau_Usuari" name="Pau_Usuari" xsdType="xs:string" optional="true"/>
+            <element column="Pau_OpMeHa" name="Pau_OpMeHa" xsdType="xs:string" optional="true"/>
+            <element column="Pau_ImaSeg" name="Pau_ImaSeg" xsdType="xs:string" optional="true"/>
+            <element column="Pau_FraSeg" name="Pau_FraSeg" xsdType="xs:string" optional="true"/>
+            <element column="Pau_PanIni" name="Pau_PanIni" xsdType="xs:string" optional="true"/>
+            <element column="Pau_PrPrSe" name="Pau_PrPrSe" xsdType="xs:string" optional="true"/>
+            <element column="Pau_PrPrPe" name="Pau_PrPrPe" xsdType="xs:string" optional="true"/>
+            <element column="Pau_PrReSe" name="Pau_PrReSe" xsdType="xs:string" optional="true"/>
+            <element column="Pau_SePrSe" name="Pau_SePrSe" xsdType="xs:string" optional="true"/>
+            <element column="Pau_SePrPe" name="Pau_SePrPe" xsdType="xs:string" optional="true"/>
+            <element column="Pau_SeReSe" name="Pau_SeReSe" xsdType="xs:string" optional="true"/>
+            <element column="Pau_ArMeHa" name="Pau_ArMeHa" xsdType="xs:string" optional="true"/>
+            <element column="Pau_TipAcc" name="Pau_TipAcc" xsdType="xs:string" optional="true"/>
+            <element column="Pau_ConCue" name="Pau_ConCue" xsdType="xs:string" optional="true"/>
+            <element column="Pau_AltCue" name="Pau_AltCue" xsdType="xs:string" optional="true"/>
+            <element column="Pau_CarCue" name="Pau_CarCue" xsdType="xs:string" optional="true"/>
+            <element column="Pau_Solici" name="Pau_Solici" xsdType="xs:string" optional="true"/>
+            <element column="Pau_Autori" name="Pau_Autori" xsdType="xs:string" optional="true"/>
+            <element column="Pau_NivFir" name="Pau_NivFir" xsdType="xs:string" optional="true"/>
+            <element column="Pau_UlPrSe" name="Pau_UlPrSe" xsdType="xs:string" optional="true"/>
+            <element column="Tok_Status" name="Tok_Status" xsdType="xs:string" optional="true"/>
+            <element column="Usu_EmaAdm" name="Usu_EmaAdm" xsdType="xs:string" optional="true"/>
+            <element column="Usu_DesSta" name="Usu_DesSta" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <query id="usuarioActualizacionSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE NBUSUARIACT
+	        @Usu_Numero= :usuNumero,
+	        @Usu_Clave= :usuClave,
+	        @Usu_Passwo= :usuPasswo,
+	        @Usu_Status= :usuStatus,
+	        @Usu_Email= :usuEmail,
+	        @Usu_UsuAdm= :usuUsuAdm,
+	        @Usu_FolTok= :usuFolTok,
+	        @Usu_Client= :usuClient,
+	        @Usu_SucMod= :usuSucMod,
+	        @Usu_FolNip= :usuFolNip,
+	        @Usu_Nombre= :usuNombre,
+	        @Tip_Actual= :tipActual,
+	        @NumTransac= :numTransac,
+	        @Transaccio= :transaccio,
+	        @Usuario= :usuario,
+	        @FechaSis= :fechaSis,
+	        @SucOrigen= sucOrigen,
+	        @SucDestino= :sucDestino,
+	        @Modulo= :modulo
+		</sql>
+        <param name="usuNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuClave" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuPasswo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuStatus" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuEmail" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuUsuAdm" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuFolTok" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuSucMod" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuFolNip" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="usuNombre" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipActual" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/usuarioActualizacionNE" element="usuario">
+            <element column="Usu_CoAcNe" name="Usu_CoAcNe" xsdType="xs:integer" optional="true"/>
+        </result>
+    </query>
+    <operation name="usuarioConsultarOp">
+        <call-query href="usuarioConsultarSQL">
+            <with-param name="usuNumero" query-param="Usu_Numero"/>
+            <with-param name="usuUsuAdm" query-param="Usu_UsuAdm"/>
+            <with-param name="usuClave" query-param="Usu_Clave"/>
+            <with-param name="usuPasswo" query-param="Usu_Passwo"/>
+            <with-param name="usuClient" query-param="Usu_Client"/>
+            <with-param name="usuFolNip" query-param="Usu_FolNip"/>
+            <with-param name="usuFolTok" query-param="Usu_FolTok"/>
+            <with-param name="usuStatus" query-param="Usu_Status"/>
+            <with-param name="usuCuCaCo" query-param="Usu_CuCaCo"/>
+            <with-param name="usuSucMod" query-param="Usu_SucMod"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="usuarioActualizacionOp">
+        <call-query href="usuarioActualizacionSQL">
+            <with-param name="usuNumero" query-param="Usu_Numero"/>
+            <with-param name="usuClave" query-param="Usu_Clave"/>
+            <with-param name="usuPasswo" query-param="Usu_Passwo"/>
+            <with-param name="usuStatus" query-param="Usu_Status"/>
+            <with-param name="usuEmail" query-param="Usu_Email"/>
+            <with-param name="usuUsuAdm" query-param="Usu_UsuAdm"/>
+            <with-param name="usuFolTok" query-param="Usu_FolTok"/>
+            <with-param name="usuClient" query-param="Usu_Client"/>
+            <with-param name="usuSucMod" query-param="Usu_SucMod"/>
+            <with-param name="usuFolNip" query-param="Usu_FolNip"/>
+            <with-param name="usuNombre" query-param="Usu_Nombre"/>
+            <with-param name="tipActual" query-param="Tip_Actual"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>

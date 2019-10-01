@@ -1,0 +1,109 @@
+<data name="PayTrueServicio" serviceGroup="PayTrueServicio" serviceNamespace="PayTrueServicio">
+    <description>Servicios de PayTrue</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="sesionCreacionSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE NBTMPOPTALT
+			@Tmp_Refere = :tmpRefere,
+			@Tmp_UsuCla = tmpUsuCla,
+			@Tmp_UsuCli = :tmpUsuCli,
+			@Tmp_Agent = :tmpAgent,
+			@Tmp_IP = :tmpIP,
+			@Tmp_Cadena = :tmpCadena,
+			@Tmp_CadExt = :tmpCadExt,
+			@Tmp_Status = :tmpStatus,
+			@Tmp_TipAcc = :tmpTipAcc,
+			@Tmp_FecHor = :tmpFecHor,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+    		@FechaSis = :fechaSis,
+    		@SucOrigen = :sucOrigen,
+    		@SucDestino = :sucDestino,
+    		@Modulo = :modulo
+    	</sql>
+        <param name="tmpRefere" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tmpUsuCla" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tmpUsuCli" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tmpAgent" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tmpIP" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tmpCadena" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tmpCadExt" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tmpStatus" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tmpTipAcc" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tmpFecHor" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
+    <query id="payTrueProcesarSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE NBTMPOPTPRO
+    		@Tmp_Transa = :tmpTransa,
+			@Tmp_Refere = :tmpRefere,
+			@Tip_Actual = :tipActual,
+			@D_ARRIVED = :dArrived,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+    		@FechaSis = :fechaSis,
+    		@SucOrigen = :sucOrigen,
+    		@SucDestino = :sucDestino,
+    		@Modulo = :modulo
+    	</sql>
+
+        <param name="tmpTransa" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tmpRefere" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipActual" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="dArrived" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
+    <operation returnRequestStatus="true" name="sesionCreacionOp">
+        <call-query href="sesionCreacionSQL">
+            <with-param name="tmpRefere" query-param="Tmp_Refere"/>
+            <with-param name="tmpUsuCla" query-param="Tmp_UsuCla"/>
+            <with-param name="tmpUsuCli" query-param="Tmp_UsuCli"/>
+            <with-param name="tmpAgent" query-param="Tmp_Agent"/>
+            <with-param name="tmpIP" query-param="Tmp_IP"/>
+            <with-param name="tmpCadena" query-param="Tmp_Cadena"/>
+            <with-param name="tmpCadExt" query-param="Tmp_CadExt"/>
+            <with-param name="tmpStatus" query-param="Tmp_Status"/>
+            <with-param name="tmpTipAcc" query-param="Tmp_TipAcc"/>
+            <with-param name="tmpFecHor" query-param="Tmp_FecHor"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="payTrueProcesarOp">
+        <call-query href="payTrueProcesarSQL">
+            <with-param name="tmpTransa" query-param="Tmp_Transa"/>
+            <with-param name="tmpRefere" query-param="Tmp_Refere"/>
+            <with-param name="tipActual" query-param="Tip_Actual"/>
+            <with-param name="dArrived" query-param="D_ARRIVED"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>
