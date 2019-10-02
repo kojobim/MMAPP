@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<proxy name="ping-proxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
+<proxy name="PingProxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
     <target>
         <inSequence>
             <log level="full"/>
+            <log>
+                <property expression="json-eval($.)" name="Request"/>
+            </log>
             <send>
                 <endpoint>
                     <http method="get" uri-template="http://localhost:8280/services/PingServicio/usuarioPorCorreoObtenerOP?email=erilofe1@gmail.com"/>
