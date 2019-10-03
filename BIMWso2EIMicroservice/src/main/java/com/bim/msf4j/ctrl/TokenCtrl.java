@@ -23,13 +23,18 @@ public class TokenCtrl implements Microservice {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response validarToken(@QueryParam("token") String token) {
-		logger.info("CTRL: Empezando validarToken metodo");
-		String response = Racal.validaToken(token);
-		logger.info("CTRL: Terminando validarToken metodo");
+		logger.info("CTRL: Empezando metodo validarToken");
+		String validaToken = Racal.validaToken(token);
+		
+		if(validaToken.isEmpty())
+			return Response
+					.status(Response.Status.CONFLICT)
+					.build();
+					
+		logger.info("CTRL: Terminando metodo validarToken");
 		return Response
 				.status(Response.Status.OK)
 				.header("Content-Type", MediaType.APPLICATION_JSON)
-				.entity(response)
 				.build();
 	}
 }
