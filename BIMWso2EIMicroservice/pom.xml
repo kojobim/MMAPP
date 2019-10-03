@@ -29,7 +29,7 @@
     <groupId>com.bim</groupId>
     <artifactId>BIMWso2EIMicroservice</artifactId>
     <version>1.0.0</version>
-    <name>WSO2 MSF4J Microservice</name>
+    <name>BIMWso2EIMicroservice</name>
 
 
     <dependencies>
