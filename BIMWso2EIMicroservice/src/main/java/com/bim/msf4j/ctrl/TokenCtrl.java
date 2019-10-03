@@ -13,7 +13,7 @@ import org.wso2.msf4j.Microservice;
 
 import com.bim.msf4j.commons.Racal;
 
-@Path("/token")
+@Path("/seguridad/token")
 public class TokenCtrl implements Microservice {
 
 	private static final Logger logger = Logger.getLogger(TokenCtrl.class);

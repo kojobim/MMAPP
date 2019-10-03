@@ -5,11 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
-
 public class Racal {
 
-	private static final Logger logger = Logger.getLogger(Racal.class);
 	private static Properties properties;
 	
 	static {
@@ -28,8 +25,6 @@ public class Racal {
 	public static String validaToken(String clave) {
 		String server = properties.getProperty("token.server");
 		int port = Integer.parseInt(properties.getProperty("token.port"));
-		logger.info("server: " + server);
-		logger.info("port: " + port);
 		TcpSocket socket = new TcpSocket();
 		String claveEncriptada = "";
 		String validaToken = "";
@@ -40,14 +35,12 @@ public class Racal {
 		claveEncriptada = encriptar(clave, 16);
 		respuesta = socket.creaConexionSocket(server, port);
 
-		logger.info("respuesta: " + respuesta);
 		if (respuesta == 0) {
 			mensaje = "VP" + claveEncriptada + repiteCaracterString(18, " ");
 			socket.enviaMensaje(mensaje);
 			validaToken = socket.recibeMensaje(2);
 			socket.cierraConexionSocket();
 		}
-		logger.info("validaToken: " + validaToken);
 		return validaToken;
 	}
 
