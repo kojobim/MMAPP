@@ -60,6 +60,35 @@ public class Racal {
 		return caracterRepetidoStr.toString();
 	}
 
+	public static String cifraPassword_HSM(String password) {
+		String server = properties.getProperty("hsm.server");
+		int port = Integer.parseInt(properties.getProperty("hsm.port"));
+		logger.info("server: " + server);
+		logger.info("port: " + port);
+		TcpSocket socket = new TcpSocket();
+		String passwordEncriptado = "";
+		String passwordCifrado = "";
+		String mensaje = "";
+		int respuesta = 0;
+		int first = 0;
+
+		password = password + repiteCaracterString(16 - password.length(), " ");
+		passwordEncriptado = encriptar(password, 16);
+		respuesta = socket.creaConexionSocket(server, port);
+		if (respuesta == 0) {
+			mensaje = "0001CP" + passwordEncriptado;
+			byte[] b = mensaje.getBytes();
+			socket.enviaMensajeBytes(b);
+			passwordCifrado = socket.recibeMensaje(32);
+			first = passwordCifrado.indexOf("0001CQ00") + "0001CQ00".length();
+			socket.cierraConexionSocket();
+		}
+		logger.info(">>>>>>>>>>>>>>> passwordCifrado >>>>>>>>>>>>" + passwordCifrado);
+		logger.info(">>>>>>>>>>>>>>> first >>>>>>>>>>>>" + first);
+
+		return passwordCifrado.substring(first, first + 8);
+	}
+	
 	public static String encriptar(String password, int longitud) {
 		StringBuffer passwordEncriptado = new StringBuffer(repiteCaracterString(16, " "));
 		StringBuffer cadena = new StringBuffer("85C2DCA4CBCED3DF");
@@ -84,29 +113,6 @@ public class Racal {
 			caracter = (char) (caracter ^ cadena.charAt(i++));
 		
 		return caracter;
-	}
-	
-	public static String cifraPassword_HSM(String password) {
-		TcpSocket socket = new TcpSocket();
-		String passwordEncriptado = "";
-		String passwordCifrado = "";
-		String mensaje = "";
-		int respuesta = 0;
-		int first = 0;
-
-		password = password + repiteCaracterString(16 - password.length(), " ");
-		passwordEncriptado = encriptar(password, 16);
-		respuesta = socket.creaConexionSocket("0.0.0.0", 0000);
-
-		if (respuesta == 0) {
-			mensaje = "0001CP" + passwordEncriptado;
-			byte[] b = mensaje.getBytes();
-			socket.enviaMensajeBytes(b);
-			passwordCifrado = socket.recibeMensaje(32);
-			first = passwordCifrado.indexOf("0001CQ00") + "0001CQ00".length();
-			socket.cierraConexionSocket();
-		}
-		return passwordCifrado.substring(first, first + 8);
 	}
 	
 }
