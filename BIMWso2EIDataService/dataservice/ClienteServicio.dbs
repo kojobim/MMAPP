@@ -54,7 +54,7 @@
             <element column="Cli_Pais" name="Cli_Pais" xsdType="xs:string" optional="true"/>
             <element column="Cli_CodPos" name="Cli_CodPos" xsdType="xs:string" optional="true"/>
             <element column="Cli_ApaPos" name="Cli_ApaPos" xsdType="xs:string" optional="true"/>
-            <element column="Cli_Consec" name="Cli_Consec" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Consec" name="Cli_Consec" xsdType="xs:short" optional="true"/>
             <element column="Cli_CobISR" name="Cli_CobISR" xsdType="xs:string" optional="true"/>
             <element column="Cli_Promot" name="Cli_Promot" xsdType="xs:string" optional="true"/>
             <element column="Cli_ProAsi" name="Cli_ProAsi" xsdType="xs:string" optional="true"/>
@@ -65,22 +65,22 @@
             <element column="Cli_ClaCar" name="Cli_ClaCar" xsdType="xs:string" optional="true"/>
             <element column="Cli_Clasif" name="Cli_Clasif" xsdType="xs:string" optional="true"/>
             <element column="Cli_Contac" name="Cli_Contac" xsdType="xs:string" optional="true"/>
-            <element column="Cli_ConCon" name="Cli_ConCon" xsdType="xs:integer" optional="true"/>
+            <element column="Cli_ConCon" name="Cli_ConCon" xsdType="xs:short" optional="true"/>
             <element column="Cli_CobIVA" name="Cli_CobIVA" xsdType="xs:string" optional="true"/>
             <element column="Cli_DesAct" name="Cli_DesAct" xsdType="xs:string" optional="true"/>
             <element column="Cli_Nacion" name="Cli_Nacion" xsdType="xs:string" optional="true"/>
             <element column="Cli_GruCor" name="Cli_GruCor" xsdType="xs:string" optional="true"/>
             <element column="Cli_NomCor" name="Cli_NomCor" xsdType="xs:string" optional="true"/>
             <element column="Cli_PaiRes" name="Cli_PaiRes" xsdType="xs:string" optional="true"/>
-            <element column="Cli_TasISR" name="Cli_TasISR" xsdType="xs:integer" optional="true"/>
+            <element column="Cli_TasISR" name="Cli_TasISR" xsdType="xs:decimal" optional="true"/>
             <element column="Cli_ActEmp" name="Cli_ActEmp" xsdType="xs:string" optional="true"/>
             <element column="Cli_Grupo" name="Cli_Grupo" xsdType="xs:string" optional="true"/>
             <element column="Cli_Corpor" name="Cli_Corpor" xsdType="xs:string" optional="true"/>
             <element column="Cli_InsChe" name="Cli_InsChe" xsdType="xs:string" optional="true"/>
             <element column="Cli_ProOri" name="Cli_ProOri" xsdType="xs:string" optional="true"/>
             <element column="Cli_ClaEco" name="Cli_ClaEco" xsdType="xs:string" optional="true"/>
-            <element column="Cli_Fecha" name="Cli_Fecha" xsdType="xs:string" optional="true"/>
-            <element column="FechaSis" name="FechaSis" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Fecha" name="Cli_Fecha" xsdType="xs:dateTime" optional="true"/>
+            <element column="FechaSis" name="FechaSis" xsdType="xs:dateTime" optional="true"/>
             <element column="Cda_Tamano" name="Cda_Tamano" xsdType="xs:string" optional="true"/>
             <element column="Cda_TiDeRe" name="Cda_TiDeRe" xsdType="xs:integer" optional="true"/>
             <element column="Cda_Usuari" name="Cda_Usuari" xsdType="xs:string" optional="true"/>
