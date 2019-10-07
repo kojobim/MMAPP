@@ -1,0 +1,67 @@
+<data name="CuentaServicio" serviceGroup="CuentaServicio" serviceNamespace="CuentaServicio">
+    <description>Servicio que utilizado para obtener la informacion de cuentas</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="cuentaOrigenConsultarSQL" useConfig="BIMDB">
+        <sql>
+        	EXEC NBCUEORICON
+	        @Cor_Usuari = :corUsuari,
+	        @Cor_Cuenta = :corCuenta,
+	        @Cor_Moneda = :corMoneda,
+	        @Cor_CliUsu = :corCliUsu,
+	        @Usu_SucMod = :usuSucMod,
+	        @Tip_Consul = :tipConsul,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="corUsuari" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="corCuenta" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="corMoneda" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="corCliUsu" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuSucMod" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/cuentaOrigenConsultarNE" element="cuenta">
+            <element column="Cor_Cuenta" name="Cor_Cuenta" xsdType="xs:string" optional="true"/>
+            <element column="Cor_Produc" name="Cor_Produc" xsdType="xs:string" optional="true"/>
+            <element column="Cor_DeCuOr" name="Cor_DeCuOr" xsdType="xs:string" optional="true"/>
+            <element column="Cue_Moneda" name="Cue_Moneda" xsdType="xs:string" optional="true"/>
+            <element column="Cor_Tipo" name="Cor_Tipo" xsdType="xs:string" optional="true"/>
+            <element column="Cue_Dispon" name="Cue_Dispon" xsdType="xs:decimal" optional="true"/>
+            <element column="Cor_TipCli" name="Cor_TipCli" xsdType="xs:string" optional="true"/>
+            <element column="Cor_NoCuOr" name="Cor_NoCuOr" xsdType="xs:string" optional="true"/>
+            <element column="Cor_Alias" name="Cor_Alias" xsdType="xs:string" optional="true"/>
+            <element column="Cue_NumFor" name="Cue_NumFor" xsdType="xs:string" optional="true"/>
+            <element column="Tip_Descri" name="Tip_Descri" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation name="cuentaOrigenConsultarOp">
+        <call-query href="cuentaOrigenConsultarSQL">
+            <with-param name="corUsuari" query-param="Cor_Usuari"/>
+            <with-param name="corCuenta" query-param="Cor_Cuenta"/>
+            <with-param name="corMoneda" query-param="Cor_Moneda"/>
+            <with-param name="corCliUsu" query-param="Cor_CliUsu"/>
+            <with-param name="usuSucMod" query-param="Usu_SucMod"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>
