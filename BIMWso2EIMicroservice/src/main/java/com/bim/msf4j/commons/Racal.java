@@ -8,7 +8,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 public class Racal {
-
+	
 	private static final Logger logger = Logger.getLogger(Racal.class);
 	private static Properties properties;
 	

@@ -26,4 +26,7 @@
     <artifact name="ClienteServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/ClienteServicio.dbs</file>
     </artifact>
+    <artifact name="CuentaServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/CuentaServicio.dbs</file>
+    </artifact>
 </artifacts>
