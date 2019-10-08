@@ -13,6 +13,7 @@
     <module>BIMWso2EIRegistry</module>
 	<module>BIMWso2EIDataService</module>
     <module>BIMWso2EICompositeApplication</module>
+    <module>BIMWso2EIMicroservice</module>
   </modules>
   <build>
     <plugins>
