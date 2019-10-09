@@ -1,0 +1,70 @@
+<data name="TasaServicio" serviceGroup="TasaServicio" serviceNamespace="TasaServicio">
+    <description>Servicio que se utiliza para calcular tasa</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="tasaClienteConsultarSQL" useConfig="BIMDB">
+        <sql>EXEC CLTAGRCACON
+	    	@Cli_Numero = :cliNumero,
+	        @Inv_Cantid = :invCantid,
+	        @Inv_Moneda = :invMoneda,
+	        @Cli_Tipo = :cliTipo,
+	        @Plazo = :plazo,
+	        @Inv_FecVen = :invFecVen,
+	        @Ine_Numero = :ineNumero,
+	        @Tasa = :tasa,
+	        @Inv_GruTas = :invGruTas,
+	        @Inv_NuPoGr = :invNuPoGr,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="cliNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invCantid" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="invMoneda" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cliTipo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="plazo" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="invFecVen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="ineNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tasa" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="invGruTas" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invNuPoGr" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/clienteConsultarNE" element="clienteConsultar">
+            <element column="TasInv" name="TasInv" xsdType="xs:decimal" optional="true"/>
+            <element column="Inv_GruTas" name="Inv_GruTas" xsdType="xs:string" optional="true"/>
+            <element column="Inv_NuPoGr" name="Inv_NuPoGr" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation returnRequestStatus="true" name="tasaClienteConsultarOp">
+        <call-query href="tasaClienteConsultarSQL">
+            <with-param name="cliNumero" query-param="Cli_Numero"/>
+            <with-param name="invCantid" query-param="Inv_Cantid"/>
+            <with-param name="invMoneda" query-param="Inv_Moneda"/>
+            <with-param name="cliTipo" query-param="Cli_Tipo"/>
+            <with-param name="plazo" query-param="Plazo"/>
+            <with-param name="invFecVen" query-param="Inv_FecVen"/>
+            <with-param name="ineNumero" query-param="Ine_Numero"/>
+            <with-param name="tasa" query-param="Tasa"/>
+            <with-param name="invGruTas" query-param="Inv_GruTas"/>
+            <with-param name="invNuPoGr" query-param="Inv_NuPoGr"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>

@@ -29,6 +29,7 @@
     <com.bim.dataservice_._CuestionarioSeguridadServicio>capp/DataServicesServer</com.bim.dataservice_._CuestionarioSeguridadServicio>
     <com.bim.dataservice_._PayTrueServicio>capp/DataServicesServer</com.bim.dataservice_._PayTrueServicio>
     <com.bim.dataservice_._CuentaServicio>capp/DataServicesServer</com.bim.dataservice_._CuentaServicio>
+    <com.bim.dataservice_._TasaServicio>capp/DataServicesServer</com.bim.dataservice_._TasaServicio>
   </properties>
   <dependencies>
     <dependency>
@@ -98,6 +99,13 @@
     <dependency>
       <groupId>com.bim.dataservice</groupId>
       <artifactId>CuentaServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>TasaServicio</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
