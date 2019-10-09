@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy name="RouterProxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
+    <target>
+        <inSequence>
+            <log level="full"/>
+            <log>
+                <property expression="$axis2:REST_URL_POSTFIX" name=">>>>>>>>>>>AXIS2"/>
+            </log>
+            <log>
+                <property expression="$url:q" name=">>>>>>>>>Request URL"/>
+            </log>
+            <log>
+                <property expression="get-property('MESSAGE_FORMAT')" name=">>>>>>>>>>>>>>CTX"/>
+            </log>
+            <log>
+                <property expression="$body//" name=">>>>>>>>>>>>>>body"/>
+            </log>
+            <log>
+                <property expression="$header//" name=">>>>>>>>>>>>>>header"/>
+            </log>
+            <log>
+                <property expression="json-eval($.)" name=">>>>>>>>>>>>>>%%%%"/>
+            </log>
+            <log>
+                <property expression="get-property('OperationName')" name=">>>>>>>>>>>>>>OperationName"/>
+            </log>
+
+            <enrich>
+                <source type="custom" xpath="$axis2:REST_URL_POSTFIX"/>
+                <target type="property" property="PATH_VARIABLES" />
+            </enrich>
+
+
+            <log>
+                <property expression="$ctx:PATH_VARIABLES" name=">>>>>>>>>>>>>>REST_URL_POSTFIX"/>
+            </log>
+            
+            <enrich>
+                <source type="body"/>
+                <target type="property" property="BODY" />
+            </enrich>
+
+            <log>
+                <property expression="get-property('BODY')" name=">>>>>>>>>>>>>>BODY_MESSAGE"/>
+            </log>
+
+            <payloadFactory media-type="json">
+                <format>
+                    {
+                        "message": {
+                            "pathVariables" : "$1",
+                            "body": "$2"
+                        }
+                    }
+                </format>
+                <args>
+                <arg evaluator="xml" literal="true" expression="get-property('PATH_VARIABLES')"/>
+                <arg evaluator="xml" literal="true" expression="get-property('BODY')"/>
+                </args>
+            </payloadFactory>
+            <property name="Content-Type" value="application/json" scope="axis2"/>
+            <send>
+                <endpoint>
+                    <http method="POST" uri-template="http://localhost:8280/services/PingProxy"/>
+                </endpoint>
+            </send>
+        </inSequence>
+        <outSequence>
+            <send/>
+        </outSequence>
+        <faultSequence/>
+    </target>
+</proxy>
