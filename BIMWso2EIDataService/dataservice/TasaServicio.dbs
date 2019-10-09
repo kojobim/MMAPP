@@ -4,7 +4,8 @@
         <property name="carbon_datasource_name">bim_db</property>
     </config>
     <query id="tasaClienteConsultarSQL" useConfig="BIMDB">
-        <sql>EXEC CLTAGRCACON
+        <sql>
+        	EXEC CLTAGRCACON
 	    	@Cli_Numero = :cliNumero,
 	        @Inv_Cantid = :invCantid,
 	        @Inv_Moneda = :invMoneda,
@@ -46,6 +47,62 @@
             <element column="Inv_NuPoGr" name="Inv_NuPoGr" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="tasaMonedaConsultarSQL" useConfig="BIMDB">
+        <sql>
+        	EXEC SOMONEDACON
+	    	@Mon_Numero = :monNumero,
+			@Mon_Descri = :monDescri,
+			@Mon_Fecha = :monFecha,
+			@Tip_Consul = :tipConsul,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="monNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="monDescri" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="monFecha" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/monedaConsultarNE" element="monedaConsultar">
+            <element column="Mon_Numero" name="Mon_Numero" xsdType="xs:string" optional="true"/>
+            <element column="Mon_Descri" name="Mon_Descri" xsdType="xs:string" optional="true"/>
+            <element column="Mon_Simbol" name="Mon_Simbol" xsdType="xs:string" optional="true"/>
+            <element column="Mon_Fecha" name="Mon_Fecha" xsdType="xs:dateTime" optional="true"/>
+            <element column="Mon_EfeCom" name="Mon_EfeCom" xsdType="xs:double" optional="true"/>
+            <element column="Mon_EfeVen" name="Mon_EfeVen" xsdType="xs:double" optional="true"/>
+            <element column="Mon_DocCom" name="Mon_DocCom" xsdType="xs:double" optional="true"/>
+            <element column="Mon_DocVen" name="Mon_DocVen" xsdType="xs:double" optional="true"/>
+            <element column="Mon_FixCom" name="Mon_FixCom" xsdType="xs:double" optional="true"/>
+            <element column="Mon_FixVen" name="Mon_FixVen" xsdType="xs:double" optional="true"/>
+            <element column="Mon_Abrevi" name="Mon_Abrevi" xsdType="xs:string" optional="true"/>
+            <element column="Mon_DesCor" name="Mon_DesCor" xsdType="xs:string" optional="true"/>
+            <element column="Mon_CtaEfe" name="Mon_CtaEfe" xsdType="xs:string" optional="true"/>
+            <element column="Mon_CtaBM" name="Mon_CtaBM" xsdType="xs:string" optional="true"/>
+            <element column="Mon_CtaSBC" name="Mon_CtaSBC" xsdType="xs:string" optional="true"/>
+            <element column="Mon_CtaRem" name="Mon_CtaRem" xsdType="xs:string" optional="true"/>
+            <element column="Mon_CieCom" name="Mon_CieCom" xsdType="xs:double" optional="true"/>
+            <element column="Mon_CieVen" name="Mon_CieVen" xsdType="xs:double" optional="true"/>
+            <element column="Mon_SpoCom" name="Mon_SpoCom" xsdType="xs:double" optional="true"/>
+            <element column="Mon_SpoVen" name="Mon_SpoVen" xsdType="xs:double" optional="true"/>
+            <element column="Mon_EqBaMa" name="Mon_EqBaMa" xsdType="xs:string" optional="true"/>
+            <element column="Mon_OpeCam" name="Mon_OpeCam" xsdType="xs:string" optional="true"/>
+            <element column="Mon_CieDia" name="Mon_CieDia" xsdType="xs:double" optional="true"/>
+            <element column="Mon_FixVal" name="Mon_FixVal" xsdType="xs:double" optional="true"/>
+            <element column="Mon_DesLeg" name="Mon_DesLeg" xsdType="xs:string" optional="true"/>
+            <element column="Mon_Tipo" name="Mon_Tipo" xsdType="xs:string" optional="true"/>
+            <element column="Mon_ForMet" name="Mon_ForMet" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
     <operation returnRequestStatus="true" name="tasaClienteConsultarOp">
         <call-query href="tasaClienteConsultarSQL">
             <with-param name="cliNumero" query-param="Cli_Numero"/>
@@ -58,6 +115,21 @@
             <with-param name="tasa" query-param="Tasa"/>
             <with-param name="invGruTas" query-param="Inv_GruTas"/>
             <with-param name="invNuPoGr" query-param="Inv_NuPoGr"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="tasaMonedaConsultarOp">
+        <call-query href="tasaMonedaConsultarSQL">
+            <with-param name="monNumero" query-param="Mon_Numero"/>
+            <with-param name="monDescri" query-param="Mon_Descri"/>
+            <with-param name="monFecha" query-param="Mon_Fecha"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
