@@ -1,0 +1,49 @@
+<data name="ReinversionServicio" serviceGroup="ReinversionServicio" serviceNamespace="ReinversionServicio">
+    <description>Servicio utilizado para las operaciones de Reinversion</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="fechaHabilConsultarSQL" useConfig="BIMDB">
+        <sql>
+        	EXEC NBSIGFECHAB
+			@Fecha = :fecha,
+			@NumDia = :numDia,
+			@FinSem = :finSem,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="fecha" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numDia" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="finSem" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/fechaHAbilConsultarNE" element="fechaHabil">
+            <element column="Fecha" name="Fecha" xsdType="xs:dateTime" optional="true"/>
+            <element column="Dias" name="Dias" xsdType="xs:integer" optional="true"/>
+        </result>
+    </query>
+    <operation name="fechaHabilConsultarOp">
+        <call-query href="fechaHabilConsultarSQL">
+            <with-param name="fecha" query-param="Fecha"/>
+            <with-param name="numDia" query-param="NumDia"/>
+            <with-param name="finSem" query-param="FinSem"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>
