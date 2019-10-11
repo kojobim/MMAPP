@@ -37,9 +37,8 @@ public class Utilerias {
 	
 	public static String convertirFechaAFormatoSimple(String fecha) {
 		logger.info("COMMONS: Iniciando convertirFecha...");
-		String fechaConv = fecha.replaceAll("\\s", "");
-		
-		if(fechaConv.length() == 10) {
+		String fechaConv = fecha.trim();
+		if(fechaConv.length() == 10 && fechaConv.contains("/")) {
 			fechaConv = fechaConv.substring(6)
 				+ "-" + fechaConv.substring(3, 5)
 				+ "-" + fechaConv.substring(0, 2);
