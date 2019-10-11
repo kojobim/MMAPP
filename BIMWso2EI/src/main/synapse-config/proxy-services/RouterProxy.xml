@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy name="RouterProxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
+    <target>
+        <inSequence>
+            <log level="full"/>
+            <class name="com.bim.custom_mediator.SolicitudFormateadorCM"/>
+            <log>
+                <property expression="json-eval($.)" name=">>>>>>>>>>REQUEST_FORMATTED"/>
+            </log>
+            <log>
+                <property expression="$ctx:PATH" name=">>>>>>>>>>ROUTER_PROXY>>>>>PATH"/>
+            </log>
+            <switch source="$ctx:PATH">
+                <case regex=".*/ping.*">
+                    <log/>
+                    <send>
+                        <endpoint>
+                            <http method="post" uri-template="http://localhost:8280/services/PingProxy"/>
+                        </endpoint>
+                    </send>
+                </case>
+                <default>
+                    <respond/>
+                </default>
+            </switch>
+        </inSequence>
+        <outSequence>
+            <send/>
+        </outSequence>
+        <faultSequence/>
+    </target>
+</proxy>
