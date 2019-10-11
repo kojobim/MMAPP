@@ -19,12 +19,13 @@
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <result defaultNamespace="http://bem.com/inversionesObtenerNE" element="inversiones" rowName="inversion">
             <element column="Inv_Numero" name="Inv_Numero" xsdType="xs:string"/>
+            <element column="Inv_Cuenta" name="Inv_Cuenta" xsdType="xs:string" optional="true"/>
             <element column="Inv_ForTas" name="Inv_ForTas" xsdType="xs:string" optional="true"/>
             <element column="Inv_FecIni" name="Inv_FecIni" xsdType="xs:string" optional="true"/>
             <element column="Inv_FecVen" name="Inv_FecVen" xsdType="xs:string" optional="true"/>
             <element column="Inv_Cantid" name="Inv_Cantid" xsdType="xs:decimal" optional="true"/>
             <element column="Amo_Tasa" name="Amo_Tasa" xsdType="xs:double" optional="true"/>
-            <element column="Amo_Tasa" name="Amo_ISR" xsdType="xs:double" optional="true"/>
+            <element column="Amo_ISR" name="Amo_ISR" xsdType="xs:double" optional="true"/>
             <element column="Amo_FecIni" name="Amo_FecIni" xsdType="xs:string" optional="true"/>
             <element column="Amo_FecVen" name="Amo_FecVen" xsdType="xs:string" optional="true"/>
             <element column="Amo_Numero" name="Amo_Numero" xsdType="xs:string" optional="true"/>

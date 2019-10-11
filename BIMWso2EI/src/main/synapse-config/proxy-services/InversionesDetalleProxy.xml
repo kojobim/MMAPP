@@ -3,27 +3,371 @@
     <target>
         <inSequence>
             <log level="full"/>
-            <property expression="json-eval($.Inv_Client)" name="Inv_Client" scope="default" type="STRING"/>
-            <property expression="json-eval($.Inv_Moneda)" name="Inv_Moneda" scope="default" type="STRING"/>
-            <property expression="json-eval($.Num_Transac)" name="Num_Transac" scope="default" type="STRING"/>
-            <property expression="json-eval($.Transaccio)" name="Transaccio" scope="default" type="STRING"/>
-            <property expression="json-eval($.Usuario)" name="Usuario" scope="default" type="STRING"/>
-            <property expression="json-eval($.Fecha_Sis)" name="Fecha_Sis" scope="default" type="STRING"/>
-            <property expression="json-eval($.Suc_Origen)" name="Suc_Origen" scope="default" type="STRING"/>
-            <property expression="json-eval($.Suc_Destino)" name="Suc_Destino" scope="default" type="STRING"/>
-            <property expression="json-eval($.Modulo)" name="Modulo" scope="default" type="STRING"/>
-            <log>
-                <property expression="json-eval($)" name="Request"/>
+            <!-- Obtencion de parametros -->
+            <property expression="json-eval($.InversionesListadoProxy.numTransac)" name="numTransac" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.usuario)" name="usuario" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.bitUsuari)" name="bitUsuari" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.bitMonto)" name="bitMonto" scope="default" type="DOUBLE"/>
+            <property expression="json-eval($.InversionesListadoProxy.invClient)" name="invClient" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.invMoneda)" name="invMoneda" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.invUsuari)" name="invUsuari" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.invNumero)" name="invNumero" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.categoria)" name="categoria" scope="default" type="STRING"/>
+            <!-- Declaracion y asignacion de constantes -->
+            <property name="tipConsul" scope="default" type="STRING" value="L1"/>
+            <property name="sucOrigen" scope="default" type="STRING" value="001"/>
+            <property name="sucDestino" scope="default" type="STRING" value="001"/>
+            <property name="modulo" scope="default" type="STRING" value="NB"/>
+            <property name="transaccio" scope="default" type="STRING" value="HKQ"/>
+            <property name="bitTipOpe" scope="default" type="STRING" value="004"/>
+            <property name="bitPriRef" scope="default" type="STRING" value="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"/>
+            <property expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss')" name="fechaSis" scope="default" type="STRING"/>
+            <property expression="get-property('axis2','REMOTE_ADDR')" name="bitDireIP" scope="default" type="STRING"/>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="PAYLOAD_ORIGINAL" type="property"/>
+            </enrich>
+            <log level="custom">
+                <property expression="get-property('PAYLOAD_ORIGINAL')" name="Payload Original..."/>
+                <property expression="json-eval($.)" name="Payload Respuesta..."/>
             </log>
-            <send>
+            <payloadFactory media-type="xml">
+                <format>
+                    <bitacoraCreacionOp>
+                        <Bit_Usuari>$1</Bit_Usuari>
+                        <Bit_Fecha>$2</Bit_Fecha>
+                        <Bit_NumTra/>
+                        <Bit_TipOpe>$3</Bit_TipOpe>
+                        <Bit_CueOri/>
+                        <Bit_CueDes/>
+                        <Bit_Monto>$4</Bit_Monto>
+                        <Bit_PriRef>$5</Bit_PriRef>
+                        <Bit_SegRef/>
+                        <Bit_DireIP>$6</Bit_DireIP>
+                        <NumTransac>$7</NumTransac>
+                        <Transaccio>$8</Transaccio>
+                        <Usuario>$9</Usuario>
+                        <FechaSis>$10</FechaSis>
+                        <SucOrigen>$11</SucOrigen>
+                        <SucDestino>$12</SucDestino>
+                        <Modulo>$13</Modulo>
+                    </bitacoraCreacionOp>
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:bitUsuari"/>
+                    <arg evaluator="xml" expression="$ctx:fechaSis"/>
+                    <arg evaluator="xml" expression="$ctx:bitTipOpe"/>
+                    <arg evaluator="xml" expression="$ctx:bitMonto"/>
+                    <arg evaluator="xml" expression="$ctx:bitPriRef"/>
+                    <arg evaluator="xml" expression="$ctx:bitDireIP"/>
+                    <arg evaluator="xml" expression="$ctx:numTransac"/>
+                    <arg evaluator="xml" expression="$ctx:transaccio"/>
+                    <arg evaluator="xml" expression="$ctx:usuario"/>
+                    <arg evaluator="xml" expression="$ctx:fechaSis"/>
+                    <arg evaluator="xml" expression="$ctx:sucOrigen"/>
+                    <arg evaluator="xml" expression="$ctx:sucDestino"/>
+                    <arg evaluator="xml" expression="$ctx:modulo"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
                 <endpoint>
-                    <address uri="http://localhost:8280/services/InversionesServicio/inversionesObtenerOp"/>
+                    <address uri="http://localhost:8280/services/BitacoraServicio/bitacoraCreacionOp"/>
                 </endpoint>
-            </send>
+            </call>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="PAYLOAD_PRIMERA_LLAMADA" type="property"/>
+            </enrich>
+            <filter regex="200" source="get-property('axis2', 'HTTP_SC')">
+                <then>
+                    <log level="custom">
+                        <property expression="get-property('PAYLOAD_PRIMERA_LLAMADA')" name="Payload de la primera llamada..."/>
+                    </log>
+                    <switch source="get-property('categoria')">
+                        <case regex="PAGARE">
+                            <payloadFactory media-type="xml">
+                                <format>
+                                    <inversionesPagareNumeroUsuarioObtenerOp>
+                                        <Inv_Numero/>
+                                        <Inv_Usuari>$1</Inv_Usuari>
+                                        <Tip_Consul>$2</Tip_Consul>
+                                        <NumTransac/>
+                                        <Transaccio>$3</Transaccio>
+                                        <Usuario>$4</Usuario>
+                                        <FechaSis>$5</FechaSis>
+                                        <SucOrigen>$6</SucOrigen>
+                                        <SucDestino>$7</SucDestino>
+                                        <Modulo>$8</Modulo>
+                                    </inversionesPagareNumeroUsuarioObtenerOp>
+                                </format>
+                                <args>
+                                    <arg evaluator="xml" expression="$ctx:invUsuari"/>
+                                    <arg evaluator="xml" expression="$ctx:tipConsul"/>
+                                    <arg evaluator="xml" expression="$ctx:transaccio"/>
+                                    <arg evaluator="xml" expression="$ctx:usuario"/>
+                                    <arg evaluator="xml" expression="$ctx:fechaSis"/>
+                                    <arg evaluator="xml" expression="$ctx:sucOrigen"/>
+                                    <arg evaluator="xml" expression="$ctx:sucDestino"/>
+                                    <arg evaluator="xml" expression="$ctx:modulo"/>
+                                </args>
+                            </payloadFactory>
+                            <call>
+                                <endpoint>
+                                    <address uri="http://localhost:8280/services/InversionesServicio/inversionesPagareNumeroUsuarioObtenerOp"/>
+                                </endpoint>
+                            </call>
+                            <enrich>
+                                <source clone="true" type="body"/>
+                                <target property="PAYLOAD_SEGUNDA_LLAMADA" type="property"/>
+                            </enrich>
+                            <filter regex="200" source="get-property('axis2', 'HTTP_SC')">
+                                <then>
+                                    <log level="custom">
+                                        <property expression="get-property('PAYLOAD_SEGUNDA_LLAMADA')" name="Payload de la segunda llamada..."/>
+                                    </log>
+                                    <property name="contador" scope="operation" type="STRING" value="0"/>
+                                    <property expression="count(//inversiones/inversion)" name="totalInv" scope="operation" type="STRING"/>
+                                    <foreach expression="//inversiones/inversion">
+                                        <sequence>
+                                            <property expression="number(get-property('operation','contador') + 1)" name="contador" scope="operation" type="STRING"/>
+                                            <filter xpath="//Inv_Numero = $ctx:invNumero">
+                                                <then>
+                                                    <payloadFactory media-type="xml">
+                                                        <format>
+                                                            <inversion>
+                                                                <invFecIni>$1</invFecIni>
+                                                                <invFecVen>$2</invFecVen>
+                                                                <invCuenta>$3</invCuenta>
+                                                                <invGat>$4</invGat>
+                                                                <invGatRea>$5</invGatRea>
+                                                                <plazo>$6</plazo>
+                                                                <intBru>$7</intBru>
+                                                                <invIntNet>$8</invIntNet>
+                                                                <invISRTot>$9</invISRTot>
+                                                                <invTotal>$10</invTotal>
+                                                                <cpRenInv/>
+                                                            </inversion>
+                                                        </format>
+                                                        <args>
+                                                            <arg evaluator="xml" expression="//Inv_FecIni/text()"/>
+                                                            <arg evaluator="xml" expression="//Inv_FecVen/text()"/>
+                                                            <arg evaluator="xml" expression="//Inv_Cuenta/text()"/>
+                                                            <arg evaluator="xml" expression="//Inv_GAT"/>
+                                                            <arg evaluator="xml" expression="//Inv_GATRea"/>
+                                                            <arg evaluator="xml" expression="//Inv_Plazo"/>
+                                                            <arg evaluator="xml" expression="//Inv_TBruta"/>
+                                                            <arg evaluator="xml" expression="//Imp_Intere"/>
+                                                            <arg evaluator="xml" expression="//Inv_ISR"/>
+                                                            <arg evaluator="xml" expression="//Inv_Total"/>
+                                                        </args>
+                                                    </payloadFactory>
+                                                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                                                    <call blocking="true">
+                                                        <endpoint>
+                                                            <http method="post" uri-template="http://localhost:9090/inversiones/detalle"/>
+                                                        </endpoint>
+                                                    </call>
+                                                    <respond/>
+                                                </then>
+                                                <else>
+                                                    <filter xpath="get-property('operation','contador') = get-property('operation','totalInv')">
+                                                        <then>
+                                                            <log level="custom">
+                                                                <property name="switchlog" value="CASO: No se encontraron coincidencias..."/>
+                                                            </log>
+                                                            <property name="HTTP_SC" scope="axis2" type="STRING" value="409"/>
+                                                            <payloadFactory media-type="xml">
+                                                                <format>
+                                                                    <Error>
+                                                                        <Err_Codigo>409</Err_Codigo>
+                                                                        <Err_Mensaj>Numero de inversion invalido</Err_Mensaj>
+                                                                    </Error>
+                                                                </format>
+                                                                <args/>
+                                                            </payloadFactory>
+                                                            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                                                            <respond/>
+                                                        </then>
+                                                        <else/>
+                                                    </filter>
+                                                </else>
+                                            </filter>
+                                        </sequence>
+                                    </foreach>
+                                </then>
+                                <else>
+                                    <log level="custom">
+                                        <property name="switchlog" value="CASO: Error en la segunda llamada..."/>
+                                    </log>
+                                    <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
+                                    <payloadFactory media-type="xml">
+                                        <format>
+                                            <Error>
+                                                <Err_Codigo>500</Err_Codigo>
+                                                <Err_Mensaj>ERROR!</Err_Mensaj>
+                                            </Error>
+                                        </format>
+                                        <args/>
+                                    </payloadFactory>
+                                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                                    <respond/>
+                                </else>
+                            </filter>
+                        </case>
+                        <default>
+                            <payloadFactory media-type="xml">
+                                <format>
+                                    <inversionesObtenerOp>
+                                        <Inv_Client>$1</Inv_Client>
+                                        <Inv_Moneda>$2</Inv_Moneda>
+                                        <NumTransac/>
+                                        <Transaccio>$3</Transaccio>
+                                        <Usuario>$4</Usuario>
+                                        <FechaSis>$5</FechaSis>
+                                        <SucOrigen>$6</SucOrigen>
+                                        <SucDestino>$7</SucDestino>
+                                        <Modulo>$8</Modulo>
+                                    </inversionesObtenerOp>
+                                </format>
+                                <args>
+                                    <arg evaluator="xml" expression="$ctx:invClient"/>
+                                    <arg evaluator="xml" expression="$ctx:invMoneda"/>
+                                    <arg evaluator="xml" expression="$ctx:transaccio"/>
+                                    <arg evaluator="xml" expression="$ctx:usuario"/>
+                                    <arg evaluator="xml" expression="$ctx:fechaSis"/>
+                                    <arg evaluator="xml" expression="$ctx:sucOrigen"/>
+                                    <arg evaluator="xml" expression="$ctx:sucDestino"/>
+                                    <arg evaluator="xml" expression="$ctx:modulo"/>
+                                </args>
+                            </payloadFactory>
+                            <call>
+                                <endpoint>
+                                    <address uri="http://localhost:8280/services/InversionesServicio/inversionesObtenerOp"/>
+                                </endpoint>
+                            </call>
+                            <enrich>
+                                <source clone="true" type="body"/>
+                                <target property="PAYLOAD_SEGUNDA_LLAMADA" type="property"/>
+                            </enrich>
+                            <filter regex="200" source="get-property('axis2', 'HTTP_SC')">
+                                <then>
+                                    <log level="custom">
+                                        <property expression="get-property('PAYLOAD_SEGUNDA_LLAMADA')" name="Payload de la segunda llamada..."/>
+                                    </log>
+                                    <property name="contador" scope="operation" type="STRING" value="0"/>
+                                    <property expression="count(//inversiones/inversion)" name="totalInv" scope="operation" type="STRING"/>
+                                    <foreach expression="//inversiones/inversion">
+                                        <sequence>
+                                            <property expression="number(get-property('operation','contador') + 1)" name="contador" scope="operation" type="STRING"/>
+                                            <filter xpath="//Inv_Numero = $ctx:invNumero and //Inv_Tipo = 'V'">
+                                                <then>
+                                                    <property expression="//Amo_Tasa" name="amoTasa" scope="operation" type="STRING"/>
+                                                    <property expression="//Amo_ISR" name="amoISR" scope="operation" type="STRING"/>
+                                                    <property expression="number(get-property('operation','amoISR') * 0.10) + number(get-property('operation','amoTasa'))" name="intBru" scope="operation" type="STRING"/>
+                                                    <payloadFactory media-type="xml">
+                                                        <format>
+                                                            <inversion>
+                                                                <invFecIni>$1</invFecIni>
+                                                                <invFecVen>$2</invFecVen>
+                                                                <invCuenta>$3</invCuenta>
+                                                                <invGat>$4</invGat>
+                                                                <invGatRea>$5</invGatRea>
+                                                                <plazo>$6</plazo>
+                                                                <intBru>$7</intBru>
+                                                                <invIntNet>$8</invIntNet>
+                                                                <invISRTot>$9</invISRTot>
+                                                                <invTotal>$10</invTotal>
+                                                                <cpRenInv/>
+                                                            </inversion>
+                                                        </format>
+                                                        <args>
+                                                            <arg evaluator="xml" expression="//Inv_FecIni/text()"/>
+                                                            <arg evaluator="xml" expression="//Inv_FecVen/text()"/>
+                                                            <arg evaluator="xml" expression="//Inv_Cuenta/text()"/>
+                                                            <arg evaluator="xml" expression="//Inv_Gat"/>
+                                                            <arg evaluator="xml" expression="//Inv_GatRea"/>
+                                                            <arg evaluator="xml" expression="//Plazo"/>
+                                                            <arg evaluator="xml" expression="get-property('operation','intBru')"/>
+                                                            <arg evaluator="xml" expression="//Inv_IntNet"/>
+                                                            <arg evaluator="xml" expression="//Inv_ISRTot"/>
+                                                            <arg evaluator="xml" expression="//Inv_Total"/>
+                                                        </args>
+                                                    </payloadFactory>
+                                                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                                                    <call blocking="true">
+                                                        <endpoint>
+                                                            <http method="post" uri-template="http://localhost:9090/inversiones/detalle"/>
+                                                        </endpoint>
+                                                    </call>
+                                                    <respond/>
+                                                </then>
+                                                <else>
+                                                    <filter xpath="get-property('operation','contador') = get-property('operation','totalInv')">
+                                                        <then>
+                                                            <log level="custom">
+                                                                <property name="switchlog" value="CASO: No se encontraron coincidencias..."/>
+                                                            </log>
+                                                            <property name="HTTP_SC" scope="axis2" type="STRING" value="409"/>
+                                                            <payloadFactory media-type="xml">
+                                                                <format>
+                                                                    <Error>
+                                                                        <Err_Codigo>409</Err_Codigo>
+                                                                        <Err_Mensaj>Numero de inversion invalido</Err_Mensaj>
+                                                                    </Error>
+                                                                </format>
+                                                                <args/>
+                                                            </payloadFactory>
+                                                            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                                                            <respond/>
+                                                        </then>
+                                                        <else/>
+                                                    </filter>
+                                                </else>
+                                            </filter>
+                                        </sequence>
+                                    </foreach>
+                                </then>
+                                <else>
+                                    <log level="custom">
+                                        <property name="switchlog" value="CASO: Error en la segunda llamada..."/>
+                                    </log>
+                                    <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
+                                    <payloadFactory media-type="xml">
+                                        <format>
+                                            <Error>
+                                                <Err_Codigo>500</Err_Codigo>
+                                                <Err_Mensaj>ERROR!</Err_Mensaj>
+                                            </Error>
+                                        </format>
+                                        <args/>
+                                    </payloadFactory>
+                                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                                    <respond/>
+                                </else>
+                            </filter>
+                        </default>
+                    </switch>
+                </then>
+                <else>
+                    <log level="custom">
+                        <property name="switchlog" value="CASO: Error en la primera llamada..."/>
+                    </log>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <Error>
+                                <Err_Codigo>500</Err_Codigo>
+                                <Err_Mensaj>ERROR!</Err_Mensaj>
+                            </Error>
+                        </format>
+                        <args/>
+                    </payloadFactory>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </else>
+            </filter>
         </inSequence>
-        <outSequence>
-            <send/>
-        </outSequence>
+        <outSequence/>
         <faultSequence/>
     </target>
 </proxy>
