@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy name="FormateadorProxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
+    <target>
+        <inSequence>
+            <log level="full"/>
+            <enrich>
+                <source clone="true" xpath="$axis2:REST_URL_POSTFIX"/>
+                <target property="PATH_VARIABLES" type="property"/>
+            </enrich>
+            <log>
+                <property expression="$ctx:PATH_VARIABLES" name=">>>>>>>>>>>>>>REST_URL_POSTFIX"/>
+            </log>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="BODY" type="property"/>
+            </enrich>
+            <log>
+                <property expression="get-property('BODY')" name=">>>>>>>>>>>>>>BODY_MESSAGE"/>
+            </log>
+            <payloadFactory media-type="json">
+                <format>
+                    {
+                        "message": {
+                            "path" : "$1",
+                            "body": "$2"
+                        }
+                    }
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="get-property('PATH_VARIABLES')" literal="true"/>
+                    <arg evaluator="xml" expression="get-property('BODY')" literal="true"/>
+                </args>
+            </payloadFactory>
+            <property name="Content-Type" scope="axis2" type="STRING" value="application/json"/>
+            <send>
+                <endpoint>
+                    <http method="post" uri-template="http://localhost:8280/services/RouterProxy"/>
+                </endpoint>
+            </send>
+        </inSequence>
+        <outSequence>
+            <send/>
+        </outSequence>
+        <faultSequence/>
+    </target>
+</proxy>
