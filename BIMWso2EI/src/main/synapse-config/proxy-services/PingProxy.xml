@@ -4,12 +4,13 @@
         <inSequence>
             <log level="full"/>
             <log>
-                <property expression="json-eval($.)" name=">>>>>>>>>>>PingProxy: Request"/>
+                <property expression="json-eval($.)" name="Request"/>
             </log>
-            <log>
-                <property expression="$body//" name=">>>>>>>>>>>>>>PingProxy: body"/>
-            </log>
-            <respond/>
+            <send>
+                <endpoint>
+                    <http method="get" uri-template="http://localhost:8280/services/PingServicio/usuarioPorCorreoObtenerOP?email=erilofe1@gmail.com"/>
+                </endpoint>
+            </send>
         </inSequence>
         <outSequence>
             <send/>
