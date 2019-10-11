@@ -12,7 +12,6 @@ import org.wso2.msf4j.Microservice;
 import org.wso2.msf4j.Request;
 
 import com.bim.msf4j.commons.HttpClientUtils;
-import com.bim.msf4j.commons.Utilerias;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -21,7 +20,6 @@ import com.google.gson.JsonParser;
 public class FiltroInversionesCtrl implements Microservice {
 
 	private static final Logger logger = Logger.getLogger(FiltroInversionesCtrl.class);
-	private Utilerias utilerias;
 	
 	@Path("/")
 	@POST
@@ -36,13 +34,14 @@ public class FiltroInversionesCtrl implements Microservice {
 		JsonArray inversiones = objInversiones.getAsJsonArray("inversion");
 		logger.info(">>>> for inversiones" + inversiones);
 		JsonObject itemAI = null;
-		JsonObject inver = new JsonObject();
-		JsonArray arrayInver = new JsonArray();
+		JsonArray arrayInverP = new JsonArray();
+		JsonArray arrayInverV = new JsonArray();
+		JsonArray arrayInverC = new JsonArray();
+		JsonArray arrayInverF = new JsonArray();
 		
 		int cpTotalInvP = 0, cpTotalInvV = 0, cpTotalInvF = 0, cpTotalInvC = 0;
 		int cpTotalInvCantidP = 0, cpTotalInvCantidV = 0, cpTotalInvCantidC = 0, cpTotalInvCantidF = 0;
-		int cantidad, invCantidad;
-		String invNumero, invFecVen, categoria;
+		int cantidad;
 		
 		for(int i = 0; i<inversiones.size(); i++) {
 			logger.info(">>>> for inversiones" + i);
@@ -51,44 +50,33 @@ public class FiltroInversionesCtrl implements Microservice {
 				itemAI.get("fotDescri").getAsString();
 			} else {
 				itemAI.addProperty("fotDescri", "PAGARE");
-			}		
-			categoria = itemAI.get("fotDescri").getAsString();
-			cantidad = itemAI.get("invCantid").getAsInt();
-			invCantidad = itemAI.get("invCantid").getAsInt();
-			invNumero = itemAI.get("invNumero").getAsString();
-			invFecVen = itemAI.get("invFecVen").getAsString();
-			
-			inver.addProperty("invCantid", invCantidad);
-			inver.addProperty("invNumero", invNumero);
-			inver.addProperty("invFecVen", invFecVen);
-			
-			Boolean inversionVencida = utilerias.calcularVencimiento(invFecVen);
-			if(inversionVencida) {
-				inversiones.remove(i);
 			}
-			logger.info("new inversiones" + inversiones);
-				
-			inver.addProperty("cpRenInv", true);
 			
+			cantidad = itemAI.get("invCantid").getAsInt();
+									
 			switch (itemAI.get("fotDescri").getAsString()) {
 			case "FIJA":
 				logger.info("*********FIJA");
-				cpTotalInvCantidF = cpTotalInvCantidF + cantidad;
+				cpTotalInvCantidF = cpTotalInvCantidF + cantidad;			
+				arrayInverF.add(itemAI);
 				cpTotalInvF ++;
 				break;
 			case "VALOR":
 				logger.info("*********VALOR");
 				cpTotalInvCantidV = cpTotalInvCantidV + cantidad;
+				arrayInverV.add(itemAI);
 				cpTotalInvV ++;
 				break;
 			case "CEDE_RI":
 				logger.info("*********CEDE_RI");
 				cpTotalInvCantidC = cpTotalInvCantidC + cantidad;
+				arrayInverC.add(itemAI);
 				cpTotalInvC ++;
 				break;
 			case "PAGARE":
 				logger.info("*********PAGARE");
 				cpTotalInvCantidP = cpTotalInvCantidP + cantidad;
+				arrayInverP.add(itemAI);
 				cpTotalInvP ++;
 				break;
 			default:
@@ -96,39 +84,37 @@ public class FiltroInversionesCtrl implements Microservice {
 			}
 		}
 		
-		JsonObject objetoCategorias = new JsonObject();
-		JsonArray arrayCategorias = new JsonArray();
-		
-		// CATEGORIAS
-		JsonObject categoriaPagare = new JsonObject();
 		JsonObject categoriaFija = new JsonObject();
-		JsonObject categoriaValor = new JsonObject();
-		JsonObject categoriaCede = new JsonObject();
-		
 		categoriaFija.addProperty("categoria", "FIJA");
-		categoriaFija.addProperty("totalinvCantid", cpTotalInvCantidF);
-		categoriaFija.addProperty("totalInv", cpTotalInvF);
-		categoriaFija.add("inversiones", arrayInver);
+		categoriaFija.addProperty("cpTotalInvCantid", cpTotalInvCantidF);
+		categoriaFija.addProperty("cpTotalInv", cpTotalInvF);
+		categoriaFija.add("inversiones", arrayInverF);
 
+		JsonObject categoriaValor = new JsonObject();
 		categoriaValor.addProperty("categoria", "VALOR");
-		categoriaValor.addProperty("totalinvCantid", cpTotalInvCantidV);
-		categoriaValor.addProperty("totalInv", cpTotalInvV);
-		categoriaValor.add("inversiones", arrayInver);
+		categoriaValor.addProperty("cpTotalInvCantid", cpTotalInvCantidV);
+		categoriaValor.addProperty("cpTotalInv", cpTotalInvV);
+		categoriaValor.add("inversiones", arrayInverV);
 		
+		JsonObject categoriaCede = new JsonObject();
 		categoriaCede.addProperty("categoria", "CEDE_RI");
-		categoriaCede.addProperty("totalinvCantid", cpTotalInvCantidC);
-		categoriaCede.addProperty("totalInv", cpTotalInvC);
-		categoriaCede.add("inversiones", arrayInver);		
+		categoriaCede.addProperty("cpTotalInvCantid", cpTotalInvCantidC);
+		categoriaCede.addProperty("cpTotalInv", cpTotalInvC);
+		categoriaCede.add("inversiones", arrayInverC);		
 
+		JsonObject categoriaPagare = new JsonObject();
 		categoriaPagare.addProperty("categoria", "PAGARE");
 		categoriaPagare.addProperty("cpTotalInvCantid", cpTotalInvCantidP);
-		categoriaPagare.addProperty("totalInv", cpTotalInvP);
-		categoriaPagare.add("inversiones", arrayInver);
+		categoriaPagare.addProperty("cpTotalInv", cpTotalInvP);
+		categoriaPagare.add("inversiones", arrayInverP);
 		
+		JsonArray arrayCategorias = new JsonArray();
 		arrayCategorias.add(categoriaFija);
 		arrayCategorias.add(categoriaValor);
 		arrayCategorias.add(categoriaPagare);
 		arrayCategorias.add(categoriaCede);
+		
+		JsonObject objetoCategorias = new JsonObject();
 		objetoCategorias.add("categorias", arrayCategorias);
 
 		logger.info("CTRL: Termino filtroInversiones metodo");
