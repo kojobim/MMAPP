@@ -7,8 +7,12 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.axis2.AxisFault;
 import org.apache.synapse.Mediator;
 import org.apache.synapse.MessageContext;
+import org.apache.synapse.aspects.flow.statistics.data.artifact.ArtifactHolder;
+import org.apache.synapse.commons.json.JsonUtil;
+import org.apache.synapse.core.axis2.Axis2MessageContext;
 import org.json.JSONObject;
 import org.json.XML;
 
@@ -19,6 +23,8 @@ public class SolicitudFormateadorCM  implements Mediator{
 	
 	public boolean mediate(MessageContext contexto) {
 		System.out.print("SolicitudFormateadorCM: Starting mediate method");
+		org.apache.axis2.context.MessageContext axisContexto = ((Axis2MessageContext) contexto)
+                .getAxis2MessageContext();
 		String cadenaSolicitudXML = contexto.getEnvelope().getBody().getFirstElement().getFirstElement().toString();
 		System.out.println("&&&&&&cadenaSolicitudXML " + cadenaSolicitudXML + "\n");
 		JAXBContext jaxbContext;
@@ -40,9 +46,11 @@ public class SolicitudFormateadorCM  implements Mediator{
 			solicitudHttp.add("body", body);
 			JsonObject event = new JsonObject();
 			event.add("solicitudHttp", solicitudHttp);
-			
-			System.out.println(">>>>>>>>>solicitudHttp " + solicitudHttp);
-			contexto.setProperty("REQUEST_FORMATTED", event.toString());
+			try {
+				JsonUtil.getNewJsonPayload(axisContexto, solicitudHttp.toString(), true, true);
+			} catch (AxisFault e) {
+				e.printStackTrace();
+			}
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
@@ -100,7 +108,7 @@ public class SolicitudFormateadorCM  implements Mediator{
 			if(param.isEmpty())
 				continue;
 			i++;
-			pathVariables.addProperty(i.toString(), param);
+			pathVariables.addProperty("param"+i.toString(), param);
 		}
 		System.out.println(">>>>>>>>>>getPathVariables<<<<<<<<<<<<<<<");
 		return pathVariables;
@@ -147,6 +155,51 @@ public class SolicitudFormateadorCM  implements Mediator{
 	}
 
 	public void setTraceState(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getMediatorName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getMediatorPosition() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public String getShortDescription() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public boolean isContentAltering() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void reportCloseStatistics(MessageContext arg0, Integer arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Integer reportOpenStatistics(MessageContext arg0, boolean arg1) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setComponentStatisticsId(ArtifactHolder arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setMediatorPosition(int arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setShortDescription(String arg0) {
 		// TODO Auto-generated method stub
 		
 	}
