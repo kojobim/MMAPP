@@ -66,3 +66,10 @@ BIMWso2EICompositeApplication/.classpath
 BIMWso2EICompositeApplication/.settings/
 
 BIMWso2EICompositeApplication/target/
+BIMWso2EICustomMediator/target/test-classes/com/bim/custom_mediator/AppTest.class
+BIMWso2EICustomMediator/target/classes/META-INF/maven/com.bim.custom_mediator/BIMWso2EICustomMediator/pom.xml
+BIMWso2EICustomMediator/target/classes/META-INF/maven/com.bim.custom_mediator/BIMWso2EICustomMediator/pom.properties
+BIMWso2EICustomMediator/target/classes/META-INF/MANIFEST.MF
+BIMWso2EICustomMediator/bin/target/classes/META-INF/maven/com.bim.custom_mediator/BIMWso2EICustomMediator/pom.xml
+BIMWso2EICustomMediator/bin/target/classes/META-INF/maven/com.bim.custom_mediator/BIMWso2EICustomMediator/pom.properties
+BIMWso2EICustomMediator/bin/target/classes/META-INF/MANIFEST.MF
