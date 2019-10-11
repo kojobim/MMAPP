@@ -23,6 +23,9 @@
     <artifact name="PayTrueServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/PayTrueServicio.dbs</file>
     </artifact>
+    <artifact name="ReinversionServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/ReinversionServicio.dbs</file>
+    </artifact>
     <artifact name="ClienteServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/ClienteServicio.dbs</file>
     </artifact>
