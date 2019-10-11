@@ -10,6 +10,8 @@
   <description>bim-Wso2-integratorCompositeApplication</description>
   <properties>
     <com.bim.proxy-service_._PingProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._PingProxy>
+    <com.bim.proxy-service_._RouterProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._RouterProxy>
+    <com.bim.proxy-service_._FormateadorProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._FormateadorProxy>
     <com.bim.proxy-service_._ConfiguracionDetalleProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._ConfiguracionDetalleProxy>
     <com.bim.proxy-service_._InversionesListadoProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._InversionesListadoProxy>
     <com.bim.proxy-service_._InversionesDetalleProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._InversionesDetalleProxy>
@@ -27,7 +29,10 @@
     <com.bim.dataservice_._BitacoraServicio>capp/DataServicesServer</com.bim.dataservice_._BitacoraServicio>
     <com.bim.dataservice_._CuestionarioSeguridadServicio>capp/DataServicesServer</com.bim.dataservice_._CuestionarioSeguridadServicio>
     <com.bim.dataservice_._PayTrueServicio>capp/DataServicesServer</com.bim.dataservice_._PayTrueServicio>
+    <com.bim.dataservice_._ReinversionServicio>capp/DataServicesServer</com.bim.dataservice_._ReinversionServicio>
+    <com.bim.dataservice_._ClienteServicio>capp/DataServicesServer</com.bim.dataservice_._ClienteServicio>
     <com.bim.dataservice_._CuentaServicio>capp/DataServicesServer</com.bim.dataservice_._CuentaServicio>
+    <com.bim.dataservice_._TasaServicio>capp/DataServicesServer</com.bim.dataservice_._TasaServicio>
   </properties>
   <dependencies>
     <dependency>
@@ -93,10 +98,31 @@
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
+
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>ClienteServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
     
     <dependency>
       <groupId>com.bim.dataservice</groupId>
+      <artifactId>ReinversionServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
       <artifactId>CuentaServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>TasaServicio</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
@@ -105,6 +131,20 @@
     <dependency>
       <groupId>com.bim.proxy-service</groupId>
       <artifactId>PingProxy</artifactId>
+      <version>1.0.0</version>
+      <type>xml</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.bim.proxy-service</groupId>
+      <artifactId>RouterProxy</artifactId>
+      <version>1.0.0</version>
+      <type>xml</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.bim.proxy-service</groupId>
+      <artifactId>FormateadorProxy</artifactId>
       <version>1.0.0</version>
       <type>xml</type>
     </dependency>
