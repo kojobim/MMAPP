@@ -23,7 +23,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result element="bankConfigurations" rowName="bankConfiguration">
+        <result element="configuracionesBanco" rowName="configuracionBanco">
             <element column="Par_FecAct" name="Par_FecAct" xsdType="xs:datetime" optional="true"/>
             <element column="Par_FeOpEs" name="Par_FeOpEs" xsdType="xs:datetime" optional="true"/>
             <element column="Par_Acceso" name="Par_Acceso" xsdType="xs:string" optional="true"/>
