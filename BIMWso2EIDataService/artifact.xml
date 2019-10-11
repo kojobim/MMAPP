@@ -32,4 +32,7 @@
     <artifact name="CuentaServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/CuentaServicio.dbs</file>
     </artifact>
+    <artifact name="TasaServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/TasaServicio.dbs</file>
+    </artifact>
 </artifacts>

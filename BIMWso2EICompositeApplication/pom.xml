@@ -33,6 +33,7 @@
     <com.bim.dataservice_._ReinversionServicio>capp/DataServicesServer</com.bim.dataservice_._ReinversionServicio>
     <com.bim.dataservice_._ClienteServicio>capp/DataServicesServer</com.bim.dataservice_._ClienteServicio>
     <com.bim.dataservice_._CuentaServicio>capp/DataServicesServer</com.bim.dataservice_._CuentaServicio>
+    <com.bim.dataservice_._TasaServicio>capp/DataServicesServer</com.bim.dataservice_._TasaServicio>
   </properties>
   <dependencies>
     <dependency>
@@ -116,6 +117,13 @@
     <dependency>
       <groupId>com.bim.dataservice</groupId>
       <artifactId>CuentaServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>TasaServicio</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
