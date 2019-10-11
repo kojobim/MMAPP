@@ -22,4 +22,8 @@
     <artifact name="RouterProxy" groupId="com.bim.proxy-service" version="1.0.0" type="synapse/proxy-service" serverRole="EnterpriseServiceBus">
         <file>src/main/synapse-config/proxy-services/RouterProxy.xml</file>
     </artifact>
+    
+    <artifact name="FormateadorProxy" groupId="com.bim.proxy-service" version="1.0.0" type="synapse/proxy-service" serverRole="EnterpriseServiceBus">
+        <file>src/main/synapse-config/proxy-services/FormateadorProxy.xml</file>
+    </artifact>
 </artifacts>

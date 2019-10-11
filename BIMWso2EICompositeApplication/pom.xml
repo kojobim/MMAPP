@@ -11,6 +11,7 @@
   <properties>
     <com.bim.proxy-service_._PingProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._PingProxy>
     <com.bim.proxy-service_._RouterProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._RouterProxy>
+    <com.bim.proxy-service_._FormateadorProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._FormateadorProxy>
     <com.bim.proxy-service_._ConfiguracionDetalleProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._ConfiguracionDetalleProxy>
     <com.bim.proxy-service_._InversionesListadoProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._InversionesListadoProxy>
     <com.bim.proxy-service_._InversionesDetalleProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._InversionesDetalleProxy>
@@ -114,6 +115,13 @@
     <dependency>
       <groupId>com.bim.proxy-service</groupId>
       <artifactId>RouterProxy</artifactId>
+      <version>1.0.0</version>
+      <type>xml</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.bim.proxy-service</groupId>
+      <artifactId>FormateadorProxy</artifactId>
       <version>1.0.0</version>
       <type>xml</type>
     </dependency>

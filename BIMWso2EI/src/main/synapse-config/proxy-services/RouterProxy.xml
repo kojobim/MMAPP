@@ -3,67 +3,23 @@
     <target>
         <inSequence>
             <log level="full"/>
+            <class name="com.bim.custom_mediator.SolicitudFormateadorCM"/>
             <log>
-                <property expression="$axis2:REST_URL_POSTFIX" name=">>>>>>>>>>>AXIS2"/>
+                <property expression="$ctx:REQUEST_FORMATTED" name=">>>>>>>>>>REQUEST_FORMATTED"/>
             </log>
             <log>
-                <property expression="$url:q" name=">>>>>>>>>Request URL"/>
+                <property expression="$ctx:PATH" name=">>>>>>>>>>ROUTER_PROXY_PATH>>>>>"/>
             </log>
             <log>
-                <property expression="get-property('MESSAGE_FORMAT')" name=">>>>>>>>>>>>>>CTX"/>
+                <property expression="$ctx:REQUEST_FORMATTED//solicitudHttp/body" name=">>>>>>>>>>JSON_OBJECT_1"/>
             </log>
             <log>
-                <property expression="$body//" name=">>>>>>>>>>>>>>body"/>
+                <property expression="$ctx:REQUEST_FORMATTED//solicitudHttp/queryParams" name=">>>>>>>>>>JSON_OBJECT_2"/>
             </log>
             <log>
-                <property expression="$header//" name=">>>>>>>>>>>>>>header"/>
+                <property expression="$ctx:REQUEST_FORMATTED//solicitudHttp/PathVariables" name=">>>>>>>>>>JSON_OBJECT_3"/>
             </log>
-            <log>
-                <property expression="json-eval($.)" name=">>>>>>>>>>>>>>%%%%"/>
-            </log>
-            <log>
-                <property expression="get-property('OperationName')" name=">>>>>>>>>>>>>>OperationName"/>
-            </log>
-
-            <enrich>
-                <source type="custom" xpath="$axis2:REST_URL_POSTFIX"/>
-                <target type="property" property="PATH_VARIABLES" />
-            </enrich>
-
-
-            <log>
-                <property expression="$ctx:PATH_VARIABLES" name=">>>>>>>>>>>>>>REST_URL_POSTFIX"/>
-            </log>
-            
-            <enrich>
-                <source type="body"/>
-                <target type="property" property="BODY" />
-            </enrich>
-
-            <log>
-                <property expression="get-property('BODY')" name=">>>>>>>>>>>>>>BODY_MESSAGE"/>
-            </log>
-
-            <payloadFactory media-type="json">
-                <format>
-                    {
-                        "message": {
-                            "pathVariables" : "$1",
-                            "body": "$2"
-                        }
-                    }
-                </format>
-                <args>
-                <arg evaluator="xml" literal="true" expression="get-property('PATH_VARIABLES')"/>
-                <arg evaluator="xml" literal="true" expression="get-property('BODY')"/>
-                </args>
-            </payloadFactory>
-            <property name="Content-Type" value="application/json" scope="axis2"/>
-            <send>
-                <endpoint>
-                    <http method="POST" uri-template="http://localhost:8280/services/PingProxy"/>
-                </endpoint>
-            </send>
+            <respond/>
         </inSequence>
         <outSequence>
             <send/>
