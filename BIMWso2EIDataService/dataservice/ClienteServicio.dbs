@@ -1,0 +1,109 @@
+<data name="ClienteServicio" serviceGroup="ClienteServicio" serviceNamespace="ClienteServicio">
+    <description>Servicio que se encarga de consultar los detalles o datos del cliente</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="clienteConsultarSQL" useConfig="BIMDB">
+        <sql>EXEC CLCLIENTCON
+			@Cli_Numero = :cliNumero,
+			@Cli_Sucurs = :cliSucurs,
+			@Cli_Nombre = :cliNombre,
+			@Tip_Consul = :tipConsul,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="cliNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cliSucurs" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cliNombre" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/clienteConsultarNE" element="cliente">
+            <element column="Cli_Numero" name="Cli_Numero" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Sucurs" name="Cli_Sucurs" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Tipo" name="Cli_Tipo" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Sector" name="Cli_Sector" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Activi" name="Cli_Activi" xsdType="xs:string" optional="true"/>
+            <element column="Cli_ActINE" name="Cli_ActINE" xsdType="xs:string" optional="true"/>
+            <element column="Tit_Numero" name="Tit_Numero" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Titulo" name="Cli_Titulo" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Nombre" name="Cli_Nombre" xsdType="xs:string" optional="true"/>
+            <element column="Cli_ApePat" name="Cli_ApePat" xsdType="xs:string" optional="true"/>
+            <element column="Cli_ApeMat" name="Cli_ApeMat" xsdType="xs:string" optional="true"/>
+            <element column="Cli_RazSoc" name="Cli_RazSoc" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Comple" name="Cli_Comple" xsdType="xs:string" optional="true"/>
+            <element column="Cli_ComOrd" name="Cli_ComOrd" xsdType="xs:string" optional="true"/>
+            <element column="Cli_RFC" name="Cli_RFC" xsdType="xs:string" optional="true"/>
+            <element column="Cli_CURP" name="Cli_CURP" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Calle" name="Cli_Calle" xsdType="xs:string" optional="true"/>
+            <element column="Cli_CalNum" name="Cli_CalNum" xsdType="xs:string" optional="true"/>
+            <element column="Cli_NumExt" name="Cli_NumExt" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Coloni" name="Cli_Coloni" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Entida" name="Cli_Entida" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Locali" name="Cli_Locali" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Pais" name="Cli_Pais" xsdType="xs:string" optional="true"/>
+            <element column="Cli_CodPos" name="Cli_CodPos" xsdType="xs:string" optional="true"/>
+            <element column="Cli_ApaPos" name="Cli_ApaPos" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Consec" name="Cli_Consec" xsdType="xs:short" optional="true"/>
+            <element column="Cli_CobISR" name="Cli_CobISR" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Promot" name="Cli_Promot" xsdType="xs:string" optional="true"/>
+            <element column="Cli_ProAsi" name="Cli_ProAsi" xsdType="xs:string" optional="true"/>
+            <element column="Cli_ProOri" name="Cli_ProOri" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Telefo" name="Cli_Telefo" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Fax" name="Cli_Fax" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Status" name="Cli_Status" xsdType="xs:string" optional="true"/>
+            <element column="Cli_ClaCar" name="Cli_ClaCar" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Clasif" name="Cli_Clasif" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Contac" name="Cli_Contac" xsdType="xs:string" optional="true"/>
+            <element column="Cli_ConCon" name="Cli_ConCon" xsdType="xs:short" optional="true"/>
+            <element column="Cli_CobIVA" name="Cli_CobIVA" xsdType="xs:string" optional="true"/>
+            <element column="Cli_DesAct" name="Cli_DesAct" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Nacion" name="Cli_Nacion" xsdType="xs:string" optional="true"/>
+            <element column="Cli_GruCor" name="Cli_GruCor" xsdType="xs:string" optional="true"/>
+            <element column="Cli_NomCor" name="Cli_NomCor" xsdType="xs:string" optional="true"/>
+            <element column="Cli_PaiRes" name="Cli_PaiRes" xsdType="xs:string" optional="true"/>
+            <element column="Cli_TasISR" name="Cli_TasISR" xsdType="xs:decimal" optional="true"/>
+            <element column="Cli_ActEmp" name="Cli_ActEmp" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Grupo" name="Cli_Grupo" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Corpor" name="Cli_Corpor" xsdType="xs:string" optional="true"/>
+            <element column="Cli_InsChe" name="Cli_InsChe" xsdType="xs:string" optional="true"/>
+            <element column="Cli_ProOri" name="Cli_ProOri" xsdType="xs:string" optional="true"/>
+            <element column="Cli_ClaEco" name="Cli_ClaEco" xsdType="xs:string" optional="true"/>
+            <element column="Cli_Fecha" name="Cli_Fecha" xsdType="xs:dateTime" optional="true"/>
+            <element column="FechaSis" name="FechaSis" xsdType="xs:dateTime" optional="true"/>
+            <element column="Cda_Tamano" name="Cda_Tamano" xsdType="xs:string" optional="true"/>
+            <element column="Cda_TiDeRe" name="Cda_TiDeRe" xsdType="xs:integer" optional="true"/>
+            <element column="Cda_Usuari" name="Cda_Usuari" xsdType="xs:string" optional="true"/>
+            <element column="Cda_DesEsp" name="Cda_DesEsp" xsdType="xs:string" optional="true"/>
+            <element column="Cda_NumEmp" name="Cda_NumEmp" xsdType="xs:integer" optional="true"/>
+            <element column="Tit_Numero" name="Tit_Numero" xsdType="xs:string" optional="true"/>
+            <element column="Cli_SucAti" name="Cli_SucAti" xsdType="xs:string" optional="true"/>
+            <element column="Adi_Email" name="Adi_Email" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation name="clienteConsultarOp">
+        <call-query href="clienteConsultarSQL">
+            <with-param name="cliNumero" query-param="Cli_Numero"/>
+            <with-param name="cliSucurs" query-param="Cli_Sucurs"/>
+            <with-param name="cliNombre" query-param="Cli_Nombre"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>

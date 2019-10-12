@@ -1,5 +1,7 @@
 package com.bim.msf4j.commons;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -10,6 +12,13 @@ public class Utilerias {
 	
 	private static final Logger logger = Logger.getLogger(Utilerias.class);
 	private static DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy-MM-dd");
+
+	public static List<Object> paginado(List<Object> datos, int pagina, int porPagina) {
+		logger.info("Inicio paginado");
+		int numDatos = (pagina - 1) * porPagina;
+		logger.info("Termino paginado");
+		return datos.subList(numDatos, numDatos + porPagina);
+	}
 
 	public static Boolean calcularVencimiento(String fecha) {
 		logger.info("COMMONS: Iniciando calcularVencimiento...");

@@ -140,6 +140,37 @@
             <element column="Usu_CoAcNe" name="Usu_CoAcNe" xsdType="xs:integer" optional="true"/>
         </result>
     </query>
+    <query id="usuarioPerfilRiesgoConsultarSQL" useConfig="BIMDB">
+        <sql>
+        	EXECUTE CLAPLCUECON
+        	@Apl_Client	= :aplClient,
+			@Apl_Cuesti	= :aplCuesti,
+			@Tip_Consul	= :tipConsul,		
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+    		@FechaSis = :fechaSis,
+    		@SucOrigen = :sucOrigen,
+    		@SucDestino = :sucDestino,
+    		@Modulo = :modulo
+        </sql>
+        <param name="aplClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="aplCuesti" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/perfilRiesgoNE" element="perfilRiesgo">
+            <element column="Apl_PerRie" name="Apl_PerRie" xsdType="xs:integer" optional="true"/>
+            <element column="Apl_ConOpe" name="Apl_ConOpe" xsdType="xs:integer" optional="true"/>
+            <element column="Per_TitCli" name="Per_TitCli" xsdType="xs:string" optional="true"/>
+            <element column="Par_OpExPe" name="Par_OpExPe" xsdType="xs:integer" optional="true"/>
+        </result>
+    </query>
     <operation name="usuarioConsultarOp">
         <call-query href="usuarioConsultarSQL">
             <with-param name="usuNumero" query-param="Usu_Numero"/>
@@ -176,6 +207,20 @@
             <with-param name="usuFolNip" query-param="Usu_FolNip"/>
             <with-param name="usuNombre" query-param="Usu_Nombre"/>
             <with-param name="tipActual" query-param="Tip_Actual"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="usuarioPerfilRiesgoConsultarOp">
+        <call-query href="usuarioPerfilRiesgoConsultarSQL">
+            <with-param name="aplClient" query-param="Apl_Client"/>
+            <with-param name="aplCuesti" query-param="Apl_Cuesti"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
