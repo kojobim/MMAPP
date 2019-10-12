@@ -103,7 +103,7 @@
             <element column="Mon_ForMet" name="Mon_ForMet" xsdType="xs:string" optional="true"/>
         </result>
     </query>
-    <query id="tasaGATConsultaYCalcularSQL" useConfig="BIMDB">
+    <query id="tasaGATConsultaCalcularSQL" useConfig="BIMDB">
         <sql>
         	EXEC INCALGATPRO
         	@Inv_Dias = :invDias,
@@ -133,13 +133,13 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/GATConsultaYCalcularNE" element="GATConsultaYCalcular">
+        <result defaultNamespace="http://bem.com/GATConsultaCalcularNE" element="GATConsultaCalcular">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
             <element column="Inv_GAT" name="Inv_GAT" xsdType="xs:double" optional="true"/>
         </result>
     </query>
-    <query id="tasaGATRealConsultaYCalcularSQL" useConfig="BIMDB">
+    <query id="tasaGATRealConsultaCalcularSQL" useConfig="BIMDB">
         <sql>
         	EXEC INCALINFPRO
             @Inv_GAT = :invGAT,
@@ -161,7 +161,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/GATRealConsultaYCalcularNE" element="GATRealConsultaYCalcular">
+        <result defaultNamespace="http://bem.com/GATRealConsultaCalcularNE" element="GATRealConsultaCalcular">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
             <element column="Inv_GATRea" name="Inv_GATRea" xsdType="xs:double" optional="true"/>
@@ -203,8 +203,8 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <operation returnRequestStatus="true" name="tasaGATConsultaYCalcularOp">
-        <call-query href="tasaGATConsultaYCalcularSQL">
+    <operation returnRequestStatus="true" name="tasaGATConsultaCalcularOp">
+        <call-query href="tasaGATConsultaCalcularSQL">
             <with-param name="invDias" query-param="Inv_Dias"/>
             <with-param name="invTasInt" query-param="Inv_TasInt"/>
             <with-param name="invGat" query-param="Inv_GAT"/>
@@ -220,8 +220,8 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <operation returnRequestStatus="true" name="tasaGATRealConsultaYCalcularOp">
-        <call-query href="tasaGATRealConsultaYCalcularSQL">
+    <operation returnRequestStatus="true" name="tasaGATRealConsultaCalcularOp">
+        <call-query href="tasaGATRealConsultaCalcularSQL">
             <with-param name="invGAT" query-param="Inv_GAT"/>
             <with-param name="invGATRea" query-param="Inv_GATRea"/>
             <with-param name="numTransac" query-param="NumTransac"/>
