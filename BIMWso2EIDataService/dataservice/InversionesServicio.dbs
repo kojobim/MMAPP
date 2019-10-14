@@ -209,6 +209,41 @@
             <element column="Err_Variab" name="Err_Variab" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="inversionesContraEstadoCuentaActualizarSQL" useConfig="BIMDB">
+        <sql>
+            EXECUTE NBCUEORIACT
+            @Cor_Usuari	= :corUsuari,
+            @Cor_Cuenta	= :corCuenta,
+            @Cor_Status	= :corStatus,
+            @Cor_MoLiDi	= :corMoLiDi,
+            @Cor_MonDia	= :corMonDia,
+            @Cor_CliUsu	= :corCliUsu,
+            @Cor_Alias = :corAlias,
+            @Tip_Actual	= :tipActual,
+        	@NumTransac = :numTransac,
+        	@Transaccio = :transaccio,
+        	@Usuario = :usuario,
+        	@FechaSis = :fechaSis,
+        	@SucOrigen = :sucOrigen,
+        	@SucDestino = :sucDestino,
+        	@Modulo = :modulo
+        </sql>
+        <param name="corUsuari" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="corCuenta" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="corStatus" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="corMoLiDi" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="corMonDia" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="corCliUsu" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="corAlias" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipActual" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
     <operation name="inversionesObtenerOp">
         <call-query href="inversionesObtenerSQL">
             <with-param name="invClient" query-param="Inv_Client"/>
@@ -285,6 +320,25 @@
             <with-param name="invFecha" query-param="Inv_Fecha"/>
             <with-param name="invrTBrut" query-param="Inv_rTBrut"/>
             <with-param name="invMonRef" query-param="Inv_MonRef"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="inversionesContraEstadoCuentaActualizarOp">
+        <call-query href="inversionesContraEstadoCuentaActualizarSQL">
+            <with-param name="corUsuari" query-param="Cor_Usuari"/>
+            <with-param name="corCuenta" query-param="Cor_Cuenta"/>
+            <with-param name="corStatus" query-param="Cor_Status"/>
+            <with-param name="corMoLiDi" query-param="Cor_MoLiDi"/>
+            <with-param name="corMonDia" query-param="Cor_MonDia"/>
+            <with-param name="corCliUsu" query-param="Cor_CliUsu"/>
+            <with-param name="corAlias" query-param="Cor_Alias"/>
+            <with-param name="tipActual" query-param="Tip_Actual"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
