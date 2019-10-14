@@ -73,3 +73,7 @@ BIMWso2EICustomMediator/target/classes/META-INF/MANIFEST.MF
 BIMWso2EICustomMediator/bin/target/classes/META-INF/maven/com.bim.custom_mediator/BIMWso2EICustomMediator/pom.xml
 BIMWso2EICustomMediator/bin/target/classes/META-INF/maven/com.bim.custom_mediator/BIMWso2EICustomMediator/pom.properties
 BIMWso2EICustomMediator/bin/target/classes/META-INF/MANIFEST.MF
+BIMWso2EICustomMediator/bin/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+BIMWso2EICustomMediator/bin/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+BIMWso2EICustomMediator/bin/target/maven-archiver/pom.properties
+BIMWso2EICustomMediator/bin/target/BIMWso2EICustomMediator-1.0.0.jar
