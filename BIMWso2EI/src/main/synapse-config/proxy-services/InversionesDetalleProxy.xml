@@ -4,15 +4,15 @@
         <inSequence>
             <log level="full"/>
             <!-- Obtencion de parametros -->
-            <property expression="json-eval($.InversionesListadoProxy.numTransac)" name="numTransac" scope="default" type="STRING"/>
-            <property expression="json-eval($.InversionesListadoProxy.usuario)" name="usuario" scope="default" type="STRING"/>
-            <property expression="json-eval($.InversionesListadoProxy.bitUsuari)" name="bitUsuari" scope="default" type="STRING"/>
-            <property expression="json-eval($.InversionesListadoProxy.bitMonto)" name="bitMonto" scope="default" type="DOUBLE"/>
-            <property expression="json-eval($.InversionesListadoProxy.invClient)" name="invClient" scope="default" type="STRING"/>
-            <property expression="json-eval($.InversionesListadoProxy.invMoneda)" name="invMoneda" scope="default" type="STRING"/>
-            <property expression="json-eval($.InversionesListadoProxy.invUsuari)" name="invUsuari" scope="default" type="STRING"/>
-            <property expression="json-eval($.InversionesListadoProxy.invNumero)" name="invNumero" scope="default" type="STRING"/>
-            <property expression="json-eval($.InversionesListadoProxy.categoria)" name="categoria" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesDetalleProxy.numTransac)" name="numTransac" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesDetalleProxy.usuario)" name="usuario" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesDetalleProxy.bitUsuari)" name="bitUsuari" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesDetalleProxy.bitMonto)" name="bitMonto" scope="default" type="DOUBLE"/>
+            <property expression="json-eval($.InversionesDetalleProxy.invClient)" name="invClient" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesDetalleProxy.invMoneda)" name="invMoneda" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesDetalleProxy.invUsuari)" name="invUsuari" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesDetalleProxy.invNumero)" name="invNumero" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesDetalleProxy.categoria)" name="categoria" scope="default" type="STRING"/>
             <!-- Declaracion y asignacion de constantes -->
             <property name="tipConsul" scope="default" type="STRING" value="L1"/>
             <property name="sucOrigen" scope="default" type="STRING" value="001"/>
