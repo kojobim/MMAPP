@@ -2,6 +2,9 @@
 <proxy name="InversionesDetalleProxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
     <target>
         <inSequence>
+            <!-- Payload de llamada al stored procedure NBSALCEDCON -->
+            <!-- Payload para llamar al stored procedure NBINVERSCON -->
+            <!-- Payload de respuesta -->
             <log level="full"/>
             <!-- Obtencion de parametros -->
             <property expression="json-eval($.InversionesDetalleProxy.numTransac)" name="numTransac" scope="default" type="STRING"/>
@@ -23,6 +26,7 @@
             <property name="bitPriRef" scope="default" type="STRING" value="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"/>
             <property expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss')" name="fechaSis" scope="default" type="STRING"/>
             <property expression="get-property('axis2','REMOTE_ADDR')" name="bitDireIP" scope="default" type="STRING"/>
+            <!-- Obtencion del Payload original -->
             <enrich>
                 <source clone="true" type="body"/>
                 <target property="PAYLOAD_ORIGINAL" type="property"/>
@@ -31,27 +35,30 @@
                 <property expression="get-property('PAYLOAD_ORIGINAL')" name="Payload Original..."/>
                 <property expression="json-eval($.)" name="Payload Respuesta..."/>
             </log>
-            <payloadFactory media-type="xml">
+            <!-- Payload para llamar al stored procedure NBBITACOALT -->
+            <payloadFactory media-type="json">
                 <format>
-                    <bitacoraCreacionOp>
-                        <Bit_Usuari>$1</Bit_Usuari>
-                        <Bit_Fecha>$2</Bit_Fecha>
-                        <Bit_NumTra/>
-                        <Bit_TipOpe>$3</Bit_TipOpe>
-                        <Bit_CueOri/>
-                        <Bit_CueDes/>
-                        <Bit_Monto>$4</Bit_Monto>
-                        <Bit_PriRef>$5</Bit_PriRef>
-                        <Bit_SegRef/>
-                        <Bit_DireIP>$6</Bit_DireIP>
-                        <NumTransac>$7</NumTransac>
-                        <Transaccio>$8</Transaccio>
-                        <Usuario>$9</Usuario>
-                        <FechaSis>$10</FechaSis>
-                        <SucOrigen>$11</SucOrigen>
-                        <SucDestino>$12</SucDestino>
-                        <Modulo>$13</Modulo>
-                    </bitacoraCreacionOp>
+                {
+                	"bitacoraCreacionOp": {
+                		"Bit_Usuari": "$1",
+                		"Bit_Fecha": "$2",
+                		"Bit_NumTra": "",
+                		"Bit_TipOpe": "$3",
+                		"Bit_CueOri": "",
+                		"Bit_CueDes": "",
+                		"Bit_Monto": $4,
+                		"Bit_PriRef": "$5",
+                		"Bit_SegRef": "",
+                		"Bit_DireIP": "$6",
+                		"NumTransac": "$7",
+                		"Transaccio": "$8",
+                		"Usuario": "$9",
+                		"FechaSis": "$10",
+                		"SucOrigen": "$11",
+                		"SucDestino": "$12",
+                		"Modulo": "$13"
+                	}
+                }
                 </format>
                 <args>
                     <arg evaluator="xml" expression="$ctx:bitUsuari"/>
@@ -85,20 +92,22 @@
                     </log>
                     <switch source="get-property('categoria')">
                         <case regex="PAGARE">
-                            <payloadFactory media-type="xml">
+                            <payloadFactory media-type="json">
                                 <format>
-                                    <inversionesPagareNumeroUsuarioObtenerOp>
-                                        <Inv_Numero/>
-                                        <Inv_Usuari>$1</Inv_Usuari>
-                                        <Tip_Consul>$2</Tip_Consul>
-                                        <NumTransac/>
-                                        <Transaccio>$3</Transaccio>
-                                        <Usuario>$4</Usuario>
-                                        <FechaSis>$5</FechaSis>
-                                        <SucOrigen>$6</SucOrigen>
-                                        <SucDestino>$7</SucDestino>
-                                        <Modulo>$8</Modulo>
-                                    </inversionesPagareNumeroUsuarioObtenerOp>
+                                {
+                                	"inversionesPagareNumeroUsuarioObtenerOp": {
+                                		"Inv_Numero": "",
+                                		"Inv_Usuari": "$1",
+                                		"Tip_Consul": "$2",
+                                		"NumTransac": "",
+                                		"Transaccio": "$3",
+                                		"Usuario": "$4",
+                                		"FechaSis": "$5",
+                                		"SucOrigen": "$6",
+                                		"SucDestino": "$7",
+                                		"Modulo": "$8"
+                                	}
+                                }
                                 </format>
                                 <args>
                                     <arg evaluator="xml" expression="$ctx:invUsuari"/>
@@ -125,6 +134,7 @@
                                     <log level="custom">
                                         <property expression="get-property('PAYLOAD_SEGUNDA_LLAMADA')" name="Payload de la segunda llamada..."/>
                                     </log>
+                                    <!-- Recorremos el arreglo obtenido de la llamada anterior y filtramos por Inv_Numero -->
                                     <property name="contador" scope="operation" type="STRING" value="0"/>
                                     <property expression="count(//inversiones/inversion)" name="totalInv" scope="operation" type="STRING"/>
                                     <foreach expression="//inversiones/inversion">
@@ -132,21 +142,23 @@
                                             <property expression="number(get-property('operation','contador') + 1)" name="contador" scope="operation" type="STRING"/>
                                             <filter xpath="//Inv_Numero = $ctx:invNumero">
                                                 <then>
-                                                    <payloadFactory media-type="xml">
+                                                    <payloadFactory media-type="json">
                                                         <format>
-                                                            <inversion>
-                                                                <invFecIni>$1</invFecIni>
-                                                                <invFecVen>$2</invFecVen>
-                                                                <invCuenta>$3</invCuenta>
-                                                                <invGat>$4</invGat>
-                                                                <invGatRea>$5</invGatRea>
-                                                                <plazo>$6</plazo>
-                                                                <intBru>$7</intBru>
-                                                                <invIntNet>$8</invIntNet>
-                                                                <invISRTot>$9</invISRTot>
-                                                                <invTotal>$10</invTotal>
-                                                                <cpRenInv/>
-                                                            </inversion>
+                                                        {
+                                                        	"inversion": {
+                                                        		"invFecIni": "$1",
+                                                        		"invFecVen": "$2",
+                                                        		"invCuenta": "$3",
+                                                        		"invGat": "$4",
+                                                        		"invGatRea": "$5",
+                                                        		"plazo": "$6",
+                                                        		"intBru": "$7",
+                                                        		"invIntNet": "$8",
+                                                        		"invISRTot": "$9",
+                                                        		"invTotal": "$10",
+                                                        		"cpRenInv": ""
+                                                        	}
+                                                        }
                                                         </format>
                                                         <args>
                                                             <arg evaluator="xml" expression="//Inv_FecIni/text()"/>
@@ -161,7 +173,7 @@
                                                             <arg evaluator="xml" expression="//Inv_Total"/>
                                                         </args>
                                                     </payloadFactory>
-                                                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                                                    <!-- Llamamos al micro-servicio para calcular vencimiento y redondear propiedades -->
                                                     <call blocking="true">
                                                         <endpoint>
                                                             <http method="post" uri-template="http://localhost:9090/inversiones/detalle"/>
@@ -175,17 +187,19 @@
                                                             <log level="custom">
                                                                 <property name="switchlog" value="CASO: No se encontraron coincidencias..."/>
                                                             </log>
+                                                            <!-- Payload en caso de numero de inversion no valido -->
                                                             <property name="HTTP_SC" scope="axis2" type="STRING" value="409"/>
-                                                            <payloadFactory media-type="xml">
+                                                            <payloadFactory media-type="json">
                                                                 <format>
-                                                                    <Error>
-                                                                        <Err_Codigo>409</Err_Codigo>
-                                                                        <Err_Mensaj>Numero de inversion invalido</Err_Mensaj>
-                                                                    </Error>
+                                                                {
+                                                                	"Error": {
+                                                                		"Err_Codigo": 409,
+                                                                		"Err_Mensaj": "Numero de inversion invalido"
+                                                                	}
+                                                                }
                                                                 </format>
                                                                 <args/>
                                                             </payloadFactory>
-                                                            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
                                                             <respond/>
                                                         </then>
                                                         <else/>
@@ -200,34 +214,37 @@
                                         <property name="switchlog" value="CASO: Error en la segunda llamada..."/>
                                     </log>
                                     <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
-                                    <payloadFactory media-type="xml">
+                                    <payloadFactory media-type="json">
                                         <format>
-                                            <Error>
-                                                <Err_Codigo>500</Err_Codigo>
-                                                <Err_Mensaj>ERROR!</Err_Mensaj>
-                                            </Error>
+                                        {
+                                        	"Error": {
+                                        		"Err_Codigo": 500,
+                                        		"Err_Mensaj": "Error!"
+                                        	}
+                                        }
                                         </format>
                                         <args/>
                                     </payloadFactory>
-                                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
                                     <respond/>
                                 </else>
                             </filter>
                         </case>
                         <default>
-                            <payloadFactory media-type="xml">
+                            <payloadFactory media-type="json">
                                 <format>
-                                    <inversionesObtenerOp>
-                                        <Inv_Client>$1</Inv_Client>
-                                        <Inv_Moneda>$2</Inv_Moneda>
-                                        <NumTransac/>
-                                        <Transaccio>$3</Transaccio>
-                                        <Usuario>$4</Usuario>
-                                        <FechaSis>$5</FechaSis>
-                                        <SucOrigen>$6</SucOrigen>
-                                        <SucDestino>$7</SucDestino>
-                                        <Modulo>$8</Modulo>
-                                    </inversionesObtenerOp>
+                                {
+                                	"inversionesObtenerOp": {
+                                		"Inv_Client": "$1",
+                                		"Inv_Moneda": "$2",
+                                		"NumTransac": "",
+                                		"Transaccio": "$3",
+                                		"Usuario": "$4",
+                                		"FechaSis": "$5",
+                                		"SucOrigen": "$6",
+                                		"SucDestino": "$7",
+                                		"Modulo": "$8"
+                                	}
+                                }
                                 </format>
                                 <args>
                                     <arg evaluator="xml" expression="$ctx:invClient"/>
@@ -254,6 +271,7 @@
                                     <log level="custom">
                                         <property expression="get-property('PAYLOAD_SEGUNDA_LLAMADA')" name="Payload de la segunda llamada..."/>
                                     </log>
+                                    <!-- Recorremos el arreglo obtenido de la llamada anterior y filtramos por Inv_Numero y Inv_Tipo -->
                                     <property name="contador" scope="operation" type="STRING" value="0"/>
                                     <property expression="count(//inversiones/inversion)" name="totalInv" scope="operation" type="STRING"/>
                                     <foreach expression="//inversiones/inversion">
@@ -264,21 +282,23 @@
                                                     <property expression="//Amo_Tasa" name="amoTasa" scope="operation" type="STRING"/>
                                                     <property expression="//Amo_ISR" name="amoISR" scope="operation" type="STRING"/>
                                                     <property expression="number(get-property('operation','amoISR') * 0.10) + number(get-property('operation','amoTasa'))" name="intBru" scope="operation" type="STRING"/>
-                                                    <payloadFactory media-type="xml">
+                                                    <payloadFactory media-type="json">
                                                         <format>
-                                                            <inversion>
-                                                                <invFecIni>$1</invFecIni>
-                                                                <invFecVen>$2</invFecVen>
-                                                                <invCuenta>$3</invCuenta>
-                                                                <invGat>$4</invGat>
-                                                                <invGatRea>$5</invGatRea>
-                                                                <plazo>$6</plazo>
-                                                                <intBru>$7</intBru>
-                                                                <invIntNet>$8</invIntNet>
-                                                                <invISRTot>$9</invISRTot>
-                                                                <invTotal>$10</invTotal>
-                                                                <cpRenInv/>
-                                                            </inversion>
+                                                        {
+                                                        	"inversion": {
+                                                        		"invFecIni": "$1",
+                                                        		"invFecVen": "$2",
+                                                        		"invCuenta": "$3",
+                                                        		"invGat": "$4",
+                                                        		"invGatRea": "$5",
+                                                        		"plazo": "$6",
+                                                        		"intBru": "$7",
+                                                        		"invIntNet": "$8",
+                                                        		"invISRTot": "$9",
+                                                        		"invTotal": "$10",
+                                                        		"cpRenInv": ""
+                                                        	}
+                                                        }
                                                         </format>
                                                         <args>
                                                             <arg evaluator="xml" expression="//Inv_FecIni/text()"/>
@@ -293,7 +313,7 @@
                                                             <arg evaluator="xml" expression="//Inv_Total"/>
                                                         </args>
                                                     </payloadFactory>
-                                                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                                                    <!-- Llamamos al micro-servicio para calcular vencimiento y redondear propiedades -->
                                                     <call blocking="true">
                                                         <endpoint>
                                                             <http method="post" uri-template="http://localhost:9090/inversiones/detalle"/>
@@ -307,17 +327,19 @@
                                                             <log level="custom">
                                                                 <property name="switchlog" value="CASO: No se encontraron coincidencias..."/>
                                                             </log>
+                                                            <!-- Payload en caso de numero de inversion no valido -->
                                                             <property name="HTTP_SC" scope="axis2" type="STRING" value="409"/>
-                                                            <payloadFactory media-type="xml">
+                                                            <payloadFactory media-type="json">
                                                                 <format>
-                                                                    <Error>
-                                                                        <Err_Codigo>409</Err_Codigo>
-                                                                        <Err_Mensaj>Numero de inversion invalido</Err_Mensaj>
-                                                                    </Error>
+                                                                {
+						                                        	"Error": {
+						                                        		"Err_Codigo": 409,
+						                                        		"Err_Mensaj": "Numero de inversion invalido"
+						                                        	}
+						                                        }
                                                                 </format>
                                                                 <args/>
                                                             </payloadFactory>
-                                                            <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
                                                             <respond/>
                                                         </then>
                                                         <else/>
@@ -332,16 +354,17 @@
                                         <property name="switchlog" value="CASO: Error en la segunda llamada..."/>
                                     </log>
                                     <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
-                                    <payloadFactory media-type="xml">
+                                    <payloadFactory media-type="json">
                                         <format>
-                                            <Error>
-                                                <Err_Codigo>500</Err_Codigo>
-                                                <Err_Mensaj>ERROR!</Err_Mensaj>
-                                            </Error>
+                                        {
+                                        	"Error": {
+                                        		"Err_Codigo": 500,
+                                        		"Err_Mensaj": "Error!"
+                                        	}
+                                        }
                                         </format>
                                         <args/>
                                     </payloadFactory>
-                                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
                                     <respond/>
                                 </else>
                             </filter>
@@ -353,16 +376,17 @@
                         <property name="switchlog" value="CASO: Error en la primera llamada..."/>
                     </log>
                     <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
-                    <payloadFactory media-type="xml">
+                    <payloadFactory media-type="json">
                         <format>
-                            <Error>
-                                <Err_Codigo>500</Err_Codigo>
-                                <Err_Mensaj>ERROR!</Err_Mensaj>
-                            </Error>
+                        {
+                        	"Error": {
+                        		"Err_Codigo": 500,
+                        		"Err_Mensaj": "Error!"
+                        	}
+                        }
                         </format>
                         <args/>
                     </payloadFactory>
-                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
                     <respond/>
                 </else>
             </filter>
