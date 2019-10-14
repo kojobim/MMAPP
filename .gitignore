@@ -70,3 +70,9 @@ BIMWso2EICustomMediator/bin/target/maven-status/maven-compiler-plugin/compile/de
 BIMWso2EICustomMediator/bin/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
 BIMWso2EICustomMediator/bin/target/maven-archiver/pom.properties
 BIMWso2EICustomMediator/bin/target/BIMWso2EICustomMediator-1.0.0.jar
+BIMWso2EICustomMediator/target
+
+BIMWso2EICustomMediator/target/BIMWso2EICustomMediator-1.0.0.jar
+BIMWso2EICustomMediator/target/maven-archiver/pom.properties
+BIMWso2EICustomMediator/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+BIMWso2EICustomMediator/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
