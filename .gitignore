@@ -66,3 +66,7 @@ BIMWso2EICompositeApplication/.classpath
 BIMWso2EICompositeApplication/.settings/
 
 BIMWso2EICompositeApplication/target/
+BIMWso2EICustomMediator/bin/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+BIMWso2EICustomMediator/bin/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+BIMWso2EICustomMediator/bin/target/maven-archiver/pom.properties
+BIMWso2EICustomMediator/bin/target/BIMWso2EICustomMediator-1.0.0.jar
