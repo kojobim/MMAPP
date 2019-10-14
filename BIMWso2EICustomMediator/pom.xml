@@ -27,7 +27,6 @@
          <artifactId>synapse-core</artifactId>
          <version>2.1.7-wso2v60</version>
      </dependency>
-
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
