@@ -14,16 +14,16 @@
             <property expression="json-eval($.InversionesListadoProxy.bitUsuari)" name="bitUsuari" scope="default" type="STRING"/>
             <property expression="json-eval($.InversionesListadoProxy.bitFecha)" name="bitFecha" scope="default" type="STRING"/>
             <property expression="json-eval($.InversionesListadoProxy.bitTipOpe)" name="bitTipOpe" scope="default" type="STRING"/>
-            <property expression="json-eval($.InversionesListadoProxy.bitMonto)" name="bitMonto" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.bitMonto)" name="bitMonto" scope="default" type="DOUBLE"/>
             <property expression="json-eval($.InversionesListadoProxy.bitPriRef)" name="bitPriRef" scope="default" type="STRING"/>
             <property expression="json-eval($.InversionesListadoProxy.bitDireIP)" name="bitDireIP" scope="default" type="STRING"/>
             <property expression="json-eval($.InversionesListadoProxy.invClient)" name="invClient" scope="default" type="STRING"/>
             <property expression="json-eval($.InversionesListadoProxy.invMoneda)" name="invMoneda" scope="default" type="STRING"/>
             <property expression="json-eval($.InversionesListadoProxy.invNumero)" name="invNumero" scope="default" type="STRING"/>
             <property expression="json-eval($.InversionesListadoProxy.invUsuari)" name="invUsuari" scope="default" type="STRING"/>
-            <property expression="json-eval($.InversionesListadoProxy.page)" name="uri.var.page" scope="default" type="STRING"/>
-            <property expression="json-eval($.InversionesListadoProxy.per_page)" name="uri.var.per_page" scope="default" type="STRING"/>
-            <property expression="json-eval($.InversionesListadoProxy.filter_by)" name="uri.var.filter_by" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.page)" name="page" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.per_page)" name="per_page" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.filter_by)" name="filter_by" scope="default" type="STRING"/>
             <enrich>
                 <source clone="true" type="body"/>
                 <target property="PAYLOAD_ORIGINAL" type="property"/>
@@ -157,7 +157,7 @@
                         </target>
                     </clone>
                     <property name="resultado" scope="default">
-                        <categorias/>
+                        <inversiones/>
                     </property>
                     <aggregate>
                         <completeCondition>
@@ -167,6 +167,11 @@
                             <log level="custom">
                                 <property expression="json-eval($.)" name="Payload Final..."/>
                             </log>
+                            <call blocking="true">
+                                <endpoint>
+                                    <http method="post" uri-template="http://localhost:9090/filtroInversiones"/>
+                                </endpoint>
+                            </call>
                             <respond/>
                         </onComplete>
                     </aggregate>
