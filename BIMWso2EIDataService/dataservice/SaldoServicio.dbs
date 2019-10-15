@@ -1,0 +1,66 @@
+<data name="SaldoServicio" serviceGroup="SaldoServicio" serviceNamespace="SaldoServicio">
+    <description>Servicio que se encarga de consultar los saldos del cliente</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="saldosClienteConsultarSQL" useConfig="BIMDB">
+        <sql>
+        	EXEC NBSALCLICON
+			@Cue_Client = :cueClient,
+			@Usu_Numero = :usuNumero,
+			@Bit_DireIP = :bitDireIP,
+			@Cue_Numero = :cueNumero,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="cueClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="bitDireIP" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cueNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/saldosClienteConsultarNE" element="cuenta" rowName="saldos">
+            <element column="Sal_Cuenta" name="Sal_Cuenta" xsdType="xs:string" optional="true"/>
+            <element column="Sal_CLABE" name="Sal_CLABE" xsdType="xs:string" optional="true"/>
+            <element column="Sal_Dispon" name="Sal_Dispon" xsdType="xs:decimal" optional="true"/>
+            <element column="Mon_Descri" name="Mon_Descri" xsdType="xs:string" optional="true"/>
+            <element column="Tip_Descri" name="Tip_Descri" xsdType="xs:string" optional="true"/>
+            <element column="Sal_SBC2" name="Sal_SBC2" xsdType="xs:decimal" optional="true"/>
+            <element column="Sal_SBC1" name="Sal_SBC1" xsdType="xs:decimal" optional="true"/>
+            <element column="Sal_PI" name="Sal_PI" xsdType="xs:decimal" optional="true"/>
+            <element column="Sal_Bloque" name="Sal_Bloque" xsdType="xs:decimal" optional="true"/>
+            <element column="Sal_BloqLF" name="Sal_BloqLF" xsdType="xs:decimal" optional="true"/>
+            <element column="Sal_Pagare" name="Sal_Pagare" xsdType="xs:integer" optional="true"/>
+            <element column="Sal_Mesa" name="Sal_Mesa" xsdType="xs:integer" optional="true"/>
+            <element column="Sal_Fondos" name="Sal_Fondos" xsdType="xs:integer" optional="true"/>
+            <element column="Sal_Cedes" name="Sal_Cedes" xsdType="xs:integer" optional="true"/>
+            <element column="Cor_Alias" name="Cor_Alias" xsdType="xs:string" optional="true"/>
+            <element column="Sal_Saldo" name="Sal_Saldo" xsdType="xs:decimal" optional="true"/>
+        </result>
+    </query>
+    <operation name="saldosClienteConsultarOp">
+        <call-query href="saldosClienteConsultarSQL">
+            <with-param name="cueClient" query-param="Cue_Client"/>
+            <with-param name="usuNumero" query-param="Usu_Numero"/>
+            <with-param name="bitDireIP" query-param="Bit_DireIP"/>
+            <with-param name="cueNumero" query-param="Cue_Numero"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>
