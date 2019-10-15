@@ -1,9 +1,12 @@
 package com.bim.msf4j.ctrl;
 
+import java.util.ArrayList;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -30,14 +33,16 @@ public class FiltroInversionesCtrl implements Microservice {
 	public JsonObject filtroInversiones(@Context final Request solicitud) {
 		logger.info("CTRL: Comenzando filtroInversiones metodo");
 		String mensaje = HttpClientUtils.getStringContent(solicitud);
-		logger.info(">>>> mensaje" + mensaje);
-		JsonObject objInversiones = new Gson().fromJson(mensaje, JsonObject.class);
-		JsonArray inversiones = objInversiones.getAsJsonArray("inversion");
-		logger.info(">>>> for inversiones" + inversiones);
+		JsonObject inversionesObjeto = new Gson().fromJson(mensaje, JsonObject.class);
+		JsonObject inversiones = inversionesObjeto.getAsJsonObject("inversiones");
+		JsonArray inversionArray = inversiones.getAsJsonArray("inversion");
 		
 		int cpTotalInvCantidP = 0, cpTotalInvCantidV = 0, cpTotalInvCantidC = 0, cpTotalInvCantidF = 0;
-		
 
+		int page = inversionesObjeto.get("page").getAsInt();
+		int  per_page = inversionesObjeto.get("per_page").getAsInt();
+		String filter_by = inversionesObjeto.get("filter_by").getAsString();
+		
 		JsonObject categoriaFija = new JsonObject();
 		categoriaFija.addProperty("categoria", "FIJA");
 		categoriaFija.add("inversiones", new JsonArray());
@@ -52,67 +57,71 @@ public class FiltroInversionesCtrl implements Microservice {
 
 		JsonObject categoriaPagare = new JsonObject();
 		categoriaPagare.addProperty("categoria", "PAGARE");
-		categoriaPagare.add("inversiones", new JsonArray());
 		
-		for(JsonElement element : inversiones) {
-			JsonObject objetoItem = new JsonObject();
-			JsonObject itemAI  = (JsonObject) element;
+		JsonArray categoriaFijaArray = new JsonArray();
+		JsonArray categoriaValorArray = new JsonArray();
+		JsonArray categoriaPagareArray = new JsonArray();
+		JsonArray categoriaCedeArray = new JsonArray();
+		
+		for(JsonElement inversion : inversionArray) {
+			JsonObject elementosObjeto = new JsonObject();
+			JsonObject elemento  = (JsonObject) inversion;
 			
-			if(itemAI.has("invTipo") && itemAI.get("invTipo").getAsString().equals("P"))
+			if(elemento.has("Inv_Tipo") && elemento.get("Inv_Tipo").getAsString().equals("P"))
 				continue;
 			
-			if(!itemAI.has("fotDescri")) 
-				itemAI.addProperty("fotDescri", "PAGARE");
-
-			int cantidad = itemAI.get("invCantid").getAsInt();
-			
+			if(!elemento.has("Fot_Descri")) 
+				elemento.addProperty("Fot_Descri", "PAGARE");
 						
-			String invNumero = itemAI.get("invNumero").getAsString();
-			logger.info("invNumero: " + invNumero);
-			int invCantid = itemAI.get("invCantid").getAsInt();
-			logger.info("item2: " + invCantid);
-			String invFecVen = itemAI.get("invFecVen").getAsString();
-			logger.info("item3: " + invFecVen);
+			String invNumero = elemento.get("Inv_Numero").getAsString();
+			int invCantid = elemento.get("Inv_Cantid").getAsInt();
+			if(!elemento.has("Inv_FecVen") || elemento.get("Inv_FecVen").isJsonNull())
+				continue;
 			
-			Boolean cpRenInv = Utilerias.calcularVencimiento(invFecVen);
-
-			objetoItem.addProperty("invNumero", invNumero);
-			objetoItem.addProperty("invCantid", invCantid);
-			objetoItem.addProperty("invFecVen", invFecVen);
-			objetoItem.addProperty("cpRenInv", cpRenInv);
-
-			logger.info("***** objetoItems" + objetoItem);
-			switch (itemAI.get("fotDescri").getAsString()) {
+			Boolean cpRenInv = Utilerias.calcularVencimiento(elemento.get("Inv_FecVen").getAsString());
+			if(filter_by != null && !filter_by.isEmpty() && filter_by.equals("PROXIMOS_VENCIMIENTOS") && !cpRenInv)
+				continue;
+			
+			elementosObjeto.addProperty("invNumero", invNumero);
+			elementosObjeto.addProperty("invCantid", invCantid);
+			elementosObjeto.addProperty("invFecVen", elemento.get("Inv_FecVen").getAsString());
+			elementosObjeto.addProperty("cpRenInv", cpRenInv);
+			
+			switch (elemento.get("Fot_Descri").getAsString()) {
 				case "FIJA":
-					logger.info("*********FIJA");
-					cpTotalInvCantidF += cantidad;
-					categoriaFija.get("inversiones").getAsJsonArray().add(objetoItem);
+					cpTotalInvCantidF += invCantid;
+					categoriaFijaArray.add(elementosObjeto);
 					break;
 				case "VALOR":
-					logger.info("*********VALOR");
-					cpTotalInvCantidV += cantidad;
-					categoriaValor.get("inversiones").getAsJsonArray().add(objetoItem);
-					logger.info("***** objetoItems" + objetoItem);
+					cpTotalInvCantidV += invCantid;
+					categoriaValorArray.add(elementosObjeto);
 					break;
 				case "CEDE_RI":
-					logger.info("*********CEDE_RI");
-					cpTotalInvCantidC += cantidad;
-					categoriaCede.get("inversiones").getAsJsonArray().add(objetoItem);
+					cpTotalInvCantidC += invCantid;
+					categoriaCedeArray.add(elementosObjeto);
 					break;
 				case "PAGARE":
-					logger.info("*********PAGARE");
-					cpTotalInvCantidP += cantidad;
-					categoriaPagare.get("inversiones").getAsJsonArray().add(objetoItem);
+					cpTotalInvCantidP += invCantid;
+					categoriaPagareArray.add(elementosObjeto);
 					break;
 				default:
 					break;
 			}
 		}
 
-		int cpTotalInvP = categoriaPagare.get("inversiones").getAsJsonArray().size(); 
-		int cpTotalInvV = categoriaValor.get("inversiones").getAsJsonArray().size(); 
-		int cpTotalInvF = categoriaFija.get("inversiones").getAsJsonArray().size();
-		int cpTotalInvC = categoriaCede.get("inversiones").getAsJsonArray().size();
+		int cpTotalInvP = categoriaPagareArray.size(); 
+		int cpTotalInvV = categoriaValorArray.size(); 
+		int cpTotalInvF = categoriaFijaArray.size();
+		int cpTotalInvC = categoriaCedeArray.size();
+		
+		categoriaFijaArray = Utilerias.paginado(categoriaFijaArray, page, per_page);
+		categoriaFija.add("inversiones", categoriaFijaArray);
+		categoriaValorArray = Utilerias.paginado(categoriaValorArray, page, per_page);
+		categoriaValor.add("inversiones", categoriaValorArray);
+		categoriaPagareArray = Utilerias.paginado(categoriaPagareArray, page, per_page);
+		categoriaPagare.add("inversiones", categoriaPagareArray);
+		categoriaCedeArray = Utilerias.paginado(categoriaCedeArray, page, per_page);
+		categoriaCede.add("inversiones", categoriaCedeArray);
 		
 		categoriaFija.addProperty("cpTotalInvCantid", cpTotalInvCantidF);
 		categoriaFija.addProperty("cpTotalInv", cpTotalInvF);
@@ -132,7 +141,6 @@ public class FiltroInversionesCtrl implements Microservice {
 		JsonObject objetoCategorias = new JsonObject();
 		objetoCategorias.add("categorias", arrayCategorias);
 		
-		logger.info("&&&&&&&&CATEGORIAS&&&&&&&&&&&  " + objetoCategorias);
 		logger.info("CTRL: Termino filtroInversiones metodo");
 		return objetoCategorias;
 	}

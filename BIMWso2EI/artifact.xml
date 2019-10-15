@@ -14,10 +14,6 @@
     <artifact name="InversionesDetalleProxy" groupId="com.bim.proxy-service" version="1.0.0" type="synapse/proxy-service" serverRole="EnterpriseServiceBus">
     	<file>src/main/synapse-config/proxy-services/InversionesDetalleProxy.xml</file>
     </artifact>
-
-    <artifact name="InversionesPagareListadoProxy" groupId="com.bim.proxy-service" version="1.0.0" type="synapse/proxy-service" serverRole="EnterpriseServiceBus">
-        <file>src/main/synapse-config/proxy-services/InversionesPagareListadoProxy.xml</file>
-    </artifact>
     
     <artifact name="RouterProxy" groupId="com.bim.proxy-service" version="1.0.0" type="synapse/proxy-service" serverRole="EnterpriseServiceBus">
         <file>src/main/synapse-config/proxy-services/RouterProxy.xml</file>
