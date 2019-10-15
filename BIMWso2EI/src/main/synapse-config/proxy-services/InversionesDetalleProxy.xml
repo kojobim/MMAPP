@@ -196,8 +196,7 @@
                                                                 		"Err_Codigo": 409,
                                                                 		"Err_Mensaj": "Numero de inversion invalido"
                                                                 	}
-                                                                }
-                                                                </format>
+                                                                }</format>
                                                                 <args/>
                                                             </payloadFactory>
                                                             <respond/>
@@ -282,6 +281,7 @@
                                                     <property expression="//Amo_Tasa" name="amoTasa" scope="operation" type="STRING"/>
                                                     <property expression="//Amo_ISR" name="amoISR" scope="operation" type="STRING"/>
                                                     <property expression="number(get-property('operation','amoISR') * 0.10) + number(get-property('operation','amoTasa'))" name="intBru" scope="operation" type="STRING"/>
+                                                    <!-- Payload de respuesta -->
                                                     <payloadFactory media-type="json">
                                                         <format>
                                                         {
