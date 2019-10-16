@@ -194,7 +194,8 @@
                                                                 		"Err_Codigo": 409,
                                                                 		"Err_Mensaj": "Número de inversión inválido"
                                                                 	}
-                                                                }</format>
+                                                                }
+                                                                </format>
                                                                 <args/>
                                                             </payloadFactory>
                                                             <respond/>
