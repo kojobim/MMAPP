@@ -39,25 +39,25 @@
             <payloadFactory media-type="json">
                 <format>
                 {
-                	"bitacoraCreacionOp": {
-                		"Bit_Usuari": "$1",
-                		"Bit_Fecha": "$2",
-                		"Bit_NumTra": "",
-                		"Bit_TipOpe": "$3",
-                		"Bit_CueOri": "",
-                		"Bit_CueDes": "",
-                		"Bit_Monto": $4,
-                		"Bit_PriRef": "$5",
-                		"Bit_SegRef": "",
-                		"Bit_DireIP": "$6",
-                		"NumTransac": "$7",
-                		"Transaccio": "BMO",
-                		"Usuario": "$8",
-                		"FechaSis": "$9",
-                		"SucOrigen": "$10",
-                		"SucDestino": "$11",
-                		"Modulo": "$12"
-                	}
+                    "bitacoraCreacionOp": {
+                        "Bit_Usuari": "$1",
+                        "Bit_Fecha": "$2",
+                        "Bit_NumTra": "",
+                        "Bit_TipOpe": "$3",
+                        "Bit_CueOri": "",
+                        "Bit_CueDes": "",
+                        "Bit_Monto": $4,
+                        "Bit_PriRef": "$5",
+                        "Bit_SegRef": "",
+                        "Bit_DireIP": "$6",
+                        "NumTransac": "$7",
+                        "Transaccio": "BMO",
+                        "Usuario": "$8",
+                        "FechaSis": "$9",
+                        "SucOrigen": "$10",
+                        "SucDestino": "$11",
+                        "Modulo": "$12"
+                    }
                 }
                 </format>
                 <args>
@@ -94,18 +94,18 @@
                             <payloadFactory media-type="json">
                                 <format>
                                 {
-                                	"inversionesPagareNumeroUsuarioObtenerOp": {
-                                		"Inv_Numero": "",
-                                		"Inv_Usuari": "$1",
-                                		"Tip_Consul": "$2",
-                                		"NumTransac": "",
-                                		"Transaccio": "HKQ",
-                                		"Usuario": "$3",
-                                		"FechaSis": "$4",
-                                		"SucOrigen": "$5",
-                                		"SucDestino": "$6",
-                                		"Modulo": "$7"
-                                	}
+                                    "inversionesPagareNumeroUsuarioObtenerOp": {
+                                        "Inv_Numero": "",
+                                        "Inv_Usuari": "$1",
+                                        "Tip_Consul": "$2",
+                                        "NumTransac": "",
+                                        "Transaccio": "HKQ",
+                                        "Usuario": "$3",
+                                        "FechaSis": "$4",
+                                        "SucOrigen": "$5",
+                                        "SucDestino": "$6",
+                                        "Modulo": "$7"
+                                    }
                                 }
                                 </format>
                                 <args>
@@ -145,19 +145,19 @@
                                                     <payloadFactory media-type="json">
                                                         <format>
                                                         {
-                                                        	"inversion": {
-                                                        		"invFecIni": "$1",
-                                                        		"invFecVen": "$2",
-                                                        		"invCuenta": "$3",
-                                                        		"invGat": $4,
-                                                        		"invGatRea": $5,
-                                                        		"plazo": $6,
-                                                        		"intBru": $7,
-                                                        		"invIntNet": $8,
-                                                        		"invISRTot": $9,
-                                                        		"invTotal": $10,
-                                                        		"cpRenInv": ""
-                                                        	}
+                                                            "inversion": {
+                                                                "invFecIni": "$1",
+                                                                "invFecVen": "$2",
+                                                                "invCuenta": "$3",
+                                                                "invGat": $4,
+                                                                "invGatRea": $5,
+                                                                "plazo": $6,
+                                                                "intBru": $7,
+                                                                "invIntNet": $8,
+                                                                "invISRTot": $9,
+                                                                "invTotal": $10,
+                                                                "cpRenInv": ""
+                                                            }
                                                         }
                                                         </format>
                                                         <args>
@@ -190,10 +190,10 @@
                                                             <payloadFactory media-type="json">
                                                                 <format>
                                                                 {
-                                                                	"Error": {
-                                                                		"Err_Codigo": 409,
-                                                                		"Err_Mensaj": "Número de inversión inválido"
-                                                                	}
+                                                                    "Error": {
+                                                                        "Err_Codigo": 409,
+                                                                        "Err_Mensaj": "Número de inversión inválido"
+                                                                    }
                                                                 }
                                                                 </format>
                                                                 <args/>
@@ -215,10 +215,10 @@
                                     <payloadFactory media-type="json">
                                         <format>
                                         {
-                                        	"Error": {
-                                        		"Err_Codigo": 500,
-                                        		"Err_Mensaj": "An error has occurred"
-                                        	}
+                                            "Error": {
+                                                "Err_Codigo": 500,
+                                                "Err_Mensaj": "An error has occurred"
+                                            }
                                         }
                                         </format>
                                         <args/>
@@ -231,17 +231,17 @@
                             <payloadFactory media-type="json">
                                 <format>
                                 {
-                                	"inversionesObtenerOp": {
-                                		"Inv_Client": "$1",
-                                		"Inv_Moneda": "$2",
-                                		"NumTransac": "",
-                                		"Transaccio": "HMZ",
-                                		"Usuario": "$3",
-                                		"FechaSis": "$4",
-                                		"SucOrigen": "$5",
-                                		"SucDestino": "$6",
-                                		"Modulo": "$7"
-                                	}
+                                    "inversionesObtenerOp": {
+                                        "Inv_Client": "$1",
+                                        "Inv_Moneda": "$2",
+                                        "NumTransac": "",
+                                        "Transaccio": "HMZ",
+                                        "Usuario": "$3",
+                                        "FechaSis": "$4",
+                                        "SucOrigen": "$5",
+                                        "SucDestino": "$6",
+                                        "Modulo": "$7"
+                                    }
                                 }
                                 </format>
                                 <args>
@@ -284,19 +284,19 @@
                                                     <payloadFactory media-type="json">
                                                         <format>
                                                         {
-                                                        	"inversion": {
-                                                        		"invFecIni": "$1",
-                                                        		"invFecVen": "$2",
-                                                        		"invCuenta": "$3",
-                                                        		"invGat": $4,
-                                                        		"invGatRea": $5,
-                                                        		"plazo": $6,
-                                                        		"intBru": $7,
-                                                        		"invIntNet": $8,
-                                                        		"invISRTot": $9,
-                                                        		"invTotal": $10,
-                                                        		"cpRenInv": ""
-                                                        	}
+                                                            "inversion": {
+                                                                "invFecIni": "$1",
+                                                                "invFecVen": "$2",
+                                                                "invCuenta": "$3",
+                                                                "invGat": $4,
+                                                                "invGatRea": $5,
+                                                                "plazo": $6,
+                                                                "intBru": $7,
+                                                                "invIntNet": $8,
+                                                                "invISRTot": $9,
+                                                                "invTotal": $10,
+                                                                "cpRenInv": ""
+                                                            }
                                                         }
                                                         </format>
                                                         <args>
@@ -354,10 +354,10 @@
                                     <payloadFactory media-type="json">
                                         <format>
                                         {
-                                        	"Error": {
-                                        		"Err_Codigo": 500,
-                                        		"Err_Mensaj": "An error has occurred"
-                                        	}
+                                            "Error": {
+                                                "Err_Codigo": 500,
+                                                "Err_Mensaj": "An error has occurred"
+                                            }
                                         }
                                         </format>
                                         <args/>
@@ -376,10 +376,10 @@
                     <payloadFactory media-type="json">
                         <format>
                         {
-                        	"Error": {
-                        		"Err_Codigo": 500,
-                        		"Err_Mensaj": "An error has occurred"
-                        	}
+                            "Error": {
+                                "Err_Codigo": 500,
+                                "Err_Mensaj": "An error has occurred"
+                            }
                         }
                         </format>
                         <args/>
