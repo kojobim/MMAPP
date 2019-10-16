@@ -43,7 +43,7 @@ public class Utilerias {
 		
 		int numDias = Days.daysBetween(DateTime.parse(fechaAct), DateTime.parse(invFecVen)).getDays();
 		logger.info("COMMONS: Finalizando calcularVencimiento...");
-		if(numDias == 1)
+		if(numDias == 0)
     		return true;
 		
 		return false;
