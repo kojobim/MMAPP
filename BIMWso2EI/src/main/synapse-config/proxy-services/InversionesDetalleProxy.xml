@@ -329,11 +329,11 @@
                                                             <payloadFactory media-type="json">
                                                                 <format>
                                                                 {
-						                                        	"Error": {
-						                                        		"Err_Codigo": 409,
-						                                        		"Err_Mensaj": "Número de inversión inválido"
-						                                        	}
-						                                        }
+                                                                    "Error": {
+                                                                        "Err_Codigo": 409,
+                                                                        "Err_Mensaj": "Número de inversión inválido"
+                                                                    }
+                                                                }
                                                                 </format>
                                                                 <args/>
                                                             </payloadFactory>
