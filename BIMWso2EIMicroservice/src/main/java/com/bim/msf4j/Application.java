@@ -7,6 +7,7 @@ import com.bim.msf4j.ctrl.InversionesCtrl;
 import com.bim.msf4j.ctrl.PaginadoCtrl;
 import com.bim.msf4j.ctrl.PingCtrl;
 import com.bim.msf4j.ctrl.TokenCtrl;
+import com.bim.msf4j.ctrl.FiltroInversionesCtrl;
 
 public class Application {
     public static void main(String[] args) {
@@ -16,6 +17,7 @@ public class Application {
                     new TokenCtrl(),
                     new HSMCtrl(),
                     new PaginadoCtrl(),
+                    new FiltroInversionesCtrl(),
                     new InversionesCtrl()
                 ).start();
     }

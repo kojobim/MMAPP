@@ -35,4 +35,7 @@
     <artifact name="TasaServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/TasaServicio.dbs</file>
     </artifact>
+    <artifact name="SaldoServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/SaldoServicio.dbs</file>
+    </artifact>    
 </artifacts>

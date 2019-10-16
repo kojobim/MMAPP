@@ -3,35 +3,225 @@
     <target>
         <inSequence>
             <log level="full"/>
-            <property expression="json-eval($.Inv_Client)" name="invClient" scope="default" type="STRING"/>
-            <property expression="json-eval($.Inv_Moneda)" name="invMoneda" scope="default" type="STRING"/>
-            <property expression="json-eval($.NumTransac)" name="numTransac" scope="default" type="STRING"/>
-            <property expression="json-eval($.Transaccio)" name="transaccio" scope="default" type="STRING"/>
-            <property expression="json-eval($.Usuario)" name="usuario" scope="default" type="STRING"/>
-            <property expression="json-eval($.FechaSis)" name="fechaSis" scope="default" type="STRING"/>
-            <property expression="json-eval($.SucOrigen)" name="sucOrigen" scope="default" type="STRING"/>
-            <property expression="json-eval($.SucDestino)" name="sucDestino" scope="default" type="STRING"/>
-            <property expression="json-eval($.Modulo)" name="modulo" scope="default" type="STRING"/>
-            <log>
-                <property expression="json-eval($.)" name="Before enrich"/>
-            </log>
+            <!-- Obtencion de parametros -->
+            <property expression="json-eval($.InversionesListadoProxy.numTransac)" name="numTransac" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.usuario)" name="usuario" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.bitUsuari)" name="bitUsuari" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.bitFecha)" name="bitFecha" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.bitMonto)" name="bitMonto" scope="default" type="DOUBLE"/>
+            <property expression="json-eval($.InversionesListadoProxy.invClient)" name="invClient" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.invMoneda)" name="invMoneda" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.invNumero)" name="invNumero" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.invUsuari)" name="invUsuari" scope="default" type="STRING"/>
+            <!-- Declaracion y asignacion de constantes -->
+            <property name="tipConsul" scope="default" type="STRING" value="L1"/>
+            <property name="sucOrigen" scope="default" type="STRING" value="001"/>
+            <property name="sucDestino" scope="default" type="STRING" value="001"/>
+            <property name="modulo" scope="default" type="STRING" value="NB"/>
+            <property name="transaccio" scope="default" type="STRING" value="HKQ"/>
+            <property name="bitTipOpe" scope="default" type="STRING" value="004"/>
+            <property name="bitPriRef" scope="default" type="STRING" value="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"/>
+            <property expression="get-property('SYSTEM_DATE', 'yyyy-MM-dd HH:mm:ss')" name="fechaSis" scope="default" type="STRING"/>
+            <property expression="get-property('axis2','REMOTE_ADDR')" name="bitDireIP" scope="default" type="STRING"/>
+            <!-- Declaracion de variables para paginado -->
+            <property expression="json-eval($.InversionesListadoProxy.page)" name="page" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.per_page)" name="per_page" scope="default" type="STRING"/>
+            <property expression="json-eval($.InversionesListadoProxy.filter_by)" name="filter_by" scope="default" type="STRING"/>
             <enrich>
                 <source clone="true" type="body"/>
                 <target property="ORIGINAL_REQ" type="property"/>
             </enrich>
+            <log level="custom">
+                <property expression="get-property('PAYLOAD_ORIGINAL')" name="Payload Original..."/>
+                <property expression="json-eval($.)" name="Payload Respuesta..."/>
+            </log>
+            <!-- Payload para llamar al stored procedure NBBITACOALT -->
+            <payloadFactory media-type="json">
+                <format>
+                {
+					"bitacoraCreacionOp": {
+                       	"Bit_Usuari": "$1",
+                       	"Bit_Fecha": "$2",
+                       	"Bit_NumTra": "",
+                       	"Bit_TipOpe": "$3",
+                        "Bit_CueOri": "",
+                       	"Bit_CueDes": "",
+                       	"Bit_Monto": $4,
+                       	"Bit_PriRef": "$5",
+                       	"Bit_SegRef": "",
+                       	"Bit_DireIP": "$6",
+                       	"NumTransac": "$7",
+                       	"Transaccio": "$8",
+                        "Usuario": "$9",
+                       	"FechaSis": "$10",
+                       	"SucOrigen": "$11",
+                       	"SucDestino": "$12",
+                       	"Modulo": "$13"
+               		}
+               	}
+                </format>
+                <args>
+                    <arg evaluator="xml" expression="$ctx:bitUsuari"/>
+                    <arg evaluator="xml" expression="$ctx:bitFecha"/>
+                    <arg evaluator="xml" expression="$ctx:bitTipOpe"/>
+                    <arg evaluator="xml" expression="$ctx:bitMonto"/>
+                    <arg evaluator="xml" expression="$ctx:bitPriRef"/>
+                    <arg evaluator="xml" expression="$ctx:bitDireIP"/>
+                    <arg evaluator="xml" expression="$ctx:numTransac"/>
+                    <arg evaluator="xml" expression="$ctx:transaccio"/>
+                    <arg evaluator="xml" expression="$ctx:usuario"/>
+                    <arg evaluator="xml" expression="$ctx:fechaSis"/>
+                    <arg evaluator="xml" expression="$ctx:sucOrigen"/>
+                    <arg evaluator="xml" expression="$ctx:sucDestino"/>
+                    <arg evaluator="xml" expression="$ctx:modulo"/>
+                </args>
+            </payloadFactory>
+            <call blocking="true">
+                <endpoint>
+                    <address uri="http://localhost:8280/services/BitacoraServicio/bitacoraCreacionOp"/>
+                </endpoint>
+            </call>
             <enrich>
                 <source clone="true" type="body"/>
                 <target property="REQUEST_PAYLOAD" type="property"/>
             </enrich>
-            <log>
-                <property expression="get-property('ORIGINAL_REQ')" name="Original Request"/>
-                <property expression="json-eval($.)" name="Response Payload"/>
-            </log>
-            <send>
-                <endpoint>
-                    <address uri="http://localhost:8280/services/InversionesServicio/inversionesObtenerOp"/>
-                </endpoint>
-            </send>
+            <filter regex="200" source="get-property('axis2', 'HTTP_SC')">
+                <then>
+                    <log level="custom">
+                        <property expression="get-property('PAYLOAD_PRIMERA_LLAMADA')" name="Payload de la primera llamada..."/>
+                    </log>
+                    <clone>
+                        <target>
+                            <sequence>
+                                <payloadFactory media-type="json">
+                                    <format>
+                                    {
+                                    	"inversionesObtenerOp": { 
+                                            "Inv_Client": "$1",
+                                            "Inv_Moneda": "$2",
+                                            "NumTransac": "",
+                                            "Transaccio": "$3",
+                                            "Usuario": "$4",
+                                            "FechaSis": "$5",
+                                            "SucOrigen": "$6",
+                                            "SucDestino": "$7",
+                                            "Modulo": "$8"
+                                        }
+                                    }
+                                    </format>
+                                    <args>
+                                        <arg evaluator="xml" expression="$ctx:invClient"/>
+                                        <arg evaluator="xml" expression="$ctx:invMoneda"/>
+                                        <arg evaluator="xml" expression="$ctx:transaccio"/>
+                                        <arg evaluator="xml" expression="$ctx:usuario"/>
+                                        <arg evaluator="xml" expression="$ctx:fechaSis"/>
+                                        <arg evaluator="xml" expression="$ctx:sucOrigen"/>
+                                        <arg evaluator="xml" expression="$ctx:sucDestino"/>
+                                        <arg evaluator="xml" expression="$ctx:modulo"/>
+                                    </args>
+                                </payloadFactory>
+                                <call>
+                                    <endpoint>
+                                        <address uri="http://localhost:8280/services/InversionesServicio/inversionesObtenerOp"/>
+                                    </endpoint>
+                                </call>
+                            </sequence>
+                        </target>
+                        <target>
+                            <sequence>
+                                <payloadFactory media-type="json">
+                                    <format>
+                                    {
+                                    	"inversionesPagareNumeroUsuarioObtenerOp": {
+                                            "Inv_Numero": "$1",
+                                            "Inv_Usuari": "$2",
+                                            "Tip_Consul": "$3",
+                                            "NumTransac": "",
+                                            "Transaccio": "$4",
+                                            "Usuario": "$5",
+                                            "FechaSis": "$6",
+                                            "SucOrigen": "$7",
+                                            "SucDestino": "$8",
+                                            "Modulo": "$9"
+                                    	}
+                                    }
+                                    </format>
+                                    <args>
+                                        <arg evaluator="xml" expression="$ctx:invNumero"/>
+                                        <arg evaluator="xml" expression="$ctx:invUsuari"/>
+                                        <arg evaluator="xml" expression="$ctx:tipConsul"/>
+                                        <arg evaluator="xml" expression="$ctx:transaccio"/>
+                                        <arg evaluator="xml" expression="$ctx:usuario"/>
+                                        <arg evaluator="xml" expression="$ctx:fechaSis"/>
+                                        <arg evaluator="xml" expression="$ctx:sucOrigen"/>
+                                        <arg evaluator="xml" expression="$ctx:sucDestino"/>
+                                        <arg evaluator="xml" expression="$ctx:modulo"/>
+                                    </args>
+                                </payloadFactory>
+                                <call>
+                                    <endpoint>
+                                        <address uri="http://localhost:8280/services/InversionesServicio/inversionesPagareNumeroUsuarioObtenerOp"/>
+                                    </endpoint>
+                                </call>
+                            </sequence>
+                        </target>
+                    </clone>
+                    <property name="resultado" scope="default">
+                        <inversiones/>
+                    </property>
+                    <aggregate>
+                        <completeCondition>
+                            <messageCount max="-1" min="-1"/>
+                        </completeCondition>
+                        <onComplete enclosingElementProperty="resultado" expression="$body/*[1]/inversiones/inversion">
+                            <log level="custom">
+                                <property expression="json-eval($.)" name="Payload Final..."/>
+                            </log>
+                            <payloadFactory media-type="json">
+                                <format>
+								{
+									"inversiones": {
+										"inversion": $1										
+									},
+									"page": $2,
+									"per_page": $3,
+									"filter_by": "$4"
+								}
+								</format>
+                                <args>
+                                    <arg evaluator="json" expression="$.inversiones.inversion"/>
+                                    <arg evaluator="xml" expression="get-property('page')"/>
+                                    <arg evaluator="xml" expression="get-property('per_page')"/>
+                                    <arg evaluator="xml" expression="get-property('filter_by')"/>
+                                </args>
+                            </payloadFactory>
+                            <call blocking="true">
+                                <endpoint>
+                                    <http method="post" uri-template="http://localhost:9090/filtroInversiones"/>
+                                </endpoint>
+                            </call>
+                            <respond/>
+                        </onComplete>
+                    </aggregate>
+                </then>
+                <else>
+                    <log level="custom">
+                        <property name="switchlog" value="CASO: Error en la primera llamada..."/>
+                    </log>
+                    <property name="HTTP_SC" scope="axis2" type="STRING" value="500"/>
+                    <payloadFactory media-type="xml">
+                        <format>
+                            <Error>
+                                <Err_Codigo>500</Err_Codigo>
+                                <Err_Mensaj>ERROR!</Err_Mensaj>
+                            </Error>
+                        </format>
+                        <args/>
+                    </payloadFactory>
+                    <property name="messageType" scope="axis2" type="STRING" value="application/json"/>
+                    <respond/>
+                </else>
+            </filter>
         </inSequence>
         <outSequence>
             <log>

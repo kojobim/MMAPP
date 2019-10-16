@@ -33,6 +33,7 @@
     <com.bim.dataservice_._ClienteServicio>capp/DataServicesServer</com.bim.dataservice_._ClienteServicio>
     <com.bim.dataservice_._CuentaServicio>capp/DataServicesServer</com.bim.dataservice_._CuentaServicio>
     <com.bim.dataservice_._TasaServicio>capp/DataServicesServer</com.bim.dataservice_._TasaServicio>
+    <com.bim.dataservice_._SaldoServicio>capp/DataServicesServer</com.bim.dataservice_._SaldoServicio>
   </properties>
   <dependencies>
     <dependency>
@@ -126,7 +127,14 @@
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
-    
+
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>SaldoServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+        
     <!--  proxy services -->
     <dependency>
       <groupId>com.bim.proxy-service</groupId>
