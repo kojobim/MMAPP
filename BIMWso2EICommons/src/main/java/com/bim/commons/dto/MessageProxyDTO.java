@@ -1,4 +1,6 @@
-package com.bim.msf4j.commons.dto;
+package com.bim.commons.dto;
+
+import com.google.gson.Gson;
 
 public class MessageProxyDTO {
 
@@ -30,4 +32,8 @@ public class MessageProxyDTO {
 		this.body = body;
 	}
 
+	@Override
+	public String toString() {
+		return new Gson().toJson(this);
+	}
 }

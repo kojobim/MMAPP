@@ -12,8 +12,8 @@ import org.apache.log4j.Logger;
 import org.wso2.msf4j.Microservice;
 import org.wso2.msf4j.Request;
 
-import com.bim.msf4j.commons.HttpClientUtils;
-import com.bim.msf4j.commons.Racal;
+import com.bim.commons.utils.HttpClientUtils;
+import com.bim.commons.utils.Racal;
 import com.bim.msf4j.vo.HSMVO;
 import com.google.gson.Gson;
 

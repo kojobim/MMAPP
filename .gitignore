@@ -48,3 +48,7 @@ BIMWso2EIMicroservice/.factorypath
 BIMWso2EICustomMediator/.settings/org.eclipse.m2e.core.prefs
 BIMWso2EICustomMediator/.settings/org.eclipse.jdt.core.prefs
 BIMWso2EIMicroservice/.settings/org.eclipse.jdt.core.prefs
+BIMWso2EICommons/.settings/org.eclipse.core.resources.prefs
+BIMWso2EICommons/.settings/org.eclipse.jdt.core.prefs
+BIMWso2EICommons/.settings/org.eclipse.m2e.core.prefs
+BIMWso2EICommons/src/site/site.xml

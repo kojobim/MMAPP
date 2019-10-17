@@ -1,9 +1,7 @@
-package com.bim.msf4j.commons;
+package com.bim.commons.utils;
 
 import java.util.List;
-
 import org.apache.log4j.Logger;
-
 
 public class Utilerias {
 
