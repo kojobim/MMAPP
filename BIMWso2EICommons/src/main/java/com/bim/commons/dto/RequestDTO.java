@@ -1,4 +1,4 @@
-package com.bim.msf4j.commons.dto;
+package com.bim.commons.dto;
 
 import com.google.gson.Gson;
 

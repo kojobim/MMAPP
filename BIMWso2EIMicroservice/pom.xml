@@ -33,6 +33,24 @@
 
 
     <dependencies>
+    	<dependency>
+			<groupId>com.bim.commons</groupId>
+			<artifactId>BIMWso2EICommons</artifactId>
+			<version>1.0.0</version>
+	    </dependency>
+	    
+		<!-- https://mvnrepository.com/artifact/org.improving/jsr331-api -->
+		<dependency>
+		    <groupId>org.improving</groupId>
+		    <artifactId>jsr331-api</artifactId>
+		    <version>2.7.0-1</version>
+		</dependency>
+		    
+		<dependency>
+			<groupId>org.wso2.msf4j</groupId>
+			<artifactId>msf4j-core</artifactId>
+		</dependency>
+		
     	<!-- Uncomment the following if you want to enable metrics & monitoring -->
 	    <!--
 	    <dependency>
