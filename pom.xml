@@ -9,6 +9,7 @@
   <description>bimwso2Integrator</description>
   <modules>
     <module>BIMWso2EI</module>
+    <module>BIMWso2EICommons</module>
     <module>BIMWso2EIConnectorExporter</module>
     <module>BIMWso2EIRegistry</module>
 	<module>BIMWso2EIDataService</module>

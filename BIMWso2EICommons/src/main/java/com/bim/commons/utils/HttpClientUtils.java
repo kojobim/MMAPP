@@ -1,4 +1,4 @@
-package com.bim.msf4j.commons;
+package com.bim.commons.utils;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -17,10 +17,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.wso2.msf4j.Request;
 
-import com.bim.msf4j.commons.dto.RequestDTO;
+import com.bim.commons.dto.RequestDTO;
 import com.google.gson.Gson;
 
+
 public class HttpClientUtils {
+
 
 	private HttpClientUtils() { }
 	
@@ -30,7 +32,8 @@ public class HttpClientUtils {
 			final URIBuilder uriBuilder = new URIBuilder(request.getUrl());
 			
 			HttpPost post = new HttpPost(uriBuilder.build());
-			StringEntity entity = new StringEntity(new Gson().toJson(request.getMessage()));
+			StringEntity entity = new StringEntity(request.getMessage().getBody());
+			System.out.println("&&&&&Message&&&&" + new Gson().toJson(request.getMessage()));
 			post.setEntity(entity);
 			post.setHeader("Accept", "application/json");
 			post.setHeader("Content-Type", "application/json");

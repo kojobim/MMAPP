@@ -15,7 +15,6 @@
     <com.bim.proxy-service_._ConfiguracionDetalleProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._ConfiguracionDetalleProxy>
     <com.bim.proxy-service_._InversionesListadoProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._InversionesListadoProxy>
     <com.bim.proxy-service_._InversionesDetalleProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._InversionesDetalleProxy>
-    <com.bim.proxy-service_._InversionesPagareListadoProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._InversionesPagareListadoProxy>
     <com.bim.sequence_._PING>capp/EnterpriseServiceBus</com.bim.sequence_._PING>
     <com.bim.sequence_._CONFIGURATION>capp/EnterpriseServiceBus</com.bim.sequence_._CONFIGURATION>
     <com.bim.sequence_._TOKEN>capp/EnterpriseServiceBus</com.bim.sequence_._TOKEN>
@@ -34,6 +33,8 @@
     <com.bim.dataservice_._ClienteServicio>capp/DataServicesServer</com.bim.dataservice_._ClienteServicio>
     <com.bim.dataservice_._CuentaServicio>capp/DataServicesServer</com.bim.dataservice_._CuentaServicio>
     <com.bim.dataservice_._TasaServicio>capp/DataServicesServer</com.bim.dataservice_._TasaServicio>
+    <com.bim.dataservice_._SaldoServicio>capp/DataServicesServer</com.bim.dataservice_._SaldoServicio>
+    <com.bim.dataservice_._TransaccionServicio>capp/DataServicesServer</com.bim.dataservice_._TransaccionServicio>
   </properties>
   <dependencies>
     <dependency>
@@ -127,7 +128,21 @@
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
-    
+
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>SaldoServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>TransaccionServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+        
     <!--  proxy services -->
     <dependency>
       <groupId>com.bim.proxy-service</groupId>
@@ -160,13 +175,6 @@
     <dependency>
       <groupId>com.bim.proxy-service</groupId>
       <artifactId>InversionesListadoProxy</artifactId>
-      <version>1.0.0</version>
-      <type>xml</type>
-    </dependency>
-
-    <dependency>
-      <groupId>com.bim.proxy-service</groupId>
-      <artifactId>InversionesPagareListadoProxy</artifactId>
       <version>1.0.0</version>
       <type>xml</type>
     </dependency>
