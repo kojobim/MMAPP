@@ -2,6 +2,7 @@ package com.bim.commons.utils;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -11,7 +12,6 @@ import org.joda.time.format.DateTimeFormatter;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonIOException;
 
 public class Utilerias {
 
