@@ -59,3 +59,5 @@ BIMWso2EICommons/bin/src/test/java/com/bim/commons/AppTest.class
 BIMWso2EICommons/bin/src/main/java/com/bim/commons/utils/HttpClientUtils.class
 BIMWso2EICommons/bin/src/main/java/com/bim/commons/dto/RequestDTO.class
 BIMWso2EICommons/bin/src/main/java/com/bim/commons/dto/MessageProxyDTO.class
+BIMWso2EIRegistry/.settings/
+BIMWso2EIRegistry/bin/
