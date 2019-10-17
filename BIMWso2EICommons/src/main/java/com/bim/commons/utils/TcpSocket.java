@@ -1,4 +1,4 @@
-package com.bim.msf4j.commons;
+package com.bim.commons.utils;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -150,5 +150,5 @@ public class TcpSocket {
 	public String getMsgErr() {
 		return sMsgErr;
 	}
-	
+
 }

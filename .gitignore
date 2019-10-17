@@ -1,11 +1,5 @@
 
-BIMWso2EI/target/capp/artifacts/proxy-service/ping-proxy/ping-proxy.xml
-
-BIMWso2EI/target/capp/artifacts/proxy-service/ping-proxy/pom.xml
-
-BIMWso2EI/target/capp/artifacts/proxy-service/ping-proxy/target/
-
-BIMWso2EI/target/capp/
+BIMWso2EI/target/
 
 BIMWso2EICompositeApplication/.project
 
@@ -13,39 +7,13 @@ BIMWso2EICompositeApplication/.project
 
 BIMWso2EIConnectorExporter/.project
 
-BIMWso2EIConnectorExporter/target/capp/
-
-BIMWso2EIDataService/target/capp/artifacts/dataservice/ping-demo/ping-demo.dbs
-
-BIMWso2EIDataService/target/capp/artifacts/dataservice/ping-demo/pom.xml
-
-BIMWso2EIDataService/target/capp/artifacts/dataservice/ping-demo/target/
-
-BIMWso2EIDataService/target/capp/pom.xml
+BIMWso2EIConnectorExporter/target/
 
 BIMWso2EIDataService/target/
 
 BIMWso2EIRegistry/.project
 
-BIMWso2EIRegistry/target/.meta/~.xml
-
-BIMWso2EIRegistry/target/capp/artifacts/resource/INDEX/pom.xml
-
-BIMWso2EIRegistry/target/capp/artifacts/resource/INDEX/registry-info.xml
-
-BIMWso2EIRegistry/target/capp/artifacts/resource/INDEX/resources/INDEX.html
-
-BIMWso2EIRegistry/target/capp/artifacts/resource/INDEX/target/all-reg-resources/registry-info.xml
-
-BIMWso2EIRegistry/target/capp/artifacts/resource/INDEX/target/all-reg-resources/resources/INDEX.html
-
-BIMWso2EIRegistry/target/capp/artifacts/resource/INDEX/target/
-
-BIMWso2EIRegistry/target/capp/pom.xml
-
-BIMWso2EIRegistry/target/registry_resources/INDEX_1.0.0/registry-info.xml
-
-BIMWso2EIRegistry/target/registry_resources/INDEX_1.0.0/resources/INDEX.html
+BIMWso2EIRegistry/target/
 
 .project
 
@@ -66,20 +34,30 @@ BIMWso2EICompositeApplication/.classpath
 BIMWso2EICompositeApplication/.settings/
 
 BIMWso2EICompositeApplication/target/
-BIMWso2EICustomMediator/target/test-classes/com/bim/custom_mediator/AppTest.class
-BIMWso2EICustomMediator/target/classes/META-INF/maven/com.bim.custom_mediator/BIMWso2EICustomMediator/pom.xml
-BIMWso2EICustomMediator/target/classes/META-INF/maven/com.bim.custom_mediator/BIMWso2EICustomMediator/pom.properties
-BIMWso2EICustomMediator/target/classes/META-INF/MANIFEST.MF
-BIMWso2EICustomMediator/bin/target/classes/META-INF/maven/com.bim.custom_mediator/BIMWso2EICustomMediator/pom.xml
-BIMWso2EICustomMediator/bin/target/classes/META-INF/maven/com.bim.custom_mediator/BIMWso2EICustomMediator/pom.properties
-BIMWso2EICustomMediator/bin/target/classes/META-INF/MANIFEST.MF
-BIMWso2EICustomMediator/bin/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
-BIMWso2EICustomMediator/bin/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
-BIMWso2EICustomMediator/bin/target/maven-archiver/pom.properties
-BIMWso2EICustomMediator/bin/target/BIMWso2EICustomMediator-1.0.0.jar
-BIMWso2EICustomMediator/target
-
-BIMWso2EICustomMediator/target/BIMWso2EICustomMediator-1.0.0.jar
-BIMWso2EICustomMediator/target/maven-archiver/pom.properties
-BIMWso2EICustomMediator/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
-BIMWso2EICustomMediator/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+BIMWso2EICustomMediator/bin
+BIMWso2EICustomMediator/target/
+BIMWso2EIRegistry/.meta/
+BIMWso2EIMicroservice/bin/
+BIMWso2EIMicroservice/target/
+.vscode
+BIMWso2EICustomMediator/.settings/org.eclipse.jdt.apt.core.prefs
+BIMWso2EICustomMediator/.classpath
+BIMWso2EIMicroservice/.classpath
+BIMWso2EIMicroservice/.settings/org.eclipse.jdt.apt.core.prefs
+BIMWso2EIMicroservice/.factorypath
+BIMWso2EICustomMediator/.settings/org.eclipse.m2e.core.prefs
+BIMWso2EICustomMediator/.settings/org.eclipse.jdt.core.prefs
+BIMWso2EIMicroservice/.settings/org.eclipse.jdt.core.prefs
+BIMWso2EICommons/.settings/org.eclipse.core.resources.prefs
+BIMWso2EICommons/.settings/org.eclipse.jdt.core.prefs
+BIMWso2EICommons/.settings/org.eclipse.m2e.core.prefs
+BIMWso2EICommons/src/site/site.xml
+BIMWso2EICommons/bin/src/main/java/com/bim/commons/utils/Racal.class
+BIMWso2EICommons/bin/src/main/java/com/bim/commons/utils/TcpSocket.class
+BIMWso2EICommons/bin/src/main/java/com/bim/commons/utils/Utilerias.class
+BIMWso2EICommons/bin/src/test/java/com/bim/commons/AppTest.class
+BIMWso2EICommons/bin/src/main/java/com/bim/commons/utils/HttpClientUtils.class
+BIMWso2EICommons/bin/src/main/java/com/bim/commons/dto/RequestDTO.class
+BIMWso2EICommons/bin/src/main/java/com/bim/commons/dto/MessageProxyDTO.class
+BIMWso2EIRegistry/.settings/
+BIMWso2EIRegistry/bin/

@@ -1,0 +1,24 @@
+<data name="TransaccionServicio" serviceGroup="TransaccionServicio" serviceNamespace="TransaccionServicio">
+    <description>Servicio que se encarga de realizar operaciones de tipo transaccion</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="folioTransaccionGenerarSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE SYINITRANSA
+    		@Num_Transa= :numTransa,
+    		@SucOrigen= :sucOrigen
+    	</sql>
+        <param name="numTransa" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/folioTransaccionGenerarNE" element="transaccion">
+            <element column="Fol_Transa" name="Fol_Transa" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation name="folioTransaccionGenerarOp">
+        <call-query href="folioTransaccionGenerarSQL">
+            <with-param name="numTransa" query-param="Num_Transa"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+        </call-query>
+    </operation>
+</data>

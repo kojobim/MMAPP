@@ -1,4 +1,4 @@
-package com.bim.msf4j.commons;
+package com.bim.commons.utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,6 @@ import org.joda.time.format.DateTimeFormatter;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonIOException;
-
 
 public class Utilerias {
 
