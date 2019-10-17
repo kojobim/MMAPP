@@ -30,12 +30,12 @@ public class LoginCtrl {
 	
 	private static final Logger logger = Logger.getLogger(LoginCtrl.class);
 	private static Properties properties;	
-	private static String UsuarioConsultar_OpTip_Consul;
-	private static String UsuarioConsultarOp_Transaccio;
-	private static String UsuarioConsultarOp_Usuario;
-	private static String UsuarioConsultarOp_SucOrigen;
-	private static String UsuarioConsultarOp_SucDestino;
-	private static String UsuarioConsultarOp_Modulo;
+	private static String UsuarioConsultarOpTipConsul;
+	private static String UsuarioConsultarOpTransaccio;
+	private static String UsuarioConsultarOpUsuario;
+	private static String UsuarioConsultarOpSucOrigen;
+	private static String UsuarioConsultarOpSucDestino;
+	private static String UsuarioConsultarOpModulo;
 	private static String ConfiguracionBancoDetalleOpTransaccio;
 	private static String ConfiguracionBancoDetalleOpSucOrigen;
 	private static String ConfiguracionBancoDetalleOpSucDestino;
@@ -59,7 +59,6 @@ public class LoginCtrl {
 	private static String ConfiguracionBancoDetalleOp;
 	private static String TokenVerificarOp;
 	
-	
 	@PostConstruct
 	public void init() {
 		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/services.properties")) {
@@ -72,12 +71,13 @@ public class LoginCtrl {
 		catch(IOException ioException) {
 			ioException.printStackTrace();
 		}
-		UsuarioConsultar_OpTip_Consul = properties.getProperty("op.usuario_consultar.tip_consul");
-		UsuarioConsultarOp_Transaccio = properties.getProperty("op.usuario_consultar.transaccio");
-		UsuarioConsultarOp_Usuario = properties.getProperty("op.usuario_consultar.usuario");
-		UsuarioConsultarOp_SucOrigen = properties.getProperty("op.usuario_consultar.suc_origen");
-		UsuarioConsultarOp_SucDestino = properties.getProperty("op.usuario_consultar.suc_destino");
-		UsuarioConsultarOp_Modulo = properties.getProperty("op.usuario_consultar.modulo");
+		
+		UsuarioConsultarOpTipConsul = properties.getProperty("op.usuario_consultar.tip_consul");
+		UsuarioConsultarOpTransaccio = properties.getProperty("op.usuario_consultar.transaccio");
+		UsuarioConsultarOpUsuario = properties.getProperty("op.usuario_consultar.usuario");
+		UsuarioConsultarOpSucOrigen = properties.getProperty("op.usuario_consultar.suc_origen");
+		UsuarioConsultarOpSucDestino = properties.getProperty("op.usuario_consultar.suc_destino");
+		UsuarioConsultarOpModulo = properties.getProperty("op.usuario_consultar.modulo");
 		
 		ConfiguracionBancoDetalleOpTransaccio = properties.getProperty("op.configuracion_banco_detalle.transaccio");
 		ConfiguracionBancoDetalleOpSucOrigen = properties.getProperty("op.configuracion_banco_detalle.suc_origen");
@@ -121,12 +121,12 @@ public class LoginCtrl {
 		
 		String mensaje = HttpClientUtils.getStringContent(solicitud);
 		JsonObject datosUsuario = new Gson().fromJson(mensaje, JsonObject.class);
-		datosUsuario.addProperty("Tip_Consul", UsuarioConsultar_OpTip_Consul);
-		datosUsuario.addProperty("Transaccio", UsuarioConsultarOp_Transaccio);
-		datosUsuario.addProperty("Usuario", UsuarioConsultarOp_Usuario);
-		datosUsuario.addProperty("SucOrigen", UsuarioConsultarOp_SucOrigen);
-		datosUsuario.addProperty("SucDestino", UsuarioConsultarOp_SucDestino);
-		datosUsuario.addProperty("Modulo", UsuarioConsultarOp_Modulo);
+		datosUsuario.addProperty("Tip_Consul", UsuarioConsultarOpTipConsul);
+		datosUsuario.addProperty("Transaccio", UsuarioConsultarOpTransaccio);
+		datosUsuario.addProperty("Usuario", UsuarioConsultarOpUsuario);
+		datosUsuario.addProperty("SucOrigen", UsuarioConsultarOpSucOrigen);
+		datosUsuario.addProperty("SucDestino", UsuarioConsultarOpSucDestino);
+		datosUsuario.addProperty("Modulo", UsuarioConsultarOpModulo);
 		datosUsuario.addProperty("Usu_Numero", "");
 		datosUsuario.addProperty("Usu_UsuAdm", "");
 		datosUsuario.addProperty("Usu_Client", "");
@@ -149,20 +149,20 @@ public class LoginCtrl {
 		usuarioConsultarOp.add("usuarioConsultarOp", datosUsuario);
 		logger.info("usuarioConsultarOp" + usuarioConsultarOp);
 
-		RequestDTO usuarioConsultarOpsolicitud = new RequestDTO();
-		usuarioConsultarOpsolicitud.setUrl(usuarioConsultarUrl.toString());
+		RequestDTO usuarioConsultarOpSolicitud = new RequestDTO();
+		usuarioConsultarOpSolicitud.setUrl(usuarioConsultarUrl.toString());
 		MessageProxyDTO usuarioConsultarOpMessaje = new MessageProxyDTO();
 		usuarioConsultarOpMessaje.setBody(usuarioConsultarOp.toString());
-		usuarioConsultarOpsolicitud.setMessage(usuarioConsultarOpMessaje);
+		usuarioConsultarOpSolicitud.setMessage(usuarioConsultarOpMessaje);
 		
-		String usuarioConsultarOpResultado = HttpClientUtils.postPerform(usuarioConsultarOpsolicitud);
+		String usuarioConsultarOpResultado = HttpClientUtils.postPerform(usuarioConsultarOpSolicitud);
 		JsonObject usuarioConsultarOpResultadoObjecto = new Gson().fromJson(usuarioConsultarOpResultado, JsonObject.class);
 		logger.info("usuarioConsultarOpResultadoObject" + usuarioConsultarOpResultadoObjecto);
 		
 		String usuario = usuarioConsultarOpResultadoObjecto.get("usuario").getAsJsonObject().get("Usu_Numero").getAsString();
 		logger.info("usuarioValue" + usuario);
 		JsonObject datosConfiguracion = new JsonObject();
-		datosConfiguracion.addProperty("Tip_Consul", UsuarioConsultar_OpTip_Consul);
+		datosConfiguracion.addProperty("Tip_Consul", UsuarioConsultarOpTipConsul);
 		datosConfiguracion.addProperty("NumTransac", "");
 		datosConfiguracion.addProperty("Transaccio", ConfiguracionBancoDetalleOpTransaccio);
 		datosConfiguracion.addProperty("Usuario", usuario);
@@ -192,10 +192,10 @@ public class LoginCtrl {
 		logger.info("contrasenaCifrada " + contrasenaCifrada);
 		
 		datosUsuario.addProperty("Usuario", usuario);
-		usuarioConsultarOpsolicitud.getMessage().setBody(datosUsuario.toString());
+		usuarioConsultarOpSolicitud.getMessage().setBody(datosUsuario.toString());
 		
-		logger.info("newVersion" + usuarioConsultarOpsolicitud.toString());
-		usuarioConsultarOpResultado = HttpClientUtils.postPerform(usuarioConsultarOpsolicitud);
+		logger.info("newVersion" + usuarioConsultarOpSolicitud.toString());
+		usuarioConsultarOpResultado = HttpClientUtils.postPerform(usuarioConsultarOpSolicitud);
 		usuarioConsultarOpResultadoObjecto = new Gson().fromJson(usuarioConsultarOpResultado, JsonObject.class);
 		
 		JsonObject datosUsuarioActualizacion = new JsonObject();
@@ -225,7 +225,7 @@ public class LoginCtrl {
 		usuarioActualizacionMensaje.setBody(UsuarioActualizacionOp.toString());
 		usuarioActualizacionSolicitud.setMessage(usuarioActualizacionMensaje);
 		
-		String usuarioActualizacionOpResultado = HttpClientUtils.postPerform(usuarioConsultarOpsolicitud);
+		String usuarioActualizacionOpResultado = HttpClientUtils.postPerform(usuarioConsultarOpSolicitud);
 		JsonObject usuarioActualizacionOpResultadoObjecto = new Gson().fromJson(usuarioActualizacionOpResultado, JsonObject.class);
 		logger.info("usuarioActualizacionOpResultadoObjecto" + usuarioActualizacionOpResultadoObjecto);
 		
