@@ -16,6 +16,9 @@ import org.wso2.msf4j.Request;
 import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 @Path("/paginado")
@@ -27,12 +30,13 @@ public class PaginadoCtrl {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Object> paginado(@Context final Request solicitud, @QueryParam("pagina") int pagina, @QueryParam("porPagina") int porPagina) {
+	public JsonArray paginado(@Context final Request solicitud, @QueryParam("page") int page, @QueryParam("per_page") int per_page) {
 		logger.info("CTRL: Comenzando paginado metodo");
-		String mensaje = HttpClientUtils.getStringContent(solicitud);		
-		Type tipoColeccion = new TypeToken<Collection<Object>>(){}.getType();
-		Collection<Object> datos = new Gson().fromJson(mensaje, tipoColeccion);		
-		List<Object> datosPaginados = Utilerias.paginado((List<Object>)datos, pagina, porPagina);
+		String mensaje = HttpClientUtils.getStringContent(solicitud);
+		Type tipoColeccion = new TypeToken<Collection<JsonObject>>(){}.getType();
+		Collection<JsonElement> datos = new Gson().fromJson(mensaje, tipoColeccion);
+		List<JsonElement> datosLista = (List<JsonElement>)datos;
+		JsonArray datosPaginados = Utilerias.paginado(new Gson().fromJson(datosLista.toString(), JsonArray.class), page, per_page);
 		logger.info("CTRL: Termino paginado metodo");
 		return datosPaginados;
 	}
