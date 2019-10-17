@@ -52,3 +52,10 @@ BIMWso2EICommons/.settings/org.eclipse.core.resources.prefs
 BIMWso2EICommons/.settings/org.eclipse.jdt.core.prefs
 BIMWso2EICommons/.settings/org.eclipse.m2e.core.prefs
 BIMWso2EICommons/src/site/site.xml
+BIMWso2EICommons/bin/src/main/java/com/bim/commons/utils/Racal.class
+BIMWso2EICommons/bin/src/main/java/com/bim/commons/utils/TcpSocket.class
+BIMWso2EICommons/bin/src/main/java/com/bim/commons/utils/Utilerias.class
+BIMWso2EICommons/bin/src/test/java/com/bim/commons/AppTest.class
+BIMWso2EICommons/bin/src/main/java/com/bim/commons/utils/HttpClientUtils.class
+BIMWso2EICommons/bin/src/main/java/com/bim/commons/dto/RequestDTO.class
+BIMWso2EICommons/bin/src/main/java/com/bim/commons/dto/MessageProxyDTO.class
