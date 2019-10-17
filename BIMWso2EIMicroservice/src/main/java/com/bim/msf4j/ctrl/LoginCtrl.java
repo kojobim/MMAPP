@@ -29,7 +29,9 @@ import com.google.gson.JsonObject;
 public class LoginCtrl {
 	
 	private static final Logger logger = Logger.getLogger(LoginCtrl.class);
-	private static Properties properties;	
+	private static Properties properties;
+	private static String FolioTransaccionGenerarOpNumTransa;
+	private static String FolioTransaccionGenerarOpSucOrigen;
 	private static String UsuarioConsultarOpTipConsul;
 	private static String UsuarioConsultarOpTransaccio;
 	private static String UsuarioConsultarOpUsuario;
@@ -54,10 +56,12 @@ public class LoginCtrl {
 	private static String UsuarioServicio;
 	private static String ConfiguracionServicio;
 	private static String TokenServicio;
+	private static String TransaccionServicio; 
 	private static String UsuarioConsultarOp;
 	private static String UsuarioActualizacionOp;
 	private static String ConfiguracionBancoDetalleOp;
 	private static String TokenVerificarOp;
+	private static String FolioTransaccionGenerarOp;
 	
 	@PostConstruct
 	public void init() {
@@ -71,6 +75,9 @@ public class LoginCtrl {
 		catch(IOException ioException) {
 			ioException.printStackTrace();
 		}
+		
+		FolioTransaccionGenerarOpNumTransa = properties.getProperty("op.usuario_consultar.tip_consul");
+		FolioTransaccionGenerarOpSucOrigen = properties.getProperty("op.usuario_consultar.tip_consul");
 		
 		UsuarioConsultarOpTipConsul = properties.getProperty("op.usuario_consultar.tip_consul");
 		UsuarioConsultarOpTransaccio = properties.getProperty("op.usuario_consultar.transaccio");
@@ -98,14 +105,16 @@ public class LoginCtrl {
 		
 		DataServiceHost = properties.getProperty("data_service.host");
 		
-		UsuarioServicio = properties.getProperty("data_service.usuario_service");
+		UsuarioServicio = properties.getProperty("data_service.usuario_servicio");
 		ConfiguracionServicio = properties.getProperty("data_service.configuracion_servicio");
 		TokenServicio = properties.getProperty("data_service.token_servicio");
+		TransaccionServicio = properties.getProperty("op.usuario_consultar.tip_consul");
 		
-		UsuarioConsultarOp = properties.getProperty("usuario_service.op.usuario_consultar");
-		UsuarioActualizacionOp = properties.getProperty("usuario_service.op.usuario_actualizacion");
-		ConfiguracionBancoDetalleOp = properties.getProperty("data_service.op.configuracion_banco_detalle");
-		TokenVerificarOp = properties.getProperty("data_service.op.configuracion_banco_detalle");
+		UsuarioConsultarOp = properties.getProperty("usuario_servicio.op.usuario_consultar");
+		UsuarioActualizacionOp = properties.getProperty("usuario_servicio.op.usuario_actualizacion");
+		ConfiguracionBancoDetalleOp = properties.getProperty("configuracion_servicio.op.configuracion_banco_detalle");
+		TokenVerificarOp = properties.getProperty("token_servicio.op.token_verificar");
+		FolioTransaccionGenerarOp = properties.getProperty("op.usuario_consultar.tip_consul");
 	}
 	
 	@Path("/")
@@ -258,6 +267,9 @@ public class LoginCtrl {
 		String tokenVerificarOpResultado = HttpClientUtils.postPerform(tokenVerificarSolicitud);
 		JsonObject tokenVerificarOpResultadoObjecto = new Gson().fromJson(tokenVerificarOpResultado, JsonObject.class);
 		logger.info("tokenVerificarOpResultadoObjecto" + tokenVerificarOpResultadoObjecto);
+		
+		
+		
 			
 		logger.info("CTRL: Terminando login metodo");
 	}
