@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -74,8 +73,7 @@ public class LoginCtrl implements Microservice {
 	private static String FolioTransaccionGenerarOp;
 	private static String BitacoraCreacionOp;
 	
-	@PostConstruct
-	public void init() {
+	public LoginCtrl() {
 		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/services.properties")) {
 			properties = new Properties();
 			

@@ -28,6 +28,7 @@ public class HttpClientUtils {
 	
 	public static String postPerform(RequestDTO request) {
 		try {
+			System.out.println("$$$$$$$RequestDTO$$$$$" +  request.toString());
 			CloseableHttpClient client = HttpClients.createDefault();
 			final URIBuilder uriBuilder = new URIBuilder(request.getUrl());
 			

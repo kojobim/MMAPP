@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -17,6 +16,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+
+import org.apache.log4j.Logger;
+import org.wso2.msf4j.Microservice;
+import org.wso2.msf4j.Request;
 
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
@@ -27,10 +30,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import org.apache.log4j.Logger;
-import org.wso2.msf4j.Microservice;
-import org.wso2.msf4j.Request;
 
 @Path("/inversiones")
 public class InversionesCtrl implements Microservice {
@@ -69,8 +68,8 @@ public class InversionesCtrl implements Microservice {
 	private static String InversionesPagareNumeroUsuarioObtenerOpSucDestino;
 	private static String InversionesPagareNumeroUsuarioObtenerOpModulo;
 
-	@PostConstruct
-	public void init() {
+	public InversionesCtrl() {
+		logger.info("Ctrl: Empezando metodo init...");
 		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/services.properties")) {
 			properties = new Properties();
 			
@@ -108,6 +107,8 @@ public class InversionesCtrl implements Microservice {
 		
 		DataServiceHost = properties.getProperty("data_service.host");
 		
+		logger.info("DataServiceHost" + DataServiceHost);
+		
 		TransaccionServicio = properties.getProperty("data_service.transaccion_servicio");
 		BitacoraServicio = properties.getProperty("data_service.bitacora_servicio");
 		InversionesServicio = properties.getProperty("data_service.inversiones_servicio");
@@ -116,7 +117,8 @@ public class InversionesCtrl implements Microservice {
 		BitacoraCreacionOp = properties.getProperty("bitacora_servicio.op.bitacora_creacion");
 		InversionesObtenerOp = properties.getProperty("inversiones_servicio.op.inversiones_obtener");
 		InversionesPagareNumeroUsuarioObtenerOp = properties.getProperty("inversiones_servicio.op.inversiones_pagare_numero_usuario_obtener");
-		
+
+		logger.info("Ctrl: Terminando metodo init...");
 	}
 	
 	@Path("/")
@@ -297,7 +299,7 @@ public class InversionesCtrl implements Microservice {
 	public JsonObject detalleInversion(@PathParam("invNumero") String invNumero,
 			@QueryParam("categoria") String categoria, @Context final Request solicitud) {
 		logger.info("CTRL: Empezando detalleInversion Method...");
-
+		logger.info("@PathVariable >>>>> invNumero" + invNumero);
 		SimpleDateFormat simpleDateFormatSis = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
 		String fechaSis = simpleDateFormatSis.format(fecha);
