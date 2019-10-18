@@ -3,6 +3,7 @@ package com.bim.msf4j.ctrl;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -11,13 +12,11 @@ import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-
-import org.apache.log4j.Logger;
-import org.wso2.msf4j.Request;
 
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
@@ -26,10 +25,15 @@ import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.apache.log4j.Logger;
+import org.wso2.msf4j.Microservice;
+import org.wso2.msf4j.Request;
+
 @Path("/inversiones")
-public class InversionesCtrl {
+public class InversionesCtrl implements Microservice {
 	
 	private static final Logger logger = Logger.getLogger(InversionesCtrl.class);
 	
@@ -51,6 +55,7 @@ public class InversionesCtrl {
 	private static String BitacoraCreacionOpSucOrigen;
 	private static String BitacoraCreacionOpSucDestino;
 	private static String BitacoraCreacionOpModulo;
+	private static String BitacoraCreacionOpBitMonto;
 	private static String InversionesObtenerOpInvMoneda;
 	private static String InversionesObtenerOpTransaccio;
 	private static String InversionesObtenerOpUsuario;
@@ -85,6 +90,7 @@ public class InversionesCtrl {
 		BitacoraCreacionOpSucOrigen = properties.getProperty("op.bitacora_creacion.suc_origen");
 		BitacoraCreacionOpSucDestino= properties.getProperty("op.bitacora_creacion.suc_destino");
 		BitacoraCreacionOpModulo = properties.getProperty("op.bitacora_creacion.modulo");
+		BitacoraCreacionOpBitMonto = properties.getProperty("op.bitacora_creacion.bit_monto");
 
 		InversionesObtenerOpInvMoneda = properties.getProperty("op.inversiones_obtener.inv_moneda");
 		InversionesObtenerOpTransaccio = properties.getProperty("op.inversiones_obtener.transaccio");
@@ -284,4 +290,250 @@ public class InversionesCtrl {
 		logger.info("CTRL: Terminando login metodo");	
 		return inversionesResultadoFinal;
 	}
+
+	@Path("{invNumero}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public JsonObject detalleInversion(@PathParam("invNumero") String invNumero,
+			@QueryParam("categoria") String categoria, @Context final Request solicitud) {
+		logger.info("CTRL: Empezando detalleInversion Method...");
+
+		SimpleDateFormat simpleDateFormatSis = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+		Date fecha = new Date();
+		String fechaSis = simpleDateFormatSis.format(fecha);
+
+		JsonObject datosTransaccion = new JsonObject();
+		datosTransaccion.addProperty("Num_Transa", "");
+		datosTransaccion.addProperty("SucOrigen", FolioTransaccionGenerarOpSucOrigen);
+
+		logger.info("datosTransaccion" + datosTransaccion);
+		StringBuilder folioTransaccionGenerarUrl = new StringBuilder()
+				.append(DataServiceHost)
+				.append("/")
+				.append(TransaccionServicio)
+				.append("/")
+				.append(FolioTransaccionGenerarOp);
+
+		JsonObject folioTransaccionGenerarOp = new JsonObject();
+		folioTransaccionGenerarOp.add("folioTransaccionGenerarOp", datosTransaccion);
+		logger.info("folioTransaccionGenerarOp" + folioTransaccionGenerarOp);
+
+		RequestDTO folioTransaccionGenerarOpSolicitud = new RequestDTO();
+		folioTransaccionGenerarOpSolicitud.setUrl(folioTransaccionGenerarUrl.toString());
+		MessageProxyDTO folioTransaccionGenerarOpMensaje = new MessageProxyDTO();
+		folioTransaccionGenerarOpMensaje.setBody(folioTransaccionGenerarOp.toString());
+		folioTransaccionGenerarOpSolicitud.setMessage(folioTransaccionGenerarOpMensaje);
+
+		String folioTransaccionGenerarOpResultado = HttpClientUtils.postPerform(folioTransaccionGenerarOpSolicitud);
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = new Gson().fromJson(folioTransaccionGenerarOpResultado, JsonObject.class);
+		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
+
+		String BitacoraCreacionFolTransa = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
+
+		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
+		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
+		String bit_PriRef = solicitud.getHeader("User-Agent");
+		String bit_DireIP = solicitud.getHeader("X-Forwarded-For");
+
+		/* 
+			Parametros obtenidos por medio del principal 
+				Bit_Usuari = usuNumero
+				Inv_Client = usuClient
+				Inv_Usuari = usuNumero
+		*/
+		
+		String usuNumero = "001844";
+		String usuClient = "00193500";
+
+		JsonObject datosBitacora = new JsonObject();
+		datosBitacora.addProperty("Bit_Usuari", usuNumero);
+		datosBitacora.addProperty("Bit_Fecha", fechaSis);
+		datosBitacora.addProperty("Bit_NumTra", "");
+		datosBitacora.addProperty("Bit_TipOpe", BitacoraCreacionOpBitTipOpe);
+		datosBitacora.addProperty("Bit_CueOri", "");
+		datosBitacora.addProperty("Bit_CueDes", "");
+		datosBitacora.addProperty("Bit_Monto", Integer.parseInt(BitacoraCreacionOpBitMonto));
+		datosBitacora.addProperty("Bit_PriRef", bit_PriRef);
+		datosBitacora.addProperty("Bit_SegRef", "");
+		datosBitacora.addProperty("Bit_DireIP", bit_DireIP);
+		datosBitacora.addProperty("NumTransac", BitacoraCreacionFolTransa);
+		datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
+		datosBitacora.addProperty("Usuario", BitacoraCreacionOpUsuario);
+		datosBitacora.addProperty("FechaSis", fechaSis);
+		datosBitacora.addProperty("SucOrigen", BitacoraCreacionOpSucOrigen);
+		datosBitacora.addProperty("SucDestino", BitacoraCreacionOpSucDestino);
+		datosBitacora.addProperty("Modulo", BitacoraCreacionOpModulo);
+
+		logger.info("datosBitacora" + datosBitacora);
+		StringBuilder bitacoraCreacionUrl = new StringBuilder()
+				.append(DataServiceHost)
+				.append("/")
+				.append(BitacoraServicio)
+				.append("/")
+				.append(BitacoraCreacionOp);
+
+		JsonObject bitacoraCreacionOp = new JsonObject();
+		bitacoraCreacionOp.add("bitacoraCreacionOp", datosBitacora);
+		logger.info("bitacoraCreacionOp" + bitacoraCreacionOp);
+
+		RequestDTO bitacoraCreacionOpSolicitud = new RequestDTO();
+		bitacoraCreacionOpSolicitud.setUrl(bitacoraCreacionUrl.toString());
+		MessageProxyDTO bitacoraCreacionOpMensaje = new MessageProxyDTO();
+		bitacoraCreacionOpMensaje.setBody(bitacoraCreacionOp.toString());
+		bitacoraCreacionOpSolicitud.setMessage(bitacoraCreacionOpMensaje);
+
+		String bitacoraCreacionOpResultado = HttpClientUtils.postPerform(bitacoraCreacionOpSolicitud);
+		JsonObject bitacoraCreacionOpResultadoObjeto = new Gson().fromJson(bitacoraCreacionOpResultado, JsonObject.class);
+		logger.info("bitacoraCreacionOpResultadoObjeto" + bitacoraCreacionOpResultadoObjeto);
+
+		JsonObject datosInversion = new JsonObject();
+		datosInversion.addProperty("FechaSis", fechaSis);
+		StringBuilder inversionConsultarUrl = new StringBuilder()
+				.append(DataServiceHost)
+				.append("/")
+				.append(InversionesServicio)
+				.append("/");
+
+		if ("PAGARE".equals(categoria)) {
+			datosInversion.addProperty("Inv_Numero", "");
+			datosInversion.addProperty("Inv_Usuari", usuNumero);
+			datosInversion.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
+			datosInversion.addProperty("NumTransac", BitacoraCreacionFolTransa);
+			datosInversion.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
+			datosInversion.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);			
+			datosInversion.addProperty("SucOrigen", InversionesPagareNumeroUsuarioObtenerOpSucOrigen);
+			datosInversion.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
+			datosInversion.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
+
+			inversionConsultarUrl
+					.append(InversionesPagareNumeroUsuarioObtenerOp);
+		} else {
+			datosInversion.addProperty("Inv_Client", usuClient);
+			datosInversion.addProperty("Inv_Moneda", InversionesObtenerOpInvMoneda);
+			datosInversion.addProperty("NumTransac", BitacoraCreacionFolTransa);
+			datosInversion.addProperty("Transaccio", InversionesObtenerOpTransaccio);
+			datosInversion.addProperty("Usuario", InversionesObtenerOpUsuario);
+			datosInversion.addProperty("SucOrigen", InversionesObtenerOpSucOrigen);
+			datosInversion.addProperty("SucDestino", InversionesObtenerOpSucDestino);
+			datosInversion.addProperty("Modulo", InversionesObtenerOpModulo);
+
+			inversionConsultarUrl
+					.append(InversionesObtenerOp);
+		}
+
+		logger.info("datosInversion" + datosInversion);
+
+		JsonObject inversionConsultarOp = new JsonObject();
+		inversionConsultarOp.add("inversionConsultarOp", datosInversion);
+		logger.info("inversionConsultarOp" + inversionConsultarOp);
+
+		RequestDTO inversionConsultarOpSolicitud = new RequestDTO();
+		inversionConsultarOpSolicitud.setUrl(inversionConsultarUrl.toString());
+		MessageProxyDTO inversionConsultarOpMensaje = new MessageProxyDTO();
+		inversionConsultarOpMensaje.setBody(inversionConsultarOp.toString());
+		inversionConsultarOpSolicitud.setMessage(inversionConsultarOpMensaje);
+
+		String inversionConsultarOpResultado = HttpClientUtils.postPerform(inversionConsultarOpSolicitud);
+		JsonObject inversionConsultarOpResultadoObjeto = new Gson().fromJson(inversionConsultarOpResultado,
+				JsonObject.class);
+		logger.info("inversionConsultarOpResultadoObjeto" + inversionConsultarOpResultadoObjeto);
+
+		JsonArray inversionesArreglo = inversionConsultarOpResultadoObjeto.get("inversiones").getAsJsonObject().get("inversion").getAsJsonArray();
+
+		JsonObject resultado = null;
+		for (JsonElement invElemento : inversionesArreglo) {
+			JsonObject inversionObj = invElemento.getAsJsonObject();
+			if (inversionObj.get("Inv_Numero").getAsString().equals(invNumero)
+				&& inversionObj.get("Fot_Descri").getAsString().equals(categoria)
+				&& (inversionObj.has("Inv_Tipo") && inversionObj.get("Inv_Tipo").getAsString().equals("V"))) {
+					
+				String invFecIni = inversionObj.get("Inv_FecIni").getAsString();
+				String invFecVen = inversionObj.get("Inv_FecVen").getAsString();
+				int plazo = 0;
+				double intBru = 0;
+				double invIntNet = 0;
+				double invISRTot = 0;
+
+				if (categoria == "PAGARE") {
+					plazo = inversionObj.get("Inv_Plazo").getAsInt();
+					intBru = inversionObj.get("Inv_TBruta").getAsDouble();
+					invIntNet = inversionObj.get("Imp_Intere").getAsDouble();
+					invISRTot = inversionObj.get("Inv_ISR").getAsDouble();
+				} else {
+					plazo = inversionObj.get("Plazo").getAsInt();
+					double amoTasa = inversionObj.get("Amo_Tasa").getAsDouble();
+					double amoISR = inversionObj.get("Amo_ISR").getAsDouble();
+					intBru = amoTasa + amoISR / 10;
+					invIntNet = inversionObj.get("Inv_IntNet").getAsDouble();
+					invISRTot = inversionObj.get("Inv_ISRTot").getAsDouble();
+				}
+
+				Date fechaIni = null;
+				Date fechaVen = null;
+
+				try {
+					SimpleDateFormat simpleDateFormatFechaBase = new SimpleDateFormat("dd/MM/yyyy");
+					fechaIni = simpleDateFormatFechaBase.parse(invFecIni);
+					
+				} catch (ParseException e) {
+					logger.info("formato de fecha no valido.");
+					try {
+						SimpleDateFormat simpleDateFormatFechaBase = new SimpleDateFormat("dd-MM-yyyy");
+						fechaIni = simpleDateFormatFechaBase.parse(invFecIni);
+					} catch (ParseException ei) {
+						logger.info("formato de fecha no valido.");
+					}
+				}
+				
+				try {
+					SimpleDateFormat simpleDateFormatFechaBase = new SimpleDateFormat("dd/MM/yyyy");
+					fechaVen = simpleDateFormatFechaBase.parse(invFecVen);
+				} catch (ParseException e) {
+					logger.info("formato de fecha no valido.");
+					try {
+						SimpleDateFormat simpleDateFormatFechaBase = new SimpleDateFormat("dd-MM-yyyy");
+						fechaVen = simpleDateFormatFechaBase.parse(invFecVen);
+					} catch (ParseException ei) {
+						logger.info("formato de fecha no valido.");
+					}
+				}
+
+				logger.info(">>>>>>> invFecIni: " + invFecIni);
+				logger.info(">>>>>>> fechaIni: " + fechaIni);
+				logger.info(">>>>>>> fechaVen: " + fechaVen);
+				logger.info(">>>>>>> invFecVen: " + invFecVen);
+
+				intBru = Utilerias.redondear(intBru, 2);
+
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+
+				logger.info(">>>>>>> inversionObj: " + inversionObj);
+
+				resultado = new JsonObject();
+				JsonObject inversion = new JsonObject();
+				inversion.addProperty("invFecIni", fechaIni != null ? simpleDateFormat.format(fechaIni) : invFecIni.trim());
+				inversion.addProperty("invFecVen", fechaVen != null ? simpleDateFormat.format(fechaVen) : invFecVen.trim());
+				inversion.addProperty("invCuenta", inversionObj.has("Inv_Cuenta") ? inversionObj.get("Inv_Cuenta").getAsString() : "");
+				inversion.addProperty("invGat", inversionObj.has("Inv_Gat") ? inversionObj.get("Inv_Gat").getAsDouble() : null);
+				inversion.addProperty("invGatRea", inversionObj.has("Inv_GatRea") ? inversionObj.get("Inv_GatRea").getAsDouble() : null);
+				inversion.addProperty("plazo", plazo);
+				inversion.addProperty("intBru", intBru);
+				inversion.addProperty("invIntNet", invIntNet);
+				inversion.addProperty("invISRTot", invISRTot);
+				inversion.addProperty("invTotal", inversionObj.has("Inv_Total") ? inversionObj.get("Inv_Total").getAsDouble() : null);
+				inversion.addProperty("cpRenInv", Utilerias.calcularVencimiento(fechaVen));
+				resultado.add("inversion", inversion);
+			}
+		}
+
+		if(resultado == null) {
+			resultado = new JsonObject();
+			JsonObject Error = new JsonObject();
+			Error.addProperty("Err_Codigo", 409);
+			Error.addProperty("Err_Mensaj", "Numero de inversion invalido");
+			resultado.add("Error", Error);
+		}
+
+		return resultado;
+    }
 }
