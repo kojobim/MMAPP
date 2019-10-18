@@ -144,10 +144,12 @@ public class InversionesCtrl {
 		MessageProxyDTO folioTransaccionGenerarOpMensaje= new MessageProxyDTO();
 		folioTransaccionGenerarOpMensaje.setBody(folioTransaccionGenerarOp.toString());
 		folioTransaccionGenerarOpSolicitud.setMessage(folioTransaccionGenerarOpMensaje);
-		
+
 		String folioTransaccionGenerarOpResultado = HttpClientUtils.postPerform(folioTransaccionGenerarOpSolicitud);
 		JsonObject folioTransaccionGenerarOpResultadoObjeto = new Gson().fromJson(folioTransaccionGenerarOpResultado, JsonObject.class);
 		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
+
+		String numTransac = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
 		
 		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
@@ -164,7 +166,6 @@ public class InversionesCtrl {
 		String usuNumero = "001844";
 		String usuClient = "00193500";
 		
-		String numTransac = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
 		JsonObject datosBitacora = new JsonObject();
 		datosBitacora.addProperty("Bit_Usuari", usuNumero);
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
