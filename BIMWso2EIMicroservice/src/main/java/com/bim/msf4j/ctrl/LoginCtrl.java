@@ -29,35 +29,49 @@ import com.google.gson.JsonObject;
 public class LoginCtrl {
 	
 	private static final Logger logger = Logger.getLogger(LoginCtrl.class);
-	private static Properties properties;	
+	private static Properties properties;
+	private static String FolioTransaccionGenerarOpSucOrigen;
 	private static String UsuarioConsultarOpTipConsul;
 	private static String UsuarioConsultarOpTransaccio;
 	private static String UsuarioConsultarOpUsuario;
 	private static String UsuarioConsultarOpSucOrigen;
 	private static String UsuarioConsultarOpSucDestino;
 	private static String UsuarioConsultarOpModulo;
+	private static String ConfiguracionBancoDetalleOpTipConsul;
 	private static String ConfiguracionBancoDetalleOpTransaccio;
+	private static String ConfiguracionBancoDetalleOpUsuario;
 	private static String ConfiguracionBancoDetalleOpSucOrigen;
 	private static String ConfiguracionBancoDetalleOpSucDestino;
 	private static String ConfiguracionBancoDetalleOpModulo;
 	private static String UsuarioActualizacionTipActual;
-	private static String UsuarioActualizacionNumTransac;
 	private static String UsuarioActualizacionTransaccio;
+	private static String UsuarioActualizacionUsuario;
 	private static String UsuarioActualizacionSucOrigen;
 	private static String UsuarioActualizacionSucDestion;
 	private static String UsuarioActualizacionModulo;
+	private static String TokenVerificarUsuario;
 	private static String TokenVerificarTransaccio;
 	private static String TokenVerificarSucOrigen;
 	private static String TokenVerificarSucDestino;
 	private static String TokenVerificarModulo;
+	private static String BitacoraCreacionOpBitTipOpe;
+	private static String BitacoraCreacionOpTransaccio;
+	private static String BitacoraCreacionOpUsuario;
+	private static String BitacoraCreacionOpSucOrigen;
+	private static String BitacoraCreacionOpSucDestino;
+	private static String BitacoraCreacionOpModulo;
 	private static String DataServiceHost;
 	private static String UsuarioServicio;
 	private static String ConfiguracionServicio;
 	private static String TokenServicio;
+	private static String TransaccionServicio;
+	private static String BitacoraServicio;
 	private static String UsuarioConsultarOp;
 	private static String UsuarioActualizacionOp;
 	private static String ConfiguracionBancoDetalleOp;
 	private static String TokenVerificarOp;
+	private static String FolioTransaccionGenerarOp;
+	private static String BitacoraCreacionOp;
 	
 	@PostConstruct
 	public void init() {
@@ -72,40 +86,56 @@ public class LoginCtrl {
 			ioException.printStackTrace();
 		}
 		
+		FolioTransaccionGenerarOpSucOrigen = properties.getProperty("op.folio_transaccion_generar.suc_origen");
+		
 		UsuarioConsultarOpTipConsul = properties.getProperty("op.usuario_consultar.tip_consul");
 		UsuarioConsultarOpTransaccio = properties.getProperty("op.usuario_consultar.transaccio");
 		UsuarioConsultarOpUsuario = properties.getProperty("op.usuario_consultar.usuario");
 		UsuarioConsultarOpSucOrigen = properties.getProperty("op.usuario_consultar.suc_origen");
 		UsuarioConsultarOpSucDestino = properties.getProperty("op.usuario_consultar.suc_destino");
 		UsuarioConsultarOpModulo = properties.getProperty("op.usuario_consultar.modulo");
-		
+
+		ConfiguracionBancoDetalleOpTipConsul= properties.getProperty("op.configuracion_banco_detalle.tip_consul");
 		ConfiguracionBancoDetalleOpTransaccio = properties.getProperty("op.configuracion_banco_detalle.transaccio");
+		ConfiguracionBancoDetalleOpUsuario = properties.getProperty("op.configuracion_banco_detalle.usuario");
 		ConfiguracionBancoDetalleOpSucOrigen = properties.getProperty("op.configuracion_banco_detalle.suc_origen");
 		ConfiguracionBancoDetalleOpSucDestino = properties.getProperty("op.configuracion_banco_detalle.suc_destino");
 		ConfiguracionBancoDetalleOpModulo = properties.getProperty("op.configuracion_banco_detalle.modulo");
 		
 		UsuarioActualizacionTipActual = properties.getProperty("op.usuario_actualizacion.tip_actual");
-		UsuarioActualizacionNumTransac = properties.getProperty("op.usuario_actualizacion.num_transac");
 		UsuarioActualizacionTransaccio = properties.getProperty("op.usuario_actualizacion.transaccio");
+		UsuarioActualizacionUsuario = properties.getProperty("op.usuario_actualizacion.usuario");
 		UsuarioActualizacionSucOrigen = properties.getProperty("op.usuario_actualizacion.suc_origen");
 		UsuarioActualizacionSucDestion = properties.getProperty("op.usuario_actualizacion.suc_destino");
 		UsuarioActualizacionModulo = properties.getProperty("op.usuario_actualizacion.modulo");
-		
+
+		TokenVerificarUsuario = properties.getProperty("op.token_verificar.usuario");
 		TokenVerificarTransaccio = properties.getProperty("op.token_verificar.transaccio");
 		TokenVerificarSucOrigen = properties.getProperty("op.token_verificar.suc_origen");
 		TokenVerificarSucDestino = properties.getProperty("op.token_verificar.suc_destino");
 		TokenVerificarModulo = properties.getProperty("op.token_verificar.modulo");
+
+		BitacoraCreacionOpBitTipOpe = properties.getProperty("op.bitacora_creacion.bit_tipope");
+		BitacoraCreacionOpModulo = properties.getProperty("op.bitacora_creacion.transaccio");
+		BitacoraCreacionOpSucDestino = properties.getProperty("op.bitacora_creacion.usuario");
+		BitacoraCreacionOpSucOrigen = properties.getProperty("op.bitacora_creacion.suc_origen");
+		BitacoraCreacionOpTransaccio = properties.getProperty("op.bitacora_creacion.suc_destino");
+		BitacoraCreacionOpUsuario = properties.getProperty("op.bitacora_creacion.modulo");
 		
 		DataServiceHost = properties.getProperty("data_service.host");
 		
-		UsuarioServicio = properties.getProperty("data_service.usuario_service");
+		UsuarioServicio = properties.getProperty("data_service.usuario_servicio");
 		ConfiguracionServicio = properties.getProperty("data_service.configuracion_servicio");
 		TokenServicio = properties.getProperty("data_service.token_servicio");
+		TransaccionServicio = properties.getProperty("data_service.transaccion_servicio");
+		BitacoraServicio = properties.getProperty("data_service.bitacora_servicio");
 		
-		UsuarioConsultarOp = properties.getProperty("usuario_service.op.usuario_consultar");
-		UsuarioActualizacionOp = properties.getProperty("usuario_service.op.usuario_actualizacion");
-		ConfiguracionBancoDetalleOp = properties.getProperty("data_service.op.configuracion_banco_detalle");
-		TokenVerificarOp = properties.getProperty("data_service.op.configuracion_banco_detalle");
+		UsuarioConsultarOp = properties.getProperty("usuario_servicio.op.usuario_consultar");
+		UsuarioActualizacionOp = properties.getProperty("usuario_servicio.op.usuario_actualizacion");
+		ConfiguracionBancoDetalleOp = properties.getProperty("configuracion_servicio.op.configuracion_banco_detalle");
+		TokenVerificarOp = properties.getProperty("token_servicio.op.token_verificar");
+		FolioTransaccionGenerarOp = properties.getProperty("transaccion_servicio.op.folio_transaccion_generar");
+		BitacoraCreacionOp = properties.getProperty("transaccion_servicio.op.bitacora_creacion");
 	}
 	
 	@Path("/")
@@ -114,10 +144,35 @@ public class LoginCtrl {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void login(@Context final Request solicitud) {
 		logger.info("CTRL: Comenzando login metodo");
-		
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
 		String fechaSis = simpleDateFormat.format(fecha);
+		
+		JsonObject datosFolioTransaccion = new JsonObject();
+		datosFolioTransaccion.addProperty("Num_Transa", "");
+		datosFolioTransaccion.addProperty("SucOrigen", FolioTransaccionGenerarOpSucOrigen);
+		
+		JsonObject folioTransaccionGenerarOp = new JsonObject();
+		folioTransaccionGenerarOp.add("folioTransaccionGenerarOp", datosFolioTransaccion);
+		
+		StringBuilder folioTransaccionGenerarOpUrl = new StringBuilder()
+				.append(DataServiceHost)
+				.append("/")
+				.append(TransaccionServicio)
+				.append("/")
+				.append(FolioTransaccionGenerarOp);
+		
+		RequestDTO folioTransaccionGenerarOpSolicitud = new RequestDTO();
+		folioTransaccionGenerarOpSolicitud.setUrl(folioTransaccionGenerarOpUrl.toString());
+		MessageProxyDTO folioTransaccionGenerarOpMensaje = new MessageProxyDTO();
+		folioTransaccionGenerarOpMensaje.setBody(folioTransaccionGenerarOp.toString());
+		folioTransaccionGenerarOpSolicitud.setMessage(folioTransaccionGenerarOpMensaje);
+		
+		logger.info("folioTransaccionGenerarOpSolicitud " + folioTransaccionGenerarOpSolicitud.toString());
+		String folioTransaccionGenerarOpResultado = HttpClientUtils.postPerform(folioTransaccionGenerarOpSolicitud);
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = new Gson().fromJson(folioTransaccionGenerarOpResultado, JsonObject.class);
+		
+		String folTransa = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
 		
 		String mensaje = HttpClientUtils.getStringContent(solicitud);
 		JsonObject datosUsuario = new Gson().fromJson(mensaje, JsonObject.class);
@@ -136,7 +191,7 @@ public class LoginCtrl {
 		datosUsuario.addProperty("Usu_CuCaCo", "");
 		datosUsuario.addProperty("Usu_SucMod", "");
 		datosUsuario.addProperty("NumTransac", "");	
-		datosUsuario.addProperty("FechaSis",fechaSis );	
+		datosUsuario.addProperty("FechaSis",fechaSis);	
 		
 		logger.info("datosUsuario" + datosUsuario);
 		StringBuilder usuarioConsultarUrl = new StringBuilder()
@@ -151,21 +206,19 @@ public class LoginCtrl {
 
 		RequestDTO usuarioConsultarOpSolicitud = new RequestDTO();
 		usuarioConsultarOpSolicitud.setUrl(usuarioConsultarUrl.toString());
-		MessageProxyDTO usuarioConsultarOpMessaje = new MessageProxyDTO();
-		usuarioConsultarOpMessaje.setBody(usuarioConsultarOp.toString());
-		usuarioConsultarOpSolicitud.setMessage(usuarioConsultarOpMessaje);
+		MessageProxyDTO usuarioConsultarOpMensaje = new MessageProxyDTO();
+		usuarioConsultarOpMensaje.setBody(usuarioConsultarOp.toString());
+		usuarioConsultarOpSolicitud.setMessage(usuarioConsultarOpMensaje);
 		
 		String usuarioConsultarOpResultado = HttpClientUtils.postPerform(usuarioConsultarOpSolicitud);
-		JsonObject usuarioConsultarOpResultadoObjecto = new Gson().fromJson(usuarioConsultarOpResultado, JsonObject.class);
-		logger.info("usuarioConsultarOpResultadoObject" + usuarioConsultarOpResultadoObjecto);
-		
-		String usuario = usuarioConsultarOpResultadoObjecto.get("usuario").getAsJsonObject().get("Usu_Numero").getAsString();
-		logger.info("usuarioValue" + usuario);
+		JsonObject usuarioConsultarOpResultadoObjeto = new Gson().fromJson(usuarioConsultarOpResultado, JsonObject.class);
+		logger.info("usuarioConsultarOpResultadoObject" + usuarioConsultarOpResultadoObjeto);
+
 		JsonObject datosConfiguracion = new JsonObject();
-		datosConfiguracion.addProperty("Tip_Consul", UsuarioConsultarOpTipConsul);
+		datosConfiguracion.addProperty("Tip_Consul", ConfiguracionBancoDetalleOpTipConsul);
 		datosConfiguracion.addProperty("NumTransac", "");
 		datosConfiguracion.addProperty("Transaccio", ConfiguracionBancoDetalleOpTransaccio);
-		datosConfiguracion.addProperty("Usuario", usuario);
+		datosConfiguracion.addProperty("Usuario", ConfiguracionBancoDetalleOpUsuario);
 		datosConfiguracion.addProperty("FechaSis", fechaSis);
 		datosConfiguracion.addProperty("SucOrigen", ConfiguracionBancoDetalleOpSucOrigen);
 		datosConfiguracion.addProperty("SucDestino", ConfiguracionBancoDetalleOpSucDestino);
@@ -173,6 +226,7 @@ public class LoginCtrl {
 		
 		JsonObject configuracionBancoDetalleOp = new JsonObject();
 		configuracionBancoDetalleOp.add("configuracionBancoDetalleOp", datosConfiguracion);
+		
 		RequestDTO configuracionBancoDetalleSolicitud = new RequestDTO();
 		StringBuilder configuracionBancoDetalleOpUrl = new StringBuilder()
 				.append(DataServiceHost)
@@ -191,18 +245,25 @@ public class LoginCtrl {
 		String contrasenaCifrada = Racal.cifraPassword_HSM(datosUsuario.get("Usu_Passwo").getAsString());
 		logger.info("contrasenaCifrada " + contrasenaCifrada);
 		
-		datosUsuario.addProperty("Usuario", usuario);
-		usuarioConsultarOpSolicitud.getMessage().setBody(datosUsuario.toString());
-		
 		logger.info("newVersion" + usuarioConsultarOpSolicitud.toString());
 		usuarioConsultarOpResultado = HttpClientUtils.postPerform(usuarioConsultarOpSolicitud);
-		usuarioConsultarOpResultadoObjecto = new Gson().fromJson(usuarioConsultarOpResultado, JsonObject.class);
+		usuarioConsultarOpResultadoObjeto = new Gson().fromJson(usuarioConsultarOpResultado, JsonObject.class);
 		
 		JsonObject datosUsuarioActualizacion = new JsonObject();
+		datosUsuarioActualizacion.addProperty("Usu_Numero", "");
 		datosUsuarioActualizacion.addProperty("Usu_Clave", datosUsuario.get("Usu_Clave").getAsString());
-		datosUsuarioActualizacion.addProperty("Usuario", usuario);
+		datosUsuarioActualizacion.addProperty("Usu_Passwo", "");
+		datosUsuarioActualizacion.addProperty("Usu_Status", "");
+		datosUsuarioActualizacion.addProperty("Usu_Email", "");
+		datosUsuarioActualizacion.addProperty("Usu_UsuAdm", "");
+		datosUsuarioActualizacion.addProperty("Usu_FolTok", "");
+		datosUsuarioActualizacion.addProperty("Usu_Client", "");
+		datosUsuarioActualizacion.addProperty("Usu_SucMod", "");
+		datosUsuarioActualizacion.addProperty("Usu_FolNip", "0");
+		datosUsuarioActualizacion.addProperty("Usu_Nombre", "");
+		datosUsuarioActualizacion.addProperty("Usuario", UsuarioActualizacionUsuario);
 		datosUsuarioActualizacion.addProperty("Tip_Actual", UsuarioActualizacionTipActual);
-		datosUsuarioActualizacion.addProperty("NumTransac", UsuarioActualizacionNumTransac);
+		datosUsuarioActualizacion.addProperty("NumTransac", folTransa);
 		datosUsuarioActualizacion.addProperty("Transaccio", UsuarioActualizacionTransaccio);
 		datosUsuarioActualizacion.addProperty("FechaSis", fechaSis);
 		datosUsuarioActualizacion.addProperty("SucOrigen", UsuarioActualizacionSucOrigen);
@@ -222,18 +283,19 @@ public class LoginCtrl {
 		RequestDTO usuarioActualizacionSolicitud = new RequestDTO();
 		usuarioActualizacionSolicitud.setUrl(usuarioActualizacionUrl.toString());
 		MessageProxyDTO usuarioActualizacionMensaje = new MessageProxyDTO();
-		usuarioActualizacionMensaje.setBody(UsuarioActualizacionOp.toString());
+		usuarioActualizacionMensaje.setBody(usuarioActualizacionOp.toString());
 		usuarioActualizacionSolicitud.setMessage(usuarioActualizacionMensaje);
 		
-		String usuarioActualizacionOpResultado = HttpClientUtils.postPerform(usuarioConsultarOpSolicitud);
+		String usuarioActualizacionOpResultado = HttpClientUtils.postPerform(usuarioActualizacionSolicitud);
 		JsonObject usuarioActualizacionOpResultadoObjecto = new Gson().fromJson(usuarioActualizacionOpResultado, JsonObject.class);
 		logger.info("usuarioActualizacionOpResultadoObjecto" + usuarioActualizacionOpResultadoObjecto);
 		
-		String tovSerie = usuarioConsultarOpResultadoObjecto.get("usuario").getAsJsonObject().get("Tov_Serie").getAsString();
+		String tovSerie = usuarioConsultarOpResultadoObjeto.get("usuario").getAsJsonObject().get("Usu_FolTok").getAsString();
 		JsonObject datosTokenVerificar = new JsonObject();
-			datosTokenVerificar.addProperty("Usuario", usuario);
 			datosTokenVerificar.addProperty("Tov_Serie", tovSerie);
+			datosTokenVerificar.addProperty("NumTransac", "");
 			datosTokenVerificar.addProperty("Transaccio", TokenVerificarTransaccio);
+			datosTokenVerificar.addProperty("Usuario", TokenVerificarUsuario);
 			datosTokenVerificar.addProperty("FechaSis", fechaSis);
 			datosTokenVerificar.addProperty("SucOrigen", TokenVerificarSucOrigen);
 			datosTokenVerificar.addProperty("SucDestino", TokenVerificarSucDestino);
@@ -258,7 +320,59 @@ public class LoginCtrl {
 		String tokenVerificarOpResultado = HttpClientUtils.postPerform(tokenVerificarSolicitud);
 		JsonObject tokenVerificarOpResultadoObjecto = new Gson().fromJson(tokenVerificarOpResultado, JsonObject.class);
 		logger.info("tokenVerificarOpResultadoObjecto" + tokenVerificarOpResultadoObjecto);
+		
+		logger.info("usuarioActualizacionOp " + usuarioActualizacionOp.toString());
+		usuarioActualizacionSolicitud = new RequestDTO();
+		usuarioActualizacionSolicitud.setUrl(usuarioActualizacionUrl.toString());
+		usuarioActualizacionMensaje = new MessageProxyDTO();
+		usuarioActualizacionMensaje.setBody(usuarioActualizacionOp.toString());
+		usuarioActualizacionSolicitud.setMessage(usuarioActualizacionMensaje);
+		
+		usuarioActualizacionOpResultado = HttpClientUtils.postPerform(usuarioActualizacionSolicitud);
+		usuarioActualizacionOpResultadoObjecto = new Gson().fromJson(usuarioActualizacionOpResultado, JsonObject.class);
+		logger.info("usuarioActualizacionOpResultadoObjecto" + usuarioActualizacionOpResultadoObjecto);
+		
+		String bitUsuari = usuarioConsultarOpResultadoObjeto.get("usuario").getAsJsonObject().get("Usu_Numero").getAsString();
+
+		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
+		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
+		String bitDireIP = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("User-Agent") : "";
+		String bitPriRef = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("X-Forwarded-For") : "";
+		
+		JsonObject datosBitacoraCreacion = new JsonObject();
+		datosBitacoraCreacion.addProperty("Bit_NumTra", "");
+		datosBitacoraCreacion.addProperty("Bit_SegRef", "");
+		datosBitacoraCreacion.addProperty("Bit_CueOri", "");
+		datosBitacoraCreacion.addProperty("Bit_CueDes", "");
+		datosBitacoraCreacion.addProperty("Bit_Monto", "0");
+		datosBitacoraCreacion.addProperty("Bit_Usuari", bitUsuari);
+		datosBitacoraCreacion.addProperty("Bit_Fecha", fechaSis);
+		datosBitacoraCreacion.addProperty("Bit_PriRef", bitPriRef);
+		datosBitacoraCreacion.addProperty("Bit_DireIP", bitDireIP);
+		datosBitacoraCreacion.addProperty("NumTransac", folTransa);
+		datosBitacoraCreacion.addProperty("Bit_TipOpe", BitacoraCreacionOpBitTipOpe);
+		datosBitacoraCreacion.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
+		datosBitacoraCreacion.addProperty("Usuario", BitacoraCreacionOpUsuario);
+		datosBitacoraCreacion.addProperty("SucOrigen", BitacoraCreacionOpSucOrigen);
+		datosBitacoraCreacion.addProperty("SucDestino", BitacoraCreacionOpSucDestino);
+		datosBitacoraCreacion.addProperty("Modulo", BitacoraCreacionOpModulo);		
 			
+		JsonObject bitacoraCreacionOp = new JsonObject();
+		bitacoraCreacionOp.add("bitacoraCreacionOp", datosBitacoraCreacion);
+		
+		StringBuilder bitacoraCreacionOpUrl = new StringBuilder()
+				.append(DataServiceHost)
+				.append("/")
+				.append(BitacoraServicio)
+				.append("/")
+				.append(BitacoraCreacionOp);
+		RequestDTO bitacoraCreacionOpSolicitud = new RequestDTO();
+		MessageProxyDTO bitacoraCreacionOpMensaje = new MessageProxyDTO();
+		bitacoraCreacionOpMensaje.setBody(bitacoraCreacionOp.toString());
+		bitacoraCreacionOpSolicitud.setUrl(bitacoraCreacionOpUrl.toString());
+		bitacoraCreacionOpSolicitud.setMessage(bitacoraCreacionOpMensaje);
+		
+		HttpClientUtils.postPerform(bitacoraCreacionOpSolicitud);
 		logger.info("CTRL: Terminando login metodo");
 	}
 }

@@ -78,7 +78,7 @@ public class InversionesCtrl {
 		
 		FolioTransaccionGenerarOpSucOrigen = properties.getProperty("op.folio_transaccion_generar.suc_origen");
 		
-		BitacoraCreacionOpBitTipOpe = properties.getProperty("op.bitacora_creacion.bit_tipOpe");
+		BitacoraCreacionOpBitTipOpe = properties.getProperty("op.bitacora_creacion.bit_tipope.inversiones_listado");
 		BitacoraCreacionOpTransaccio = properties.getProperty("op.bitacora_creacion.transaccio");
 		BitacoraCreacionOpUsuario = properties.getProperty("op.bitacora_creacion.usuario");
 		BitacoraCreacionOpSucOrigen = properties.getProperty("op.bitacora_creacion.suc_origen");
