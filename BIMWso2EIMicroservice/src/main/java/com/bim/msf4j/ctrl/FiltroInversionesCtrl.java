@@ -75,7 +75,7 @@ public class FiltroInversionesCtrl implements Microservice {
 			if(!elemento.has("Inv_FecVen") || elemento.get("Inv_FecVen").isJsonNull())
 				continue;
 			
-			Boolean cpRenInv = Utilerias.calcularVencimiento(elemento.get("Inv_FecVen").getAsString());
+			Boolean cpRenInv = true;
 			if(filter_by != null && !filter_by.isEmpty() && filter_by.equals("PROXIMOS_VENCIMIENTOS") && !cpRenInv)
 				continue;
 			
