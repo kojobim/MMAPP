@@ -8,10 +8,12 @@ import com.bim.msf4j.ctrl.PaginadoCtrl;
 import com.bim.msf4j.ctrl.PingCtrl;
 import com.bim.msf4j.ctrl.FiltroInversionesCtrl;
 import com.bim.msf4j.ctrl.TokenCtrl;
+import com.bim.msf4j.exceptions.BimExceptionMapper;
 
 public class Application {
     public static void main(String[] args) {
         new MicroservicesRunner()
+        		.addExceptionMapper(new BimExceptionMapper())
                 .deploy(new PingCtrl(), 
                 		new TokenCtrl(), 
                 		new HSMCtrl(), 
