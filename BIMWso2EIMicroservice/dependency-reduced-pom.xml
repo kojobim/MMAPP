@@ -10,8 +10,31 @@
   <artifactId>BIMWso2EIMicroservice</artifactId>
   <name>BIMWso2EIMicroservice</name>
   <version>1.0.0</version>
+  <build>
+    <finalName>bim-wso2-ei-microservice</finalName>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Microservices>${microservice.resourceClasses}</Microservices>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
   <properties>
-    <microservice.mainClass>com.bim.msf4j.Application</microservice.mainClass>
+    <microservice.resourceClasses>com.bim.msf4j.ctrl.TokenCtrl,com.bim.msf4j.ctrl.HSMCtrl,com.bim.msf4j.ctrl.LoginCtrl,com.bim.msf4j.ctrl.InversionesCtrl</microservice.resourceClasses>
   </properties>
 </project>
 
