@@ -9,13 +9,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 import org.apache.log4j.Logger;
-// import org.joda.time.format.DateTimeFormat;
-// import org.joda.time.format.DateTimeFormatter;
 
 public class Utilerias {
 
 	private static final Logger logger = Logger.getLogger(Utilerias.class);
-	// private static DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy-MM-dd");
 	
 	@SuppressWarnings("unchecked")
 	public static JsonArray paginado(JsonArray datos, int page, int per_page) {
@@ -41,18 +38,6 @@ public class Utilerias {
 			return true;
 
 		return false;
-		// String fechaAct = dtfOut.print(DateTime.now());
-		// logger.info("Fecha actual: " + fechaAct);
-		// String fechaConv = convertirFechaAFormatoSimple(fecha);
-		// String invFecVen = dtfOut.print(DateTime.parse(fechaConv));
-		// logger.info("Fecha de vencimiento: " + invFecVen);
-		
-		// int numDias = Days.daysBetween(DateTime.parse(fechaAct), DateTime.parse(invFecVen)).getDays();
-		// logger.info("COMMONS: Finalizando calcularVencimiento...");
-		// if(numDias == 0)
-    	// 	return true;
-		
-		// return false;
 	}
 	
 	public static double redondear(double cantidad, int decimales) {

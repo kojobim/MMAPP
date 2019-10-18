@@ -31,11 +31,6 @@ import com.google.gson.JsonObject;
 import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
 
-// import org.joda.time.DateTime;
-// import org.joda.time.DateTime;
-// import org.joda.time.format.DateTimeFormat;
-// import org.joda.time.format.DateTimeFormatter;
-
 @Path("/inversiones")
 public class InversionesCtrl {
 	
@@ -302,8 +297,6 @@ public class InversionesCtrl {
 			@QueryParam("categoria") String categoria) {
 		logger.info("CTRL: Empezando detalleInversion Method...");
 
-		// DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy-MM-dd");
-
 		SimpleDateFormat simpleDateFormatSis = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
 		String fechaSis = simpleDateFormatSis.format(fecha);
@@ -448,8 +441,6 @@ public class InversionesCtrl {
 				double invIntNet = 0;
 				double invISRTot = 0;
 
-				// if (inversionObj.has("Inv_Tipo") && inversionObj.get("Inv_Tipo").getAsString() != "V")
-
 				if (categoria == "PAGARE") {
 					plazo = inversionObj.get("Inv_Plazo").getAsInt();
 					intBru = inversionObj.get("Inv_TBruta").getAsDouble();
@@ -498,19 +489,6 @@ public class InversionesCtrl {
 				logger.info(">>>>>>> fechaIni: " + fechaIni);
 				logger.info(">>>>>>> fechaVen: " + fechaVen);
 				logger.info(">>>>>>> invFecVen: " + invFecVen);
-
-				// DateTime dtFecIni = null;
-				// DateTime dtFecVen = null;
-				
-				// if(!invFecIni.contains("Proximo Vencimiento") && !invFecIni.isEmpty()) {
-				// 	invFecIni = Utilerias.convertirFechaAFormatoSimple(invFecIni);
-				// 	dtFecIni = DateTime.parse(invFecIni);
-				// }
-					
-				// if(fechaVen != null) {
-				// 	invFecVen = Utilerias.convertirFechaAFormatoSimple(invFecVen);
-				// 	dtFecVen = DateTime.parse(invFecVen);
-				// }
 
 				intBru = Utilerias.redondear(intBru, 2);
 
