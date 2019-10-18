@@ -544,33 +544,5 @@ public class InversionesCtrl {
 		}
 
 		return resultado;
-
-    	// logger.info("CTRL: Empezando detalleInversion method...");
-    	// String body = HttpClientUtils.getStringContent(request);
-    	// logger.info("vo: " + body);
-    	
-    	// JsonObject jsonObj = new Gson().fromJson(body, JsonObject.class);
-    	// JsonObject inversion = jsonObj.get("inversion").getAsJsonObject();
-    	// String invFecIni = inversion.get("invFecIni").getAsString();
-    	// String invFecVen = inversion.get("invFecVen").getAsString();
-    	// double intBru = inversion.get("intBru").getAsDouble();
-    	
-    	// intBru = Utilerias.redondear(intBru, 2);
-    	// invFecIni = Utilerias.convertirFechaAFormatoSimple(invFecIni);
-    	// invFecVen = Utilerias.convertirFechaAFormatoSimple(invFecVen);
-    	// DateTime dtFecIni = DateTime.parse(invFecIni);
-    	// DateTime dtFecVen = DateTime.parse(invFecVen);
-		// inversion.addProperty("cpRenInv", Utilerias.calcularVencimiento(invFecVen));
-    	
-    	// inversion.addProperty("intBru", intBru);
-    	// inversion.addProperty("invFecIni", dtfOut.print(dtFecIni));
-    	// inversion.addProperty("invFecVen", dtfOut.print(dtFecVen));
-    	
-    	// logger.info("CTRL: Terminando detalleInversion method...");
-    	// return Response
-    	// 		.status(Response.Status.OK)
-    	// 		.header("Content-Type", MediaType.APPLICATION_JSON)
-    	// 		.entity(jsonObj)
-    	// 		.build();
     }
 }
