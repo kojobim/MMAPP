@@ -32,9 +32,11 @@ public class HttpClientUtils {
 			final URIBuilder uriBuilder = new URIBuilder(request.getUrl());
 			
 			HttpPost post = new HttpPost(uriBuilder.build());
-			StringEntity entity = new StringEntity(request.getMessage().getBody());
-			System.out.println("&&&&&Message&&&&" + new Gson().toJson(request.getMessage()));
-			post.setEntity(entity);
+			if(request.getMessage() != null) {
+				StringEntity entity = new StringEntity(request.getMessage().getBody());
+				System.out.println("&&&&&Message&&&&" + new Gson().toJson(request.getMessage()));
+				post.setEntity(entity);
+			}
 			post.setHeader("Accept", "application/json");
 			post.setHeader("Content-Type", "application/json");
 			CloseableHttpResponse response = client.execute(post);
