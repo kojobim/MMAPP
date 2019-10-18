@@ -29,10 +29,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import org.apache.log4j.Logger;
+import org.wso2.msf4j.Microservice;
 import org.wso2.msf4j.Request;
 
 @Path("/inversiones")
-public class InversionesCtrl {
+public class InversionesCtrl implements Microservice {
 	
 	private static final Logger logger = Logger.getLogger(InversionesCtrl.class);
 	
