@@ -11,6 +11,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
+import org.wso2.msf4j.Microservice;
 import org.wso2.msf4j.Request;
 
 import com.bim.commons.utils.HttpClientUtils;
@@ -22,7 +23,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 @Path("/paginado")
-public class PaginadoCtrl {
+public class PaginadoCtrl implements Microservice {
 
 	private static final Logger logger = Logger.getLogger(PaginadoCtrl.class);
 	
