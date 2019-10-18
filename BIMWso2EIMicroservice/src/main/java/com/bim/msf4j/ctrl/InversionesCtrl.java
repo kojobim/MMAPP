@@ -294,7 +294,7 @@ public class InversionesCtrl {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public JsonObject detalleInversion(@PathParam("invNumero") String invNumero,
-			@QueryParam("categoria") String categoria) {
+			@QueryParam("categoria") String categoria, @Context final Request solicitud) {
 		logger.info("CTRL: Empezando detalleInversion Method...");
 
 		SimpleDateFormat simpleDateFormatSis = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
@@ -329,19 +329,34 @@ public class InversionesCtrl {
 
 		String BitacoraCreacionFolTransa = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
 
+		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
+		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
+		String bit_PriRef = solicitud.getHeader("User-Agent");
+		String bit_DireIP = solicitud.getHeader("X-Forwarded-For");
+
+		/* 
+			Parametros obtenidos por medio del principal 
+				Bit_Usuari = usuNumero
+				Inv_Client = usuClient
+				Inv_Usuari = usuNumero
+		*/
+		
+		String usuNumero = "001844";
+		String usuClient = "00193500";
+
 		JsonObject datosBitacora = new JsonObject();
-		datosBitacora.addProperty("Bit_Usuari", "001844");
+		datosBitacora.addProperty("Bit_Usuari", usuNumero);
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_NumTra", "");
 		datosBitacora.addProperty("Bit_TipOpe", BitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("Bit_CueOri", "");
 		datosBitacora.addProperty("Bit_CueDes", "");
 		datosBitacora.addProperty("Bit_Monto", Integer.parseInt(BitacoraCreacionOpBitMonto));
-		datosBitacora.addProperty("Bit_PriRef", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36");
+		datosBitacora.addProperty("Bit_PriRef", bit_PriRef);
 		datosBitacora.addProperty("Bit_SegRef", "");
-		datosBitacora.addProperty("Bit_DireIP", "172.30.20.130");
+		datosBitacora.addProperty("Bit_DireIP", bit_DireIP);
 		datosBitacora.addProperty("NumTransac", BitacoraCreacionFolTransa);
-		datosBitacora.addProperty("Transaccio", "HOR");
+		datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
 		datosBitacora.addProperty("Usuario", BitacoraCreacionOpUsuario);
 		datosBitacora.addProperty("FechaSis", fechaSis);
 		datosBitacora.addProperty("SucOrigen", BitacoraCreacionOpSucOrigen);
@@ -371,40 +386,37 @@ public class InversionesCtrl {
 		logger.info("bitacoraCreacionOpResultadoObjeto" + bitacoraCreacionOpResultadoObjeto);
 
 		JsonObject datosInversion = new JsonObject();
-		StringBuilder inversionConsultarUrl = new StringBuilder().append(DataServiceHost);
+		datosInversion.addProperty("FechaSis", fechaSis);
+		StringBuilder inversionConsultarUrl = new StringBuilder()
+				.append(DataServiceHost)
+				.append("/")
+				.append(InversionesServicio)
+				.append("/");
 
-		if (categoria == "PAGARE") {
+		if ("PAGARE".equals(categoria)) {
 			datosInversion.addProperty("Inv_Numero", "");
-			datosInversion.addProperty("Inv_Usuari", "000024");
+			datosInversion.addProperty("Inv_Usuari", usuNumero);
 			datosInversion.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
 			datosInversion.addProperty("NumTransac", BitacoraCreacionFolTransa);
-			datosInversion.addProperty("Transaccio", "HWE");
-			datosInversion.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);
-			datosInversion.addProperty("FechaSis", fechaSis);
+			datosInversion.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
+			datosInversion.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);			
 			datosInversion.addProperty("SucOrigen", InversionesPagareNumeroUsuarioObtenerOpSucOrigen);
 			datosInversion.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
 			datosInversion.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
 
 			inversionConsultarUrl
-					.append("/")
-					.append(InversionesServicio)
-					.append("/")
 					.append(InversionesPagareNumeroUsuarioObtenerOp);
 		} else {
-			datosInversion.addProperty("Inv_Client", "00193500");
+			datosInversion.addProperty("Inv_Client", usuClient);
 			datosInversion.addProperty("Inv_Moneda", InversionesObtenerOpInvMoneda);
 			datosInversion.addProperty("NumTransac", BitacoraCreacionFolTransa);
-			datosInversion.addProperty("Transaccio", "HWE");
+			datosInversion.addProperty("Transaccio", InversionesObtenerOpTransaccio);
 			datosInversion.addProperty("Usuario", InversionesObtenerOpUsuario);
-			datosInversion.addProperty("FechaSis", fechaSis);
 			datosInversion.addProperty("SucOrigen", InversionesObtenerOpSucOrigen);
 			datosInversion.addProperty("SucDestino", InversionesObtenerOpSucDestino);
 			datosInversion.addProperty("Modulo", InversionesObtenerOpModulo);
 
 			inversionConsultarUrl
-					.append("/")
-					.append(InversionesServicio)
-					.append("/")
 					.append(InversionesObtenerOp);
 		}
 
