@@ -23,6 +23,7 @@ import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
 import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.HttpClientUtils;
+import com.bim.commons.utils.Utilerias;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -153,9 +154,19 @@ public class InversionesCtrl {
 		String bit_PriRef = solicitud.getHeader("User-Agent");
 		String bit_DireIP = solicitud.getHeader("X-Forwarded-For");
 		
+		/* 
+			Parametros obtenidos por medio del principal 
+				Bit_Usuari = usuNumero
+				Inv_Client = usuClient
+				Inv_Usuari = usuNumero
+		*/
+		
+		String usuNumero = "001844";
+		String usuClient = "00193500";
+		
 		String numTransac = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
 		JsonObject datosBitacora = new JsonObject();
-		datosBitacora.addProperty("Bit_Usuari", "001844"); // usuNumero
+		datosBitacora.addProperty("Bit_Usuari", usuNumero);
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_NumTra", "");
 		datosBitacora.addProperty("Bit_TipOpe", BitacoraCreacionOpBitTipOpe);
@@ -187,14 +198,13 @@ public class InversionesCtrl {
 		bitacoraCreacionSolicitud.setUrl(bitacoraCreacionOpUrl.toString());
 		MessageProxyDTO bitacoraCreacionOpMensaje= new MessageProxyDTO();
 		bitacoraCreacionOpMensaje.setBody(bitacoraCreacionOp.toString());
-		bitacoraCreacionSolicitud.getMessage().setBody(bitacoraCreacionOp.toString());
-		
+		bitacoraCreacionSolicitud.setMessage(bitacoraCreacionOpMensaje);
 		HttpClientUtils.postPerform(bitacoraCreacionSolicitud);
 
 		JsonObject inversionesObtener = new JsonObject();
-		inversionesObtener.addProperty("Inv_Client", "00193500"); //usuClient
+		inversionesObtener.addProperty("Inv_Client", usuClient);
 		inversionesObtener.addProperty("Inv_Moneda", InversionesObtenerOpInvMoneda);
-		inversionesObtener.addProperty("NumTransac", numTransac);
+		inversionesObtener.addProperty("NumTransac", "");
 		inversionesObtener.addProperty("Transaccio", InversionesObtenerOpTransaccio);
 		inversionesObtener.addProperty("Usuario", InversionesObtenerOpUsuario);
 		inversionesObtener.addProperty("FechaSis", fechaSis);
@@ -215,16 +225,16 @@ public class InversionesCtrl {
 		RequestDTO inversionesObtenerSolicitud = new RequestDTO();
 		inversionesObtenerSolicitud.setUrl(inversionesObtenerUrl.toString());
 		MessageProxyDTO inversionesObtenerMensaje = new MessageProxyDTO();
-		inversionesObtenerMensaje.setBody(InversionesObtenerOp.toString());
+		inversionesObtenerMensaje.setBody(inversionesObtenerOp.toString());
 		inversionesObtenerSolicitud.setMessage(inversionesObtenerMensaje);
-		
+		logger.info("inversionesObtenerSolicitud " + inversionesObtenerSolicitud.toString());
 		String inversionesObtenerOpResultado = HttpClientUtils.postPerform(inversionesObtenerSolicitud);
 		JsonObject inversionesObtenerOpResultadoObjeto = new Gson().fromJson(inversionesObtenerOpResultado, JsonObject.class);
 		logger.info("inversionesObtenerOpResultadoObjeto" + inversionesObtenerOpResultadoObjeto);
 		
 		JsonObject inversionesPagareNumeroUsuarioObtener = new JsonObject();
 			inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
-			inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Usuari", "001844"); //usuNumero
+			inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Usuari", usuNumero);
 			inversionesPagareNumeroUsuarioObtener.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
 			inversionesPagareNumeroUsuarioObtener.addProperty("NumTransac", numTransac);
 			inversionesPagareNumeroUsuarioObtener.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
@@ -254,11 +264,23 @@ public class InversionesCtrl {
 		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = new Gson().fromJson(inversionesPagareNumeroUsuarioObtenerOpResultado, JsonObject.class);
 		logger.info("inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto" + inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto);
 		
-		JsonArray inversiones = inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto.get("inversiones").getAsJsonArray();
+		JsonArray inversionesResultado = new JsonArray();
+		if(inversionesPagareNumeroUsuarioObtenerOp.has("inversiones") && inversionesPagareNumeroUsuarioObtenerOp.get("inversiones").getAsJsonObject().has("inversion")) {
+			inversionesResultado.addAll(inversionesPagareNumeroUsuarioObtenerOp.get("inversiones").getAsJsonObject().get("inversion").getAsJsonArray());
+		}
+
+		inversionesResultado.addAll(inversionesObtenerOpResultadoObjeto.get("inversiones").getAsJsonObject().get("inversion").getAsJsonArray());
 		
-		JsonObject inversionesResultado = Filtrado.filtroInversiones(inversiones, page, per_page, filter_by);
+		inversionesResultado.forEach(inversionResultado -> {
+			JsonObject inversionResultadoObjeto = (JsonObject) inversionResultado;
+			String invCantid = inversionResultadoObjeto.get("Inv_Cantid").getAsString();
+			Double invCantidRedondeado = Utilerias.redondear(Double.parseDouble(invCantid), 3);
+			inversionResultadoObjeto.addProperty("Inv_Cantid", invCantidRedondeado.toString());
+		});
+		logger.info("inversionesResultado " +  inversionesResultado);
+		JsonObject inversionesResultadoFinal = Filtrado.filtroInversiones(inversionesResultado, page, per_page, filter_by);
 		
-		logger.info("CTRL: Terminando login metodo");
-		return inversionesResultado;
+		logger.info("CTRL: Terminando login metodo");	
+		return inversionesResultadoFinal;
 	}
 }

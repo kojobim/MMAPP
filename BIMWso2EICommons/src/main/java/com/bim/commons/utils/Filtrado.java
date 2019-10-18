@@ -1,5 +1,9 @@
 package com.bim.commons.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 
 import com.google.gson.JsonArray;
@@ -12,8 +16,9 @@ public class Filtrado {
 	
     public static JsonObject filtroInversiones(JsonArray inversionArray, int page, int per_page, String filter_by) {
 		logger.info("COMMONS: Comenzando filtroInversiones metodo");
-        
-		int cpTotalInvCantidP = 0, cpTotalInvCantidV = 0, cpTotalInvCantidC = 0, cpTotalInvCantidF = 0;
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		double cpTotalInvCantidP = 0, cpTotalInvCantidV = 0, cpTotalInvCantidC = 0, cpTotalInvCantidF = 0;
 		
 		JsonObject categoriaFija = new JsonObject();
 		categoriaFija.addProperty("categoria", "FIJA");
@@ -46,7 +51,7 @@ public class Filtrado {
 				elemento.addProperty("Fot_Descri", "PAGARE");
 						
 			String invNumero = elemento.get("Inv_Numero").getAsString();
-			int invCantid = elemento.get("Inv_Cantid").getAsInt();
+			double invCantid = elemento.get("Inv_Cantid").getAsDouble();
 			if(!elemento.has("Inv_FecVen") || elemento.get("Inv_FecVen").isJsonNull())
 				continue;
 			
@@ -56,7 +61,21 @@ public class Filtrado {
 			
 			elementosObjeto.addProperty("invNumero", invNumero);
 			elementosObjeto.addProperty("invCantid", invCantid);
-			elementosObjeto.addProperty("invFecVen", elemento.get("Inv_FecVen").getAsString());
+			
+			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+			String invFecVen = null;
+			if(elemento.has("Inv_FecVen"))
+				invFecVen = elemento.get("Inv_FecVen").getAsString();
+			Date fecha1 = new Date();
+			if(invFecVen != null && !invFecVen.contains("Proximo Vencimiento ")) {
+				try {
+					fecha1 = format.parse(invFecVen);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				elementosObjeto.addProperty("Inv_FecVen", simpleDateFormat.format(fecha1));
+			}
+			
 			elementosObjeto.addProperty("cpRenInv", cpRenInv);
 			
 			switch (elemento.get("Fot_Descri").getAsString()) {
