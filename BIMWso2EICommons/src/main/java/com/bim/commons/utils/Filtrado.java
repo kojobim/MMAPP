@@ -1,44 +1,24 @@
-package com.bim.msf4j.ctrl;
+package com.bim.commons.utils;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
-import org.apache.log4j.Logger;
-import org.wso2.msf4j.Microservice;
-import org.wso2.msf4j.Request;
-
-import com.bim.commons.utils.HttpClientUtils;
-import com.bim.commons.utils.Utilerias;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-@Path("/filtroInversiones")
-public class FiltroInversionesCtrl implements Microservice {
+import org.apache.log4j.Logger;
 
-	private static final Logger logger = Logger.getLogger(FiltroInversionesCtrl.class);
+public class Filtrado {
+
+	private static final Logger logger = Logger.getLogger(Filtrado.class);
 	
-	@Path("/")
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public JsonObject filtroInversiones(@Context final Request solicitud) {
-		logger.info("CTRL: Comenzando filtroInversiones metodo");
-		String mensaje = HttpClientUtils.getStringContent(solicitud);
-		JsonObject inversionesObjeto = new Gson().fromJson(mensaje, JsonObject.class);
-		JsonObject inversiones = inversionesObjeto.getAsJsonObject("inversiones");
-		JsonArray inversionArray = inversiones.getAsJsonArray("inversion");
-		
-		int cpTotalInvCantidP = 0, cpTotalInvCantidV = 0, cpTotalInvCantidC = 0, cpTotalInvCantidF = 0;
+    public static JsonObject filtroInversiones(JsonArray inversionArray, int page, int per_page, String filter_by) {
+		logger.info("COMMONS: Comenzando filtroInversiones metodo");
 
-		int page = inversionesObjeto.get("page").getAsInt();
-		int  per_page = inversionesObjeto.get("per_page").getAsInt();
-		String filter_by = inversionesObjeto.get("filter_by").getAsString();
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		double cpTotalInvCantidP = 0, cpTotalInvCantidV = 0, cpTotalInvCantidC = 0, cpTotalInvCantidF = 0;
 		
 		JsonObject categoriaFija = new JsonObject();
 		categoriaFija.addProperty("categoria", "FIJA");
@@ -71,17 +51,47 @@ public class FiltroInversionesCtrl implements Microservice {
 				elemento.addProperty("Fot_Descri", "PAGARE");
 						
 			String invNumero = elemento.get("Inv_Numero").getAsString();
-			int invCantid = elemento.get("Inv_Cantid").getAsInt();
+			double invCantid = elemento.get("Inv_Cantid").getAsDouble();
 			if(!elemento.has("Inv_FecVen") || elemento.get("Inv_FecVen").isJsonNull())
 				continue;
+
+			String invFechaVen = elemento.get("Inv_FecVen").getAsString();
+			Date fechaVen = null;
+
+			try {
+					SimpleDateFormat simpleDateFormatFechaBase = new SimpleDateFormat("dd/MM/yyyy");
+					fechaVen = simpleDateFormatFechaBase.parse(invFechaVen);
+				} catch (ParseException e) {
+					logger.info("formato de fecha no valido.");
+					try {
+						SimpleDateFormat simpleDateFormatFechaBase = new SimpleDateFormat("dd-MM-yyyy");
+						fechaVen = simpleDateFormatFechaBase.parse(invFechaVen);
+					} catch (ParseException ei) {
+						logger.info("formato de fecha no valido.");
+					}
+				}
 			
-			Boolean cpRenInv = true;
+			Boolean cpRenInv = Utilerias.calcularVencimiento(fechaVen);
 			if(filter_by != null && !filter_by.isEmpty() && filter_by.equals("PROXIMOS_VENCIMIENTOS") && !cpRenInv)
 				continue;
 			
 			elementosObjeto.addProperty("invNumero", invNumero);
 			elementosObjeto.addProperty("invCantid", invCantid);
-			elementosObjeto.addProperty("invFecVen", elemento.get("Inv_FecVen").getAsString());
+			
+			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+			String invFecVen = null;
+			if(elemento.has("Inv_FecVen"))
+				invFecVen = elemento.get("Inv_FecVen").getAsString();
+			Date fecha1 = new Date();
+			if(invFecVen != null && !invFecVen.contains("Proximo Vencimiento ")) {
+				try {
+					fecha1 = format.parse(invFecVen);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				elementosObjeto.addProperty("Inv_FecVen", simpleDateFormat.format(fecha1));
+			}
+			
 			elementosObjeto.addProperty("cpRenInv", cpRenInv);
 			
 			switch (elemento.get("Fot_Descri").getAsString()) {
@@ -138,7 +148,8 @@ public class FiltroInversionesCtrl implements Microservice {
 		JsonObject objetoCategorias = new JsonObject();
 		objetoCategorias.add("categorias", arrayCategorias);
 		
-		logger.info("CTRL: Termino filtroInversiones metodo");
+		logger.info("COMMONS: Termino filtroInversiones metodo");
 		return objetoCategorias;
-	}
+    }
+
 }
