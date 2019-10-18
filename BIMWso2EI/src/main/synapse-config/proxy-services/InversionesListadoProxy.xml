@@ -30,7 +30,7 @@
             <property expression="json-eval($.InversionesListadoProxy.filter_by)" name="filter_by" scope="default" type="STRING"/>
             <enrich>
                 <source clone="true" type="body"/>
-                <target property="PAYLOAD_ORIGINAL" type="property"/>
+                <target property="ORIGINAL_REQ" type="property"/>
             </enrich>
             <log level="custom">
                 <property expression="get-property('PAYLOAD_ORIGINAL')" name="Payload Original..."/>
@@ -102,7 +102,7 @@
             </call>
             <enrich>
                 <source clone="true" type="body"/>
-                <target property="PAYLOAD_PRIMERA_LLAMADA" type="property"/>
+                <target property="REQUEST_PAYLOAD" type="property"/>
             </enrich>
             <filter regex="200" source="get-property('axis2', 'HTTP_SC')">
                 <then>
@@ -241,7 +241,13 @@
                 </else>
             </filter>
         </inSequence>
-        <outSequence/>
+        <outSequence>
+            <log>
+                <property expression="get-property('ORIGINAL_REQ')" name="Original Request"/>
+                <property expression="json-eval($.)" name="Response Payload"/>
+            </log>
+            <send/>
+        </outSequence>
         <faultSequence/>
     </target>
 </proxy>

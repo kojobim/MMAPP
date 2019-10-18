@@ -4,11 +4,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import org.apache.log4j.Logger;
 
 public class Filtrado {
 
@@ -54,8 +54,24 @@ public class Filtrado {
 			double invCantid = elemento.get("Inv_Cantid").getAsDouble();
 			if(!elemento.has("Inv_FecVen") || elemento.get("Inv_FecVen").isJsonNull())
 				continue;
+
+			String invFechaVen = elemento.get("Inv_FecVen").getAsString();
+			Date fechaVen = null;
+
+			try {
+					SimpleDateFormat simpleDateFormatFechaBase = new SimpleDateFormat("dd/MM/yyyy");
+					fechaVen = simpleDateFormatFechaBase.parse(invFechaVen);
+				} catch (ParseException e) {
+					logger.info("formato de fecha no valido.");
+					try {
+						SimpleDateFormat simpleDateFormatFechaBase = new SimpleDateFormat("dd-MM-yyyy");
+						fechaVen = simpleDateFormatFechaBase.parse(invFechaVen);
+					} catch (ParseException ei) {
+						logger.info("formato de fecha no valido.");
+					}
+				}
 			
-			Boolean cpRenInv = Utilerias.calcularVencimiento(elemento.get("Inv_FecVen").getAsString());
+			Boolean cpRenInv = Utilerias.calcularVencimiento(fechaVen);
 			if(filter_by != null && !filter_by.isEmpty() && filter_by.equals("PROXIMOS_VENCIMIENTOS") && !cpRenInv)
 				continue;
 			
