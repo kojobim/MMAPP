@@ -170,7 +170,7 @@
       <version>1.0.0</version>
       <type>xml</type>
     </dependency>
-        
+    
     <dependency>
       <groupId>com.bim.proxy-service</groupId>
       <artifactId>InversionesDetalleProxy</artifactId>
