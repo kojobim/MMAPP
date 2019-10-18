@@ -17,10 +17,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.log4j.Logger;
-import org.wso2.msf4j.Microservice;
-import org.wso2.msf4j.Request;
-
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
 import com.bim.commons.utils.Filtrado;
@@ -30,6 +26,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import org.apache.log4j.Logger;
+import org.wso2.msf4j.Microservice;
+import org.wso2.msf4j.Request;
 
 @Path("/inversiones")
 public class InversionesCtrl implements Microservice {
@@ -440,7 +440,8 @@ public class InversionesCtrl implements Microservice {
 				JsonObject.class);
 		logger.info("inversionConsultarOpResultadoObjeto" + inversionConsultarOpResultadoObjeto);
 
-		JsonArray inversionesArreglo = inversionConsultarOpResultadoObjeto.get("inversiones").getAsJsonObject().get("inversion").getAsJsonArray();
+		JsonObject inversionesObjecto = inversionConsultarOpResultadoObjeto.get("inversiones").getAsJsonObject();
+		JsonArray inversionesArreglo = inversionesObjecto.has("inversion") ? inversionesObjecto.get("inversion").getAsJsonArray() : new JsonArray();
 
 		JsonObject resultado = null;
 		for (JsonElement invElemento : inversionesArreglo) {
