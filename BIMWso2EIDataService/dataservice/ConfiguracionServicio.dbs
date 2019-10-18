@@ -36,9 +36,60 @@
             <element column="Par_RECAFA" name="Par_RECAFA" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="horarioInversionSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE ESHORARICON
+    		@Tip_Consul= :tipConsul,
+            @Tip_Transf= :tipTransf,
+            @Err_Codigo= :errCodigo,
+            @Msj_Error= :msjError,
+    		@NumTransac= :numTransac,
+    		@Transaccio= :transaccio,
+    		@Usuario= :usuario,
+    		@FechaSis= :fechaSis,
+    		@SucOrigen= :sucOrigen,
+    		@SucDestino= :sucDestino,
+    		@Modulo= :modulo
+    	</sql>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipTransf" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="errCodigo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="msjError" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result element="horariosInversion" rowName="horarioInversion">
+            <element column="EsHorariID" name="EsHorariID" xsdType="xs:integer" optional="true"/>
+            <element column="Hor_Numero" name="Hor_Numero" xsdType="xs:integer" optional="true"/>
+            <element column="Hor_TipMod" name="Hor_TipMod" xsdType="xs:string" optional="true"/>
+            <element column="Hor_TipHor" name="Hor_TipHor" xsdType="xs:string" optional="true"/>
+            <element column="Hor_HorIni" name="Hor_HorIni" xsdType="xs:dateTime" optional="true"/>
+            <element column="Hor_HorFin" name="Hor_HorFin" xsdType="xs:dateTime" optional="true"/>
+            <element column="Hor_DiaHab" name="Hor_DiaHab" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
     <operation name="configuracionBancoDetalleOp">
         <call-query href="configuracionBancoDetalleSQL">
             <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="horarioInversionOp">
+        <call-query href="horarioInversionSQL">
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="tipTransf" query-param="Tip_Transf"/>
+            <with-param name="errCodigo" query-param="Err_Codigo"/>
+            <with-param name="msjError" query-param="Msj_Error"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
