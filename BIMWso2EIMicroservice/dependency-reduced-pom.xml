@@ -34,7 +34,7 @@
     </plugins>
   </build>
   <properties>
-    <microservice.resourceClasses>com.bim.msf4j.ctrl.TokenCtrl,com.bim.msf4j.ctrl.HSMCtrl,com.bim.msf4j.ctrl.LoginCtrl,com.bim.msf4j.ctrl.InversionesCtrl</microservice.resourceClasses>
+    <microservice.mainClass>com.bim.msf4j.Application</microservice.mainClass>
   </properties>
 </project>
 
