@@ -1,5 +1,6 @@
 package com.bim.msf4j.ctrl;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
@@ -33,7 +34,12 @@ public class PaginadoCtrl implements Microservice {
 	@Produces(MediaType.APPLICATION_JSON)
 	public JsonArray paginado(@Context final Request solicitud, @QueryParam("page") int page, @QueryParam("per_page") int per_page) {
 		logger.info("CTRL: Comenzando paginado metodo");
-		String mensaje = HttpClientUtils.getStringContent(solicitud);
+		String mensaje = null;
+		try {
+			mensaje = HttpClientUtils.getStringContent(solicitud);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		Type tipoColeccion = new TypeToken<Collection<JsonObject>>(){}.getType();
 		Collection<JsonElement> datos = new Gson().fromJson(mensaje, tipoColeccion);
 		List<JsonElement> datosLista = (List<JsonElement>)datos;

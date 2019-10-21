@@ -138,11 +138,12 @@ public class LoginCtrl implements Microservice {
 	}
 	
 	@Path("/")
-	@POST()
+	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void login(@Context final Request solicitud) {
+	public void login(JsonObject datosUsuario, @Context Request solicitud) {
 		logger.info("CTRL: Comenzando login metodo");
+		logger.info("datosUsuario " + datosUsuario);
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
 		String fechaSis = simpleDateFormat.format(fecha);
@@ -169,12 +170,12 @@ public class LoginCtrl implements Microservice {
 		
 		logger.info("folioTransaccionGenerarOpSolicitud " + folioTransaccionGenerarOpSolicitud.toString());
 		String folioTransaccionGenerarOpResultado = HttpClientUtils.postPerform(folioTransaccionGenerarOpSolicitud);
+		logger.info("folioTransaccionGenerarOpResultado" + folioTransaccionGenerarOpResultado);
 		JsonObject folioTransaccionGenerarOpResultadoObjeto = new Gson().fromJson(folioTransaccionGenerarOpResultado, JsonObject.class);
 		
 		String folTransa = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
 		
-		String mensaje = HttpClientUtils.getStringContent(solicitud);
-		JsonObject datosUsuario = new Gson().fromJson(mensaje, JsonObject.class);
+//		JsonObject datosUsuario = new Gson().fromJson(mensaje, JsonObject.class);
 		datosUsuario.addProperty("Tip_Consul", UsuarioConsultarOpTipConsul);
 		datosUsuario.addProperty("Transaccio", UsuarioConsultarOpTransaccio);
 		datosUsuario.addProperty("Usuario", UsuarioConsultarOpUsuario);
@@ -210,6 +211,7 @@ public class LoginCtrl implements Microservice {
 		usuarioConsultarOpSolicitud.setMessage(usuarioConsultarOpMensaje);
 		
 		String usuarioConsultarOpResultado = HttpClientUtils.postPerform(usuarioConsultarOpSolicitud);
+		logger.info("usuarioConsultarOpResultado " + usuarioConsultarOpResultado);
 		JsonObject usuarioConsultarOpResultadoObjeto = new Gson().fromJson(usuarioConsultarOpResultado, JsonObject.class);
 		logger.info("usuarioConsultarOpResultadoObject" + usuarioConsultarOpResultadoObjeto);
 
@@ -238,6 +240,7 @@ public class LoginCtrl implements Microservice {
 		configuracionBancoDetalleSolicitud.getMessage().setBody(configuracionBancoDetalleOp.toString());
 		
 		String configuracionBancoDetalleOpResultado = HttpClientUtils.postPerform(configuracionBancoDetalleSolicitud);
+		logger.info("configuracionBancoDetalleOpResultado " + configuracionBancoDetalleOpResultado);
 		JsonObject configuracionBancoDetalleOpResultadoObjecto = new Gson().fromJson(configuracionBancoDetalleOpResultado, JsonObject.class);
 		logger.info("configuracionBancoDetalleOpResultadoObjecto" + configuracionBancoDetalleOpResultadoObjecto);
 		
@@ -286,6 +289,7 @@ public class LoginCtrl implements Microservice {
 		usuarioActualizacionSolicitud.setMessage(usuarioActualizacionMensaje);
 		
 		String usuarioActualizacionOpResultado = HttpClientUtils.postPerform(usuarioActualizacionSolicitud);
+		logger.info("usuarioActualizacionOpResultado " + usuarioActualizacionOpResultado);
 		JsonObject usuarioActualizacionOpResultadoObjecto = new Gson().fromJson(usuarioActualizacionOpResultado, JsonObject.class);
 		logger.info("usuarioActualizacionOpResultadoObjecto" + usuarioActualizacionOpResultadoObjecto);
 		
@@ -317,6 +321,7 @@ public class LoginCtrl implements Microservice {
 		tokenVerificarSolicitud.setMessage(tokenVerificiarMensaje);
 		
 		String tokenVerificarOpResultado = HttpClientUtils.postPerform(tokenVerificarSolicitud);
+		logger.info("tokenVerificarOpResultado " + tokenVerificarOpResultado);
 		JsonObject tokenVerificarOpResultadoObjecto = new Gson().fromJson(tokenVerificarOpResultado, JsonObject.class);
 		logger.info("tokenVerificarOpResultadoObjecto" + tokenVerificarOpResultadoObjecto);
 		
@@ -328,6 +333,7 @@ public class LoginCtrl implements Microservice {
 		usuarioActualizacionSolicitud.setMessage(usuarioActualizacionMensaje);
 		
 		usuarioActualizacionOpResultado = HttpClientUtils.postPerform(usuarioActualizacionSolicitud);
+		logger.info("usuarioActualizacionOpResultado " + usuarioActualizacionOpResultado);
 		usuarioActualizacionOpResultadoObjecto = new Gson().fromJson(usuarioActualizacionOpResultado, JsonObject.class);
 		logger.info("usuarioActualizacionOpResultadoObjecto" + usuarioActualizacionOpResultadoObjecto);
 		

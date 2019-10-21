@@ -1,5 +1,7 @@
 package com.bim.msf4j.ctrl;
 
+import java.io.IOException;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -28,7 +30,12 @@ public class HSMCtrl implements Microservice {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response cifraPasswordHSM(@Context final Request request) {
 		logger.info("CTRL: Empezando cifraPasswordHSM metodo");
-		String body = HttpClientUtils.getStringContent(request);
+		String body = "";
+		try {
+			body = HttpClientUtils.getStringContent(request);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		logger.info("vo: " + body);
 		HSMVO hsmVO = new Gson().fromJson(body, HSMVO.class);
 		String contrasenaEncriptada = Racal.cifraPassword_HSM(hsmVO.getContrasena());
