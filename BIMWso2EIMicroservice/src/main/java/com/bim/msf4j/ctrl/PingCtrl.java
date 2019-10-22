@@ -14,6 +14,7 @@ import org.wso2.msf4j.Microservice;
 
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
+
 import com.bim.commons.utils.HttpClientUtils;
 import com.google.gson.Gson;
 
@@ -27,7 +28,8 @@ public class PingCtrl implements Microservice {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response postPing(@QueryParam("email") String email) {
-    	logger.info("CTRL: Starting post method");    	
+    	logger.info("CTRL: Starting post method");
+    		
     	MessageProxyDTO messageProxyDTO = new MessageProxyDTO();
     	HashMap<String, String> queryParams = new HashMap<>();
 		messageProxyDTO.setQueryParams(new Gson().toJson(queryParams));

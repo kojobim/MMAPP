@@ -156,7 +156,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/inversionesImportesDeInvercionFinalizadaActualizarNE" element="ImportesDeInvercionFinalizada" rowName="ImporteDeInvercionFinalizada">
+        <result defaultNamespace="http://bem.com/inversionesImportesDeInvercionFinalizadaActualizarNE" element="ImportesDeInvercionFinalizada">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
             <element column="Err_Variab" name="Err_Variab" xsdType="xs:string" optional="true"/>

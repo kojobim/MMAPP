@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
-import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -16,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
+import org.wso2.msf4j.Microservice;
 import org.wso2.msf4j.Request;
 
 import com.bim.commons.dto.MessageProxyDTO;
@@ -26,7 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 @Path("/login")
-public class LoginCtrl {
+public class LoginCtrl implements Microservice {
 	
 	private static final Logger logger = Logger.getLogger(LoginCtrl.class);
 	private static Properties properties;
@@ -73,8 +73,7 @@ public class LoginCtrl {
 	private static String FolioTransaccionGenerarOp;
 	private static String BitacoraCreacionOp;
 	
-	@PostConstruct
-	public void init() {
+	public LoginCtrl() {
 		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/services.properties")) {
 			properties = new Properties();
 			
