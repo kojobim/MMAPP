@@ -415,7 +415,6 @@ public class InversionesCtrl implements Microservice {
 	public JsonObject detalleInversion(@PathParam("invNumero") String invNumero,
 			@QueryParam("categoria") String categoria, @Context final Request solicitud) {
 		logger.info("CTRL: Empezando detalleInversion Method...");
-		logger.info("@PathVariable >>>>> invNumero" + invNumero);
 		SimpleDateFormat simpleDateFormatSis = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
 		String fechaSis = simpleDateFormatSis.format(fecha);
@@ -694,8 +693,6 @@ public class InversionesCtrl implements Microservice {
 				intBru = Utilerias.redondear(intBru, 2);
 
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-				logger.info(">>>>> inversionObj: " + inversionObj);
 
 				resultado = new JsonObject();
 				JsonObject inversion = new JsonObject();
