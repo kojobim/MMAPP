@@ -19,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
+import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Utilerias;
@@ -125,9 +126,15 @@ public class InversionesCtrl implements Microservice {
 	@GET()
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public JsonObject inversionesListado(@QueryParam("page") int page, @QueryParam("per_page") int per_page, @QueryParam("filter_by") String filter_by, @Context final Request solicitud) {
+	public JsonObject inversionesListado(@QueryParam("page") Integer page, @QueryParam("per_page") Integer per_page, @QueryParam("filter_by") String filter_by, @Context final Request solicitud) {
 		logger.info("CTRL: Comenzando inversionesListado metodo");
+
+		logger.info("page " + page);
+		logger.info("per_page " + per_page);
 		
+		if(page == null || per_page == null) 
+			throw new BadRequestException("BIM.MENSAJ.2");
+			
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
 		String fechaSis = simpleDateFormat.format(fecha);
@@ -161,8 +168,8 @@ public class InversionesCtrl implements Microservice {
 		
 		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
-		String bit_PriRef = solicitud.getHeader("User-Agent");
-		String bit_DireIP = solicitud.getHeader("X-Forwarded-For");
+		String bit_DireIP = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("User-Agent") : "";
+		String bit_PriRef = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("X-Forwarded-For") : "";
 		
 		/* 
 			Parametros obtenidos por medio del principal 
