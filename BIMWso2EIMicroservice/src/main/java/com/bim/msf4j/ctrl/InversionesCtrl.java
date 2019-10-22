@@ -470,9 +470,9 @@ public class InversionesCtrl implements Microservice {
 		datosBitacora.addProperty("Bit_CueOri", "");
 		datosBitacora.addProperty("Bit_CueDes", "");
 		datosBitacora.addProperty("Bit_Monto", Integer.parseInt(BitacoraCreacionOpBitMonto));
-		datosBitacora.addProperty("Bit_PriRef", bit_PriRef);
+		datosBitacora.addProperty("Bit_PriRef", bit_PriRef != null ? bit_PriRef : "");
 		datosBitacora.addProperty("Bit_SegRef", "");
-		datosBitacora.addProperty("Bit_DireIP", bit_DireIP);
+		datosBitacora.addProperty("Bit_DireIP", bit_DireIP != null ? bit_DireIP : "");
 		datosBitacora.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
 		datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
 		datosBitacora.addProperty("Usuario", BitacoraCreacionOpUsuario);
