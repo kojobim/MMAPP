@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+  <s:Header>
+    <Action s:mustUnderstand="1" xmlns="http://schemas.microsoft.com/ws/2005/05/addressing/none">http://tempuri.org/IService1/DatosCliente</Action>
+  </s:Header>
+  <s:Body>
+    <DatosCliente xmlns="http://tempuri.org/">
+      <MCorreoRequest xmlns:d4p1="http://schemas.datacontract.org/2004/07/WcfSendMail.Modelo" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <d4p1:Anio>year</d4p1:Anio>
+        <d4p1:Cliente>client</d4p1:Cliente>
+        <d4p1:Mes>month</d4p1:Mes>
+      </MCorreoRequest>
+    </DatosCliente>
+  </s:Body>
+</s:Envelope>

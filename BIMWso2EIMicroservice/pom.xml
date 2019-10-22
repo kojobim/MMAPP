@@ -91,7 +91,7 @@
     
     
     <properties>
-        <microservice.resourceClasses>com.bim.msf4j.ctrl.TokenCtrl,com.bim.msf4j.ctrl.HSMCtrl,com.bim.msf4j.ctrl.LoginCtrl,com.bim.msf4j.ctrl.InversionesCtrl</microservice.resourceClasses>
+        <microservice.resourceClasses>com.bim.msf4j.ctrl.TokenCtrl,com.bim.msf4j.ctrl.HSMCtrl,com.bim.msf4j.ctrl.LoginCtrl,com.bim.msf4j.ctrl.InversionesCtrl,com.bim.msf4j.ctrl.SaldosCtrl</microservice.resourceClasses>
     </properties>
     <build>
         <finalName>bim-wso2-ei-microservice</finalName>
@@ -116,6 +116,18 @@
                         </manifestEntries>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+            	<groupId>org.jvnet.jax-ws-commons</groupId>
+            	<artifactId>jaxws-maven-plugin</artifactId>
+            	<configuration>
+            		<xdebug>true</xdebug>
+            		<sourceDestDir>src/main/java</sourceDestDir>
+            		<wsdlUrls>
+            			<wsdlUrl>http://172.30.20.35/WcfSendMail/Service1.svc?wsdl</wsdlUrl>
+            		</wsdlUrls>
+            	</configuration>
+            	<version>2.5</version>
             </plugin>
         </plugins>
     </build>
