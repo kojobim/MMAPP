@@ -60,20 +60,47 @@ public class Utilerias {
 		return fechaConv;
 	}
 
-	public static JsonArray calculaTasa (JsonObject datosParaCalculaTasa){
-		logger.info("COMMONS: Iniciando calculaTasa");
+	public static JsonObject calculaTasa(JsonObject datos) {
+		/*
+			Inv_Plazo = Se obtiene de la inversión a renovar en la propiedad 'Inv_Plazo'.
+			Inv_Cantid = Se obtiene de la inversión a renovar en la propiedad 'Inv_Cantid'.
+			TasInv = Se obtiene al consultar el SP CLTAGRCACON.
+			Par_DiBaIn = Se obtiene al consultar el SP SOPARAMSCON.
+			Par_ISR = Cli_TasISR Se obtiene al consultar el SP CLCLIENTCON.
+			Cli_CobISR = Se obtiene de consultar al SP CLCLIENTCON.
+		*/
+		int invPlazo = datos.get("Inv_Plazo").getAsInt();
+		double invCantid = datos.get("Inv_Cantid").getAsDouble();
+		double invTBruta = datos.get("TasInv").getAsDouble();
+		double parDiBaIn = datos.get("Par_DiBaIn").getAsDouble();
+		double parISR = datos.get("Par_ISR").getAsDouble();
+		String cliCobISR = datos.get("Cli_CobISR").getAsString();
 
-		String Cli_Numero = datosParaCalculaTasa.has("Cli_Numero") ? datosParaCalculaTasa.get("Cli_Numero").getAsString() : "";
-		int Inv_Cantid = datosParaCalculaTasa.has("Inv_Cantid") ? datosParaCalculaTasa.get("Inv_Cantid").getAsNumber() : "";
-		String Cue_Moneda = datosParaCalculaTasa.has("Cue_Moneda") ? datosParaCalculaTasa.get("Cue_Moneda").getAsString() : "";
-		String Cli_Tipo = datosParaCalculaTasa.has("Cli_Tipo") ? datosParaCalculaTasa.get("Cli_Tipo").getAsString() : "";
-		int Inv_Plazo = datosParaCalculaTasa.has("Inv_Plazo") ? datosParaCalculaTasa.get("Inv_Plazo").getAsNumber() : "";
-		String Inv_FecVen = datosParaCalculaTasa.has("Inv_FecVen") ? datosParaCalculaTasa.get("Inv_FecVen").getAsString() : "";
+		double invCanBru = invCantid * invTBruta * invPlazo / (parDiBaIn * 100);
 
+		double tasISR = 0;
+		double tasNet = 0;
+		double canNet = 0;
 
+		if("S".equals(cliCobISR))
+			tasISR = parISR / 10;
 
-		logger.info("COMMONS: Finalizando calculaTasa");
-		return resultado
+		tasNet = invTBruta - tasISR;
+		canNet = invCantid * tasNet * invPlazo / (parDiBaIn * 100);
+
+		double invCanISR = invCantid * tasISR * invPlazo / (parDiBaIn * 100);
+		double invCanTot = invCantid + canNet;
+
+		JsonObject resultado = new JsonObject();
+		resultado.addProperty("Inv_Capita", invCantid);
+		resultado.addProperty("Inv_CanBru", invCanBru);
+		resultado.addProperty("Inv_ISR", redondear(tasISR, 2));
+		resultado.addProperty("Inv_CanISR", invCanISR);
+		resultado.addProperty("Inv_Tasa", redondear(tasNet, 2));
+		resultado.addProperty("Inv_CanNet", canNet);
+		resultado.addProperty("Inv_CanTot", invCanTot);
+
+		return resultado;
 	}
 
 }

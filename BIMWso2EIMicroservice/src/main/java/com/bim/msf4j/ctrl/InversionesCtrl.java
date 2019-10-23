@@ -62,6 +62,7 @@ public class InversionesCtrl implements Microservice {
 	private static String tasaClienteConsultarOp;
 	private static String tasaMonedaConsultarOp;
 	private static String tasaGATConsultaCalcularOp;
+	private static String tasaGATReaConsultaCalcularOp;
 	private static String intentosActualizacionOp;
 	private static String inversionesStatusActualizarOp;
 	private static String inversionesImportesDeInvercionFinalizadaActualizarOp;
@@ -129,6 +130,12 @@ public class InversionesCtrl implements Microservice {
 	private static String tasaGATConsultaCalcularOpSucDestino;
 	private static String tasaGATConsultaCalcularOpModulo;	
 	private static String tasaGATConsultaCalcualrOpInvGAT;
+	private static String tasaGATReaConsultaCalcularOpTransaccio;
+	private static String tasaGATReaConsultaCalcularOpUsuari;
+	private static String tasaGATReaConsultaCalcularOpSucOrigen;
+	private static String tasaGATReaConsultaCalcularOpSucDestino;
+	private static String tasaGATReaConsultaCalcularOpModulo;	
+	private static String tasaGATReaConsultaCalcualrOpInvGATRea;
 	private static String intentosActualizacionOpTipActual;	
 	private static String intentosActualizacionOpTransaccio;
 	private static String intentosActualizacionOpUsuari;
@@ -234,7 +241,14 @@ public class InversionesCtrl implements Microservice {
 		tasaGATConsultaCalcularOpModulo = properties.getProperty("op.gat_consulta_calcular.modulo");	
 		tasaGATConsultaCalcualrOpInvGAT = properties.getProperty("op.tasa_gat_consulta_calcular.inv_gat");
 		
-		intentosActualizacionOpTipActual = properties.getProperty("op.intentos_atualizacion.tip_actual")
+		tasaGATReaConsultaCalcularOpTransaccio  = properties.getProperty("op.tasa_gat_rea_consulta_calcular.transaccio");
+		tasaGATReaConsultaCalcularOpUsuari = properties.getProperty("op.tasa_gat_rea_consulta_calcular.usuario");
+		tasaGATReaConsultaCalcularOpSucOrigen = properties.getProperty("op.gat_rea_consulta_calcular.suc_origen");
+		tasaGATReaConsultaCalcularOpSucDestino = properties.getProperty("op.gat_rea_consulta_calcular.suc_destino");
+		tasaGATReaConsultaCalcularOpModulo = properties.getProperty("op.gat_rea_consulta_calcular.modulo");	
+		tasaGATReaConsultaCalcualrOpInvGATRea = properties.getProperty("op.tasa_gat_rea_consulta_calcular.inv_gat_rea");
+
+		intentosActualizacionOpTipActual = properties.getProperty("op.intentos_atualizacion.tip_actual");
 		tasaGATConsultaCalcularOpTransaccio  = properties.getProperty("op.intentos_actualizacion.transaccio");
 		tasaGATConsultaCalcularOpUsuari = properties.getProperty("op.intentos_actualizacion.usuario");
 		tasaGATConsultaCalcularOpSucOrigen = properties.getProperty("op.intentos_actualizacion.suc_origen");
@@ -279,6 +293,7 @@ public class InversionesCtrl implements Microservice {
 		tasaClienteConsultarOp = properties.getProperty("tasa_servicio.op.tasa_cliente_consultar");
 		tasaMonedaConsultarOp = properties.getProperty("tasa_servicio.op.tasa_moneda_consultar");
 		tasaGATConsultaCalcularOp = properties.getProperty("tasa_servicio.op.tasa_gat_consulta_calcular");
+		tasaGATReaConsultaCalcularOp = properties.getProperty("tasa_servicio.op.tasa_gat_rea_consulta_calcular");
 		intentosActualizacionOp = properties.getProperty("token_servicio.op.intentos_actualizacion");
 		inversionesStatusActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_status_actualizar");
 		inversionesImportesDeInvercionFinalizadaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_importes_de_invercion_finalizada_actualizar");
@@ -756,6 +771,7 @@ public class InversionesCtrl implements Microservice {
 		/* 
 			Parametros obtenidos por medio del principal 
 				Inv_Usuari = usuNumero
+				003870
 		*/
 		
 		String usuNumero = "000024";
@@ -874,43 +890,41 @@ public class InversionesCtrl implements Microservice {
 		JsonObject clienteConsultarOpResultadoObjeto = new Gson().fromJson(clienteConsultarOpResultado, JsonObject.class);
 		logger.info("clienteConsultarOpResultadoObjeto" + clienteConsultarOpResultadoObjeto);
 
+		// JsonObject datosPendienteEdwin = new JsonObject();
+		// datosPendienteEdwin.addProperty("Par_Sucurs", value);
+		// datosPendienteEdwin.addProperty("Tip_Consul", value);
+		// datosPendienteEdwin.addProperty("NumTransac", numTransac);
+		// datosPendienteEdwin.addProperty("Transaccio", CuentaOrigenConsultarOpTransaccio);
+		// datosPendienteEdwin.addProperty("Usuario", CuentaOrigenConsultarOpUsuari);
+		// datosPendienteEdwin.addProperty("FechaSis", fechaSis);
+		// datosPendienteEdwin.addProperty("SucOrigen", CuentaOrigenConsultarOpSucOrigen);
+		// datosPendienteEdwin.addProperty("SucDestino", CuentaOrigenConsultarOpSucDestino);
+		// datosPendienteEdwin.addProperty("Modulo", CuentaOrigenConsultarOpModulo);
+
+		// logger.info("datosPendienteEdwin" + datosPendienteEdwin);
+		// StringBuilder cuentaOrigenConsultarUrl = new StringBuilder()
+		// 		.append(DataServiceHost)
+		// 		.append("/")
+		// 		.append(CuentaServicio)
+		// 		.append("/")
+		// 		.append(CuentaOrigenConsultarOp);
+
+		// JsonObject cuentaOrigenConsultarOp = new JsonObject();
+		// cuentaOrigenConsultarOp.add("cuentaOrigenConsultarOp", datosCuenta);
+		// logger.info("cuentaOrigenConsultarOp" + cuentaOrigenConsultarOp);
+
+		// RequestDTO cuentaOrigenConsultarOpSolicitud = new RequestDTO();
+		// cuentaOrigenConsultarOpSolicitud.setUrl(cuentaOrigenConsultarUrl.toString());
+		// MessageProxyDTO cuentaOrigenConsultarOpMensaje= new MessageProxyDTO();
+		// cuentaOrigenConsultarOpMensaje.setBody(cuentaOrigenConsultarOp.toString());
+		// cuentaOrigenConsultarOpSolicitud.setMessage(cuentaOrigenConsultarOpMensaje);
+
+		// String cuentaOrigenConsultarOpResultado = HttpClientUtils.postPerform(cuentaOrigenConsultarOpSolicitud);
+		// JsonObject cuentaOrigenConsultarOpResultadoObjeto = new Gson().fromJson(cuentaOrigenConsultarOpResultado, JsonObject.class);
+		// logger.info("cuentaOrigenConsultarOpResultadoObjeto" + cuentaOrigenConsultarOpResultadoObjeto);
+
 		
-		JsonObject datosCuenta = new JsonObject();
-		datosCuenta.addProperty("Cor_Usuari", usuNumero);
-		datosCuenta.addProperty("Cor_Cuenta", "");
-		datosCuenta.addProperty("Cor_Moneda", "");
-		datosCuenta.addProperty("Cor_CliUsu", "");
-		datosCuenta.addProperty("Usu_SucMod", "");
-		datosCuenta.addProperty("Tip_Consul", CuentaOrigenConsultarOpTipConsul);
-		datosCuenta.addProperty("NumTransac", numTransac);
-		datosCuenta.addProperty("Transaccio", CuentaOrigenConsultarOpTransaccio);
-		datosCuenta.addProperty("Usuario", CuentaOrigenConsultarOpUsuari);
-		datosCuenta.addProperty("FechaSis", fechaSis);
-		datosCuenta.addProperty("SucOrigen", CuentaOrigenConsultarOpSucOrigen);
-		datosCuenta.addProperty("SucDestino", CuentaOrigenConsultarOpSucDestino);
-		datosCuenta.addProperty("Modulo", CuentaOrigenConsultarOpModulo);
-
-		logger.info("datosCuenta" + datosCuenta);
-		StringBuilder cuentaOrigenConsultarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(CuentaServicio)
-				.append("/")
-				.append(CuentaOrigenConsultarOp);
-
-		JsonObject cuentaOrigenConsultarOp = new JsonObject();
-		cuentaOrigenConsultarOp.add("cuentaOrigenConsultarOp", datosCuenta);
-		logger.info("cuentaOrigenConsultarOp" + cuentaOrigenConsultarOp);
-
-		RequestDTO cuentaOrigenConsultarOpSolicitud = new RequestDTO();
-		cuentaOrigenConsultarOpSolicitud.setUrl(cuentaOrigenConsultarUrl.toString());
-		MessageProxyDTO cuentaOrigenConsultarOpMensaje= new MessageProxyDTO();
-		cuentaOrigenConsultarOpMensaje.setBody(cuentaOrigenConsultarOp.toString());
-		cuentaOrigenConsultarOpSolicitud.setMessage(cuentaOrigenConsultarOpMensaje);
-
-		String cuentaOrigenConsultarOpResultado = HttpClientUtils.postPerform(cuentaOrigenConsultarOpSolicitud);
-		JsonObject cuentaOrigenConsultarOpResultadoObjeto = new Gson().fromJson(cuentaOrigenConsultarOpResultado, JsonObject.class);
-		logger.info("cuentaOrigenConsultarOpResultadoObjeto" + cuentaOrigenConsultarOpResultadoObjeto);
+		
 
 		JsonObject datosPerfilRiesgo = new JsonObject();
 		datosPerfilRiesgo.addProperty("Apl_Client", usuClient);
@@ -949,12 +963,12 @@ public class InversionesCtrl implements Microservice {
 		/* 
 			Parametros obtenidos por medio del principal
 				Fecha =  fecha actual del sistema
-				NumDia=  ver de donde se obtiene de plazo
+				NumDia=  plazo
 		 */
 
 		JsonObject datosFechaHabil = new JsonObject();
 		datosFechaHabil.addProperty("Fecha", fechaSis);
-		datosFechaHabil.addProperty("NumDia", inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsNumber() : 0);
+		datosFechaHabil.addProperty("NumDia", inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsInt() : 0);
 		datosFechaHabil.addProperty("FinSem", fechaHabilConsultarOpFinSem);
 		datosFechaHabil.addProperty("NumTransac", numTransac);
 		datosFechaHabil.addProperty("Transaccio", fechaHabilConsultarOpTransaccio);
@@ -989,10 +1003,10 @@ public class InversionesCtrl implements Microservice {
 		/* 
 			Parametros obtenidos por medio del principal
 				Cli_Numero = usu_Client
-				Inv_Moneda=  01 constante para 
+				Inv_Moneda=  01 constante
 		*/		
 
-		JsonObject cliente = clienteConsultarOpResultadoObjeto.has("fechaHabil") ? clienteConsultarOpResultadoObjeto.get("fechaHabil").getAsJsonObject() : new JsonObject();
+		JsonObject cliente = clienteConsultarOpResultadoObjeto.has("cliente") ? clienteConsultarOpResultadoObjeto.get("cliente").getAsJsonObject() : new JsonObject();
 		String cliTipo = cliente.has("Cli_Tipo") ? cliente.get("Cli_Tipo").getAsString() : "";
 
 		String invFecVen = inversion.has("Inv_FecVen") ? inversion.get("Inv_FecVen").getAsString() : "";
@@ -1019,10 +1033,10 @@ public class InversionesCtrl implements Microservice {
 		datosTasaCliente.addProperty("Inv_Cantid", inversion.has("Inv_Cantid") ? inversion.get("Inv_Cantid").getAsDouble() : 0);
 		datosTasaCliente.addProperty("Inv_Moneda", tasaClienteConsultarOpInvMoneda);
 		datosTasaCliente.addProperty("Cli_Tipo", cliTipo);
-		datosTasaCliente.addProperty("Plazo", inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsNumber() : 0);
-		datosTasaCliente.addProperty("Inv_FecVen", fecVen != null ? simpleDateFormat.format(fecVen) : "");
+		datosTasaCliente.addProperty("Plazo", inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsInt() : 0);
+		datosTasaCliente.addProperty("Inv_FecVen", "");
 		datosTasaCliente.addProperty("Ine_Numero", "");
-		datosTasaCliente.addProperty("Tasa", inversion.has("Inv_tasa") ? inversion.get("Inv_Tasa").getAsDouble() : 0);
+		datosTasaCliente.addProperty("Tasa", 0);//PENDIENTE GUARDAR CONSTANTE		
 		datosTasaCliente.addProperty("Inv_GruTas", "");
 		datosTasaCliente.addProperty("Inv_NuPoGr", "");
 		datosTasaCliente.addProperty("NumTransac", numTransac);
@@ -1093,116 +1107,122 @@ public class InversionesCtrl implements Microservice {
 		String tasaMonedaConsultarOpResultado = HttpClientUtils.postPerform(tasaMonedaConsultarOpSolicitud);
 		JsonObject tasaMonedaConsultarOpResultadoObjeto = new Gson().fromJson(tasaMonedaConsultarOpResultado, JsonObject.class);
 		logger.info("tasaMonedaConsultarOpResultadoObjeto" + tasaMonedaConsultarOpResultadoObjeto);
-		
-		/* 
-			Parametros obtenidos por medio del principal
-			Mon_Comisi = 0 de donde se obtiene pendiente para validar
-			cueMonInv = 509000 a Inv_cantidad de inversion pendiende validar
-		*/
+
+		JsonObject monedaConsultar = tasaMonedaConsultarOpResultadoObjeto.has("monedaConsultar") ? tasaMonedaConsultarOpResultadoObjeto.get("monedaConsultar").getAsJsonObject() : new JsonObject();
+		Double monFixCom = monedaConsultar.has("Mon_FixCom") ? monedaConsultar.get("Mon_FixCom").getAsDouble() : 0;
+		Double invCantid = inversion.has("Inv_Cantid") ? inversion.get("Inv_Cantid").getAsDouble() : 0;
+		Double MonTotUDI = 400000.00;
+
+		Double invGAT = 0.00;
+		Double invGATRea = 0.00;
 
 		JsonObject clienteConsultar = tasaClienteConsultarOpResultadoObjeto.has("clienteConsultar") ? tasaClienteConsultarOpResultadoObjeto.get("clienteConsultar").getAsJsonObject() : new JsonObject();
-		String invTasInt = clienteConsultar.has("TasInv") ? clienteConsultar.get("TasInv").getAsString() : "";
+		Double invTasInt = clienteConsultar.has("TasInv") ? clienteConsultar.get("TasInv").getAsDouble() : 0;
+
+		if((invCantid / monFixCom) > MonTotUDI) {
 		
-		int cueMonInv = 509000;
-		int monComisi = 0;
+			/* 
+				Parametros obtenidos por medio del principal
+				Mon_Comisi = 0 de donde se obtiene pendiente para validar
+			*/
+			int monComisi = 0;
 
-		JsonObject datosGAT = new JsonObject();
-		datosGAT.addProperty("Inv_Dias",  inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsNumber() : 0);
-		datosGAT.addProperty("Inv_TasInt", invTasInt);
-		datosGAT.addProperty("Inv_GAT", tasaGATConsultaCalcualrOpInvGAT);
-		datosGAT.addProperty("Cal_Opcion", "");
-		datosGAT.addProperty("Cue_MonInv", cueMonInv);
-		datosGAT.addProperty("Mon_Comisi", monComisi);
-		datosGAT.addProperty("NumTransac", numTransac);
-		datosGAT.addProperty("Transaccio", tasaGATConsultaCalcularOpTransaccio);
-		datosGAT.addProperty("Usuario", tasaGATConsultaCalcularOpUsuari);
-		datosGAT.addProperty("FechaSis", fechaSis);
-		datosGAT.addProperty("SucOrigen", tasaGATConsultaCalcularOpSucOrigen);
-		datosGAT.addProperty("SucDestino", tasaGATConsultaCalcularOpSucDestino);
-		datosGAT.addProperty("Modulo", tasaGATConsultaCalcularOpModulo);
+			JsonObject datosGAT = new JsonObject();
+			datosGAT.addProperty("Inv_Dias",  inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsInt() : 0);
+			datosGAT.addProperty("Inv_TasInt", invTasInt);
+			datosGAT.addProperty("Inv_GAT", Integer.parseInt(tasaGATConsultaCalcualrOpInvGAT));
+			datosGAT.addProperty("Cal_Opcion", "");
+			datosGAT.addProperty("Cue_MonInv", invCantid);
+			datosGAT.addProperty("Mon_Comisi", monComisi);//pendiente de hacer constante 0
+			datosGAT.addProperty("NumTransac", numTransac);
+			datosGAT.addProperty("Transaccio", tasaGATConsultaCalcularOpTransaccio);
+			datosGAT.addProperty("Usuario", tasaGATConsultaCalcularOpUsuari);
+			datosGAT.addProperty("FechaSis", fechaSis);
+			datosGAT.addProperty("SucOrigen", tasaGATConsultaCalcularOpSucOrigen);
+			datosGAT.addProperty("SucDestino", tasaGATConsultaCalcularOpSucDestino);
+			datosGAT.addProperty("Modulo", tasaGATConsultaCalcularOpModulo);
 
-		logger.info("datosMoneda" + datosMoneda);
-		StringBuilder tasaGATConsultaCalcularUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(TasaServicio)
-				.append("/")
-				.append(tasaGATConsultaCalcularOp);
-		JsonObject tasaGATConsultaCalcularOp = new JsonObject();
-		tasaGATConsultaCalcularOp.add("tasaGATConsultaCalcularOp", datosGAT);
-		logger.info("tasaGATConsultaCalcularOp" + tasaGATConsultaCalcularOp);
+			logger.info("datosGAT" + datosGAT);
+			StringBuilder tasaGATConsultaCalcularUrl = new StringBuilder()
+					.append(DataServiceHost)
+					.append("/")
+					.append(TasaServicio)
+					.append("/")
+					.append(tasaGATConsultaCalcularOp);
+			JsonObject tasaGATConsultaCalcularOp = new JsonObject();
+			tasaGATConsultaCalcularOp.add("tasaGATConsultaCalcularOp", datosGAT);
+			logger.info("tasaGATConsultaCalcularOp" + tasaGATConsultaCalcularOp);
 
-		RequestDTO tasaGATConsultaCalcularOpSolicitud = new RequestDTO();
-		tasaGATConsultaCalcularOpSolicitud.setUrl(tasaGATConsultaCalcularUrl.toString());
-		MessageProxyDTO tasaGATConsultaCalcularOpMensaje= new MessageProxyDTO();
-		tasaGATConsultaCalcularOpMensaje.setBody(tasaGATConsultaCalcularOp.toString());
-		tasaGATConsultaCalcularOpSolicitud.setMessage(tasaGATConsultaCalcularOpMensaje);
+			RequestDTO tasaGATConsultaCalcularOpSolicitud = new RequestDTO();
+			tasaGATConsultaCalcularOpSolicitud.setUrl(tasaGATConsultaCalcularUrl.toString());
+			MessageProxyDTO tasaGATConsultaCalcularOpMensaje= new MessageProxyDTO();
+			tasaGATConsultaCalcularOpMensaje.setBody(tasaGATConsultaCalcularOp.toString());
+			tasaGATConsultaCalcularOpSolicitud.setMessage(tasaGATConsultaCalcularOpMensaje);
 
-		String tasaGATConsultaCalcularOpResultado = HttpClientUtils.postPerform(tasaGATConsultaCalcularOpSolicitud);
-		JsonObject tasaGATConsultaCalcularOpResultadoObjeto = new Gson().fromJson(tasaGATConsultaCalcularOpResultado, JsonObject.class);
-		logger.info("tasaGATConsultaCalcularOpResultadoObjeto" + tasaGATConsultaCalcularOpResultadoObjeto);
+			String tasaGATConsultaCalcularOpResultado = HttpClientUtils.postPerform(tasaGATConsultaCalcularOpSolicitud);
+			JsonObject tasaGATConsultaCalcularOpResultadoObjeto = new Gson().fromJson(tasaGATConsultaCalcularOpResultado, JsonObject.class);
+			logger.info("tasaGATConsultaCalcularOpResultadoObjeto" + tasaGATConsultaCalcularOpResultadoObjeto);
 
+			JsonObject GATConsultaCalcular = tasaGATConsultaCalcularOpResultadoObjeto.has("GATConsultaCalcular") ? tasaGATConsultaCalcularOpResultadoObjeto.get("GATConsultaCalcular").getAsJsonObject() : new JsonObject();
+			invGAT = GATConsultaCalcular.has("Inv_GAT") ? GATConsultaCalcular.get("Inv_GAT").getAsDouble() : 0;			
 
+			/* 
+				Parametros obtenidos por medio del principal
+				Mon_Comisi = 0 de donde se obtiene pendiente para validar
+				cueMonInv = 509000 a Inv_cantidad de inversion pendiende validar
+			*/		
 
+			JsonObject datosGATRea = new JsonObject();
+			datosGATRea.addProperty("Inv_GAT", invGAT);
+			datosGATRea.addProperty("Inv_GATRea", Integer.parseInt(tasaGATReaConsultaCalcualrOpInvGATRea));
+			datosGATRea.addProperty("NumTransac", numTransac);
+			datosGATRea.addProperty("Transaccio", tasaGATReaConsultaCalcularOpTransaccio);
+			datosGATRea.addProperty("Usuario", tasaGATReaConsultaCalcularOpUsuari);
+			datosGATRea.addProperty("FechaSis", fechaSis);
+			datosGATRea.addProperty("SucOrigen", tasaGATReaConsultaCalcularOpSucOrigen);
+			datosGATRea.addProperty("SucDestino", tasaGATReaConsultaCalcularOpSucDestino);
+			datosGATRea.addProperty("Modulo", tasaGATReaConsultaCalcularOpModulo);
 
+			logger.info("datosGATRea" + datosGATRea);
+			StringBuilder tasaGATReaConsultaCalcularUrl = new StringBuilder()
+					.append(DataServiceHost)
+					.append("/")
+					.append(TasaServicio)
+					.append("/")
+					.append(tasaGATReaConsultaCalcularOp);
+			JsonObject tasaGATReaConsultaCalcularOp = new JsonObject();
+			tasaGATReaConsultaCalcularOp.add("tasaGATReaConsultaCalcularOp", datosGATRea);
+			logger.info("tasaGATReaConsultaCalcularOp" + tasaGATReaConsultaCalcularOp);
 
+			RequestDTO tasaGATReaConsultaCalcularOpSolicitud = new RequestDTO();
+			tasaGATReaConsultaCalcularOpSolicitud.setUrl(tasaGATReaConsultaCalcularUrl.toString());
+			MessageProxyDTO tasaGATReaConsultaCalcularOpMensaje= new MessageProxyDTO();
+			tasaGATReaConsultaCalcularOpMensaje.setBody(tasaGATReaConsultaCalcularOp.toString());
+			tasaGATReaConsultaCalcularOpSolicitud.setMessage(tasaGATReaConsultaCalcularOpMensaje);
 
+			String tasaGATReaConsultaCalcularOpResultado = HttpClientUtils.postPerform(tasaGATReaConsultaCalcularOpSolicitud);
+			JsonObject tasaGATReaConsultaCalcularOpResultadoObjeto = new Gson().fromJson(tasaGATReaConsultaCalcularOpResultado, JsonObject.class);
+			logger.info("tasaGATReaConsultaCalcularOpResultadoObjeto" + tasaGATReaConsultaCalcularOpResultadoObjeto);
 
+			JsonObject GATRealConsultaCalcular = tasaGATReaConsultaCalcularOpResultadoObjeto.has("GATRealConsultaCalcular") ? tasaGATReaConsultaCalcularOpResultadoObjeto.get("GATRealConsultaCalcular").getAsJsonObject() : new JsonObject();
+			invGATRea = GATRealConsultaCalcular.has("Inv_GATRea") ? GATRealConsultaCalcular.get("Inv_GATRea").getAsDouble() : 0;	
+		}	
 
+		int invPlazo =  inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsInt() : 0;
+		JsonObject resultadoCalulaTasa = null; 
 
+		Double Cli_TasISR = cliente.has("Cli_TasISR") ? cliente.get("Cli_TasISR").getAsDouble() : 0;
+		Double Cli_CobISR = cliente.has("Cli_CobISR") ? cliente.get("Cli_CobISR").getAsDouble() : 0;
 
-
-
-
-		
-
-		/* 
-			Parametros obtenidos por medio del principal
-			Mon_Comisi = 0 de donde se obtiene pendiente para validar
-			cueMonInv = 509000 a Inv_cantidad de inversion pendiende validar
-		*/
-
-		// JsonObject clienteConsultar = tasaClienteConsultarOpResultadoObjeto.has("clienteConsultar") ? tasaClienteConsultarOpResultadoObjeto.get("clienteConsultar").getAsJsonObject() : new JsonObject();
-		// String invTasInt = clienteConsultar.has("TasInv") ? clienteConsultar.get("TasInv").getAsString() : "";
-		
-		// int cueMonInv = 509000;
-		// int monComisi = 0;
-
-		// JsonObject datosGAT = new JsonObject();
-		// datosGAT.addProperty("Inv_Dias",  inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsNumber() : 0);
-		// datosGAT.addProperty("Inv_TasInt", invTasInt);
-		// datosGAT.addProperty("Inv_GAT", tasaGATConsultaCalcualrOpInvGAT);
-		// datosGAT.addProperty("Cal_Opcion", "");
-		// datosGAT.addProperty("Cue_MonInv", cueMonInv);
-		// datosGAT.addProperty("Mon_Comisi", monComisi);
-		// datosGAT.addProperty("NumTransac", numTransac);
-		// datosGAT.addProperty("Transaccio", tasaGATConsultaCalcularOpTransaccio);
-		// datosGAT.addProperty("Usuario", tasaGATConsultaCalcularOpUsuari);
-		// datosGAT.addProperty("FechaSis", fechaSis);
-		// datosGAT.addProperty("SucOrigen", tasaGATConsultaCalcularOpSucOrigen);
-		// datosGAT.addProperty("SucDestino", tasaGATConsultaCalcularOpSucDestino);
-		// datosGAT.addProperty("Modulo", tasaGATConsultaCalcularOpModulo);
-
-		// logger.info("datosMoneda" + datosMoneda);
-		// StringBuilder tasaGATConsultaCalcularUrl = new StringBuilder()
-		// 		.append(DataServiceHost)
-		// 		.append("/")
-		// 		.append(TasaServicio)
-		// 		.append("/")
-		// 		.append(tasaGATConsultaCalcularOp);
-		// JsonObject tasaGATConsultaCalcularOp = new JsonObject();
-		// tasaGATConsultaCalcularOp.add("tasaGATConsultaCalcularOp", datosGAT);
-		// logger.info("tasaGATConsultaCalcularOp" + tasaGATConsultaCalcularOp);
-
-		// RequestDTO tasaGATConsultaCalcularOpSolicitud = new RequestDTO();
-		// tasaGATConsultaCalcularOpSolicitud.setUrl(tasaGATConsultaCalcularUrl.toString());
-		// MessageProxyDTO tasaGATConsultaCalcularOpMensaje= new MessageProxyDTO();
-		// tasaGATConsultaCalcularOpMensaje.setBody(tasaGATConsultaCalcularOp.toString());
-		// tasaGATConsultaCalcularOpSolicitud.setMessage(tasaGATConsultaCalcularOpMensaje);
-
-		// String tasaGATConsultaCalcularOpResultado = HttpClientUtils.postPerform(tasaGATConsultaCalcularOpSolicitud);
-		// JsonObject tasaGATConsultaCalcularOpResultadoObjeto = new Gson().fromJson(tasaGATConsultaCalcularOpResultado, JsonObject.class);
-		// logger.info("tasaGATConsultaCalcularOpResultadoObjeto" + tasaGATConsultaCalcularOpResultadoObjeto);
+		if(invCantid >= 5000 && invPlazo > 0){
+			JsonObject calculaTasa = new JsonObject();
+			calculaTasa.addProperty("Inv_Plazo", invPlazo);
+			calculaTasa.addProperty("Inv_Cantid", invCantid);
+			calculaTasa.addProperty("TasInv", invTasInt);
+			// calculaTasa.addProperty("Par_DiBaIn", Par_DiBaIn);
+			calculaTasa.addProperty("Par_ISR", Cli_TasISR);
+			calculaTasa.addProperty("Cli_CobISR", Cli_CobISR);
+		}
 
 		/* 
 			*************************************************************************
