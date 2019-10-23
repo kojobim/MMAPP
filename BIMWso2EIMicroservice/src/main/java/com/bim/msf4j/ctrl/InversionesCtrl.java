@@ -76,6 +76,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 	private static String HorarioInversionOpSucDestino;
 	private static String HorarioInversionOpModulo;
 
+	private static String InversionesFilterBy;
+	private static Integer InversionesMaximoPagina;
+	
 	public InversionesCtrl() {
 		super();
 		logger.info("Ctrl: Empezando metodo init...");
@@ -126,7 +129,10 @@ public class InversionesCtrl extends BimBaseCtrl {
 		InversionesObtenerOp = properties.getProperty("inversiones_servicio.op.inversiones_obtener");
 		InversionesPagareNumeroUsuarioObtenerOp = properties.getProperty("inversiones_servicio.op.inversiones_pagare_numero_usuario_obtener");
 		HorarioInversionOp = properties.getProperty("configuracion_servicio.op.horario_inversion");
-
+		
+		InversionesFilterBy = properties.getProperty("inversiones_servicio.filter_by");
+		InversionesMaximoPagina = Integer.parseInt(properties.getProperty("inversiones_servicio.maximo_pagina"));
+		
 		logger.info("Ctrl: Terminando metodo init...");
 	}
 	
@@ -134,15 +140,30 @@ public class InversionesCtrl extends BimBaseCtrl {
 	@GET()
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public JsonObject inversionesListado(@QueryParam("page") Integer page, @QueryParam("per_page") Integer per_page, @QueryParam("filter_by") String filter_by, @Context final Request solicitud) {
+	public JsonObject inversionesListado(@QueryParam("page") String page, @QueryParam("per_page") String perPage, @QueryParam("filter_by") String filterBy, @Context final Request solicitud) {
 		logger.info("CTRL: Comenzando inversionesListado metodo");
-
-		logger.info("page " + page);
-		logger.info("per_page " + per_page);
 		
-		if(page == null || per_page == null) 
+		if(page == null || perPage == null) 
 			throw new BadRequestException("BIM.MENSAJ.2");
-			
+		
+		if(!Utilerias.isNumber(page))
+			throw new BadRequestException("BIM.MENSAJ.22");
+		
+		if(!Utilerias.isNumber(perPage))
+			throw new BadRequestException("BIM.MENSAJ.23");
+		
+		int pageValue = Integer.parseInt(page);
+		int perPageValue = Integer.parseInt(perPage);
+
+		if(pageValue <= 0)
+			throw new BadRequestException("BIM.MENSAJ.9");
+		
+		if(perPageValue <= 0 || perPageValue > InversionesMaximoPagina)
+			throw new BadRequestException("BIM.MENSAJ.23");
+
+		if(filterBy != null && !filterBy.equals(InversionesFilterBy))
+			throw new BadRequestException("BIM.MENSAJ.6");
+
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
 		String fechaSis = simpleDateFormat.format(fecha);
@@ -398,7 +419,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			inversionResultadoObjeto.addProperty("cpRenInv", cpRenInv);
 		});
 		logger.info("inversionesResultado " +  inversionesResultado);
-		JsonObject inversionesResultadoFinal = Filtrado.filtroInversiones(inversionesResultado, page, per_page, filter_by);
+		JsonObject inversionesResultadoFinal = Filtrado.filtroInversiones(inversionesResultado, pageValue, perPageValue, filterBy);
 		
 		logger.info("CTRL: Terminando login metodo");	
 		return inversionesResultadoFinal;

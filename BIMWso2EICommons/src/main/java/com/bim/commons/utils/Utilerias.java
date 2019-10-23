@@ -102,4 +102,11 @@ public class Utilerias {
 		logger.info("COMMONS: Finalizando convertirFecha...");
 		return fechaConv;
 	}
+	
+	public static Boolean isNumber(String value) {
+		logger.info("COMMONS: Finalizando isNumber metodo...");
+		String regex = "\\d";		
+		logger.info("COMMONS: Finalizando isNumber metodo...");
+		return value.matches(regex);
+	}
 }
