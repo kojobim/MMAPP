@@ -1,11 +1,7 @@
 package com.bim.msf4j.ctrl;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Properties;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -13,23 +9,27 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
-import org.wso2.msf4j.Microservice;
 import org.wso2.msf4j.Request;
 
+import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
+import com.bim.commons.exceptions.BadRequestException;
+import com.bim.commons.exceptions.ConflictException;
+import com.bim.commons.exceptions.InternalServerException;
+import com.bim.commons.exceptions.UnauthorizedException;
 import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Racal;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 @Path("/login")
-public class LoginCtrl implements Microservice {
+public class LoginCtrl extends BimBaseCtrl {
 	
 	private static final Logger logger = Logger.getLogger(LoginCtrl.class);
-	private static Properties properties;
 	private static String FolioTransaccionGenerarOpSucOrigen;
 	private static String UsuarioConsultarOpTipConsul;
 	private static String UsuarioConsultarOpTransaccio;
@@ -74,16 +74,7 @@ public class LoginCtrl implements Microservice {
 	private static String BitacoraCreacionOp;
 	
 	public LoginCtrl() {
-		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/services.properties")) {
-			properties = new Properties();
-			
-			if(inputStream != null) {
-				properties.load(inputStream);
-			}			
-		}
-		catch(IOException ioException) {
-			ioException.printStackTrace();
-		}
+		super();
 		
 		FolioTransaccionGenerarOpSucOrigen = properties.getProperty("op.folio_transaccion_generar.suc_origen");
 		
@@ -134,16 +125,31 @@ public class LoginCtrl implements Microservice {
 		ConfiguracionBancoDetalleOp = properties.getProperty("configuracion_servicio.op.configuracion_banco_detalle");
 		TokenVerificarOp = properties.getProperty("token_servicio.op.token_verificar");
 		FolioTransaccionGenerarOp = properties.getProperty("transaccion_servicio.op.folio_transaccion_generar");
-		BitacoraCreacionOp = properties.getProperty("transaccion_servicio.op.bitacora_creacion");
+		BitacoraCreacionOp = properties.getProperty("bitacora_servicio.op.bitacora_creacion");
 	}
 	
 	@Path("/")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void login(JsonObject datosUsuario, @Context Request solicitud) {
+	public Response login(JsonObject datosUsuario, @Context Request solicitud) {
 		logger.info("CTRL: Comenzando login metodo");
 		logger.info("datosUsuario " + datosUsuario);
+		
+		String usuClave = datosUsuario.has("Usu_Clave") ? datosUsuario.get("Usu_Clave").getAsString() : null;
+		 
+		if(usuClave == null || usuClave.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.4");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		String usuPasswo = datosUsuario.has("Usu_Passwo") ? datosUsuario.get("Usu_Passwo").getAsString() : null; 
+		
+		if(usuPasswo == null || usuPasswo.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.5");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
 		String fechaSis = simpleDateFormat.format(fecha);
@@ -175,7 +181,7 @@ public class LoginCtrl implements Microservice {
 		
 		String folTransa = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
 		
-//		JsonObject datosUsuario = new Gson().fromJson(mensaje, JsonObject.class);
+		datosUsuario.addProperty("Usu_Passwo", "");
 		datosUsuario.addProperty("Tip_Consul", UsuarioConsultarOpTipConsul);
 		datosUsuario.addProperty("Transaccio", UsuarioConsultarOpTransaccio);
 		datosUsuario.addProperty("Usuario", UsuarioConsultarOpUsuario);
@@ -215,6 +221,95 @@ public class LoginCtrl implements Microservice {
 		JsonObject usuarioConsultarOpResultadoObjeto = new Gson().fromJson(usuarioConsultarOpResultado, JsonObject.class);
 		logger.info("usuarioConsultarOpResultadoObject" + usuarioConsultarOpResultadoObjeto);
 
+		datosUsuario.addProperty("Usu_Passwo", usuPasswo);
+		JsonObject usuario = usuarioConsultarOpResultadoObjeto.has("usuario") ? usuarioConsultarOpResultadoObjeto.get("usuario").getAsJsonObject() : null;
+		
+		if(usuario == null || usuario.isJsonPrimitive()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+			
+		String usuNumero = usuario.has("Usu_Numero") ? usuario.get("Usu_Numero").getAsString() : null;
+		String usuStatus = usuario.has("Usu_Status") ? usuario.get("Usu_Status").getAsString() : null;
+		
+		if(usuNumero == null || (usuStatus == null || usuStatus.isEmpty())) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+		
+		if(usuStatus.equals("I")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.11");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		if(usuStatus.equals("F")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.12");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		String tokStatus = usuario.has("Tok_Status") ? usuario.get("Tok_Status").getAsString() : null;
+		
+		if(tokStatus == null || tokStatus.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+		
+		if(tokStatus.equals("I")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.13");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		Integer usuCoAcNe = usuario.has("Usu_CoAcNe") ? usuario.get("Usu_CoAcNe").getAsInt() : null; 
+		Integer usuCoDeNe = usuario.has("Usu_CoDeNe") ? usuario.get("Usu_CoDeNe").getAsInt() : null;
+		Integer usuCoPaNe = usuario.has("Usu_CoPaNe") ? usuario.get("Usu_CoPaNe").getAsInt() : null;
+		
+		if(usuCoAcNe == null || usuCoDeNe == null || usuCoPaNe == null) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+			
+		if((usuCoAcNe.intValue() > 3 || usuStatus.equals("B")) && usuCoDeNe.intValue() < 3 && usuCoPaNe < 1) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.14");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		if(usuCoDeNe.intValue() > 3 && usuStatus.equals("B")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.15");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		if(usuCoPaNe.intValue() > 1 && usuStatus.equals("B")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.15");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		String usuStaSes = usuario.has("Usu_StaSes") ? usuario.get("Usu_StaSes").getAsString() : null;
+
+		if(usuStaSes == null) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+		
+		if(!usuStaSes.equals("I")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.16");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		if(usuStatus.equals("D")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.17");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		if(usuStatus.equals("C")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.18");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		if(!usuStatus.equals("A")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.19");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
 		JsonObject datosConfiguracion = new JsonObject();
 		datosConfiguracion.addProperty("Tip_Consul", ConfiguracionBancoDetalleOpTipConsul);
 		datosConfiguracion.addProperty("NumTransac", "");
@@ -244,9 +339,36 @@ public class LoginCtrl implements Microservice {
 		JsonObject configuracionBancoDetalleOpResultadoObjecto = new Gson().fromJson(configuracionBancoDetalleOpResultado, JsonObject.class);
 		logger.info("configuracionBancoDetalleOpResultadoObjecto" + configuracionBancoDetalleOpResultadoObjecto);
 		
-		String contrasenaCifrada = Racal.cifraPassword_HSM(datosUsuario.get("Usu_Passwo").getAsString());
-		logger.info("contrasenaCifrada " + contrasenaCifrada);
+		JsonObject configuracionesBanco = configuracionBancoDetalleOpResultadoObjecto.has("configuracionesBanco") ? configuracionBancoDetalleOpResultadoObjecto.get("configuracionesBanco").getAsJsonObject() : null;
+		JsonObject configuracionBanco = configuracionesBanco.has("configuracionBanco") ? configuracionesBanco.get("configuracionBanco").getAsJsonObject() : null; 
+		String parAcceso = configuracionBanco.has("Par_Acceso") ? configuracionBanco.get("Par_Acceso").getAsString() : null;
 		
+		if(parAcceso.equals("N")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		String usuPasCif = Racal.cifraPassword_HSM(datosUsuario.get("Usu_Passwo").getAsString());
+		logger.info("contrasenaCifrada " + usuPasCif);
+		
+		if(usuPasCif.length() == 7 && usuPasCif.equals("autoriz")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.7");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+
+		if(usuPasCif.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.8");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+		
+		logger.info(">>>>>>>>>>>>>usuPasCif: " + usuPasCif);
+		logger.info(">>>>>>>>>>>>>usuPasswo: " + usuario.get("Usu_Passwo"));
+		
+		if(!usuPasCif.equals(usuario.get("Usu_Passwo").getAsString().trim())) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.20");
+			throw new UnauthorizedException(bimMessageDTO.toString());
+		}
+			
 		logger.info("newVersion" + usuarioConsultarOpSolicitud.toString());
 		usuarioConsultarOpResultado = HttpClientUtils.postPerform(usuarioConsultarOpSolicitud);
 		usuarioConsultarOpResultadoObjeto = new Gson().fromJson(usuarioConsultarOpResultado, JsonObject.class);
@@ -294,6 +416,7 @@ public class LoginCtrl implements Microservice {
 		logger.info("usuarioActualizacionOpResultadoObjecto" + usuarioActualizacionOpResultadoObjecto);
 		
 		String tovSerie = usuarioConsultarOpResultadoObjeto.get("usuario").getAsJsonObject().get("Usu_FolTok").getAsString();
+		
 		JsonObject datosTokenVerificar = new JsonObject();
 			datosTokenVerificar.addProperty("Tov_Serie", tovSerie);
 			datosTokenVerificar.addProperty("NumTransac", "");
@@ -324,6 +447,17 @@ public class LoginCtrl implements Microservice {
 		logger.info("tokenVerificarOpResultado " + tokenVerificarOpResultado);
 		JsonObject tokenVerificarOpResultadoObjecto = new Gson().fromJson(tokenVerificarOpResultado, JsonObject.class);
 		logger.info("tokenVerificarOpResultadoObjecto" + tokenVerificarOpResultadoObjecto);
+		
+		JsonObject tokenVerificar = tokenVerificarOpResultadoObjecto.has("tokenVerificar") 
+				&& tokenVerificarOpResultadoObjecto.get("tokenVerificar").isJsonObject() 
+				? tokenVerificarOpResultadoObjecto.get("tokenVerificar").getAsJsonObject()
+						: null;
+		
+		if(tokenVerificar != null && tokenVerificar.has("Tov_FecVen")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.21");
+			bimMessageDTO.addMergeVariable("fecha", tokenVerificar.get("Tov_FecVen").getAsString());
+			throw new ConflictException(bimMessageDTO.toString());
+		}
 		
 		logger.info("usuarioActualizacionOp " + usuarioActualizacionOp.toString());
 		usuarioActualizacionSolicitud = new RequestDTO();
@@ -378,6 +512,21 @@ public class LoginCtrl implements Microservice {
 		bitacoraCreacionOpSolicitud.setMessage(bitacoraCreacionOpMensaje);
 		
 		HttpClientUtils.postPerform(bitacoraCreacionOpSolicitud);
+		
+		String usuClient = usuario.has("Usu_Client") ? usuario.get("Usu_Client").getAsString() : null;
+		String usuNombre = usuario.has("Usu_Nombre") ? usuario.get("Usu_Nombre").getAsString() : null;
+		String usuEmail = usuario.has("Usu_Email") ? usuario.get("Usu_Email").getAsString() : null;
+		String usuUsuAdm = usuario.has("Usu_UsuAdm") ? usuario.get("Usu_UsuAdm").getAsString() : null;
+		
+		JsonObject usuarioResultado = new JsonObject();
+		usuarioResultado.addProperty("usuClave ", usuClave);
+		usuarioResultado.addProperty("usuNumero ", usuNumero);
+		usuarioResultado.addProperty("usuClient ", usuClient);
+		usuarioResultado.addProperty("usuNombre ", usuNombre);
+		usuarioResultado.addProperty("usuEmail ", usuEmail);
+		usuarioResultado.addProperty("usuUsuAdm ", usuUsuAdm);
 		logger.info("CTRL: Terminando login metodo");
+		return Response.ok(usuarioResultado.toString(), MediaType.APPLICATION_JSON)
+				.build();
 	}
 }
