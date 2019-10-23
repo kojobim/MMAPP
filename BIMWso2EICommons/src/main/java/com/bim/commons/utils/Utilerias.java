@@ -59,4 +59,21 @@ public class Utilerias {
 		logger.info("COMMONS: Finalizando convertirFecha...");
 		return fechaConv;
 	}
+
+	public static JsonArray calculaTasa (JsonObject datosParaCalculaTasa){
+		logger.info("COMMONS: Iniciando calculaTasa");
+
+		String Cli_Numero = datosParaCalculaTasa.has("Cli_Numero") ? datosParaCalculaTasa.get("Cli_Numero").getAsString() : "";
+		int Inv_Cantid = datosParaCalculaTasa.has("Inv_Cantid") ? datosParaCalculaTasa.get("Inv_Cantid").getAsNumber() : "";
+		String Cue_Moneda = datosParaCalculaTasa.has("Cue_Moneda") ? datosParaCalculaTasa.get("Cue_Moneda").getAsString() : "";
+		String Cli_Tipo = datosParaCalculaTasa.has("Cli_Tipo") ? datosParaCalculaTasa.get("Cli_Tipo").getAsString() : "";
+		int Inv_Plazo = datosParaCalculaTasa.has("Inv_Plazo") ? datosParaCalculaTasa.get("Inv_Plazo").getAsNumber() : "";
+		String Inv_FecVen = datosParaCalculaTasa.has("Inv_FecVen") ? datosParaCalculaTasa.get("Inv_FecVen").getAsString() : "";
+
+
+
+		logger.info("COMMONS: Finalizando calculaTasa");
+		return resultado
+	}
+
 }

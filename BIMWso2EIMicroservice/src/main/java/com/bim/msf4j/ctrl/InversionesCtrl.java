@@ -22,6 +22,7 @@ import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
 import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.HttpClientUtils;
+import com.bim.commons.utils.Racal;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -103,6 +104,7 @@ public class InversionesCtrl implements Microservice {
 	private static String UsuarioPerfilRiesgoConsultarOpSucOrigen;
 	private static String UsuarioPerfilRiesgoConsultarOpSucDestino;
 	private static String UsuarioPerfilRiesgoConsultarOpModulo;	
+	private static String UsuarioPerfilRiesgoConsultarOpAplClient;	
 	private static String fechaHabilConsultarOpFinSem;
 	private static String fechaHabilConsultarOpTransaccio;
 	private static String fechaHabilConsultarOpUsuari;
@@ -121,12 +123,13 @@ public class InversionesCtrl implements Microservice {
 	private static String tasaMonedaConsultarOpSucDestino;
 	private static String tasaMonedaConsultarOpModulo;
 	private static String tasaMonedaConsultarOpMonNumero;
-	private static String tasaMonedaConsultarOpMonFecha;
 	private static String tasaGATConsultaCalcularOpTransaccio;
 	private static String tasaGATConsultaCalcularOpUsuari;
 	private static String tasaGATConsultaCalcularOpSucOrigen;
 	private static String tasaGATConsultaCalcularOpSucDestino;
 	private static String tasaGATConsultaCalcularOpModulo;	
+	private static String tasaGATConsultaCalcualrOpInvGAT;
+	private static String intentosActualizacionOpTipActual;	
 	private static String intentosActualizacionOpTransaccio;
 	private static String intentosActualizacionOpUsuari;
 	private static String intentosActualizacionOpSucOrigen;
@@ -136,7 +139,8 @@ public class InversionesCtrl implements Microservice {
 	private static String inversionesStatusActualizarOpUsuari;
 	private static String inversionesStatusActualizarOpSucOrigen;
 	private static String inversionesStatusActualizarOpSucDestino;
-	private static String inversionesStatusActualizarOpModulo;	
+	private static String inversionesStatusActualizarOpModulo;
+	private static String inversionesStatusActualizarOpAdiInsLiq;
 	private static String inversionesImportesDeInvercionFinalizadaActualizarOpTransaccio;
 	private static String inversionesImportesDeInvercionFinalizadaActualizarOpUsuari;
 	private static String inversionesImportesDeInvercionFinalizadaActualizarOpSucOrigen;
@@ -194,6 +198,7 @@ public class InversionesCtrl implements Microservice {
 		CuentaOrigenConsultarOpSucDestino = properties.getProperty("op.cuenta_origen_consultar.suc_destino");
 		CuentaOrigenConsultarOpModulo = properties.getProperty("op.cuenta_origen_consultar.modulo");
 
+		UsuarioPerfilRiesgoConsultarOpAplClient = properties.getProperty("op.usuario_perfil_riesgo_consultar.apl_cuesti");
 		UsuarioPerfilRiesgoConsultarOpTipConsul = properties.getProperty("op.usuario_perfil_riesgo_consultar.tip_consul");
 		UsuarioPerfilRiesgoConsultarOpTransaccio  = properties.getProperty("op.usuario_perfil_riesgo_consultar.transaccio");
 		UsuarioPerfilRiesgoConsultarOpUsuari = properties.getProperty("op.usuario_perfil_riesgo_consultar.usuario");
@@ -221,25 +226,27 @@ public class InversionesCtrl implements Microservice {
 		tasaMonedaConsultarOpSucDestino = properties.getProperty("op.tasa_moneda_consultar.suc_destino");
 		tasaMonedaConsultarOpModulo = properties.getProperty("op.tasa_moneda_consultar.modulo");		
 		tasaMonedaConsultarOpMonNumero = properties.getProperty("op.tasa_moneda_consultar.mon_numero");
-		tasaMonedaConsultarOpMonFecha = properties.getProperty("op.tasa_moneda_consultar.mon_fecha");
 		
 		tasaGATConsultaCalcularOpTransaccio  = properties.getProperty("op.tasa_gat_consulta_calcular.transaccio");
 		tasaGATConsultaCalcularOpUsuari = properties.getProperty("op.tasa_gat_consulta_calcular.usuario");
 		tasaGATConsultaCalcularOpSucOrigen = properties.getProperty("op.gat_consulta_calcular.suc_origen");
 		tasaGATConsultaCalcularOpSucDestino = properties.getProperty("op.gat_consulta_calcular.suc_destino");
 		tasaGATConsultaCalcularOpModulo = properties.getProperty("op.gat_consulta_calcular.modulo");	
+		tasaGATConsultaCalcualrOpInvGAT = properties.getProperty("op.tasa_gat_consulta_calcular.inv_gat");
 		
+		intentosActualizacionOpTipActual = properties.getProperty("op.intentos_atualizacion.tip_actual")
 		tasaGATConsultaCalcularOpTransaccio  = properties.getProperty("op.intentos_actualizacion.transaccio");
 		tasaGATConsultaCalcularOpUsuari = properties.getProperty("op.intentos_actualizacion.usuario");
 		tasaGATConsultaCalcularOpSucOrigen = properties.getProperty("op.intentos_actualizacion.suc_origen");
 		tasaGATConsultaCalcularOpSucDestino = properties.getProperty("op.intentos_actualizacion.suc_destino");
 		tasaGATConsultaCalcularOpModulo = properties.getProperty("op.intentos_actualizacion.modulo");
 		
-		inversionesStatusActualizarOpTransaccio  = properties.getProperty("op.inversiones-status_actualizar.transaccio");
+		inversionesStatusActualizarOpTransaccio  = properties.getProperty("op.inversiones_status_actualizar.transaccio");
 		inversionesStatusActualizarOpUsuari = properties.getProperty("op.inversiones-status_actualizar.usuario");
 		inversionesStatusActualizarOpSucOrigen = properties.getProperty("op.inversiones-status_actualizar.suc_origen");
 		inversionesStatusActualizarOpSucDestino = properties.getProperty("op.inversiones-status_actualizar.suc_destino");
 		inversionesStatusActualizarOpModulo = properties.getProperty("op.inversiones-status_actualizar.modulo");
+		inversionesStatusActualizarOpAdiInsLiq = properties.getProperty("op.inversiones-status_actualizar.adi_insLiq");
 
 		inversionesImportesDeInvercionFinalizadaActualizarOpTransaccio  = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.transaccio");
 		inversionesImportesDeInvercionFinalizadaActualizarOpUsuari = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.usuario");
@@ -704,7 +711,12 @@ public class InversionesCtrl implements Microservice {
 	public JsonObject reinversion(@PathParam("invNumero") String invNumero,	
 			@QueryParam("categoria") String categoria, @Context final Request solicitud) {
 			logger.info("CTRL: Comenzando reinversion metodo");
-			String mensaje = HttpClientUtils.getStringContent(solicitud);
+			String mensaje = null;
+			try {
+				mensaje = HttpClientUtils.getStringContent(solicitud);	
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			JsonObject inversionesObjeto = new Gson().fromJson(mensaje, JsonObject.class);
 			JsonObject renovarInversion = inversionesObjeto.getAsJsonObject("renovarInversion");		
 	
@@ -822,7 +834,7 @@ public class InversionesCtrl implements Microservice {
 
 		/* 
 			Parametros obtenidos por medio del principal
-				Cli_Numero = Usu_Client validar viene se sp1
+				Cli_Numero = Usu_Client se otiene de sp1
 		*/
 	
 		String usuClient = "00193500";
@@ -862,15 +874,9 @@ public class InversionesCtrl implements Microservice {
 		JsonObject clienteConsultarOpResultadoObjeto = new Gson().fromJson(clienteConsultarOpResultado, JsonObject.class);
 		logger.info("clienteConsultarOpResultadoObjeto" + clienteConsultarOpResultadoObjeto);
 
-		/* 
-			Parametros obtenidos por medio del principal
-				Cor_Usuari = ver de donde se obtiene
-		*/
-	
-		String corUsuari = "001844";
-
+		
 		JsonObject datosCuenta = new JsonObject();
-		datosCuenta.addProperty("Cor_Usuari", corUsuari);
+		datosCuenta.addProperty("Cor_Usuari", usuNumero);
 		datosCuenta.addProperty("Cor_Cuenta", "");
 		datosCuenta.addProperty("Cor_Moneda", "");
 		datosCuenta.addProperty("Cor_CliUsu", "");
@@ -906,17 +912,9 @@ public class InversionesCtrl implements Microservice {
 		JsonObject cuentaOrigenConsultarOpResultadoObjeto = new Gson().fromJson(cuentaOrigenConsultarOpResultado, JsonObject.class);
 		logger.info("cuentaOrigenConsultarOpResultadoObjeto" + cuentaOrigenConsultarOpResultadoObjeto);
 
-		/* 
-			Parametros obtenidos por medio del principal
-				Apl_Client =  Cli_Numero viene de sp3 que se obtiene de sp1 Usu_Client
-				Apl_Cuesti =  ver de donde se optiene
- 		*/
-	
-		int aplCuesti = 0;
-
 		JsonObject datosPerfilRiesgo = new JsonObject();
 		datosPerfilRiesgo.addProperty("Apl_Client", usuClient);
-		datosPerfilRiesgo.addProperty("Apl_Cuesti", aplCuesti);
+		datosPerfilRiesgo.addProperty("Apl_Cuesti", Integer.parseInt(UsuarioPerfilRiesgoConsultarOpAplClient));
 		datosPerfilRiesgo.addProperty("Tip_Consul", UsuarioPerfilRiesgoConsultarOpTipConsul);
 		datosPerfilRiesgo.addProperty("NumTransac", numTransac);
 		datosPerfilRiesgo.addProperty("Transaccio", UsuarioPerfilRiesgoConsultarOpTransaccio);
@@ -950,9 +948,8 @@ public class InversionesCtrl implements Microservice {
 
 		/* 
 			Parametros obtenidos por medio del principal
-				Fecha =  ver de donde se optiene
-				NumDia=  ver de donde se optiene confirmar que sea plazo
-				FinSem=  "N" fines de semana no se consideran dias habiles
+				Fecha =  fecha actual del sistema
+				NumDia=  ver de donde se obtiene de plazo
 		 */
 
 		JsonObject datosFechaHabil = new JsonObject();
@@ -991,13 +988,12 @@ public class InversionesCtrl implements Microservice {
 
 		/* 
 			Parametros obtenidos por medio del principal
-				Cli_Numero viene de sp3 que se obtiene de sp1 Usu_Client
-				Inv_Moneda=  ver de donde se optiene
-				Cli_Tipo = 2 ver donde se obitene
-				Ine_Numero= preguntar si es igual al Cli_ActINE del sp3
- 		*/
-		
-		String cliTipo = "2";
+				Cli_Numero = usu_Client
+				Inv_Moneda=  01 constante para 
+		*/		
+
+		JsonObject cliente = clienteConsultarOpResultadoObjeto.has("fechaHabil") ? clienteConsultarOpResultadoObjeto.get("fechaHabil").getAsJsonObject() : new JsonObject();
+		String cliTipo = cliente.has("Cli_Tipo") ? cliente.get("Cli_Tipo").getAsString() : "";
 
 		String invFecVen = inversion.has("Inv_FecVen") ? inversion.get("Inv_FecVen").getAsString() : "";
 		Date fecVen = null;
@@ -1061,14 +1057,13 @@ public class InversionesCtrl implements Microservice {
 		
 		/* 
 			Parametros obtenidos por medio del principal
-			Mon_Numero = Inv_Moneda? o ver de donde se obiene si es constante
-			Mon_fecha = que fecha se utiliza
+			Mon_Numero =  99 constante para obtener la udi
  		*/
 
 		JsonObject datosMoneda = new JsonObject();
 		datosMoneda.addProperty("Mon_Numero", tasaMonedaConsultarOpMonNumero);
 		datosMoneda.addProperty("Mon_Descri", "");
-		datosMoneda.addProperty("Mon_Fecha", tasaMonedaConsultarOpMonFecha);
+		datosMoneda.addProperty("Mon_Fecha", "");
 		datosMoneda.addProperty("Tip_Consul", "");
 		datosMoneda.addProperty("NumTransac", numTransac);
 		datosMoneda.addProperty("Transaccio", tasaMonedaConsultarOpTransaccio);
@@ -1101,20 +1096,20 @@ public class InversionesCtrl implements Microservice {
 		
 		/* 
 			Parametros obtenidos por medio del principal
-			Inv_Dias = inv_plazo? o ver de donde se obiene si es constante
-			Inv_TasInt = 4.65 de donde se obtiene si es el Inv_Tasa de detalle de inversion
-			Mon_Comisi = 0 de donde se obtiene
-			cueMonInv = 509000 a Inv_cantidad de inversion
-			monComisi = 0? donde se obtiene
-		 */
+			Mon_Comisi = 0 de donde se obtiene pendiente para validar
+			cueMonInv = 509000 a Inv_cantidad de inversion pendiende validar
+		*/
+
+		JsonObject clienteConsultar = tasaClienteConsultarOpResultadoObjeto.has("clienteConsultar") ? tasaClienteConsultarOpResultadoObjeto.get("clienteConsultar").getAsJsonObject() : new JsonObject();
+		String invTasInt = clienteConsultar.has("TasInv") ? clienteConsultar.get("TasInv").getAsString() : "";
 		
 		int cueMonInv = 509000;
 		int monComisi = 0;
 
 		JsonObject datosGAT = new JsonObject();
 		datosGAT.addProperty("Inv_Dias",  inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsNumber() : 0);
-		datosGAT.addProperty("Inv_TasInt", inversion.has("Inv_Tasa") ? inversion.get("Inv_Tasa").getAsDouble() : 0);
-		datosGAT.addProperty("Inv_GAT", inversion.has("Inv_GAT") ? inversion.get("Inv_GAT").getAsDouble() : 0);
+		datosGAT.addProperty("Inv_TasInt", invTasInt);
+		datosGAT.addProperty("Inv_GAT", tasaGATConsultaCalcualrOpInvGAT);
 		datosGAT.addProperty("Cal_Opcion", "");
 		datosGAT.addProperty("Cue_MonInv", cueMonInv);
 		datosGAT.addProperty("Mon_Comisi", monComisi);
@@ -1147,18 +1142,67 @@ public class InversionesCtrl implements Microservice {
 		JsonObject tasaGATConsultaCalcularOpResultadoObjeto = new Gson().fromJson(tasaGATConsultaCalcularOpResultado, JsonObject.class);
 		logger.info("tasaGATConsultaCalcularOpResultadoObjeto" + tasaGATConsultaCalcularOpResultadoObjeto);
 
+
+
+
+
+
+
+
+
+
+
+
+
 		
 
-		/*
-			+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-			+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-			+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-			verificar si aplica el sp 10 debido a que en el documento de reglas de engocio de paertura pagare
-			en las secciones de reinvertir no se utiliza el GATRea
-			+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-			+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-			+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+		/* 
+			Parametros obtenidos por medio del principal
+			Mon_Comisi = 0 de donde se obtiene pendiente para validar
+			cueMonInv = 509000 a Inv_cantidad de inversion pendiende validar
 		*/
+
+		// JsonObject clienteConsultar = tasaClienteConsultarOpResultadoObjeto.has("clienteConsultar") ? tasaClienteConsultarOpResultadoObjeto.get("clienteConsultar").getAsJsonObject() : new JsonObject();
+		// String invTasInt = clienteConsultar.has("TasInv") ? clienteConsultar.get("TasInv").getAsString() : "";
+		
+		// int cueMonInv = 509000;
+		// int monComisi = 0;
+
+		// JsonObject datosGAT = new JsonObject();
+		// datosGAT.addProperty("Inv_Dias",  inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsNumber() : 0);
+		// datosGAT.addProperty("Inv_TasInt", invTasInt);
+		// datosGAT.addProperty("Inv_GAT", tasaGATConsultaCalcualrOpInvGAT);
+		// datosGAT.addProperty("Cal_Opcion", "");
+		// datosGAT.addProperty("Cue_MonInv", cueMonInv);
+		// datosGAT.addProperty("Mon_Comisi", monComisi);
+		// datosGAT.addProperty("NumTransac", numTransac);
+		// datosGAT.addProperty("Transaccio", tasaGATConsultaCalcularOpTransaccio);
+		// datosGAT.addProperty("Usuario", tasaGATConsultaCalcularOpUsuari);
+		// datosGAT.addProperty("FechaSis", fechaSis);
+		// datosGAT.addProperty("SucOrigen", tasaGATConsultaCalcularOpSucOrigen);
+		// datosGAT.addProperty("SucDestino", tasaGATConsultaCalcularOpSucDestino);
+		// datosGAT.addProperty("Modulo", tasaGATConsultaCalcularOpModulo);
+
+		// logger.info("datosMoneda" + datosMoneda);
+		// StringBuilder tasaGATConsultaCalcularUrl = new StringBuilder()
+		// 		.append(DataServiceHost)
+		// 		.append("/")
+		// 		.append(TasaServicio)
+		// 		.append("/")
+		// 		.append(tasaGATConsultaCalcularOp);
+		// JsonObject tasaGATConsultaCalcularOp = new JsonObject();
+		// tasaGATConsultaCalcularOp.add("tasaGATConsultaCalcularOp", datosGAT);
+		// logger.info("tasaGATConsultaCalcularOp" + tasaGATConsultaCalcularOp);
+
+		// RequestDTO tasaGATConsultaCalcularOpSolicitud = new RequestDTO();
+		// tasaGATConsultaCalcularOpSolicitud.setUrl(tasaGATConsultaCalcularUrl.toString());
+		// MessageProxyDTO tasaGATConsultaCalcularOpMensaje= new MessageProxyDTO();
+		// tasaGATConsultaCalcularOpMensaje.setBody(tasaGATConsultaCalcularOp.toString());
+		// tasaGATConsultaCalcularOpSolicitud.setMessage(tasaGATConsultaCalcularOpMensaje);
+
+		// String tasaGATConsultaCalcularOpResultado = HttpClientUtils.postPerform(tasaGATConsultaCalcularOpSolicitud);
+		// JsonObject tasaGATConsultaCalcularOpResultadoObjeto = new Gson().fromJson(tasaGATConsultaCalcularOpResultado, JsonObject.class);
+		// logger.info("tasaGATConsultaCalcularOpResultadoObjeto" + tasaGATConsultaCalcularOpResultadoObjeto);
 
 		/* 
 			*************************************************************************
@@ -1168,25 +1212,15 @@ public class InversionesCtrl implements Microservice {
 			*************************************************************************
 		 */
 
+		String cpRSAToken = renovarInversion.has("cpRSAToken") ? renovarInversion.get("cpRSAToken").getAsString() : "";
+		String validaToken = Racal.validaToken(cpRSAToken);
 
-
-
-		
-		/* 
-			Parametros obtenidos por medio del principal
-			Tok_Usuari = 001844 este numero es igual al de usuNumero de donde se obtiene
-			Tip_Actual = 1 ver de donde se obtiene
-		 */
-		
-		String tokUsuari = "001844";
-		String tipActual = "1";
-
-		JsonObject datosIntentosToken = new JsonObject();
-		datosIntentosToken.addProperty("Tok_Folio",  renovarInversion.has("cpRSAToken") ? renovarInversion.get("cpRSAToken").getAsString() : "");
+				JsonObject datosIntentosToken = new JsonObject();
+		datosIntentosToken.addProperty("Tok_Folio",  renovarInversion.has("cpRSAToken") ? renovarInversion.get("cpRSAToken").getAsString() : "");// obtenemos desde el principal
 		datosIntentosToken.addProperty("Tok_UsuAdm", "");
-		datosIntentosToken.addProperty("Tok_Usuari", tokUsuari);
+		datosIntentosToken.addProperty("Tok_Usuari", usuNumero);
 		datosIntentosToken.addProperty("Tok_ComCan", "");
-		datosIntentosToken.addProperty("Tip_Actual", tipActual);
+		datosIntentosToken.addProperty("Tip_Actual", intentosActualizacionOpTipActual);
 		datosIntentosToken.addProperty("NumTransac", numTransac);
 		datosIntentosToken.addProperty("Transaccio", intentosActualizacionOpTransaccio);
 		datosIntentosToken.addProperty("Usuario", intentosActualizacionOpUsuari);
@@ -1216,42 +1250,29 @@ public class InversionesCtrl implements Microservice {
 		JsonObject intentosActualizacionOpResultadoObjeto = new Gson().fromJson(intentosActualizacionOpResultado, JsonObject.class);
 		logger.info("intentosActualizacionOpResultadoObjeto" + intentosActualizacionOpResultadoObjeto);
 
-		
+		logger.info("validaToken" + validaToken);
 
-		 
+		if ("01".equals(validaToken)) {
+			logger.info("ENTRO!");
+			resultado = new JsonObject();
+			JsonObject Error = new JsonObject();
+			Error.addProperty("Err_Codigo", 403);
+			Error.addProperty("Err_Mensaj", "TOKEN INVLIDO");
+			resultado.add("Error", Error);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+			return resultado;
+		}
 		
 		/* 
 			Parametros obtenidos por medio del principal
-			Adi_Invers = 001935000030001 si es el token que mandan el el requestbody o ver de donde se obiene si es constante
-			Adi_InsLiq = 01 lo reguresa el SP 11,12 
-			Adi_MoReGr = 0 este numero es igual al de usuNumero de donde se obtiene
-			numtransac = 49646239
-		 */
+			Adi_MoReGr = 0 este numero de donde se obtiene pendiente validacion
+		*/
 		
-		String adiInvers = "001935000030001";
-		String adiinsLiq = "01";
 		int adimoReGr = 0;
 
 		JsonObject datosStatusActualizar = new JsonObject();
-		datosStatusActualizar.addProperty("Adi_Invers", adiInvers);
-		datosStatusActualizar.addProperty("Adi_InsLiq", adiinsLiq);
+		datosStatusActualizar.addProperty("Adi_Invers", inversion.has("Inv_Numero") ? inversion.get("Inv_Numero").getAsString() : "");
+		datosStatusActualizar.addProperty("Adi_InsLiq", inversionesStatusActualizarOpAdiInsLiq);
 		datosStatusActualizar.addProperty("Adi_MoReGr", adimoReGr);
 		datosStatusActualizar.addProperty("NumTransac", numTransac);
 		datosStatusActualizar.addProperty("Transaccio", inversionesStatusActualizarOpTransaccio);
@@ -1284,37 +1305,50 @@ public class InversionesCtrl implements Microservice {
 
 		/* 
 			Parametros obtenidos por medio del principal
-			Inv_Deposi = si es Inv_Cantid
-			Inv_rFecIn = fecha fin de vencimiento de invercion ant
-			Inv_rFecVe = fecha de sp de siguente fecha habil
-			Inv_rCanti = inv_cantidad o se calcula
-			Inv_rAutor = si es igual al Usuario 
+			Inv_Deposi = si es Inv_Cantid pendiente validacion 
+			Inv_rCanti = inv_cantidad o se calcula pendiente validacion
+			Inv_rISR = ISR validar 
 
-			Inv_rISR = ISR de inversion
-			Inv_rCuent
-
-			Adi_MoReGr = 0 este numero es igual al de usuNumero de donde se obtiene
-			numtransac = 49646239
+			Adi_MoReGr = 0 pendiente validacion
 		 */
-		
-		// String adiInvers = "001935000030001";
-		// String adiinsLiq = "01";
-		// int adimoReGr = 0;
+		JsonObject fechaHabil = fechaHabilConsultarOpResultadoObjeto.has("fechaHabil") ? fechaHabilConsultarOpResultadoObjeto.get("fechaHabil").getAsJsonObject() : new JsonObject();
 
-	
+		String sigFecha = fechaHabil.has("Fecha") ? fechaHabil.get("Fecha").getAsString() : "";
+
+		Date rfecVe = null;
+		logger.info("FECHA SIGUENTE HABIL" + sigFecha);
+		
+		try {
+			rfecVe = simpleDateFormat.parse(sigFecha);	
+		} catch (Exception e) {
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+				rfecVe = sdf.parse(sigFecha);
+			} catch (Exception ex) {
+				try {
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+					rfecVe = sdf.parse(sigFecha);
+				} catch (Exception ei) {
+					logger.info("Error en el formato de fecha.");
+				}
+			}
+		}
+		logger.info("***************" + rfecVe);
+
 
 
 		JsonObject datosInversionFinalizada = new JsonObject();
 		datosInversionFinalizada.addProperty("Inv_Numero", inversion.has("Inv_Numero") ? inversion.get("Inv_Numero").getAsString() : "");
 		datosInversionFinalizada.addProperty("Inv_Deposi", inversion.has("Inv_Cantid") ? inversion.get("Inv_Cantid").getAsDouble() : 0);
-		datosInversionFinalizada.addProperty("Inv_rFecIn", inversion.has("Inv_FecVen") ? inversion.get("Inv_FecVen").getAsString() : "");
-		datosInversionFinalizada.addProperty("Inv_rFecVe", fechaHabilConsultarOpResultadoObjeto.has("Fecha") ? fechaHabilConsultarOpResultadoObjeto.get("Fecha").getAsString() : "");
+		datosInversionFinalizada.addProperty("Inv_rFecIn", fecVen != null ? simpleDateFormat.format(fecVen) : "");
+		datosInversionFinalizada.addProperty("Inv_rFecVe", rfecVe != null ? simpleDateFormat.format(rfecVe) : "");
 		datosInversionFinalizada.addProperty("Inv_rCanti", inversion.has("Inv_Cantid") ? inversion.get("Inv_Cantid").getAsDouble() : 0);
 		datosInversionFinalizada.addProperty("Inv_rTasa", inversion.has("Inv_Tasa") ? inversion.get("Inv_Tasa").getAsDouble() : 0);
 		datosInversionFinalizada.addProperty("Inv_rAutor", inversionesImportesDeInvercionFinalizadaActualizarOpUsuari);
 		datosInversionFinalizada.addProperty("Inv_rISR", inversion.has("Inv_ISR") ? inversion.get("Inv_ISR").getAsDouble() : 0);
 		datosInversionFinalizada.addProperty("Inv_rCuent", inversion.has("Inv_Cuenta") ? inversion.get("Inv_Cuenta").getAsString() : "");
-		datosInversionFinalizada.addProperty("Inv_rTBrut", inversion.has("Inv_TBruta") ? inversion.get("Inv_TBruta").getAsString() : "");
+		datosInversionFinalizada.addProperty("Inv_rTBrut", inversion.has("Inv_TBruta") ? inversion.get("Inv_TBruta").getAsDouble() : 0);
+		datosInversionFinalizada.addProperty("NumTransac", numTransac);		
 		datosInversionFinalizada.addProperty("Transaccio", inversionesImportesDeInvercionFinalizadaActualizarOpTransaccio);
 		datosInversionFinalizada.addProperty("Usuario", inversionesImportesDeInvercionFinalizadaActualizarOpUsuari);
 		datosInversionFinalizada.addProperty("FechaSis", fechaSis);
