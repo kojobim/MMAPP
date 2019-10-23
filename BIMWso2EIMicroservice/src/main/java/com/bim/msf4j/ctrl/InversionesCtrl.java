@@ -1,8 +1,5 @@
 package com.bim.msf4j.ctrl;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,27 +14,27 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.log4j.Logger;
+import org.wso2.msf4j.Request;
+import org.wso2.msf4j.internal.MicroservicesRegistryImpl;
+
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Utilerias;
+import com.bim.msf4j.exceptions.BimExceptionMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import org.apache.log4j.Logger;
-import org.wso2.msf4j.Microservice;
-import org.wso2.msf4j.Request;
-
 @Path("/inversiones")
-public class InversionesCtrl implements Microservice {
+public class InversionesCtrl extends BimBaseCtrl {
 	
 	private static final Logger logger = Logger.getLogger(InversionesCtrl.class);
 	
-	private static Properties properties;
 	private static String DataServiceHost;
 	
 	private static String TransaccionServicio;
@@ -70,17 +67,8 @@ public class InversionesCtrl implements Microservice {
 	private static String InversionesPagareNumeroUsuarioObtenerOpModulo;
 
 	public InversionesCtrl() {
+		super();
 		logger.info("Ctrl: Empezando metodo init...");
-		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/services.properties")) {
-			properties = new Properties();
-			
-			if(inputStream != null) {
-				properties.load(inputStream);
-			}			
-		}
-		catch(IOException ioException) {
-			ioException.printStackTrace();
-		}
 		
 		FolioTransaccionGenerarOpSucOrigen = properties.getProperty("op.folio_transaccion_generar.suc_origen");
 		
@@ -546,4 +534,8 @@ public class InversionesCtrl implements Microservice {
 
 		return resultado;
     }
+	
+	private void addResourceToRegistry(MicroservicesRegistryImpl microservicesRegistryImpl) {
+		microservicesRegistryImpl.addExceptionMapper(new BimExceptionMapper());
+	}
 }
