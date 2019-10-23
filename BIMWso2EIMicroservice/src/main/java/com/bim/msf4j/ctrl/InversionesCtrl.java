@@ -18,9 +18,11 @@ import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
 import org.wso2.msf4j.internal.MicroservicesRegistryImpl;
 
+import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
 import com.bim.commons.exceptions.BadRequestException;
+import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Utilerias;
@@ -146,20 +148,33 @@ public class InversionesCtrl extends BimBaseCtrl {
 		if(page == null || perPage == null) 
 			throw new BadRequestException("BIM.MENSAJ.2");
 		
-		if(!Utilerias.isNumber(page))
-			throw new BadRequestException("BIM.MENSAJ.22");
+		if(!Utilerias.isNumber(page)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.9");
+			bimMessageDTO.addMergeVariable("page", page);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
 		
-		if(!Utilerias.isNumber(perPage))
-			throw new BadRequestException("BIM.MENSAJ.23");
+		if(!Utilerias.isNumber(perPage)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.22");
+			bimMessageDTO.addMergeVariable("perPage", perPage);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
 		
 		int pageValue = Integer.parseInt(page);
 		int perPageValue = Integer.parseInt(perPage);
 
-		if(pageValue <= 0)
-			throw new BadRequestException("BIM.MENSAJ.9");
+		if(pageValue <= 0) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.9");
+			bimMessageDTO.addMergeVariable("page", page);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
 		
-		if(perPageValue <= 0 || perPageValue > InversionesMaximoPagina)
-			throw new BadRequestException("BIM.MENSAJ.23");
+		if(perPageValue <= 0 || perPageValue > InversionesMaximoPagina) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.10");
+			bimMessageDTO.addMergeVariable("perPage", perPage);
+			bimMessageDTO.addMergeVariable("maximo", InversionesMaximoPagina.toString());
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
 
 		if(filterBy != null && !filterBy.equals(InversionesFilterBy))
 			throw new BadRequestException("BIM.MENSAJ.6");
