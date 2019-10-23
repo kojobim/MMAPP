@@ -3,6 +3,7 @@ package com.bim.msf4j.exceptions;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.ws.rs.core.MediaType;
@@ -10,11 +11,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 
+import org.stringtemplate.v4.ST;
+
+import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.BimException;
 import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.exceptions.ForbiddenException;
 import com.bim.commons.exceptions.UnauthorizedException;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 public class BimExceptionMapper implements ExceptionMapper<BimException> {
@@ -47,13 +52,20 @@ public class BimExceptionMapper implements ExceptionMapper<BimException> {
 		if(exception instanceof ForbiddenException)
 			status = Status.FORBIDDEN;
 		
-		String exceptionMessage = exception.getMessage();
-		System.out.println("exceptionMessage:" + exceptionMessage);
-		String mensaje = properties.getProperty(exceptionMessage);
-		System.out.println("mensaje: " + mensaje);
+		BimMessageDTO exceptionMessage = new Gson().fromJson(exception.getMessage(), BimMessageDTO.class);
+		String errCodigo = exceptionMessage.getCode();
+		
+		ST template = new ST(properties.getProperty(errCodigo));
+		
+		if(exceptionMessage.getMergeVariables() != null) 
+			for(Entry<String, String> entry : exceptionMessage.getMergeVariables().entrySet())
+				template.add(entry.getKey(), entry.getValue());
+			
+		String errMensaj = template.render().toString();
+		
 		JsonObject datosError = new JsonObject();
-		datosError.addProperty("Err_Codigo", exceptionMessage);
-		datosError.addProperty("Err_Mensaj", mensaje);
+		datosError.addProperty("Err_Codigo", errCodigo);
+		datosError.addProperty("Err_Mensaj", errMensaj);
 		JsonObject error = new JsonObject();
 		error.add("Error", datosError);
 		System.out.println("error: " + error);
