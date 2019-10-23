@@ -9,6 +9,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
@@ -131,7 +132,7 @@ public class LoginCtrl extends BimBaseCtrl {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public void login(JsonObject datosUsuario, @Context Request solicitud) {
+	public Response login(JsonObject datosUsuario, @Context Request solicitud) {
 		logger.info("CTRL: Comenzando login metodo");
 		logger.info("datosUsuario " + datosUsuario);
 		
@@ -289,10 +290,10 @@ public class LoginCtrl extends BimBaseCtrl {
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
 		
-//		if(!usuStaSes.equals("I")) {
-//			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.16");
-//			throw new ConflictException(bimMessageDTO.toString());
-//		}
+		if(!usuStaSes.equals("I")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.16");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
 		
 		if(usuStatus.equals("D")) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.17");
@@ -362,8 +363,6 @@ public class LoginCtrl extends BimBaseCtrl {
 		
 		logger.info(">>>>>>>>>>>>>usuPasCif: " + usuPasCif);
 		logger.info(">>>>>>>>>>>>>usuPasswo: " + usuario.get("Usu_Passwo"));
-		logger.info(">>>>>>>>>>>>equals? : " + usuario.get("Usu_Passwo").getAsString().trim().equals(usuPasCif));
-		logger.info(">>>>>>>>>>>>equals? : " + usuPasCif.equals(usuPasswo.trim()));
 		
 		if(!usuPasCif.equals(usuario.get("Usu_Passwo").getAsString().trim())) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.20");
@@ -513,6 +512,21 @@ public class LoginCtrl extends BimBaseCtrl {
 		bitacoraCreacionOpSolicitud.setMessage(bitacoraCreacionOpMensaje);
 		
 		HttpClientUtils.postPerform(bitacoraCreacionOpSolicitud);
+		
+		String usuClient = usuario.has("Usu_Client") ? usuario.get("Usu_Client").getAsString() : null;
+		String usuNombre = usuario.has("Usu_Nombre") ? usuario.get("Usu_Nombre").getAsString() : null;
+		String usuEmail = usuario.has("Usu_Email") ? usuario.get("Usu_Email").getAsString() : null;
+		String usuUsuAdm = usuario.has("Usu_UsuAdm") ? usuario.get("Usu_UsuAdm").getAsString() : null;
+		
+		JsonObject usuarioResultado = new JsonObject();
+		usuarioResultado.addProperty("usuClave ", usuClave);
+		usuarioResultado.addProperty("usuNumero ", usuNumero);
+		usuarioResultado.addProperty("usuClient ", usuClient);
+		usuarioResultado.addProperty("usuNombre ", usuNombre);
+		usuarioResultado.addProperty("usuEmail ", usuEmail);
+		usuarioResultado.addProperty("usuUsuAdm ", usuUsuAdm);
 		logger.info("CTRL: Terminando login metodo");
+		return Response.ok(usuarioResultado.toString(), MediaType.APPLICATION_JSON)
+				.build();
 	}
 }
