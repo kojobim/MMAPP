@@ -14,7 +14,7 @@ public class Filtrado {
 
 	private static final Logger logger = Logger.getLogger(Filtrado.class);
 	
-    public static JsonObject filtroInversiones(JsonArray inversionArray, int page, int per_page, String filter_by) {
+    public static JsonObject filtroInversiones(JsonArray inversionArray, Integer page, Integer per_page, String filter_by) {
 		logger.info("COMMONS: Comenzando filtroInversiones metodo");
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -104,13 +104,13 @@ public class Filtrado {
 		int cpTotalInvF = categoriaFijaArray.size();
 		int cpTotalInvC = categoriaCedeArray.size();
 		
-		categoriaFijaArray = Utilerias.paginado(categoriaFijaArray, page, per_page);
+		categoriaFijaArray = Utilerias.paginado(categoriaFijaArray, page.intValue(), per_page.intValue());
 		categoriaFija.add("inversiones", categoriaFijaArray);
-		categoriaValorArray = Utilerias.paginado(categoriaValorArray, page, per_page);
+		categoriaValorArray = Utilerias.paginado(categoriaValorArray, page.intValue(), per_page.intValue());
 		categoriaValor.add("inversiones", categoriaValorArray);
-		categoriaPagareArray = Utilerias.paginado(categoriaPagareArray, page, per_page);
+		categoriaPagareArray = Utilerias.paginado(categoriaPagareArray, page.intValue(), per_page.intValue());
 		categoriaPagare.add("inversiones", categoriaPagareArray);
-		categoriaCedeArray = Utilerias.paginado(categoriaCedeArray, page, per_page);
+		categoriaCedeArray = Utilerias.paginado(categoriaCedeArray, page.intValue(), per_page.intValue());
 		categoriaCede.add("inversiones", categoriaCedeArray);
 		
 		categoriaFija.addProperty("cpTotalInvCantid", cpTotalInvCantidF);

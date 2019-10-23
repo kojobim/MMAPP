@@ -1,8 +1,5 @@
 package com.bim.msf4j.ctrl;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,26 +14,27 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.log4j.Logger;
+import org.wso2.msf4j.Request;
+import org.wso2.msf4j.internal.MicroservicesRegistryImpl;
+
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
+import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Utilerias;
+import com.bim.msf4j.exceptions.BimExceptionMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import org.apache.log4j.Logger;
-import org.wso2.msf4j.Microservice;
-import org.wso2.msf4j.Request;
-
 @Path("/inversiones")
-public class InversionesCtrl implements Microservice {
+public class InversionesCtrl extends BimBaseCtrl {
 	
 	private static final Logger logger = Logger.getLogger(InversionesCtrl.class);
 	
-	private static Properties properties;
 	private static String DataServiceHost;
 	
 	private static String TransaccionServicio;
@@ -79,17 +77,8 @@ public class InversionesCtrl implements Microservice {
 	private static String HorarioInversionOpModulo;
 
 	public InversionesCtrl() {
+		super();
 		logger.info("Ctrl: Empezando metodo init...");
-		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/services.properties")) {
-			properties = new Properties();
-			
-			if(inputStream != null) {
-				properties.load(inputStream);
-			}			
-		}
-		catch(IOException ioException) {
-			ioException.printStackTrace();
-		}
 		
 		FolioTransaccionGenerarOpSucOrigen = properties.getProperty("op.folio_transaccion_generar.suc_origen");
 		
@@ -145,9 +134,15 @@ public class InversionesCtrl implements Microservice {
 	@GET()
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public JsonObject inversionesListado(@QueryParam("page") int page, @QueryParam("per_page") int per_page, @QueryParam("filter_by") String filter_by, @Context final Request solicitud) {
+	public JsonObject inversionesListado(@QueryParam("page") Integer page, @QueryParam("per_page") Integer per_page, @QueryParam("filter_by") String filter_by, @Context final Request solicitud) {
 		logger.info("CTRL: Comenzando inversionesListado metodo");
+
+		logger.info("page " + page);
+		logger.info("per_page " + per_page);
 		
+		if(page == null || per_page == null) 
+			throw new BadRequestException("BIM.MENSAJ.2");
+			
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
 		String fechaSis = simpleDateFormat.format(fecha);
@@ -181,8 +176,8 @@ public class InversionesCtrl implements Microservice {
 		
 		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
-		String bit_PriRef = solicitud.getHeader("User-Agent");
-		String bit_DireIP = solicitud.getHeader("X-Forwarded-For");
+		String bit_DireIP = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("User-Agent") : "";
+		String bit_PriRef = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("X-Forwarded-For") : "";
 		
 		/* 
 			Parametros obtenidos por medio del principal 
@@ -720,5 +715,9 @@ public class InversionesCtrl implements Microservice {
 		}
 
 		return resultado;
+    }
+	
+	private void addResourceToRegistry(MicroservicesRegistryImpl microservicesRegistryImpl) {
+		microservicesRegistryImpl.addExceptionMapper(new BimExceptionMapper());
 	}
 }
