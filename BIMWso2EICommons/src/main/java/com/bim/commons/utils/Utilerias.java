@@ -104,7 +104,7 @@ public class Utilerias {
 	}
 	
 	public static Boolean isNumber(String value) {
-		logger.info("COMMONS: Finalizando isNumber metodo...");
+		logger.info("COMMONS: Iniciando isNumber metodo...");
 		String regex = "\\d";		
 		logger.info("COMMONS: Finalizando isNumber metodo...");
 		return value.matches(regex);
