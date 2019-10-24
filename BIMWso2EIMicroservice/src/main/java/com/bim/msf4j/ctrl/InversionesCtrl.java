@@ -13,10 +13,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.apache.log4j.Logger;
-import org.wso2.msf4j.Request;
-import org.wso2.msf4j.internal.MicroservicesRegistryImpl;
-
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
@@ -30,6 +26,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import org.apache.log4j.Logger;
+import org.wso2.msf4j.Request;
+import org.wso2.msf4j.internal.MicroservicesRegistryImpl;
 
 @Path("/inversiones")
 public class InversionesCtrl extends BimBaseCtrl {
@@ -79,6 +79,10 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 	private static String InversionesFilterBy;
 	private static Integer InversionesMaximoPagina;
+	private static String InversionesCategoriaFija;
+	private static String InversionesCategoriaValor;
+	private static String InversionesCategoriaCedeRi;
+	private static String InversionesCategoriaPagare;
 	
 	public InversionesCtrl() {
 		super();
@@ -133,6 +137,10 @@ public class InversionesCtrl extends BimBaseCtrl {
 		
 		InversionesFilterBy = properties.getProperty("inversiones_servicio.filter_by");
 		InversionesMaximoPagina = Integer.parseInt(properties.getProperty("inversiones_servicio.maximo_pagina"));
+		InversionesCategoriaFija = properties.getProperty("inversiones_servicio.categoria.fija");
+		InversionesCategoriaValor = properties.getProperty("inversiones_servicio.categoria.valor");
+		InversionesCategoriaCedeRi = properties.getProperty("inversiones_servicio.categoria.cede_ri");
+		InversionesCategoriaPagare = properties.getProperty("inversiones_servicio.categoria.pagare");
 		
 		logger.info("Ctrl: Terminando metodo init...");
 	}
@@ -445,6 +453,20 @@ public class InversionesCtrl extends BimBaseCtrl {
 	public JsonObject detalleInversion(@PathParam("invNumero") String invNumero,
 			@QueryParam("categoria") String categoria, @Context final Request solicitud) {
 		logger.info("CTRL: Empezando detalleInversion Method...");
+
+		if(!Utilerias.isNumber(invNumero)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.23");
+			bimMessageDTO.addMergeVariable("invNumero", invNumero);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+
+		if(!InversionesCategoriaFija.equals(categoria) && !InversionesCategoriaValor.equals(categoria)
+			&& !InversionesCategoriaCedeRi.equals(categoria) && !InversionesCategoriaPagare.equals(categoria)) {
+				BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.24");
+				bimMessageDTO.addMergeVariable("categoria", categoria);
+				throw new BadRequestException(bimMessageDTO.toString());
+		}
+
 		SimpleDateFormat simpleDateFormatSis = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
 		String fechaSis = simpleDateFormatSis.format(fecha);
@@ -541,7 +563,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 				.append(InversionesServicio)
 				.append("/");
 
-		if ("PAGARE".equals(categoria)) {
+		if (InversionesCategoriaPagare.equals(categoria)) {
 			datosInversion.addProperty("Inv_Numero", "");
 			datosInversion.addProperty("Inv_Usuari", usuNumero);
 			datosInversion.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
@@ -655,7 +677,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 				double invGat = 0;
 				double invGatRea = 0;
 
-				if ("PAGARE".equalsIgnoreCase(categoria)) {
+				if (InversionesCategoriaPagare.equals(categoria)) {
 					invGat = inversionObj.has("Inv_GAT") ? inversionObj.get("Inv_GAT").getAsDouble() : 0;
 					invGatRea = inversionObj.has("Inv_GATRea") ? inversionObj.get("Inv_GATRea").getAsDouble() : 0;
 					plazo = inversionObj.has("Inv_Plazo") ? inversionObj.get("Inv_Plazo").getAsInt() : 0;
@@ -742,11 +764,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 		}
 
 		if(resultado == null) {
-			resultado = new JsonObject();
-			JsonObject Error = new JsonObject();
-			Error.addProperty("Err_Codigo", 409);
-			Error.addProperty("Err_Mensaj", "Numero de inversion invalido");
-			resultado.add("Error", Error);
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.25");
+			bimMessageDTO.addMergeVariable("invNumero", invNumero);
+			throw new ConflictException(bimMessageDTO.toString());
 		}
 
 		return resultado;
