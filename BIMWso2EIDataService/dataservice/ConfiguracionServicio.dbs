@@ -72,6 +72,77 @@
             <element column="Hor_DiaHab" name="Hor_DiaHab" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="informacionSucursalObtenerSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE SOPARAMSCON
+            @Par_Sucurs= :parSucurs,
+    		@Tip_Consul= :tipConsul,
+    		@NumTransac= :numTransac,
+    		@Transaccio= :transaccio,
+    		@Usuario= :usuario,
+    		@FechaSis= :fechaSis,
+    		@SucOrigen= :sucOrigen,
+    		@SucDestino= :sucDestino,
+    		@Modulo = :modulo
+    	</sql>
+        <param name="parSucurs" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result element="informacionSucursal">
+            <element column="Par_Sucurs" name="Par_Sucurs" xsdType="xs:string" optional="true"/>
+            <element column="Par_CheCaj" name="Par_CheCaj" xsdType="xs:integer" optional="true"/>
+            <element column="Par_IVA" name="Par_IVA" xsdType="xs:double" optional="true"/>
+            <element column="Par_ISR" name="Par_ISR" xsdType="xs:double" optional="true"/>
+            <element column="Par_DiBaIn" name="Par_DiBaIn" xsdType="xs:integer" optional="true"/>
+            <element column="Par_DiBaCr" name="Par_DiBaCr" xsdType="xs:integer" optional="true"/>
+            <element column="Par_DiBaCh" name="Par_DiBaCh" xsdType="xs:integer" optional="true"/>
+            <element column="Par_ChLey1" name="Par_ChLey1" xsdType="xs:string" optional="true"/>
+            <element column="Par_ChLey2" name="Par_ChLey2" xsdType="xs:string" optional="true"/>
+            <element column="Par_ChLey3" name="Par_ChLey3" xsdType="xs:string" optional="true"/>
+            <element column="Par_CheCer" name="Par_CheCer" xsdType="xs:string" optional="true"/>
+            <element column="Par_DiaRem" name="Par_DiaRem" xsdType="xs:integer" optional="true"/>
+            <element column="Par_LimAut" name="Par_LimAut" xsdType="xs:double" optional="true"/>
+            <element column="Par_TranBR" name="Par_TranBR" xsdType="xs:string" optional="true"/>
+            <element column="Par_CliInd" name="Par_CliInd" xsdType="xs:integer" optional="true"/>
+            <element column="Par_BanFol" name="Par_BanFol" xsdType="xs:integer" optional="true"/>
+            <element column="Par_FecAct" name="Par_FecAct" xsdType="xs:dateTime" optional="true"/>
+            <element column="Par_CoCoIn" name="Par_CoCoIn" xsdType="xs:double" optional="true"/>
+            <element column="Par_CoReme" name="Par_CoReme" xsdType="xs:double" optional="true"/>
+            <element column="Par_OpeBan" name="Par_OpeBan" xsdType="xs:integer" optional="true"/>
+            <element column="Par_ConPap" name="Par_ConPap" xsdType="xs:integer" optional="true"/>
+            <element column="Par_MonCom" name="Par_MonCom" xsdType="xs:string" optional="true"/>
+            <element column="Par_LinSob" name="Par_LinSob" xsdType="xs:string" optional="true"/>
+            <element column="Par_EnvSPE" name="Par_EnvSPE" xsdType="xs:integer" optional="true"/>
+            <element column="Par_Banco" name="Par_Banco" xsdType="xs:string" optional="true"/>
+            <element column="Par_ComRem" name="Par_ComRem" xsdType="xs:string" optional="true"/>
+            <element column="Par_IvaRem" name="Par_IvaRem" xsdType="xs:string" optional="true"/>
+            <element column="Par_RemExt" name="Par_RemExt" xsdType="xs:string" optional="true"/>
+            <element column="Par_IVAREX" name="Par_IVAREX" xsdType="xs:string" optional="true"/>
+            <element column="Par_GiBaEx" name="Par_GiBaEx" xsdType="xs:string" optional="true"/>
+            <element column="Par_GiBaNa" name="Par_GiBaNa" xsdType="xs:string" optional="true"/>
+            <element column="Par_IVAGBN" name="Par_IVAGBN" xsdType="xs:string" optional="true"/>
+            <element column="Par_IVAGBE" name="Par_IVAGBE" xsdType="xs:string" optional="true"/>
+            <element column="Par_ComSPE" name="Par_ComSPE" xsdType="xs:string" optional="true"/>
+            <element column="Par_IVASPE" name="Par_IVASPE" xsdType="xs:string" optional="true"/>
+            <element column="Par_NumTes" name="Par_NumTes" xsdType="xs:string" optional="true"/>
+            <element column="Par_IncISR" name="Par_IncISR" xsdType="xs:string" optional="true"/>
+            <element column="Par_InsISR" name="Par_InsISR" xsdType="xs:string" optional="true"/>
+            <element column="Par_SPEUA" name="Par_SPEUA" xsdType="xs:string" optional="true"/>
+            <element column="Par_SIAC" name="Par_SIAC" xsdType="xs:string" optional="true"/>
+            <element column="Par_CobInm" name="Par_CobInm" xsdType="xs:string" optional="true"/>
+            <element column="Par_FecRem" name="Par_FecRem" xsdType="xs:dateTime" optional="true"/>
+            <element column="Par_IntBan" name="Par_IntBan" xsdType="xs:string" optional="true"/>
+            <element column="Par_Compan" name="Par_Compan" xsdType="xs:string" optional="true"/>
+            <element column="Tip_Fecha" name="Tip_Fecha" xsdType="xs:string" optional="true"/>
+            <element column="Suc_UltDia" name="Suc_UltDia" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
     <operation name="configuracionBancoDetalleOp">
         <call-query href="configuracionBancoDetalleSQL">
             <with-param name="tipConsul" query-param="Tip_Consul"/>
@@ -90,6 +161,20 @@
             <with-param name="tipTransf" query-param="Tip_Transf"/>
             <with-param name="errCodigo" query-param="Err_Codigo"/>
             <with-param name="msjError" query-param="Msj_Error"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="informacionSucursalObtenerOp">
+        <call-query href="informacionSucursalObtenerSQL">
+        <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="parSucurs" query-param="Par_Sucurs"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
