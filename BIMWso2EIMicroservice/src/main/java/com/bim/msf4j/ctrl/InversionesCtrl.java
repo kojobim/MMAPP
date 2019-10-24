@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.dto.MessageProxyDTO;
@@ -149,7 +150,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 	@GET()
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public JsonObject inversionesListado(@QueryParam("page") String page, @QueryParam("per_page") String perPage, @QueryParam("filter_by") String filterBy, @Context final Request solicitud) {
+	public Response inversionesListado(@QueryParam("page") String page, @QueryParam("per_page") String perPage, @QueryParam("filter_by") String filterBy, @Context final Request solicitud) {
 		logger.info("CTRL: Comenzando inversionesListado metodo");
 		
 		if(page == null || perPage == null) 
@@ -444,13 +445,14 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject inversionesResultadoFinal = Filtrado.filtroInversiones(inversionesResultado, pageValue, perPageValue, filterBy);
 		
 		logger.info("CTRL: Terminando login metodo");	
-		return inversionesResultadoFinal;
+		return Response.ok(inversionesResultadoFinal.toString(), MediaType.APPLICATION_JSON)
+				.build();
 	}
 
 	@Path("{invNumero}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public JsonObject detalleInversion(@PathParam("invNumero") String invNumero,
+	public Response detalleInversion(@PathParam("invNumero") String invNumero,
 			@QueryParam("categoria") String categoria, @Context final Request solicitud) {
 		logger.info("CTRL: Empezando detalleInversion Method...");
 
@@ -769,7 +771,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 			throw new ConflictException(bimMessageDTO.toString());
 		}
 
-		return resultado;
+		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
+				.build();
     }
 	
 	private void addResourceToRegistry(MicroservicesRegistryImpl microservicesRegistryImpl) {
