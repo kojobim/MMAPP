@@ -1,7 +1,8 @@
 package com.bim.commons.dto;
 
+import javax.xml.soap.SOAPElement;
+
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 
 public class SOAPRequestDTO {
 	
@@ -9,10 +10,9 @@ public class SOAPRequestDTO {
 	private String soapAction;
 	private String namespace;
 	private String namespaceUrl;
-	private String parentName;
-	private String childNamespace;
-	private String childNamesapacePrefix;
-	private JsonElement data;
+	private SOAPElement soapElementBody;
+	private String soapRequestPrefix;
+
 
 	public String getNamespace() {
 		return namespace;
@@ -28,22 +28,6 @@ public class SOAPRequestDTO {
 
 	public void setNamespaceUrl(String namespaceUrl) {
 		this.namespaceUrl = namespaceUrl;
-	}
-
-	public String getParentName() {
-		return parentName;
-	}
-
-	public void setParentName(String parentName) {
-		this.parentName = parentName;
-	}
-
-	public JsonElement getData() {
-		return data;
-	}
-
-	public void setData(JsonElement data) {
-		this.data = data;
 	}
 
 	public String getSoapEnpoint() {
@@ -62,20 +46,20 @@ public class SOAPRequestDTO {
 		this.soapAction = soapAction;
 	}
 
-	public String getChildNamespace() {
-		return childNamespace;
+	public SOAPElement getSoapElementBody() {
+		return soapElementBody;
 	}
 
-	public void setChildNamespace(String childNamespace) {
-		this.childNamespace = childNamespace;
+	public void setSoapElementBody(SOAPElement soapElementBody) {
+		this.soapElementBody = soapElementBody;
 	}
 
-	public String getChildNamesapacePrefix() {
-		return childNamesapacePrefix;
+	public String getSoapRequestPrefix() {
+		return soapRequestPrefix;
 	}
 
-	public void setChildNamesapacePrefix(String childNamesapacePrefix) {
-		this.childNamesapacePrefix = childNamesapacePrefix;
+	public void setSoapRequestPrefix(String soapRequestPrefix) {
+		this.soapRequestPrefix = soapRequestPrefix;
 	}
 
 	@Override
