@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.util.Map.Entry;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
@@ -41,6 +43,39 @@ public class HttpClientUtils {
 			post.setHeader("Accept", "application/json");
 			post.setHeader("Content-Type", "application/json");
 			CloseableHttpResponse response = client.execute(post);
+			InputStream inputStream = response.getEntity().getContent();
+			String json = IOUtils.toString(inputStream);
+			client.close();
+			return json;
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static String getPerform(RequestDTO request) {
+		try {
+			System.out.println("$$$$$$$RequestDTO$$$$$" +  request.toString());
+			CloseableHttpClient client = HttpClients.createDefault();
+			final URIBuilder uriBuilder = new URIBuilder(request.getUrl());
+			
+			HttpGet get = new HttpGet(uriBuilder.build());
+			
+			if(request.getHeaders() != null) {
+				for(Entry<String, String> header : request.getHeaders().entrySet())
+					get.setHeader(header.getKey(), header.getValue());
+			}
+			else {
+				get.setHeader("Accept", "application/json");
+				get.setHeader("Content-Type", "application/json");
+			}
+			CloseableHttpResponse response = client.execute(get);
 			InputStream inputStream = response.getEntity().getContent();
 			String json = IOUtils.toString(inputStream);
 			client.close();
