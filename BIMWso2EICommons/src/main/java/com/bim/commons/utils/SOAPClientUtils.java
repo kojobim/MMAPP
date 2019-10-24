@@ -37,7 +37,7 @@ public class SOAPClientUtils {
 		}
 	}
 	
-	private static void createSoapEnvelope(SOAPMessage soapMessage ,SOAPRequestDTO soapRequestDTO) throws SOAPException {
+	private static void createSoapEnvelope(SOAPMessage soapMessage, SOAPRequestDTO soapRequestDTO) throws SOAPException {
 		System.out.println("COMMONS: Empezando metodo createSoapEnvelope...");
 		System.out.println("soapMessage: " + soapMessage.toString());
 		System.out.println("soapRequestDTO " + soapRequestDTO.toString());
