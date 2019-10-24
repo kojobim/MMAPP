@@ -14,6 +14,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
 import com.bim.commons.exceptions.BadRequestException;
@@ -60,12 +61,14 @@ public class InversionesCtrl extends BimBaseCtrl {
 	private static String tasaClienteConsultarOp;
 	private static String tasaMonedaConsultarOp;
 	private static String tasaGATConsultaCalcularOp;
-	private static String tasaGATReaConsultaCalcularOp;
+	private static String tasaGATRealConsultaCalcularOp;
 	private static String intentosActualizacionOp;
 	private static String inversionesStatusActualizarOp;
 	private static String inversionesImportesDeInvercionFinalizadaActualizarOp;
 	private static String HorarioInversionOp;
 	private static String InformacionSucursalObtenerOp;
+	private static String inversionesProcesoLiquidacionGenerarOp;
+	private static String inversionesContraEstadoCuentaActualizarOp;
 
 	private static String FolioTransaccionGenerarOpSucOrigen;
 	private static String BitacoraCreacionOpBitTipOpe;
@@ -93,12 +96,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 	private static String ClienteConsultarOpSucOrigen;
 	private static String ClienteConsultarOpSucDestino;
 	private static String ClienteConsultarOpModulo;	
-	private static String CuentaOrigenConsultarOpTipConsul;
-	private static String CuentaOrigenConsultarOpTransaccio;
-	private static String CuentaOrigenConsultarOpUsuari;
-	private static String CuentaOrigenConsultarOpSucOrigen;
-	private static String CuentaOrigenConsultarOpSucDestino;
-	private static String CuentaOrigenConsultarOpModulo;
 	private static String UsuarioPerfilRiesgoConsultarOpTipConsul;
 	private static String UsuarioPerfilRiesgoConsultarOpTransaccio;
 	private static String UsuarioPerfilRiesgoConsultarOpUsuari;
@@ -165,7 +162,20 @@ public class InversionesCtrl extends BimBaseCtrl {
 	private static String informacionSucursalObtenerOpSucOrigen;
 	private static String informacionSucursalObtenerOpSucDestino;
 	private static String informacionSucursalObtenerOpModulo;
+	private static String inversionesProcesoLiquidacionGenerarOpTransaccio;
+	private static String inversionesProcesoLiquidacionGenerarOpUsuari;
+	private static String inversionesProcesoLiquidacionGenerarOpSucOrigen;
+	private static String inversionesProcesoLiquidacionGenerarOpSucDestino;
+	private static String inversionesProcesoLiquidacionGenerarOpModulo;
+	private static String inversionesContraEstadoCuentaActualizarOpTransaccio;
+	private static String inversionesContraEstadoCuentaActualizarOpUsuari;
+	private static String inversionesContraEstadoCuentaActualizarOpSucOrigen;
+	private static String inversionesContraEstadoCuentaActualizarOpSucDestino;
+	private static String inversionesContraEstadoCuentaActualizarOpModulo;
 
+	private static String InversionesFilterBy;
+	private static Integer InversionesMaximoPagina;
+	
 	public InversionesCtrl() {
 		super();
 		logger.info("Ctrl: Empezando metodo init...");
@@ -200,13 +210,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		ClienteConsultarOpSucOrigen = properties.getProperty("op.tasa_cliente_consultar.suc_origen");
 		ClienteConsultarOpSucDestino = properties.getProperty("op.tasa_cliente_consultar.suc_destino");
 		ClienteConsultarOpModulo = properties.getProperty("op.tasa_cliente_consultar.modulo");
-
-		CuentaOrigenConsultarOpTipConsul = properties.getProperty("op.cuenta_origen_consultar.tip_consul");
-		CuentaOrigenConsultarOpTransaccio  = properties.getProperty("op.cuenta_origen_consultar.transaccio");
-		CuentaOrigenConsultarOpUsuari = properties.getProperty("op.cuenta_origen_consultar.usuario");
-		CuentaOrigenConsultarOpSucOrigen = properties.getProperty("op.cuenta_origen_consultar.suc_origen");
-		CuentaOrigenConsultarOpSucDestino = properties.getProperty("op.cuenta_origen_consultar.suc_destino");
-		CuentaOrigenConsultarOpModulo = properties.getProperty("op.cuenta_origen_consultar.modulo");
 
 		UsuarioPerfilRiesgoConsultarOpAplClient = properties.getProperty("op.usuario_perfil_riesgo_consultar.apl_cuesti");
 		UsuarioPerfilRiesgoConsultarOpTipConsul = properties.getProperty("op.usuario_perfil_riesgo_consultar.tip_consul");
@@ -270,6 +273,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		inversionesImportesDeInvercionFinalizadaActualizarOpSucOrigen = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.suc_origen");
 		inversionesImportesDeInvercionFinalizadaActualizarOpSucDestino = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.suc_destino");
 		inversionesImportesDeInvercionFinalizadaActualizarOpModulo = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.modulo");
+
 		HorarioInversionOpTipConsul = properties.getProperty("op.horario_inversion.tip_consul");
 		HorarioInversionOpTipTransf = properties.getProperty("op.horario_inversion.tip_transf");
 		HorarioInversionOpTransaccio = properties.getProperty("op.horario_inversion.transaccio");
@@ -277,6 +281,18 @@ public class InversionesCtrl extends BimBaseCtrl {
 		HorarioInversionOpSucOrigen = properties.getProperty("op.horario_inversion.suc_origen");
 		HorarioInversionOpSucDestino = properties.getProperty("op.horario_inversion.suc_destino");
 		HorarioInversionOpModulo = properties.getProperty("op.horario_inversion.modulo");
+		
+		inversionesProcesoLiquidacionGenerarOpTransaccio  = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.transaccio");
+		inversionesProcesoLiquidacionGenerarOpUsuari = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.usuario");
+		inversionesProcesoLiquidacionGenerarOpSucOrigen = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.suc_origen");
+		inversionesProcesoLiquidacionGenerarOpSucDestino = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.suc_destino");
+		inversionesProcesoLiquidacionGenerarOpModulo = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.modulo");
+				
+		inversionesContraEstadoCuentaActualizarOpTransaccio  = properties.getProperty("op.inversiones_proceso_liquidacion_generar.transaccio");
+		inversionesContraEstadoCuentaActualizarOpUsuari = properties.getProperty("op.inversiones_proceso_liquidacion_generar.usuario");
+		inversionesContraEstadoCuentaActualizarOpSucOrigen = properties.getProperty("op.inversiones_proceso_liquidacion_generar.suc_origen");
+		inversionesContraEstadoCuentaActualizarOpSucDestino = properties.getProperty("op.inversiones_proceso_liquidacion_generar.suc_destino");
+		inversionesContraEstadoCuentaActualizarOpModulo = properties.getProperty("op.inversiones_proceso_liquidacion_generar.modulo");
 		
 		DataServiceHost = properties.getProperty("data_service.host");
 		
@@ -304,13 +320,19 @@ public class InversionesCtrl extends BimBaseCtrl {
 		tasaClienteConsultarOp = properties.getProperty("tasa_servicio.op.tasa_cliente_consultar");
 		tasaMonedaConsultarOp = properties.getProperty("tasa_servicio.op.tasa_moneda_consultar");
 		tasaGATConsultaCalcularOp = properties.getProperty("tasa_servicio.op.tasa_gat_consulta_calcular");
-		tasaGATReaConsultaCalcularOp = properties.getProperty("tasa_servicio.op.tasa_gat_rea_consulta_calcular");
+		tasaGATRealConsultaCalcularOp = properties.getProperty("tasa_servicio.op.tasa_gat_rea_consulta_calcular");
 		intentosActualizacionOp = properties.getProperty("token_servicio.op.intentos_actualizacion");
 		inversionesStatusActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_status_actualizar");
 		inversionesImportesDeInvercionFinalizadaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_importes_de_invercion_finalizada_actualizar");
 		HorarioInversionOp = properties.getProperty("configuracion_servicio.op.horario_inversion");
 		InformacionSucursalObtenerOp = properties.getProperty("configuracion_servicio.op.informacion_sucursal_obtener");
+		inversionesProcesoLiquidacionGenerarOp = properties.getProperty("inversiones_servicio.op.inversiones_proceso_liquidacion_generar");
+		inversionesContraEstadoCuentaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_contra_estado_cuenta_actualizar");
 
+		
+		InversionesFilterBy = properties.getProperty("inversiones_servicio.filter_by");
+		InversionesMaximoPagina = Integer.parseInt(properties.getProperty("inversiones_servicio.maximo_pagina"));
+		
 		logger.info("Ctrl: Terminando metodo init...");
 	}
 	
@@ -318,15 +340,43 @@ public class InversionesCtrl extends BimBaseCtrl {
 	@GET()
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public JsonObject inversionesListado(@QueryParam("page") Integer page, @QueryParam("per_page") Integer per_page, @QueryParam("filter_by") String filter_by, @Context final Request solicitud) {
+	public JsonObject inversionesListado(@QueryParam("page") String page, @QueryParam("per_page") String perPage, @QueryParam("filter_by") String filterBy, @Context final Request solicitud) {
 		logger.info("CTRL: Comenzando inversionesListado metodo");
-
-		logger.info("page " + page);
-		logger.info("per_page " + per_page);
 		
-		if(page == null || per_page == null) 
+		if(page == null || perPage == null) 
 			throw new BadRequestException("BIM.MENSAJ.2");
-			
+		
+		if(!Utilerias.isNumber(page)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.9");
+			bimMessageDTO.addMergeVariable("page", page);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		if(!Utilerias.isNumber(perPage)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.22");
+			bimMessageDTO.addMergeVariable("perPage", perPage);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		int pageValue = Integer.parseInt(page);
+		int perPageValue = Integer.parseInt(perPage);
+
+		if(pageValue <= 0) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.9");
+			bimMessageDTO.addMergeVariable("page", page);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		if(perPageValue <= 0 || perPageValue > InversionesMaximoPagina) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.10");
+			bimMessageDTO.addMergeVariable("perPage", perPage);
+			bimMessageDTO.addMergeVariable("maximo", InversionesMaximoPagina.toString());
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+
+		if(filterBy != null && !filterBy.equals(InversionesFilterBy))
+			throw new BadRequestException("BIM.MENSAJ.6");
+
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
 		String fechaSis = simpleDateFormat.format(fecha);
@@ -582,7 +632,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			inversionResultadoObjeto.addProperty("cpRenInv", cpRenInv);
 		});
 		logger.info("inversionesResultado " +  inversionesResultado);
-		JsonObject inversionesResultadoFinal = Filtrado.filtroInversiones(inversionesResultado, page, per_page, filter_by);
+		JsonObject inversionesResultadoFinal = Filtrado.filtroInversiones(inversionesResultado, pageValue, perPageValue, filterBy);
 		
 		logger.info("CTRL: Terminando login metodo");	
 		return inversionesResultadoFinal;
@@ -914,7 +964,12 @@ public class InversionesCtrl extends BimBaseCtrl {
 				e.printStackTrace();
 			}
 			JsonObject inversionesObjeto = new Gson().fromJson(mensaje, JsonObject.class);
-			JsonObject renovarInversion = inversionesObjeto.getAsJsonObject("renovarInversion");		
+			JsonObject renovarInversion = inversionesObjeto.getAsJsonObject("renovarInversion");				
+		
+		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
+		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
+		String bit_PriRef = solicitud.getHeader("User-Agent");
+		String bit_DireIP = solicitud.getHeader("X-Forwarded-For");
 	
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
@@ -1348,9 +1403,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			invGAT = GATConsultaCalcular.has("Inv_GAT") ? GATConsultaCalcular.get("Inv_GAT").getAsDouble() : 0;			
 
 			/* 
-				Parametros obtenidos por medio del principal
-				Mon_Comisi = 0 de donde se obtiene pendiente para validar
-				cueMonInv = 509000 a Inv_cantidad de inversion pendiende validar
+				STORED PROCEDURE INCALINFPRO
 			*/		
 
 			JsonObject datosGATRea = new JsonObject();
@@ -1365,32 +1418,32 @@ public class InversionesCtrl extends BimBaseCtrl {
 			datosGATRea.addProperty("Modulo", tasaGATReaConsultaCalcularOpModulo);
 
 			logger.info("datosGATRea" + datosGATRea);
-			StringBuilder tasaGATReaConsultaCalcularUrl = new StringBuilder()
+			StringBuilder tasaGATRealConsultaCalcularUrl = new StringBuilder()
 					.append(DataServiceHost)
 					.append("/")
 					.append(TasaServicio)
 					.append("/")
-					.append(tasaGATReaConsultaCalcularOp);
-			JsonObject tasaGATReaConsultaCalcularOp = new JsonObject();
-			tasaGATReaConsultaCalcularOp.add("tasaGATReaConsultaCalcularOp", datosGATRea);
-			logger.info("tasaGATReaConsultaCalcularOp" + tasaGATReaConsultaCalcularOp);
+					.append(tasaGATRealConsultaCalcularOp);
+			JsonObject tasaGATRealConsultaCalcularOp = new JsonObject();
+			tasaGATRealConsultaCalcularOp.add("tasaGATRealConsultaCalcularOp", datosGATRea);
+			logger.info("tasaGATRealConsultaCalcularOp" + tasaGATRealConsultaCalcularOp);
 
-			RequestDTO tasaGATReaConsultaCalcularOpSolicitud = new RequestDTO();
-			tasaGATReaConsultaCalcularOpSolicitud.setUrl(tasaGATReaConsultaCalcularUrl.toString());
-			MessageProxyDTO tasaGATReaConsultaCalcularOpMensaje= new MessageProxyDTO();
-			tasaGATReaConsultaCalcularOpMensaje.setBody(tasaGATReaConsultaCalcularOp.toString());
-			tasaGATReaConsultaCalcularOpSolicitud.setMessage(tasaGATReaConsultaCalcularOpMensaje);
+			RequestDTO tasaGATRealConsultaCalcularOpSolicitud = new RequestDTO();
+			tasaGATRealConsultaCalcularOpSolicitud.setUrl(tasaGATRealConsultaCalcularUrl.toString());
+			MessageProxyDTO tasaGATRealConsultaCalcularOpMensaje= new MessageProxyDTO();
+			tasaGATRealConsultaCalcularOpMensaje.setBody(tasaGATRealConsultaCalcularOp.toString());
+			tasaGATRealConsultaCalcularOpSolicitud.setMessage(tasaGATRealConsultaCalcularOpMensaje);
 
-			String tasaGATReaConsultaCalcularOpResultado = HttpClientUtils.postPerform(tasaGATReaConsultaCalcularOpSolicitud);
-			JsonObject tasaGATReaConsultaCalcularOpResultadoObjeto = new Gson().fromJson(tasaGATReaConsultaCalcularOpResultado, JsonObject.class);
-			logger.info("tasaGATReaConsultaCalcularOpResultadoObjeto" + tasaGATReaConsultaCalcularOpResultadoObjeto);
+			String tasaGATRealConsultaCalcularOpResultado = HttpClientUtils.postPerform(tasaGATRealConsultaCalcularOpSolicitud);
+			JsonObject tasaGATRealConsultaCalcularOpResultadoObjeto = new Gson().fromJson(tasaGATRealConsultaCalcularOpResultado, JsonObject.class);
+			logger.info("tasaGATRealConsultaCalcularOpResultadoObjeto" + tasaGATRealConsultaCalcularOpResultadoObjeto);
 
-			JsonObject GATRealConsultaCalcular = tasaGATReaConsultaCalcularOpResultadoObjeto.has("GATRealConsultaCalcular") ? tasaGATReaConsultaCalcularOpResultadoObjeto.get("GATRealConsultaCalcular").getAsJsonObject() : new JsonObject();
+			JsonObject GATRealConsultaCalcular = tasaGATRealConsultaCalcularOpResultadoObjeto.has("GATRealConsultaCalcular") ? tasaGATRealConsultaCalcularOpResultadoObjeto.get("GATRealConsultaCalcular").getAsJsonObject() : new JsonObject();
 			invGATRea = GATRealConsultaCalcular.has("Inv_GATRea") ? GATRealConsultaCalcular.get("Inv_GATRea").getAsDouble() : 0;	
 		}	
 
 		int invPlazo =  inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsInt() : 0;
-		JsonObject resultadoCalulaTasa = null; 
+		JsonObject resultadoCalculaTasa = null; 
 
 		JsonObject informacionSucursal = informacionSucursalObtenerOpResultadoObjeto.has("informacionSucursal") ? informacionSucursalObtenerOpResultadoObjeto.get("informacionSucursal").getAsJsonObject() : new JsonObject();
 
@@ -1398,15 +1451,23 @@ public class InversionesCtrl extends BimBaseCtrl {
 		Double Cli_TasISR = cliente.has("Cli_TasISR") ? cliente.get("Cli_TasISR").getAsDouble() : 0;
 		String Cli_CobISR = cliente.has("Cli_CobISR") ? cliente.get("Cli_CobISR").getAsString() : "";
 
-		if(invCantid >= 5000 && invPlazo > 0){
-			JsonObject calculaTasa = new JsonObject();
-			calculaTasa.addProperty("Inv_Plazo", invPlazo);
-			calculaTasa.addProperty("Inv_Cantid", invCantid);
-			calculaTasa.addProperty("TasInv", invTasInt);
-			calculaTasa.addProperty("Par_DiBaIn", Par_DiBaIn);
-			calculaTasa.addProperty("Par_ISR", Cli_TasISR);
-			calculaTasa.addProperty("Cli_CobISR", Cli_CobISR);
+		if(invCantid < 5000 || invPlazo <= 0){
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.26");
+			// bimMessageDTO.addMergeVariable("invCatid", invCantid);
+			throw new BadRequestException(bimMessageDTO.toString());
 		}
+
+		JsonObject calculaTasa = new JsonObject();
+		calculaTasa.addProperty("Inv_Plazo", invPlazo);
+		calculaTasa.addProperty("Inv_Cantid", invCantid);
+		calculaTasa.addProperty("TasInv", invTasInt);
+		calculaTasa.addProperty("Par_DiBaIn", Par_DiBaIn);
+		calculaTasa.addProperty("Par_ISR", Cli_TasISR);
+		calculaTasa.addProperty("Cli_CobISR", Cli_CobISR);
+
+		resultadoCalculaTasa = Utilerias.calculaTasa(calculaTasa);
+
+		logger.info("resultadoCalculaTasa" + resultadoCalculaTasa);
 
 		/* 
 			*************************************************************************
@@ -1461,7 +1522,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			resultado = new JsonObject();
 			JsonObject Error = new JsonObject();
 			Error.addProperty("Err_Codigo", 403);
-			Error.addProperty("Err_Mensaj", "TOKEN INVLIDO");
+			Error.addProperty("Err_Mensaj", "TOKEN INVALIDO");
 			resultado.add("Error", Error);
 
 			return resultado;
@@ -1580,6 +1641,196 @@ public class InversionesCtrl extends BimBaseCtrl {
 		String inversionesImportesDeInvercionFinalizadaActualizarOpResultado = HttpClientUtils.postPerform(inversionesImportesDeInvercionFinalizadaActualizarOpSolicitud);
 		JsonObject inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto = new Gson().fromJson(inversionesImportesDeInvercionFinalizadaActualizarOpResultado, JsonObject.class);
 		logger.info("inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto" + inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto);
+
+
+
+		/* 
+			SP 15 LISTO MAPEO
+		 */
+		
+
+		JsonObject datosProcesoLiquidacion = new JsonObject();
+		datosProcesoLiquidacion.addProperty("Inv_Numero", inversion.has("Inv_Numero") ? inversion.get("Inv_Numero").getAsString() : "");
+		datosProcesoLiquidacion.addProperty("Inv_Deposi", inversion.has("Inv_Cantid") ? inversion.get("Inv_Cantid").getAsDouble() : 0);
+		datosProcesoLiquidacion.addProperty("Inv_rFecIn", fecVen != null ? simpleDateFormat.format(fecVen) : "");
+		datosProcesoLiquidacion.addProperty("Inv_rFecVe", rfecVe != null ? simpleDateFormat.format(rfecVe) : "");
+		datosProcesoLiquidacion.addProperty("Inv_rCanti", inversion.has("Inv_Cantid") ? inversion.get("Inv_Cantid").getAsDouble() : 0);
+		datosProcesoLiquidacion.addProperty("Inv_rTasa", inversion.has("Inv_Tasa") ? inversion.get("Inv_Tasa").getAsDouble() : 0);
+		datosProcesoLiquidacion.addProperty("Inv_rAutor", inversionesImportesDeInvercionFinalizadaActualizarOpUsuari);
+		datosProcesoLiquidacion.addProperty("Inv_rISR", inversion.has("Inv_ISR") ? inversion.get("Inv_ISR").getAsDouble() : 0);
+		datosProcesoLiquidacion.addProperty("Inv_rCuent", inversion.has("Inv_Cuenta") ? inversion.get("Inv_Cuenta").getAsString() : "");
+		datosProcesoLiquidacion.addProperty("Dias_Base", 360);//verificar		
+		datosProcesoLiquidacion.addProperty("Inv_Fecha", fecVen != null ? simpleDateFormat.format(fecVen) : "");//verificar
+		datosProcesoLiquidacion.addProperty("Inv_rTBrut", inversion.has("Inv_TBruta") ? inversion.get("Inv_TBruta").getAsDouble() : 0);
+		datosProcesoLiquidacion.addProperty("Inv_MonRef", inversion.has("Inv_TBruta") ? inversion.get("Inv_TBruta").getAsDouble() : 0);
+		datosProcesoLiquidacion.addProperty("NumTransac", numTransac);		
+		datosProcesoLiquidacion.addProperty("Transaccio", inversionesProcesoLiquidacionGenerarOpTransaccio);
+		datosProcesoLiquidacion.addProperty("Usuario", inversionesProcesoLiquidacionGenerarOpUsuari);
+		datosProcesoLiquidacion.addProperty("FechaSis", fechaSis);
+		datosProcesoLiquidacion.addProperty("SucOrigen", inversionesProcesoLiquidacionGenerarOpSucOrigen);
+		datosProcesoLiquidacion.addProperty("SucDestino", inversionesProcesoLiquidacionGenerarOpSucDestino);
+		datosProcesoLiquidacion.addProperty("Modulo", inversionesProcesoLiquidacionGenerarOpModulo);
+
+		logger.info("datosProcesoLiquidacion" + datosProcesoLiquidacion);
+		StringBuilder inversionesProcesoLiquidacionGenerarUrl = new StringBuilder()
+				.append(DataServiceHost)
+				.append("/")
+				.append(InversionesServicio)
+				.append("/")
+				.append(inversionesProcesoLiquidacionGenerarOp);
+		JsonObject inversionesProcesoLiquidacionGenerarOp = new JsonObject();
+		inversionesProcesoLiquidacionGenerarOp.add("inversionesProcesoLiquidacionGenerarOp", datosProcesoLiquidacion);
+		logger.info("inversionesProcesoLiquidacionGenerarOp" + inversionesProcesoLiquidacionGenerarOp);
+
+		RequestDTO inversionesProcesoLiquidacionGenerarOpSolicitud = new RequestDTO();
+		inversionesProcesoLiquidacionGenerarOpSolicitud.setUrl(inversionesProcesoLiquidacionGenerarUrl.toString());
+		MessageProxyDTO inversionesProcesoLiquidacionGenerarOpMensaje= new MessageProxyDTO();
+		inversionesProcesoLiquidacionGenerarOpMensaje.setBody(inversionesProcesoLiquidacionGenerarOp.toString());
+		inversionesImportesDeInvercionFinalizadaActualizarOpSolicitud.setMessage(inversionesImportesDeInvercionFinalizadaActualizarOpMensaje);
+
+		String inversionesProcesoLiquidacionGenerarOpResultado = HttpClientUtils.postPerform(inversionesProcesoLiquidacionGenerarOpSolicitud);
+		JsonObject inversionesProcesoLiquidacionGenerarOpResultadoObjeto = new Gson().fromJson(inversionesProcesoLiquidacionGenerarOpResultado, JsonObject.class);
+		logger.info("inversionesProcesoLiquidacionGenerarOpResultadoObjeto" + inversionesProcesoLiquidacionGenerarOpResultadoObjeto);
+
+
+
+		/* 
+			SP 16 PENDIENTE MAPEO
+		*/
+		
+
+		JsonObject datosBitacora = new JsonObject();
+		datosBitacora.addProperty("Bit_Usuari", usuNumero);
+		datosBitacora.addProperty("Bit_Fecha", fechaSis);
+		datosBitacora.addProperty("Bit_NumTra", "");
+		datosBitacora.addProperty("Bit_TipOpe", BitacoraCreacionOpBitTipOpe);
+		datosBitacora.addProperty("Bit_CueOri", "");
+		datosBitacora.addProperty("Bit_CueDes", "");
+		datosBitacora.addProperty("Bit_Monto", Integer.parseInt(BitacoraCreacionOpBitMonto));
+		datosBitacora.addProperty("Bit_PriRef", bit_PriRef != null ? bit_PriRef : "");
+		datosBitacora.addProperty("Bit_SegRef", "");
+		datosBitacora.addProperty("Bit_DireIP", bit_DireIP != null ? bit_DireIP : "");
+		datosBitacora.addProperty("NumTransac", numTransac);
+		datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
+		datosBitacora.addProperty("Usuario", BitacoraCreacionOpUsuario);
+		datosBitacora.addProperty("FechaSis", fechaSis);
+		datosBitacora.addProperty("SucOrigen", BitacoraCreacionOpSucOrigen);
+		datosBitacora.addProperty("SucDestino", BitacoraCreacionOpSucDestino);
+		datosBitacora.addProperty("Modulo", BitacoraCreacionOpModulo);
+
+		logger.info("datosBitacora" + datosBitacora);
+		StringBuilder bitacoraCreacionUrl = new StringBuilder()
+				.append(DataServiceHost)
+				.append("/")
+				.append(BitacoraServicio)
+				.append("/")
+				.append(BitacoraCreacionOp);
+
+		JsonObject bitacoraCreacionOp = new JsonObject();
+		bitacoraCreacionOp.add("bitacoraCreacionOp", datosBitacora);
+		logger.info("bitacoraCreacionOp" + bitacoraCreacionOp);
+
+		RequestDTO bitacoraCreacionOpSolicitud = new RequestDTO();
+		bitacoraCreacionOpSolicitud.setUrl(bitacoraCreacionUrl.toString());
+		MessageProxyDTO bitacoraCreacionOpMensaje = new MessageProxyDTO();
+		bitacoraCreacionOpMensaje.setBody(bitacoraCreacionOp.toString());
+		bitacoraCreacionOpSolicitud.setMessage(bitacoraCreacionOpMensaje);
+
+		String bitacoraCreacionOpResultado = HttpClientUtils.postPerform(bitacoraCreacionOpSolicitud);
+		JsonObject bitacoraCreacionOpResultadoObjeto = new Gson().fromJson(bitacoraCreacionOpResultado, JsonObject.class);
+		logger.info("bitacoraCreacionOpResultadoObjeto" + bitacoraCreacionOpResultadoObjeto);
+
+
+		
+		/* 
+			SP 17 EN PROGRESO MAPEO
+		*/
+		
+
+		JsonObject datosIversionVsEstadoCuenta = new JsonObject();
+		datosIversionVsEstadoCuenta.addProperty("Inv_Numero", inversion.has("Inv_Numero") ? inversion.get("Inv_Numero").getAsString() : "");
+		datosIversionVsEstadoCuenta.addProperty("Inv_Deposi", inversion.has("Inv_Cantid") ? inversion.get("Inv_Cantid").getAsDouble() : 0);
+		datosIversionVsEstadoCuenta.addProperty("Inv_rFecIn", fecVen != null ? simpleDateFormat.format(fecVen) : "");
+		datosIversionVsEstadoCuenta.addProperty("Inv_rFecVe", rfecVe != null ? simpleDateFormat.format(rfecVe) : "");
+		datosIversionVsEstadoCuenta.addProperty("Inv_rCanti", inversion.has("Inv_Cantid") ? inversion.get("Inv_Cantid").getAsDouble() : 0);
+		datosIversionVsEstadoCuenta.addProperty("Inv_rTasa", inversion.has("Inv_Tasa") ? inversion.get("Inv_Tasa").getAsDouble() : 0);
+		datosIversionVsEstadoCuenta.addProperty("Inv_rAutor", inversionesImportesDeInvercionFinalizadaActualizarOpUsuari);
+		datosIversionVsEstadoCuenta.addProperty("Inv_rISR", inversion.has("Inv_ISR") ? inversion.get("Inv_ISR").getAsDouble() : 0);
+		datosIversionVsEstadoCuenta.addProperty("Inv_rCuent", inversion.has("Inv_Cuenta") ? inversion.get("Inv_Cuenta").getAsString() : "");
+		datosIversionVsEstadoCuenta.addProperty("Dias_Base", 360);//verificar		
+		datosIversionVsEstadoCuenta.addProperty("Inv_Fecha", fecVen != null ? simpleDateFormat.format(fecVen) : "");//verificar
+		datosIversionVsEstadoCuenta.addProperty("Inv_rTBrut", inversion.has("Inv_TBruta") ? inversion.get("Inv_TBruta").getAsDouble() : 0);
+		datosIversionVsEstadoCuenta.addProperty("Inv_MonRef", inversion.has("Inv_TBruta") ? inversion.get("Inv_TBruta").getAsDouble() : 0);
+		datosIversionVsEstadoCuenta.addProperty("NumTransac", numTransac);		
+		datosIversionVsEstadoCuenta.addProperty("Transaccio", inversionesContraEstadoCuentaActualizarOpTransaccio);
+		datosIversionVsEstadoCuenta.addProperty("Usuario", inversionesContraEstadoCuentaActualizarOpUsuari);
+		datosIversionVsEstadoCuenta.addProperty("FechaSis", fechaSis);
+		datosIversionVsEstadoCuenta.addProperty("SucOrigen", inversionesContraEstadoCuentaActualizarOpSucOrigen);
+		datosIversionVsEstadoCuenta.addProperty("SucDestino", inversionesContraEstadoCuentaActualizarOpSucDestino);
+		datosIversionVsEstadoCuenta.addProperty("Modulo", inversionesContraEstadoCuentaActualizarOpModulo);
+
+		logger.info("datosIversionVsEstadoCuenta" + datosIversionVsEstadoCuenta);
+		StringBuilder inversionesContraEstadoCuentaActualizarUrl = new StringBuilder()
+				.append(DataServiceHost)
+				.append("/")
+				.append(InversionesServicio)
+				.append("/")
+				.append(inversionesContraEstadoCuentaActualizarOp);
+		JsonObject inversionesContraEstadoCuentaActualizarOp = new JsonObject();
+		inversionesContraEstadoCuentaActualizarOp.add("inversionesContraEstadoCuentaActualizarOp", datosIversionVsEstadoCuenta);
+		logger.info("inversionesContraEstadoCuentaActualizarOp" + inversionesContraEstadoCuentaActualizarOp);
+
+		RequestDTO inversionesContraEstadoCuentaActualizarOpSolicitud = new RequestDTO();
+		inversionesContraEstadoCuentaActualizarOpSolicitud.setUrl(inversionesContraEstadoCuentaActualizarUrl.toString());
+		MessageProxyDTO inversionesContraEstadoCuentaActualizarOpMensaje= new MessageProxyDTO();
+		inversionesContraEstadoCuentaActualizarOpMensaje.setBody(inversionesContraEstadoCuentaActualizarOp.toString());
+		inversionesContraEstadoCuentaActualizarOpSolicitud.setMessage(inversionesContraEstadoCuentaActualizarOpMensaje);
+
+		String inversionesContraEstadoCuentaActualizarOpResultado = HttpClientUtils.postPerform(inversionesContraEstadoCuentaActualizarOpSolicitud);
+		JsonObject inversionesContraEstadoCuentaActualizarOpResultadoObjeto = new Gson().fromJson(inversionesContraEstadoCuentaActualizarOpResultado, JsonObject.class);
+		logger.info("inversionesContraEstadoCuentaActualizarOpResultadoObjeto" + inversionesContraEstadoCuentaActualizarOpResultadoObjeto);
+
+		
+		/* 
+			SP 18 PENDIENTE MAPEO
+		*/
+		
+
+		JsonObject inversionesPagareNumeroUsuarioObtener = new JsonObject();
+			inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
+			inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Usuari", usuNumero);
+			inversionesPagareNumeroUsuarioObtener.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
+			inversionesPagareNumeroUsuarioObtener.addProperty("NumTransac", numTransac);
+			inversionesPagareNumeroUsuarioObtener.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
+			inversionesPagareNumeroUsuarioObtener.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);
+			inversionesPagareNumeroUsuarioObtener.addProperty("FechaSis", fechaSis);
+			inversionesPagareNumeroUsuarioObtener.addProperty("SucOrigen", InversionesPagareNumeroUsuarioObtenerOpSucOrigen);
+			inversionesPagareNumeroUsuarioObtener.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
+			inversionesPagareNumeroUsuarioObtener.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
+	
+		StringBuilder inversionesPagareNumeroUsuarioObtenerUrl = new StringBuilder()
+				.append(DataServiceHost)
+				.append("/")
+				.append(InversionesServicio)
+				.append("/")
+				.append(InversionesPagareNumeroUsuarioObtenerOp);
+		JsonObject inversionesPagareNumeroUsuarioObtenerOp = new JsonObject();
+		inversionesPagareNumeroUsuarioObtenerOp.add("inversionesPagareNumeroUsuarioObtenerOp", inversionesPagareNumeroUsuarioObtener);
+		logger.info("inversionesPagareNumeroUsuarioObtenerOp" + inversionesPagareNumeroUsuarioObtenerOp);
+
+		RequestDTO inversionesPagareNumeroUsuarioObtenerSolicitud = new RequestDTO();
+		inversionesPagareNumeroUsuarioObtenerSolicitud.setUrl(inversionesPagareNumeroUsuarioObtenerUrl.toString());
+		MessageProxyDTO inversionesPagareNumeroUsuarioObtenerMensaje = new MessageProxyDTO();
+		inversionesPagareNumeroUsuarioObtenerMensaje.setBody(inversionesPagareNumeroUsuarioObtenerOp.toString());
+		inversionesPagareNumeroUsuarioObtenerSolicitud.setMessage(inversionesPagareNumeroUsuarioObtenerMensaje);
+		
+		String inversionesPagareNumeroUsuarioObtenerOpResultado = HttpClientUtils.postPerform(inversionesPagareNumeroUsuarioObtenerSolicitud);
+		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = new Gson().fromJson(inversionesPagareNumeroUsuarioObtenerOpResultado, JsonObject.class);
+		logger.info("inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto" + inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto);
+
+
+
+
 
 
 		resultado = new JsonObject();
