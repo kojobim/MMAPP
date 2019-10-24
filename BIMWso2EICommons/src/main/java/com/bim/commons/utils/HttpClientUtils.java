@@ -28,6 +28,7 @@ public class HttpClientUtils {
 	
 	public static String postPerform(RequestDTO request) {
 		try {
+			System.out.println("$$$$$$$RequestDTO$$$$$" +  request.toString());
 			CloseableHttpClient client = HttpClients.createDefault();
 			final URIBuilder uriBuilder = new URIBuilder(request.getUrl());
 			
@@ -56,11 +57,11 @@ public class HttpClientUtils {
 		return null;
 	}
 	
-	public static String getStringContent(Request request) {
+	public static String getStringContent(Request request) throws IOException {
 		return getStringFromInputStream(request.getMessageContentStream());
 	}
 	
-	private static String getStringFromInputStream(InputStream inputStream) {
+	public static String getStringFromInputStream(InputStream inputStream) {
 		BufferedInputStream bis = new BufferedInputStream(inputStream);
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         String result;

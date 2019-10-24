@@ -1,6 +1,8 @@
 package com.bim.commons.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -26,16 +28,57 @@ public class Utilerias {
 		return new Gson().fromJson(new Gson().toJson(listResult), JsonArray.class);
 	}
 	   
-	public static Boolean calcularVencimiento(Date fechaVen) {
+	public static Boolean calcularVencimiento(Date fechaVen, Date horIni, Date horFin) {
 		logger.info("COMMONS: Iniciando calcularVencimiento...");
 
 		if(fechaVen == null)
-				return false;
+			return false;
 		
-		Date fechaActual = new Date();
+		Date fechaActual = null;
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.YEAR, 1900);
+		calendar.set(Calendar.MONTH, Calendar.JANUARY);
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		Date horaActual = calendar.getTime();
+
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			fechaActual = sdf.parse(sdf.format(new Date()));
+		} catch (Exception e) {
+			logger.info("formato de fecha no valido.");
+		}
+
+		Date calHorIni = null;
+		Date calHorFin = null;
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			calendar.setTime(horIni);
+			calendar.add(Calendar.MINUTE, -1);
+			calHorIni = sdf.parse(sdf.format(calendar.getTime()));
+		} catch (Exception e) {
+			logger.info("error al formatear calHorIni.");
+		}
+
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			calendar.setTime(horFin);
+			calendar.add(Calendar.MINUTE, 1);
+			calHorFin = sdf.parse(sdf.format(calendar.getTime()));
+		} catch (Exception e) {
+			logger.info("error al formatear calHorFin.");
+		}
+
+		logger.info(">>>>> fechaActual: " + fechaActual);
+		logger.info(">>>>> HoraActual: " + horaActual);
+		logger.info(">>>>> fechaVen: " + fechaVen);
+		logger.info(">>>>> calHorIni: " + calHorIni);
+		logger.info(">>>>> calHorFin: " + calHorFin);
 		
-		if(fechaVen.compareTo(fechaActual) == 0)
-			return true;
+		logger.info("COMMONS: Finalizando calcularVencimiento...");
+		if(fechaVen.compareTo(fechaActual) == 0 &&
+			(horaActual.after(calHorIni) && horaActual.before(calHorFin)))
+				return true;
 
 		return false;
 	}
@@ -58,5 +101,12 @@ public class Utilerias {
 		
 		logger.info("COMMONS: Finalizando convertirFecha...");
 		return fechaConv;
+	}
+	
+	public static Boolean isNumber(String value) {
+		logger.info("COMMONS: Iniciando isNumber metodo...");
+		String regex = "\\d";		
+		logger.info("COMMONS: Finalizando isNumber metodo...");
+		return value.matches(regex);
 	}
 }

@@ -59,11 +59,13 @@
 	    </dependency>
 	    -->
 	    
+		<!-- https://mvnrepository.com/artifact/org.antlr/stringtemplate -->
 		<dependency>
-			<groupId>org.wso2.msf4j</groupId>
-			<artifactId>msf4j-core</artifactId>
+		    <groupId>org.antlr</groupId>
+		    <artifactId>stringtemplate</artifactId>
+		    <version>4.0.2</version>
 		</dependency>
-		
+				
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
@@ -91,7 +93,7 @@
     
     
     <properties>
-        <microservice.resourceClasses>com.bim.msf4j.ctrl.TokenCtrl,com.bim.msf4j.ctrl.HSMCtrl,com.bim.msf4j.ctrl.LoginCtrl,com.bim.msf4j.ctrl.InversionesCtrl,com.bim.msf4j.ctrl.SaldosCtrl</microservice.resourceClasses>
+    	<microservice.resourceClasses>com.bim.msf4j.ctrl.HSMCtrl,com.bim.msf4j.ctrl.InversionesCtrl,com.bim.msf4j.ctrl.LoginCtrl,com.bim.msf4j.ctrl.PingCtrl,com.bim.msf4j.ctrl.TokenCtrl,com.bim.msf4j.ctrl.SaldosCtrl</microservice.resourceClasses>
     </properties>
     <build>
         <finalName>bim-wso2-ei-microservice</finalName>

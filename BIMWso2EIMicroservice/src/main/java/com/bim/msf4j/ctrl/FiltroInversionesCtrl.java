@@ -1,5 +1,7 @@
 package com.bim.msf4j.ctrl;
 
+import java.io.IOException;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -29,7 +31,12 @@ public class FiltroInversionesCtrl implements Microservice {
 	@Produces(MediaType.APPLICATION_JSON)
 	public JsonObject filtroInversiones(@Context final Request solicitud) {
 		logger.info("CTRL: Comenzando filtroInversiones metodo");
-		String mensaje = HttpClientUtils.getStringContent(solicitud);
+		String mensaje = null;
+		try {
+			mensaje = HttpClientUtils.getStringContent(solicitud);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		JsonObject inversionesObjeto = new Gson().fromJson(mensaje, JsonObject.class);
 		JsonObject inversiones = inversionesObjeto.getAsJsonObject("inversiones");
 		JsonArray inversionArray = inversiones.getAsJsonArray("inversion");
