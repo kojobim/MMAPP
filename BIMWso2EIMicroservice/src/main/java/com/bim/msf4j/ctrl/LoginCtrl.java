@@ -346,7 +346,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		JsonObject configuracionBanco = configuracionesBanco.has("configuracionBanco") ? 
 				configuracionesBanco.get("configuracionBanco").isJsonObject() 
 					? configuracionesBanco.get("configuracionBanco").getAsJsonObject()
-						: configuracionesBanco.get("configuracionesBanco").getAsJsonArray().get(0).getAsJsonObject()
+						: configuracionesBanco.get("configuracionBanco").getAsJsonArray().get(0).getAsJsonObject()
 				: null; 
 						
 		String parAcceso = configuracionBanco.has("Par_Acceso") ? configuracionBanco.get("Par_Acceso").getAsString() : null;
