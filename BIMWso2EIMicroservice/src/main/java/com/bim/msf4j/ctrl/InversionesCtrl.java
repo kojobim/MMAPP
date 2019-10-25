@@ -14,6 +14,10 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.log4j.Logger;
+import org.wso2.msf4j.Request;
+import org.wso2.msf4j.internal.MicroservicesRegistryImpl;
+
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
@@ -27,10 +31,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import org.apache.log4j.Logger;
-import org.wso2.msf4j.Request;
-import org.wso2.msf4j.internal.MicroservicesRegistryImpl;
 
 @Path("/inversiones")
 public class InversionesCtrl extends BimBaseCtrl {
