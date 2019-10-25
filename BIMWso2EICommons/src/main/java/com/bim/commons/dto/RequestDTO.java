@@ -10,6 +10,7 @@ public class RequestDTO {
 	private String url;
 	private MessageProxyDTO message;
 	private Map<String, String> headers;
+	private Boolean isHttps;
 
 	public String getUrl() {
 		return url;
@@ -40,6 +41,14 @@ public class RequestDTO {
 			this.headers = new HashMap<String, String>();
 		
 		this.headers.put(key, value);
+	}
+
+	public Boolean isHttps() {
+		return isHttps;
+	}
+
+	public void setIsHttps(Boolean isHttps) {
+		this.isHttps = isHttps;
 	}
 
 	@Override
