@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 public class RequestDTO {
 
 	private String url;
 	private MessageProxyDTO message;
+	private JsonObject body;
 	private Map<String, String> headers;
 	private Boolean isHttps;
 
@@ -49,6 +51,14 @@ public class RequestDTO {
 
 	public void setIsHttps(Boolean isHttps) {
 		this.isHttps = isHttps;
+	}
+
+	public JsonObject getBody() {
+		return body;
+	}
+
+	public void setBody(JsonObject body) {
+		this.body = body;
 	}
 
 	@Override

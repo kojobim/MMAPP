@@ -1,8 +1,5 @@
 package com.bim.msf4j.ctrl;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -16,13 +13,7 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
 
-import com.bim.commons.dto.BimMessageDTO;
-import com.bim.commons.dto.MessageProxyDTO;
-import com.bim.commons.dto.RequestDTO;
-import com.bim.commons.exceptions.UnauthorizedException;
-import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Utilerias;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -30,8 +21,6 @@ import com.google.gson.JsonObject;
 public class CuentasCtrl extends BimBaseCtrl {
 
 	private static final Logger logger = Logger.getLogger(CuentasCtrl.class);
-	private static String DataServer;
-	private static String IdentityServer;
 	private static String SaldoServicio;
 	private static String ClienteServicio;
 	private static String SaldosClienteConsultarOp;
@@ -58,18 +47,25 @@ public class CuentasCtrl extends BimBaseCtrl {
 	private static String BitacoraCreacionOpSucOrigen;
 	private static String BitacoraCreacionOpSucDestino;
 	private static String BitacoraCreacionOpModulo;
+	private static String MovimientosServicio;
+	private static String MovimientosListadoOp;
+	private static String MovimientosListadoOpTipConsul;
+	private static String MovimientosListadoOpTransaccio;
+	private static String MovimientosListadoOpUsuario;
+	private static String MovimientosListadoOpSucOrigen;
+	private static String MovimientosListadoOpSucDestino;
+	private static String MovimientosListadoOpModulo;
 	
 	
 	public CuentasCtrl() {
 		super();
-		DataServer = properties.getProperty("data_service.host");
-		
-		IdentityServer = properties.getProperty("identity_server.host");
-		
 		
 		SaldoServicio = properties.getProperty("data_service.saldo_servicio");
 		ClienteServicio = properties.getProperty("data_service.cliente_servicio");
 		TransaccionServicio = properties.getProperty("data_service.transaccion_servicio");
+		BitacoraServicio = properties.getProperty("data_service.bitacora_servicio");
+		MovimientosServicio = properties.getProperty("data_service.movimientos_servicio");
+				
 		
 		SaldosClienteConsultarOp = properties.getProperty("saldo_servicio.op.saldos_cliente_consultar");
 		SaldosClienteConsultarOpModulo = properties.getProperty("op.saldos_cliente_consultar.modulo");
@@ -97,6 +93,13 @@ public class CuentasCtrl extends BimBaseCtrl {
 		FolioTransaccionGenerarOp = properties.getProperty("transaccion_servicio.op.folio_transaccion_generar");
 		FolioTransaccionGenerarOpSucOrigen = properties.getProperty("op.folio_transaccion_generar.suc_origen");
 		
+		MovimientosListadoOp = properties.getProperty("movimientos_servicio.op.movimientos_listado");
+		MovimientosListadoOpTipConsul = properties.getProperty("op.movimientos_listado.tip_consul");
+		MovimientosListadoOpModulo = properties.getProperty("op.movimientos_listado.modulo");
+		MovimientosListadoOpSucDestino = properties.getProperty("op.movimientos_listado.suc_destino");
+		MovimientosListadoOpSucOrigen = properties.getProperty("op.movimientos_listado.suc_origen");
+		MovimientosListadoOpTransaccio = properties.getProperty("op.movimientos_listado.transaccio");
+		MovimientosListadoOpUsuario = properties.getProperty("op.movimientos_listado.usuario");
 	}
 	
 	@Path("/")
@@ -108,27 +111,13 @@ public class CuentasCtrl extends BimBaseCtrl {
 		
 		logger.info("Authorization " + solicitud.getHeader("Authorization"));
 		
-		RequestDTO principalSolicitud = new RequestDTO();
-		principalSolicitud.setUrl(IdentityServer);
-		principalSolicitud.setIsHttps(true);
-		principalSolicitud.addHeader("Authorization", solicitud.getHeader("Authorization"));
-		principalSolicitud.addHeader("Content-Type", "application/json");
-		principalSolicitud.addHeader("Accept", "application/json");
-		
-		String principalResultado = HttpClientUtils.getPerform(principalSolicitud);
-		JsonObject principalResultadoObjecto = new Gson().fromJson(principalResultado, JsonObject.class);
-		
-		if(principalResultadoObjecto.has("error")) {
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.29");
-			throw new UnauthorizedException(bimMessageDTO.toString());
-		}
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjecto = Utilerias.getPrincipal(bearerToken);
 		
 		logger.info(">>>>>>>>>principalResultadoObjecto: " + principalResultadoObjecto);
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
-
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-		Date fecha = new Date();
-		String fechaSis = simpleDateFormat.format(fecha);
+		
+		String fechaSis = Utilerias.getFechaSis();
 		
 		String cueClient = principalResultadoObjecto.get("usuClient").getAsString();
 		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
@@ -147,24 +136,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		datosSaldosClienteConsultar.addProperty("SucDestino", SaldosClienteConsultarOpSucDestino);
 		datosSaldosClienteConsultar.addProperty("Modulo", SaldosClienteConsultarOpModulo);
 		
-		JsonObject saldosClienteConsultarOp = new JsonObject();
-		saldosClienteConsultarOp.add("saldosClienteConsultarOp", datosSaldosClienteConsultar);
-		
-		StringBuilder saldosClienteConsultarOpUrl = new StringBuilder()
-				.append(DataServer)
-				.append("/")
-				.append(SaldoServicio)
-				.append("/")
-				.append(SaldosClienteConsultarOp);
-		
-		RequestDTO saldosClienteConsultarSolicitud = new RequestDTO();
-		saldosClienteConsultarSolicitud.setUrl(saldosClienteConsultarOpUrl.toString());
-		MessageProxyDTO saldosClienteConsultarMensaje = new MessageProxyDTO();
-		saldosClienteConsultarMensaje.setBody(saldosClienteConsultarOp.toString());
-		saldosClienteConsultarSolicitud.setMessage(saldosClienteConsultarMensaje);
-		
-		String saldosClienteConsultarResultado = HttpClientUtils.postPerform(saldosClienteConsultarSolicitud);
-		JsonObject saldosClienteConsultarResultadoObjecto = new Gson().fromJson(saldosClienteConsultarResultado, JsonObject.class);
+		JsonObject saldosClienteConsultarResultadoObjecto = Utilerias.performOperacion(SaldoServicio, SaldosClienteConsultarOp, datosSaldosClienteConsultar);
 		
 		logger.info(">>>>>>>>>saldosClienteConsultarResultadoObjecto " + saldosClienteConsultarResultadoObjecto);
 		
@@ -217,24 +189,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		datosClienteConsultar.addProperty("SucDestino", ClienteConsultarOpSucDestino);
 		datosClienteConsultar.addProperty("Modulo", ClienteConsultarOpModulo);
 		
-		JsonObject clienteConsultarOp = new JsonObject();
-		clienteConsultarOp.add("clienteConsultarOp", datosClienteConsultar);
-		
-		StringBuilder clienteConsultarUrl = new StringBuilder()
-				.append(DataServer)
-				.append("/")
-				.append(ClienteServicio)
-				.append("/")
-				.append(ClienteConsultarOp);
-		
-		RequestDTO clienteConsultarSolicitud = new RequestDTO();
-		clienteConsultarSolicitud.setUrl(clienteConsultarUrl.toString());
-		MessageProxyDTO clienteConsultarMensaje = new MessageProxyDTO();
-		clienteConsultarMensaje.setBody(clienteConsultarOp.toString());
-		clienteConsultarSolicitud.setMessage(clienteConsultarMensaje);
-		
-		String clienteConsultarResultado = HttpClientUtils.postPerform(clienteConsultarSolicitud);
-		JsonObject clienteConsultarResultadoObjecto = new Gson().fromJson(clienteConsultarResultado, JsonObject.class);
+		JsonObject clienteConsultarResultadoObjecto = Utilerias.performOperacion(ClienteServicio, ClienteConsultarOp, datosClienteConsultar);
 		
 		logger.info("clienteConsultarResultadoObjecto " + clienteConsultarResultadoObjecto);
 		
@@ -281,20 +236,8 @@ public class CuentasCtrl extends BimBaseCtrl {
 		
 		logger.info("Authorization " + solicitud.getHeader("Authorization"));
 		
-		RequestDTO principalSolicitud = new RequestDTO();
-		principalSolicitud.setUrl(IdentityServer);
-		principalSolicitud.setIsHttps(true);
-		principalSolicitud.addHeader("Authorization", solicitud.getHeader("Authorization"));
-		principalSolicitud.addHeader("Content-Type", "application/json");
-		principalSolicitud.addHeader("Accept", "application/json");
-		
-		String principalResultado = HttpClientUtils.getPerform(principalSolicitud);
-		JsonObject principalResultadoObjecto = new Gson().fromJson(principalResultado, JsonObject.class);
-		
-		if(principalResultadoObjecto.has("error")) {
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.29");
-			throw new UnauthorizedException(bimMessageDTO.toString());
-		}
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjecto = Utilerias.getPrincipal(bearerToken); 
 		
 		String usuNumero = principalResultadoObjecto.has("usuNumero") ? principalResultadoObjecto.get("usuNumero").getAsString() : null;
 		
@@ -302,36 +245,17 @@ public class CuentasCtrl extends BimBaseCtrl {
 		logger.info(">>>>>X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
 		
 		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
-
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-		Date fecha = new Date();
-		String fechaSis = simpleDateFormat.format(fecha);
+		String fechaSis = Utilerias.getFechaSis();
 		
 		logger.info(">>>>>fechaSis " + fechaSis);
 		
 		JsonObject datosFolioTransaccion = new JsonObject();
-		datosFolioTransaccion.addProperty("NumTransac", "");
+		datosFolioTransaccion.addProperty("Num_Transa", "");
 		datosFolioTransaccion.addProperty("SucOrigen", FolioTransaccionGenerarOpSucOrigen);
-
-		JsonObject folioTransaccionGenerarOp = new JsonObject();
-		folioTransaccionGenerarOp.add("folioTransaccionGenerarOp", datosFolioTransaccion);
 		
-		String folioTransaccionGenerarUrl = new StringBuilder()
-				.append(DataServer)
-				.append("/")
-				.append(TransaccionServicio)
-				.append("/")
-				.append(FolioTransaccionGenerarOp).toString();
-		
-		
-		RequestDTO folioTransaccionGenerarSolicitud = new RequestDTO();
-		folioTransaccionGenerarSolicitud.setUrl(folioTransaccionGenerarUrl);
-		MessageProxyDTO folioTransaccionGenerarMensaje = new MessageProxyDTO();
-		folioTransaccionGenerarMensaje.setBody(folioTransaccionGenerarOp.toString());
-		folioTransaccionGenerarSolicitud.setMessage(folioTransaccionGenerarMensaje);
-		
-		String folioTransaccionGenerarResultado =HttpClientUtils.postPerform(folioTransaccionGenerarSolicitud);
-		JsonObject folioTransaccionGenerarResultadoObjeto =  new Gson().fromJson(folioTransaccionGenerarResultado, JsonObject.class);
+		JsonObject folioTransaccionGenerarResultadoObjeto =  Utilerias
+				.performOperacion(TransaccionServicio, FolioTransaccionGenerarOp, 
+						datosFolioTransaccion);
 		
 		logger.info("- folioTransaccionGenerarResultadoObjeto " + folioTransaccionGenerarResultadoObjeto); 
 		
@@ -349,33 +273,17 @@ public class CuentasCtrl extends BimBaseCtrl {
 		datosMovimientos.addProperty("Mov_MonIni", 0);
 		datosMovimientos.addProperty("Mov_MonFin", 0);
 		datosMovimientos.addProperty("Mov_Clasif", "");
-		datosMovimientos.addProperty("Tip_Consul", "");
+		datosMovimientos.addProperty("Tip_Consul", MovimientosListadoOpTipConsul);
 		datosMovimientos.addProperty("NumTransac", "");
-		datosMovimientos.addProperty("Transaccio", "");
-		datosMovimientos.addProperty("Usuario", "");
-		datosMovimientos.addProperty("SucOrigen", "");
-		datosMovimientos.addProperty("SucDestino", "");
-		datosMovimientos.addProperty("Modulo", "");
+		datosMovimientos.addProperty("Transaccio", MovimientosListadoOpTransaccio);
+		datosMovimientos.addProperty("Usuario", MovimientosListadoOpUsuario);
+		datosMovimientos.addProperty("SucOrigen", MovimientosListadoOpSucOrigen);
+		datosMovimientos.addProperty("SucDestino", MovimientosListadoOpSucDestino);
+		datosMovimientos.addProperty("Modulo", MovimientosListadoOpModulo);
 		
-		JsonObject movimientosListadoOp = new JsonObject();
-		movimientosListadoOp.add("movimientosListadoOp", datosMovimientos);
-		
-		String movimientosListadoUrl = new StringBuilder()
-				.append(DataServer)
-				.append("/")
-				.append("MovimientosServicio")
-				.append("/")
-				.append("movimientosListadoOp")
-				.toString();
-		
-		RequestDTO movimientosListadoSolicitud = new RequestDTO();
-		movimientosListadoSolicitud.setUrl(movimientosListadoUrl);
-		MessageProxyDTO movimientosListadoMensaje = new MessageProxyDTO();
-		movimientosListadoMensaje.setBody(movimientosListadoOp.toString());
-		movimientosListadoSolicitud.setMessage(movimientosListadoMensaje);
-		
-		String movimientosListadoResultado = HttpClientUtils.postPerform(movimientosListadoSolicitud);
-		JsonObject movimientosListadoResultadoObjeto = new Gson().fromJson(movimientosListadoResultado, JsonObject.class);
+		JsonObject movimientosListadoResultadoObjeto = Utilerias
+				.performOperacion(MovimientosServicio, MovimientosListadoOp, 
+						datosMovimientos);
 		
 		logger.info("- movimientosListadoResultadoObjeto " + movimientosListadoResultadoObjeto );
 		
@@ -398,25 +306,9 @@ public class CuentasCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("SucDestino", BitacoraCreacionOpSucDestino);
 		datosBitacora.addProperty("Modulo", BitacoraCreacionOpModulo);
 		
-		JsonObject bitacoraCreacionOp = new JsonObject();
-		bitacoraCreacionOp.add("bitacoraCreacionOp", datosBitacora);
-		
-		String bitacoraCreacionUrl = new StringBuilder()
-				.append(DataServer)
-				.append("/")
-				.append(BitacoraServicio)
-				.append("/")
-				.append(BitacoraCreacionOp)
-				.toString();
-		
-		RequestDTO bitacoraCreacionRequest = new RequestDTO();
-		bitacoraCreacionRequest.setUrl(bitacoraCreacionUrl);
-		MessageProxyDTO bitacoraCreacionMensaje = new MessageProxyDTO();
-		bitacoraCreacionMensaje.setBody(bitacoraCreacionOp.toString());
-		bitacoraCreacionRequest.setMessage(bitacoraCreacionMensaje);
-		
-		String bitacoraCreacionResultado = HttpClientUtils.postPerform(bitacoraCreacionRequest);
-		JsonObject bitacoraCreacionResultadoObjeto = new Gson().fromJson(bitacoraCreacionResultado, JsonObject.class);
+		JsonObject bitacoraCreacionResultadoObjeto = Utilerias
+				.performOperacion(BitacoraServicio, BitacoraCreacionOp, 
+						datosBitacora);
 		
 		logger.info("- bitacoraCreacionResultadoObjeto " + bitacoraCreacionResultadoObjeto);
 		
