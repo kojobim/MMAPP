@@ -40,5 +40,8 @@
     </artifact>    
     <artifact name="TransaccionServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/TransaccionServicio.dbs</file>
+    </artifact>   
+    <artifact name="MovimientosServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/MovimientosServicio.dbs</file>
     </artifact>
 </artifacts>
