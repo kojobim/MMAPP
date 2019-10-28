@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
+import com.bim.commons.enums.InversionesCategoriasEnum;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.utils.Filtrado;
@@ -80,10 +81,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 	private static String InversionesFilterBy;
 	private static Integer InversionesMaximoPagina;
-	private static String InversionesCategoriaFija;
-	private static String InversionesCategoriaValor;
-	private static String InversionesCategoriaCedeRi;
-	private static String InversionesCategoriaPagare;
 	
 	public InversionesCtrl() {
 		super();
@@ -138,10 +135,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		
 		InversionesFilterBy = properties.getProperty("inversiones_servicio.filter_by");
 		InversionesMaximoPagina = Integer.parseInt(properties.getProperty("inversiones_servicio.maximo_pagina"));
-		InversionesCategoriaFija = properties.getProperty("inversiones_servicio.categoria.fija");
-		InversionesCategoriaValor = properties.getProperty("inversiones_servicio.categoria.valor");
-		InversionesCategoriaCedeRi = properties.getProperty("inversiones_servicio.categoria.cede_ri");
-		InversionesCategoriaPagare = properties.getProperty("inversiones_servicio.categoria.pagare");
 		
 		logger.info("Ctrl: Terminando metodo init...");
 	}
@@ -461,9 +454,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 			bimMessageDTO.addMergeVariable("invNumero", invNumero);
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
-
-		if(!InversionesCategoriaFija.equals(categoria) && !InversionesCategoriaValor.equals(categoria)
-			&& !InversionesCategoriaCedeRi.equals(categoria) && !InversionesCategoriaPagare.equals(categoria)) {
+		
+		if(InversionesCategoriasEnum.validarCategoria(categoria) == null) {
 				BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.24");
 				bimMessageDTO.addMergeVariable("categoria", categoria);
 				throw new BadRequestException(bimMessageDTO.toString());
@@ -475,8 +467,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
-		String bit_PriRef = solicitud.getHeader("User-Agent");
-		String bit_DireIP = solicitud.getHeader("X-Forwarded-For");
+		String bitPriRef = solicitud.getHeader("User-Agent");
+		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
 
 		JsonObject datosTransaccion = new JsonObject();
 		datosTransaccion.addProperty("Num_Transa", "");
@@ -524,9 +516,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_CueOri", "");
 		datosBitacora.addProperty("Bit_CueDes", "");
 		datosBitacora.addProperty("Bit_Monto", Integer.parseInt(BitacoraCreacionOpBitMonto));
-		datosBitacora.addProperty("Bit_PriRef", bit_PriRef != null ? bit_PriRef : "");
+		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
 		datosBitacora.addProperty("Bit_SegRef", "");
-		datosBitacora.addProperty("Bit_DireIP", bit_DireIP != null ? bit_DireIP : "");
+		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
 		datosBitacora.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
 		datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
 		datosBitacora.addProperty("Usuario", BitacoraCreacionOpUsuario);
@@ -565,7 +557,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 				.append(InversionesServicio)
 				.append("/");
 
-		if (InversionesCategoriaPagare.equals(categoria)) {
+		if (categoria.equals(InversionesCategoriasEnum.PAGARE.toString())) {
 			datosInversion.addProperty("Inv_Numero", "");
 			datosInversion.addProperty("Inv_Usuari", usuNumero);
 			datosInversion.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
@@ -679,7 +671,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 				double invGat = 0;
 				double invGatRea = 0;
 
-				if (InversionesCategoriaPagare.equals(categoria)) {
+				if (categoria.equals(InversionesCategoriasEnum.PAGARE.toString())) {
 					invGat = inversionObj.has("Inv_GAT") ? inversionObj.get("Inv_GAT").getAsDouble() : 0;
 					invGatRea = inversionObj.has("Inv_GATRea") ? inversionObj.get("Inv_GATRea").getAsDouble() : 0;
 					plazo = inversionObj.has("Inv_Plazo") ? inversionObj.get("Inv_Plazo").getAsInt() : 0;
