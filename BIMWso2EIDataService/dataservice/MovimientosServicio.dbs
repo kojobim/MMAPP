@@ -39,7 +39,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result element="movimientos" rowName="movimiento">
+        <result element="cuenta" rowName="movimientos">
             <element column="Mov_Cuenta" name="Mov_Cuenta" xsdType="xs:string" optional="true"/>
             <element column="Mov_Numero" name="Mov_Numero" xsdType="xs:string" optional="true"/>
             <element column="Mov_Consec" name="Mov_Consec" xsdType="xs:string" optional="true"/>
