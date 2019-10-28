@@ -1,0 +1,79 @@
+<data name="MovimientosServicio" serviceGroup="MovimientosServicio" serviceNamespace="MovimientosServicio">
+    <description>Servicio usado para exponer las funcionalidades de los movimientos</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="movimientosListadoSQL" useConfig="BIMDB">
+        <sql>
+			EXECUTE NBMOVCHECON
+			@Cue_Numero = :cueNumero,
+            @Fec_Inicia = :fecInicia,
+            @Fec_Final = :fecFinal,
+            @Mov_Natura = :movNatura,
+            @Mov_PalCla = :movPalCla,
+            @Mov_MonIni = :movMonIni,
+            @Mov_MonFin = :movMonFin,
+            @Mov_Clasif = :movClasif,
+            @Tip_Consul = :tipConsul,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="cueNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fecInicia" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fecFinal" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="movNatura" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="movPalCla" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="movMonIni" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="movMonFin" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="movClasif" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result element="movimientos" rowName="movimiento">
+            <element column="Mov_Cuenta" name="Mov_Cuenta" xsdType="xs:string" optional="true"/>
+            <element column="Mov_Numero" name="Mov_Numero" xsdType="xs:string" optional="true"/>
+            <element column="Mov_Consec" name="Mov_Consec" xsdType="xs:string" optional="true"/>
+            <element column="Mov_Natura" name="Mov_Natura" xsdType="xs:string" optional="true"/>
+            <element column="Fecha_Val" name="Fecha_Val" xsdType="xs:string" optional="true"/>
+            <element column="Mov_Descri" name="Mov_Descri" xsdType="xs:string" optional="true"/>
+            <element column="Mov_Refere" name="Mov_Refere" xsdType="xs:string" optional="true"/>
+            <element column="Mov_Cantid" name="Mov_Cantid" xsdType="xs:decimal" optional="true"/>
+            <element column="Usuario" name="Usuario" xsdType="xs:string" optional="true"/>
+            <element column="Transaccio" name="Transaccio" xsdType="xs:string" optional="true"/>
+            <element column="Mov_Saldo" name="Mov_Saldo" xsdType="xs:decimal" optional="true"/>
+            <element column="Mov_Tipo" name="Mov_Tipo" xsdType="xs:string" optional="true"/>
+            <element column="Mov_Clasif" name="Mov_Clasif" xsdType="xs:string" optional="true"/>
+            <element column="Mov_DesCla" name="Mov_DesCla" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation name="movimeintosListadoOp">
+        <call-query href="movimientosListadoSQL">
+            <with-param name="cueNumero" query-param="Cue_Numero"/>
+            <with-param name="fecInicia" query-param="Fec_Inicia"/>
+            <with-param name="fecFinal" query-param="Fec_Final"/>
+            <with-param name="movNatura" query-param="Mov_Natura"/>
+            <with-param name="movPalCla" query-param="Mov_PalCla"/>
+            <with-param name="movMonIni" query-param="Mov_MonIni"/>
+            <with-param name="movMonFin" query-param="Mov_MonFin"/>
+            <with-param name="movClasif" query-param="Mov_Clasif"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>

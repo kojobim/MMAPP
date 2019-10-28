@@ -109,4 +109,32 @@ public class Utilerias {
 		logger.info("COMMONS: Finalizando isNumber metodo...");
 		return value.matches(regex);
 	}
+	
+	public static String concat(String ...args) {
+		logger.info("COMMONS: Iniciando concat metodo...");
+		StringBuilder resultado = new StringBuilder();
+		for(int j = 0; j < args.length; j++) {
+			String arg = args[j];
+			if(arg == null || arg.isEmpty())
+				continue;
+			
+			String []argItems = arg.split(" ");
+			
+			for(int i = 0; i < argItems.length; i++) {
+				if(argItems[i].isEmpty())
+					continue;
+				
+				resultado.append(argItems[i]);
+				
+				if(i < argItems.length - 1) 
+					resultado.append(" ");
+			}	
+
+			if(j < args.length - 1) 
+				resultado.append(" ");
+		}
+		logger.info("COMMONS: Iniciando concat metodo...");
+		return resultado.toString();
+		
+	}
 }
