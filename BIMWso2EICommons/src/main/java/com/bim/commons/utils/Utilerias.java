@@ -210,5 +210,40 @@ public class Utilerias {
 		JsonObject resultadoObjeto = resultado != null ? new Gson().fromJson(resultado, JsonObject.class) : null;
 		return resultadoObjeto;
 	}
+
+	public static String getStringProperty(JsonObject datos, String propertyName) {
+		if(datos == null)
+			return null;
+		return datos.has(propertyName) && datos.get(propertyName).isJsonPrimitive() ? datos.get(propertyName).getAsString() : null;
+	}
 	
+	public static Integer getIntProperty(JsonObject datos, String propertyName) {
+		if(datos == null)
+			return null;
+		return datos.has(propertyName) && datos.get(propertyName).isJsonPrimitive() ? datos.get(propertyName).getAsInt() : null;
+	}
+	
+	public static Double getDoubleProperty(JsonObject datos, String propertyName) {
+		if(datos == null)
+			return null;
+		return datos.has(propertyName) && datos.get(propertyName).isJsonPrimitive() ? datos.get(propertyName).getAsDouble() : null;
+	}
+	
+	public static Float getFloatProperty(JsonObject datos, String propertyName) {
+		if(datos == null)
+			return null;
+		return datos.has(propertyName) && datos.get(propertyName).isJsonPrimitive() ? datos.get(propertyName).getAsFloat() : null;
+	}
+	
+	public static JsonObject getJsonObjectProperty(JsonObject datos, String propertyName) {
+		if(datos == null)
+			return null;
+		return datos.has(propertyName)  && datos.get(propertyName).isJsonObject() ? datos.get(propertyName).getAsJsonObject() : null;
+	}
+	
+	public static JsonArray getJsonArrayProperty(JsonObject datos, String propertyName) {
+		if(datos == null)
+			return null;
+		return datos.has(propertyName)  && datos.get(propertyName).isJsonArray() ? datos.get(propertyName).getAsJsonArray() : null;
+	}
 }
