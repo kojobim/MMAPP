@@ -467,8 +467,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
-		String bit_PriRef = solicitud.getHeader("User-Agent");
-		String bit_DireIP = solicitud.getHeader("X-Forwarded-For");
+		String bitPriRef = solicitud.getHeader("User-Agent");
+		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
 
 		JsonObject datosTransaccion = new JsonObject();
 		datosTransaccion.addProperty("Num_Transa", "");
@@ -516,9 +516,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_CueOri", "");
 		datosBitacora.addProperty("Bit_CueDes", "");
 		datosBitacora.addProperty("Bit_Monto", Integer.parseInt(BitacoraCreacionOpBitMonto));
-		datosBitacora.addProperty("Bit_PriRef", bit_PriRef != null ? bit_PriRef : "");
+		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
 		datosBitacora.addProperty("Bit_SegRef", "");
-		datosBitacora.addProperty("Bit_DireIP", bit_DireIP != null ? bit_DireIP : "");
+		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
 		datosBitacora.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
 		datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
 		datosBitacora.addProperty("Usuario", BitacoraCreacionOpUsuario);
