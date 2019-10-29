@@ -5,15 +5,24 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.xml.namespace.QName;
+import javax.xml.soap.MessageFactory;
+
+import javax.xml.soap.MimeHeaders;
+import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPElement;
-import javax.xml.soap.SOAPElementFactory;
+import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPFactory;
+import javax.xml.soap.SOAPHeader;
+import javax.xml.soap.SOAPMessage;
+import javax.xml.soap.SOAPPart;
 
 import org.apache.log4j.Logger;
 
-import com.bim.commons.dto.SOAPRequestDTO;
+import com.bim.commons.dto.BimMessageDTO;
+import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.utils.SOAPClientUtils;
+import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
 @Path("/utils")
@@ -23,19 +32,24 @@ public class UtilsCtrl extends BimBaseCtrl {
 
 	private static String SoapEndpoint;
 	private static String SoapAction;
-	private static String Namespace;
-	private static String NamespaceUrl;
-	private static String ParentName;
-	
+	private static String NamespaceWcf;
+	private static String PrefixWcf;
+	private static String NamespaceTem;
+	private static String PrefixTem;
+	private static String NamespaceSoapenv;
+	private static String PrefixSoapenv;
 	
 	public UtilsCtrl() {
 		super();
 		
-		SoapEndpoint = properties.getProperty("soap.saldos.endpoint");
-		SoapAction = properties.getProperty("soap.saldos.action");
-		Namespace = properties.getProperty("soap.saldos.datos_client.namespace");
-		NamespaceUrl = properties.getProperty("soap.saldos.datos_client.namespace.url");
-		ParentName = properties.getProperty("soap.saldos.datos_client.parent_name");
+		SoapEndpoint = properties.getProperty("soap.movimientos.endpoint");
+		SoapAction = properties.getProperty("soap.movimientos.action");
+		NamespaceWcf = properties.getProperty("soap.movimientos.namespace.wcf");
+		PrefixWcf = properties.getProperty("soap.movimientos.namespace.wcf.prefix");
+		NamespaceTem = properties.getProperty("soap.movimientos.namespace.tem");
+		PrefixTem = properties.getProperty("soap.movimientos.namespace.tem.prefix");
+		NamespaceSoapenv = properties.getProperty("soap.movimientos.namespace.soapenv");
+		PrefixSoapenv = properties.getProperty("soap.movimientos.namespace.soapenv.prefix");
 		
 	}
 	
@@ -43,43 +57,92 @@ public class UtilsCtrl extends BimBaseCtrl {
 	@POST()
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public String consultaSaldos(JsonObject datosCorreo) {
-		logger.info("CTRL: Comenzando consultaSaldos metodo");
+	public void movimientosEnvioCorreo(JsonObject datosCorreo) throws SOAPException {
+		logger.info("CTRL: Comenzando movimientosEnvioCorreo metodo");
 		
 		String anio = datosCorreo.get("anio").getAsString();
 		String mes = datosCorreo.get("mes").getAsString();
 		String cliente = datosCorreo.get("cliente").getAsString();
 		
-		//agregar validacions de datosCorreo
+        if(anio == null || anio.isEmpty()) {
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.23");
+            throw new BadRequestException(bimMessageDTO.toString());
+        }
+        
+        if(mes == null || mes.isEmpty()) {
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.24");
+            throw new BadRequestException(bimMessageDTO.toString());
+        }
+        
+        if(cliente == null || cliente.isEmpty()) {
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.25");
+            throw new BadRequestException(bimMessageDTO.toString());
+        }
+                
+        if(!Utilerias.isNumber(anio)) {
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.26");
+            bimMessageDTO.addMergeVariable("anio", anio);
+            throw new BadRequestException(bimMessageDTO.toString());
+        }
+        
+        if(!Utilerias.isNumber(mes)) {
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.27");
+            bimMessageDTO.addMergeVariable("mes", mes);
+            throw new BadRequestException(bimMessageDTO.toString());
+        }
+        
+        if(!Utilerias.isNumber(cliente)) {
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.28");
+            bimMessageDTO.addMergeVariable("cliente", cliente);
+            throw new BadRequestException(bimMessageDTO.toString());
+        }
+        
+		SOAPMessage soapRequest = null;
+		MessageFactory messageFactory = MessageFactory.newInstance();
+		soapRequest = messageFactory.createMessage();
 		
-		SOAPRequestDTO soapRequestDTO = new SOAPRequestDTO();
-		soapRequestDTO.setSoapEnpoint(SoapEndpoint);
-		soapRequestDTO.setSoapAction(SoapAction);
-		soapRequestDTO.setNamespace(Namespace);
-		soapRequestDTO.setNamespaceUrl(NamespaceUrl);
-		soapRequestDTO.setSoapRequestPrefix("s");
+		MimeHeaders headers =  soapRequest.getMimeHeaders();
+		headers.addHeader("SOAPAction", SoapAction);
 		
-		SOAPElement soapElementDatosCliente = null;
-		try {
-			soapElementDatosCliente = SOAPFactory.newInstance().createElement("DatosCliente","", "http://tempuri.org/");
-			SOAPElement soapElementMCorreoRequest = soapElementDatosCliente.addChildElement("MCorreoRequest");
-			soapElementMCorreoRequest.addNamespaceDeclaration("d4p1", "http://schemas.datacontract.org/2004/07/WcfSendMail.Modelo");
-			soapElementMCorreoRequest.addNamespaceDeclaration("i", "http://www.w3.org/2001/XMLSchema-instance");
-			SOAPElement soapElementMCorreoRequestAnio = soapElementMCorreoRequest.addChildElement("Anio", "d4p1");
-			soapElementMCorreoRequestAnio.addTextNode(anio);
-			SOAPElement soapElementMCorreoRequestMes= soapElementMCorreoRequest.addChildElement("Mes", "d4p1");
-			soapElementMCorreoRequestMes.addTextNode(mes);
-			SOAPElement soapElementMCorreoRequestCliente = soapElementMCorreoRequest.addChildElement("Cliente", "d4p1");
-			soapElementMCorreoRequestCliente.addTextNode(cliente);
-		} catch (SOAPException e) {
-			e.printStackTrace();
-		}
+		SOAPPart soapPart = soapRequest.getSOAPPart();
 		
-		soapRequestDTO.setSoapElementBody(soapElementDatosCliente);
+		SOAPEnvelope soapEnvelope = soapPart.getEnvelope();
+		soapEnvelope.removeNamespaceDeclaration(soapEnvelope.getPrefix());
+		soapEnvelope.addNamespaceDeclaration(PrefixSoapenv, NamespaceSoapenv);
+		soapEnvelope.addNamespaceDeclaration(PrefixTem, NamespaceTem);
+		soapEnvelope.addNamespaceDeclaration(PrefixWcf, NamespaceWcf);
+		soapEnvelope.setPrefix(PrefixSoapenv);
+	
+        if(soapEnvelope.getHeader() != null) 
+            soapEnvelope.getHeader().detachNode();
+        
+        SOAPHeader soapHeader = soapEnvelope.addHeader();
+        soapHeader.setPrefix(PrefixSoapenv);
 		
-		SOAPClientUtils.callSoapWebService(soapRequestDTO);
-		logger.info("CTRL: Finalizando consultaSaldos metodo");
-		return "SUCCESS";
+		SOAPBody soapBody = soapEnvelope.getBody();
+		soapBody.setPrefix(PrefixSoapenv);
+       
+		QName datosClienteName = new QName(NamespaceTem, "DatosCliente", PrefixTem);
+		SOAPElement soapElementDatosCliente = soapBody.addBodyElement(datosClienteName);
+		
+		QName datosMCorreoRequestName = new QName(NamespaceTem, "MCorreoRequest", PrefixTem);
+		SOAPElement soapElementMCorreoRequest = soapElementDatosCliente.addChildElement(datosMCorreoRequestName);
+		
+		QName anioName = new QName(NamespaceWcf, "Anio", PrefixWcf);
+		SOAPElement soapElementAnio = soapElementMCorreoRequest.addChildElement(anioName);
+		soapElementAnio.addTextNode(anio);
+
+		QName clienteName = new QName(NamespaceWcf, "Cliente", PrefixWcf);
+		SOAPElement soapElementCliente = soapElementMCorreoRequest.addChildElement(clienteName);
+		soapElementCliente.addTextNode(cliente);
+		
+		QName mesName = new QName(NamespaceWcf, "Mes", PrefixWcf);
+		SOAPElement soapElementMes = soapElementMCorreoRequest.addChildElement(mesName);
+		soapElementMes.addTextNode(mes);
+		
+		SOAPClientUtils.callSoapWebService(soapRequest, SoapEndpoint);
+		
+		logger.info("CTRL: Finalizando movimientosEnvioCorreo metodo");
 	}
 	 
 }
