@@ -33,6 +33,7 @@
     <com.bim.dataservice_._TasaServicio>capp/DataServicesServer</com.bim.dataservice_._TasaServicio>
     <com.bim.dataservice_._SaldoServicio>capp/DataServicesServer</com.bim.dataservice_._SaldoServicio>
     <com.bim.dataservice_._TransaccionServicio>capp/DataServicesServer</com.bim.dataservice_._TransaccionServicio>
+    <com.bim.dataservice_._MovimientosServicio>capp/DataServicesServer</com.bim.dataservice_._MovimientosServicio>
   </properties>
   <dependencies>
     <dependency>
@@ -137,6 +138,13 @@
     <dependency>
       <groupId>com.bim.dataservice</groupId>
       <artifactId>TransaccionServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>MovimientosServicio</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>

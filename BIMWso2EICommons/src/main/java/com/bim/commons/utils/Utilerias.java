@@ -12,6 +12,11 @@ import java.util.Properties;
 
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
+import org.apache.log4j.Logger;
+
+import com.bim.commons.dto.BimMessageDTO;
+import com.bim.commons.dto.RequestDTO;
+import com.bim.commons.exceptions.UnauthorizedException;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -23,6 +28,8 @@ public class Utilerias {
 
 	private static final Logger logger = Logger.getLogger(Utilerias.class);
 	private static Properties properties;
+	private static String IdentityServer;
+	private static String DataServer;
 	
 	static {
 		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/services.properties")) {
@@ -35,6 +42,9 @@ public class Utilerias {
 		catch(IOException ioException) {
 			ioException.printStackTrace();
 		}
+		
+		IdentityServer = properties.getProperty("identity_server.host");
+		DataServer = properties.getProperty("data_service.host");
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -175,7 +185,7 @@ public class Utilerias {
 		return value.matches(regex);
 	}
 
-	public static String validarTokenTransaccion(String cpRSAToken, String tokFolio, String tokUsuari) {
+	public static String validarTokenTransaccion(String cpRSAToken, String tokUsuari) {
 		logger.info("COMMONS: Iniciando validarTokenTransaccion metodo...");
 
 		String DataServiceHost = properties.getProperty("data_service.host");
@@ -192,7 +202,7 @@ public class Utilerias {
 		String usuStatus = "01".equals(validaToken) ? "C" : "A";
 
 		JsonObject datosToken = new JsonObject();
-		datosToken.addProperty("Tok_Folio", tokFolio);
+		datosToken.addProperty("Tok_Folio", "");
 		datosToken.addProperty("Tok_UsuAdm", "");
 		datosToken.addProperty("Tok_Usuari", tokUsuari);
 		datosToken.addProperty("Tok_ComCan", "");
@@ -230,5 +240,202 @@ public class Utilerias {
 			usuStatus = intentosActualizacion.get("Usu_Status").getAsString();
 
 		return usuStatus;
+	}
+
+	public static String generarDigitoVerificador(String sVarEncode) {
+		int matrizd1[][] = new int[2][2];
+		int matrizd2[][] = new int[2][2];
+		int matrizenc1[][] = new int[2][2];
+		int matrizenc2[][] = new int[2][2];
+		String sVarEncodeTmp = sVarEncode;
+
+		if(sVarEncodeTmp.length() < 8) {
+			for(int i = sVarEncodeTmp.length(); i < 8; i++) {
+				sVarEncodeTmp += " ";
+			}
+		} else if(sVarEncodeTmp.length() > 8) {
+			sVarEncodeTmp = "";
+			for(int i = 0; i < 8; i++) {
+				sVarEncodeTmp += sVarEncode.charAt(i);
+			}
+		}
+
+		// Carga de la primera matriz de datos
+		for(int i = 0; i < 2; i++) {
+			for(int j = 0; j < 2; j++) {
+				if(i == 0)
+					matrizd1[j][0] = (int) sVarEncodeTmp.charAt(j);
+				else
+					matrizd1[j][1] = (int) sVarEncodeTmp.charAt(j + 2);
+			}
+		}
+
+		// Carga de la segunda matriz de datos
+		for(int i = 4; i < 6; i++) {
+			for(int j = 4; j < 6; j++) {
+				if(i == 4)
+					matrizd2[j-4][0] = (int) sVarEncodeTmp.charAt(j);
+				else
+					matrizd2[j-4][1] = (int) sVarEncodeTmp.charAt(j + 2);
+			}
+		}
+
+		// Multiplica las matrices por la matriz codificadora
+		for(int i = 0; i < 2; i++) {
+			for(int j = 0; j < 2; j++) {
+				int suma1 = 0;
+				int suma2 = 0;
+
+				for(int x = 0; x < 2; x++) {
+					suma1 += matrizd1[x][i] * matrizd2[j][x];
+					suma2 += matrizd2[x][i] * matrizd2[j][x];
+				}
+
+				matrizenc1[j][i] = suma1;
+				matrizenc2[j][i] = suma2;
+			}
+		}
+
+		String claveEnc = "";
+		String claveEnc1 = "";
+
+		for(int i = 0; i < 2; i++) {
+			for(int j = 0; j < 2; j++) {
+				if(String.valueOf(matrizenc1[j][i]).length() < 3) {
+					if(String.valueOf(matrizenc1[j][i]).length() > 1) {
+						claveEnc += "0";
+					} else {
+						claveEnc += "00";
+					}
+				}
+				claveEnc += String.valueOf(matrizenc1[j][i]);
+			}
+		}
+
+		for(int i = 0; i < 2; i++) {
+			for(int j = 0; j < 2; j++) {
+				if(String.valueOf(matrizenc2[j][i]).length() < 3) {
+					if(String.valueOf(matrizenc2[j][i]).length() > 1) {
+						claveEnc1 += "0";
+					} else {
+						claveEnc1 += "00";
+					}
+				}
+				claveEnc1 += String.valueOf(matrizenc2[j][i]);
+			}
+		}
+
+		claveEnc += claveEnc1;
+		return claveEnc;
+	}
+	
+	public static String concat(String ...args) {
+		logger.info("COMMONS: Iniciando concat metodo...");
+		StringBuilder resultado = new StringBuilder();
+		for(int j = 0; j < args.length; j++) {
+			String arg = args[j];
+			if(arg == null || arg.isEmpty())
+				continue;
+			
+			String []argItems = arg.split(" ");
+			
+			for(int i = 0; i < argItems.length; i++) {
+				if(argItems[i].isEmpty())
+					continue;
+				
+				resultado.append(argItems[i]);
+				
+				if(i < argItems.length - 1) 
+					resultado.append(" ");
+			}	
+
+			if(j < args.length - 1) 
+				resultado.append(" ");
+		}
+		logger.info("COMMONS: Iniciando concat metodo...");
+		return resultado.toString();	
+	}
+	
+	public static JsonObject getPrincipal(String bearerToken) {
+		RequestDTO principalSolicitud = new RequestDTO();
+		principalSolicitud.setUrl(IdentityServer);
+		principalSolicitud.setIsHttps(true);
+		principalSolicitud.addHeader("Authorization", bearerToken);
+		principalSolicitud.addHeader("Content-Type", "application/json");
+		principalSolicitud.addHeader("Accept", "application/json");
+		
+		String principalResultado = HttpClientUtils.getPerform(principalSolicitud);
+		JsonObject principalResultadoObjecto = new Gson().fromJson(principalResultado, JsonObject.class);
+		
+		if(principalResultadoObjecto.has("error")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.29");
+			throw new UnauthorizedException(bimMessageDTO.toString());
+		}
+		
+		return principalResultadoObjecto;
+	}
+	
+	public static String getFechaSis() {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
+		Date fecha = new Date();
+		return simpleDateFormat.format(fecha);	
+	}
+	
+	public static String getOperacionUrl(String servicio, String operacion) {
+		return new StringBuilder()
+				.append(DataServer)
+				.append("/")
+				.append(servicio)
+				.append("/")
+				.append(operacion)
+				.toString();
+	}
+	
+	public static JsonObject performOperacion(String servicioNombre, String operacionNombre, JsonObject datosOperacion) {
+		String url = getOperacionUrl(servicioNombre, operacionNombre);
+		RequestDTO solicitudOperacion = new RequestDTO();
+		solicitudOperacion.setUrl(url);
+		JsonObject operacion = new JsonObject();
+		operacion.add(operacionNombre, datosOperacion);
+		solicitudOperacion.setBody(operacion);
+		String resultado = HttpClientUtils.postPerform(solicitudOperacion);
+		JsonObject resultadoObjeto = resultado != null ? new Gson().fromJson(resultado, JsonObject.class) : null;
+		return resultadoObjeto;
+	}
+
+	public static String getStringProperty(JsonObject datos, String propertyName) {
+		if(datos == null)
+			return null;
+		return datos.has(propertyName) && datos.get(propertyName).isJsonPrimitive() ? datos.get(propertyName).getAsString() : null;
+	}
+	
+	public static Integer getIntProperty(JsonObject datos, String propertyName) {
+		if(datos == null)
+			return null;
+		return datos.has(propertyName) && datos.get(propertyName).isJsonPrimitive() ? datos.get(propertyName).getAsInt() : null;
+	}
+	
+	public static Double getDoubleProperty(JsonObject datos, String propertyName) {
+		if(datos == null)
+			return null;
+		return datos.has(propertyName) && datos.get(propertyName).isJsonPrimitive() ? datos.get(propertyName).getAsDouble() : null;
+	}
+	
+	public static Float getFloatProperty(JsonObject datos, String propertyName) {
+		if(datos == null)
+			return null;
+		return datos.has(propertyName) && datos.get(propertyName).isJsonPrimitive() ? datos.get(propertyName).getAsFloat() : null;
+	}
+	
+	public static JsonObject getJsonObjectProperty(JsonObject datos, String propertyName) {
+		if(datos == null)
+			return null;
+		return datos.has(propertyName)  && datos.get(propertyName).isJsonObject() ? datos.get(propertyName).getAsJsonObject() : null;
+	}
+	
+	public static JsonArray getJsonArrayProperty(JsonObject datos, String propertyName) {
+		if(datos == null)
+			return null;
+		return datos.has(propertyName)  && datos.get(propertyName).isJsonArray() ? datos.get(propertyName).getAsJsonArray() : null;
 	}
 }
