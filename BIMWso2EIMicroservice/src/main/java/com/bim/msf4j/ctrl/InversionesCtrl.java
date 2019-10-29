@@ -480,13 +480,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
 		String bitPriRef = solicitud.getHeader("User-Agent");
 		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
-
-		/* 
-			Parametros obtenidos por medio del principal 
-				Bit_Usuari = usuNumero
-				Inv_Client = usuClient
-				Inv_Usuari = usuNumero
-		*/
 		
 		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
 		String usuClient = principalResultadoObjecto.get("usuClient").getAsString();
