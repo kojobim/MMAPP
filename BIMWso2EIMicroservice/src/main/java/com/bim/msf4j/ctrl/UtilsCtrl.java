@@ -65,34 +65,34 @@ public class UtilsCtrl extends BimBaseCtrl {
 		String cliente = datosCorreo.get("cliente").getAsString();
 		
         if(anio == null || anio.isEmpty()) {
-            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.23");
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.32");
             throw new BadRequestException(bimMessageDTO.toString());
         }
         
         if(mes == null || mes.isEmpty()) {
-            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.24");
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.33");
             throw new BadRequestException(bimMessageDTO.toString());
         }
         
         if(cliente == null || cliente.isEmpty()) {
-            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.25");
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.34");
             throw new BadRequestException(bimMessageDTO.toString());
         }
                 
         if(!Utilerias.isNumber(anio)) {
-            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.26");
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.35");
             bimMessageDTO.addMergeVariable("anio", anio);
             throw new BadRequestException(bimMessageDTO.toString());
         }
         
         if(!Utilerias.isNumber(mes)) {
-            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.27");
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.36");
             bimMessageDTO.addMergeVariable("mes", mes);
             throw new BadRequestException(bimMessageDTO.toString());
         }
         
         if(!Utilerias.isNumber(cliente)) {
-            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.28");
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.37");
             bimMessageDTO.addMergeVariable("cliente", cliente);
             throw new BadRequestException(bimMessageDTO.toString());
         }

@@ -55,6 +55,10 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result element="intentosActualizacion">
+            <element column="Usu_Status" name="Usu_Status" xsdType="xs:string" optional="true"/>
+            <element column="Usu_ToAcNe" name="Usu_ToAcNe" xsdType="xs:integer" optional="true"/>
+        </result>
     </query>
     <query id="logCreacionSQL" useConfig="BIMDB">
         <sql>

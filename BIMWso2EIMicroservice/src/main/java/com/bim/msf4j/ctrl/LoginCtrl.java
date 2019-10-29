@@ -1,8 +1,5 @@
 package com.bim.msf4j.ctrl;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -15,15 +12,12 @@ import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
 
 import com.bim.commons.dto.BimMessageDTO;
-import com.bim.commons.dto.MessageProxyDTO;
-import com.bim.commons.dto.RequestDTO;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.exceptions.UnauthorizedException;
-import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Racal;
-import com.google.gson.Gson;
+import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
 @Path("/login")
@@ -60,12 +54,6 @@ public class LoginCtrl extends BimBaseCtrl {
 	private static String BitacoraCreacionOpSucOrigen;
 	private static String BitacoraCreacionOpSucDestino;
 	private static String BitacoraCreacionOpModulo;
-	private static String DataServiceHost;
-	private static String UsuarioServicio;
-	private static String ConfiguracionServicio;
-	private static String TokenServicio;
-	private static String TransaccionServicio;
-	private static String BitacoraServicio;
 	private static String UsuarioConsultarOp;
 	private static String UsuarioActualizacionOp;
 	private static String ConfiguracionBancoDetalleOp;
@@ -112,14 +100,6 @@ public class LoginCtrl extends BimBaseCtrl {
 		BitacoraCreacionOpTransaccio = properties.getProperty("op.bitacora_creacion.suc_destino");
 		BitacoraCreacionOpUsuario = properties.getProperty("op.bitacora_creacion.modulo");
 		
-		DataServiceHost = properties.getProperty("data_service.host");
-		
-		UsuarioServicio = properties.getProperty("data_service.usuario_servicio");
-		ConfiguracionServicio = properties.getProperty("data_service.configuracion_servicio");
-		TokenServicio = properties.getProperty("data_service.token_servicio");
-		TransaccionServicio = properties.getProperty("data_service.transaccion_servicio");
-		BitacoraServicio = properties.getProperty("data_service.bitacora_servicio");
-		
 		UsuarioConsultarOp = properties.getProperty("usuario_servicio.op.usuario_consultar");
 		UsuarioActualizacionOp = properties.getProperty("usuario_servicio.op.usuario_actualizacion");
 		ConfiguracionBancoDetalleOp = properties.getProperty("configuracion_servicio.op.configuracion_banco_detalle");
@@ -136,50 +116,29 @@ public class LoginCtrl extends BimBaseCtrl {
 		logger.info("CTRL: Comenzando login metodo");
 		logger.info("datosUsuario " + datosUsuario);
 		
-		String usuClave = datosUsuario.has("Usu_Clave") ? datosUsuario.get("Usu_Clave").getAsString() : null;
+		String usuClave = Utilerias.getStringProperty(datosUsuario, "Usu_Clave");
 		 
 		if(usuClave == null || usuClave.isEmpty()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.4");
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 		
-		String usuPasswo = datosUsuario.has("Usu_Passwo") ? datosUsuario.get("Usu_Passwo").getAsString() : null; 
+		String usuPasswo = Utilerias.getStringProperty(datosUsuario, "Usu_Passwo"); 
 		
 		if(usuPasswo == null || usuPasswo.isEmpty()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.5");
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 		
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-		Date fecha = new Date();
-		String fechaSis = simpleDateFormat.format(fecha);
+		String fechaSis = Utilerias.getFechaSis();
 		
 		JsonObject datosFolioTransaccion = new JsonObject();
 		datosFolioTransaccion.addProperty("Num_Transa", "");
 		datosFolioTransaccion.addProperty("SucOrigen", FolioTransaccionGenerarOpSucOrigen);
 		
-		JsonObject folioTransaccionGenerarOp = new JsonObject();
-		folioTransaccionGenerarOp.add("folioTransaccionGenerarOp", datosFolioTransaccion);
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = Utilerias.performOperacion(TransaccionServicio, FolioTransaccionGenerarOp, datosFolioTransaccion);
 		
-		StringBuilder folioTransaccionGenerarOpUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(TransaccionServicio)
-				.append("/")
-				.append(FolioTransaccionGenerarOp);
-		
-		RequestDTO folioTransaccionGenerarOpSolicitud = new RequestDTO();
-		folioTransaccionGenerarOpSolicitud.setUrl(folioTransaccionGenerarOpUrl.toString());
-		MessageProxyDTO folioTransaccionGenerarOpMensaje = new MessageProxyDTO();
-		folioTransaccionGenerarOpMensaje.setBody(folioTransaccionGenerarOp.toString());
-		folioTransaccionGenerarOpSolicitud.setMessage(folioTransaccionGenerarOpMensaje);
-		
-		logger.info("folioTransaccionGenerarOpSolicitud " + folioTransaccionGenerarOpSolicitud.toString());
-		String folioTransaccionGenerarOpResultado = HttpClientUtils.postPerform(folioTransaccionGenerarOpSolicitud);
-		logger.info("folioTransaccionGenerarOpResultado" + folioTransaccionGenerarOpResultado);
-		JsonObject folioTransaccionGenerarOpResultadoObjeto = new Gson().fromJson(folioTransaccionGenerarOpResultado, JsonObject.class);
-		
-		String folTransa = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
+		String folTransa = Utilerias.getStringProperty(folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject(), "Fol_Transa");
 		
 		datosUsuario.addProperty("Usu_Passwo", "");
 		datosUsuario.addProperty("Tip_Consul", UsuarioConsultarOpTipConsul);
@@ -200,37 +159,19 @@ public class LoginCtrl extends BimBaseCtrl {
 		datosUsuario.addProperty("FechaSis",fechaSis);	
 		
 		logger.info("datosUsuario" + datosUsuario);
-		StringBuilder usuarioConsultarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(UsuarioServicio)
-				.append("/")
-				.append(UsuarioConsultarOp);
-		JsonObject usuarioConsultarOp = new JsonObject();
-		usuarioConsultarOp.add("usuarioConsultarOp", datosUsuario);
-		logger.info("usuarioConsultarOp" + usuarioConsultarOp);
-
-		RequestDTO usuarioConsultarOpSolicitud = new RequestDTO();
-		usuarioConsultarOpSolicitud.setUrl(usuarioConsultarUrl.toString());
-		MessageProxyDTO usuarioConsultarOpMensaje = new MessageProxyDTO();
-		usuarioConsultarOpMensaje.setBody(usuarioConsultarOp.toString());
-		usuarioConsultarOpSolicitud.setMessage(usuarioConsultarOpMensaje);
-		
-		String usuarioConsultarOpResultado = HttpClientUtils.postPerform(usuarioConsultarOpSolicitud);
-		logger.info("usuarioConsultarOpResultado " + usuarioConsultarOpResultado);
-		JsonObject usuarioConsultarOpResultadoObjeto = new Gson().fromJson(usuarioConsultarOpResultado, JsonObject.class);
+		JsonObject usuarioConsultarOpResultadoObjeto = Utilerias.performOperacion(UsuarioServicio, UsuarioConsultarOp, datosUsuario);
 		logger.info("usuarioConsultarOpResultadoObject" + usuarioConsultarOpResultadoObjeto);
 
 		datosUsuario.addProperty("Usu_Passwo", usuPasswo);
-		JsonObject usuario = usuarioConsultarOpResultadoObjeto.has("usuario") ? usuarioConsultarOpResultadoObjeto.get("usuario").getAsJsonObject() : null;
+		JsonObject usuario = Utilerias.getJsonObjectProperty(usuarioConsultarOpResultadoObjeto, "usuario");
 		
 		if(usuario == null || usuario.isJsonPrimitive()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
 			
-		String usuNumero = usuario.has("Usu_Numero") ? usuario.get("Usu_Numero").getAsString() : null;
-		String usuStatus = usuario.has("Usu_Status") ? usuario.get("Usu_Status").getAsString() : null;
+		String usuNumero = Utilerias.getStringProperty(usuario, "Usu_Numero");
+		String usuStatus = Utilerias.getStringProperty(usuario, "Usu_Status");
 		
 		if(usuNumero == null || (usuStatus == null || usuStatus.isEmpty())) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
@@ -247,7 +188,7 @@ public class LoginCtrl extends BimBaseCtrl {
 			throw new ConflictException(bimMessageDTO.toString());
 		}
 		
-		String tokStatus = usuario.has("Tok_Status") ? usuario.get("Tok_Status").getAsString() : null;
+		String tokStatus = Utilerias.getStringProperty(usuario, "Tok_Status");
 		
 		if(tokStatus == null || tokStatus.isEmpty()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
@@ -259,9 +200,9 @@ public class LoginCtrl extends BimBaseCtrl {
 			throw new ConflictException(bimMessageDTO.toString());
 		}
 		
-		Integer usuCoAcNe = usuario.has("Usu_CoAcNe") ? usuario.get("Usu_CoAcNe").getAsInt() : null; 
-		Integer usuCoDeNe = usuario.has("Usu_CoDeNe") ? usuario.get("Usu_CoDeNe").getAsInt() : null;
-		Integer usuCoPaNe = usuario.has("Usu_CoPaNe") ? usuario.get("Usu_CoPaNe").getAsInt() : null;
+		Integer usuCoAcNe = Utilerias.getIntProperty(usuario, "Usu_CoAcNe"); 
+		Integer usuCoDeNe = Utilerias.getIntProperty(usuario, "Usu_CoDeNe");
+		Integer usuCoPaNe = Utilerias.getIntProperty(usuario, "Usu_CoPaNe");
 		
 		if(usuCoAcNe == null || usuCoDeNe == null || usuCoPaNe == null) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
@@ -283,7 +224,7 @@ public class LoginCtrl extends BimBaseCtrl {
 			throw new ConflictException(bimMessageDTO.toString());
 		}
 		
-		String usuStaSes = usuario.has("Usu_StaSes") ? usuario.get("Usu_StaSes").getAsString() : null;
+		String usuStaSes = Utilerias.getStringProperty(usuario, "Usu_StaSes");
 
 		if(usuStaSes == null) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
@@ -320,28 +261,18 @@ public class LoginCtrl extends BimBaseCtrl {
 		datosConfiguracion.addProperty("SucDestino", ConfiguracionBancoDetalleOpSucDestino);
 		datosConfiguracion.addProperty("Modulo", ConfiguracionBancoDetalleOpModulo);
 		
-		JsonObject configuracionBancoDetalleOp = new JsonObject();
-		configuracionBancoDetalleOp.add("configuracionBancoDetalleOp", datosConfiguracion);
-		
-		RequestDTO configuracionBancoDetalleSolicitud = new RequestDTO();
-		StringBuilder configuracionBancoDetalleOpUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(ConfiguracionServicio)
-				.append("/")
-				.append(ConfiguracionBancoDetalleOp);
-		configuracionBancoDetalleSolicitud.setUrl(configuracionBancoDetalleOpUrl.toString());
-		configuracionBancoDetalleSolicitud.setMessage(new MessageProxyDTO());
-		configuracionBancoDetalleSolicitud.getMessage().setBody(configuracionBancoDetalleOp.toString());
-		
-		String configuracionBancoDetalleOpResultado = HttpClientUtils.postPerform(configuracionBancoDetalleSolicitud);
-		logger.info("configuracionBancoDetalleOpResultado " + configuracionBancoDetalleOpResultado);
-		JsonObject configuracionBancoDetalleOpResultadoObjecto = new Gson().fromJson(configuracionBancoDetalleOpResultado, JsonObject.class);
+		JsonObject configuracionBancoDetalleOpResultadoObjecto = Utilerias.performOperacion(ConfiguracionServicio, ConfiguracionBancoDetalleOp, datosConfiguracion);
 		logger.info("configuracionBancoDetalleOpResultadoObjecto" + configuracionBancoDetalleOpResultadoObjecto);
 		
-		JsonObject configuracionesBanco = configuracionBancoDetalleOpResultadoObjecto.has("configuracionesBanco") ? configuracionBancoDetalleOpResultadoObjecto.get("configuracionesBanco").getAsJsonObject() : null;
-		JsonObject configuracionBanco = configuracionesBanco.has("configuracionBanco") ? configuracionesBanco.get("configuracionBanco").getAsJsonObject() : null; 
-		String parAcceso = configuracionBanco.has("Par_Acceso") ? configuracionBanco.get("Par_Acceso").getAsString() : null;
+		JsonObject configuracionesBanco = Utilerias.getJsonObjectProperty(configuracionBancoDetalleOpResultadoObjecto, "configuracionesBanco");
+							
+		JsonObject configuracionBanco = configuracionesBanco.has("configuracionBanco") ? 
+				configuracionesBanco.get("configuracionBanco").isJsonObject() 
+					? configuracionesBanco.get("configuracionBanco").getAsJsonObject()
+						: configuracionesBanco.get("configuracionBanco").getAsJsonArray().get(0).getAsJsonObject()
+				: null; 
+						
+		String parAcceso = Utilerias.getStringProperty(configuracionBanco, "Par_Acceso");
 		
 		if(parAcceso.equals("N")) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
@@ -368,10 +299,8 @@ public class LoginCtrl extends BimBaseCtrl {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.20");
 			throw new UnauthorizedException(bimMessageDTO.toString());
 		}
-			
-		logger.info("newVersion" + usuarioConsultarOpSolicitud.toString());
-		usuarioConsultarOpResultado = HttpClientUtils.postPerform(usuarioConsultarOpSolicitud);
-		usuarioConsultarOpResultadoObjeto = new Gson().fromJson(usuarioConsultarOpResultado, JsonObject.class);
+
+		usuarioConsultarOpResultadoObjeto = Utilerias.performOperacion(UsuarioServicio, UsuarioConsultarOp, datosUsuario);
 		
 		JsonObject datosUsuarioActualizacion = new JsonObject();
 		datosUsuarioActualizacion.addProperty("Usu_Numero", "");
@@ -394,87 +323,40 @@ public class LoginCtrl extends BimBaseCtrl {
 		datosUsuarioActualizacion.addProperty("SucDestino", UsuarioActualizacionSucDestion);
 		datosUsuarioActualizacion.addProperty("Modulo", UsuarioActualizacionModulo);
 		
-		JsonObject usuarioActualizacionOp = new JsonObject();
-		usuarioActualizacionOp.add("usuarioActualizacionOp", datosUsuarioActualizacion);
-		
-		StringBuilder usuarioActualizacionUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(UsuarioServicio)
-				.append("/")
-				.append(UsuarioActualizacionOp);
-		
-		RequestDTO usuarioActualizacionSolicitud = new RequestDTO();
-		usuarioActualizacionSolicitud.setUrl(usuarioActualizacionUrl.toString());
-		MessageProxyDTO usuarioActualizacionMensaje = new MessageProxyDTO();
-		usuarioActualizacionMensaje.setBody(usuarioActualizacionOp.toString());
-		usuarioActualizacionSolicitud.setMessage(usuarioActualizacionMensaje);
-		
-		String usuarioActualizacionOpResultado = HttpClientUtils.postPerform(usuarioActualizacionSolicitud);
-		logger.info("usuarioActualizacionOpResultado " + usuarioActualizacionOpResultado);
-		JsonObject usuarioActualizacionOpResultadoObjecto = new Gson().fromJson(usuarioActualizacionOpResultado, JsonObject.class);
+		JsonObject usuarioActualizacionOpResultadoObjecto = Utilerias.performOperacion(UsuarioServicio, UsuarioActualizacionOp, datosUsuarioActualizacion);
 		logger.info("usuarioActualizacionOpResultadoObjecto" + usuarioActualizacionOpResultadoObjecto);
 		
-		String tovSerie = usuarioConsultarOpResultadoObjeto.get("usuario").getAsJsonObject().get("Usu_FolTok").getAsString();
+		String tovSerie = Utilerias.getStringProperty(usuarioConsultarOpResultadoObjeto.get("usuario").getAsJsonObject(), "Usu_FolTok");
 		
 		JsonObject datosTokenVerificar = new JsonObject();
-			datosTokenVerificar.addProperty("Tov_Serie", tovSerie);
-			datosTokenVerificar.addProperty("NumTransac", "");
-			datosTokenVerificar.addProperty("Transaccio", TokenVerificarTransaccio);
-			datosTokenVerificar.addProperty("Usuario", TokenVerificarUsuario);
-			datosTokenVerificar.addProperty("FechaSis", fechaSis);
-			datosTokenVerificar.addProperty("SucOrigen", TokenVerificarSucOrigen);
-			datosTokenVerificar.addProperty("SucDestino", TokenVerificarSucDestino);
-			datosTokenVerificar.addProperty("Modulo", TokenVerificarModulo);
+		datosTokenVerificar.addProperty("Tov_Serie", tovSerie);
+		datosTokenVerificar.addProperty("NumTransac", "");
+		datosTokenVerificar.addProperty("Transaccio", TokenVerificarTransaccio);
+		datosTokenVerificar.addProperty("Usuario", TokenVerificarUsuario);
+		datosTokenVerificar.addProperty("FechaSis", fechaSis);
+		datosTokenVerificar.addProperty("SucOrigen", TokenVerificarSucOrigen);
+		datosTokenVerificar.addProperty("SucDestino", TokenVerificarSucDestino);
+		datosTokenVerificar.addProperty("Modulo", TokenVerificarModulo);
 		
-		JsonObject tokenVerificarOp = new JsonObject();
-		tokenVerificarOp.add("tokenVerificarOp", datosTokenVerificar);
-		
-		StringBuilder tokenVerificarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(TokenServicio)
-				.append("/")
-				.append(TokenVerificarOp);
-		
-		RequestDTO tokenVerificarSolicitud = new RequestDTO();
-		tokenVerificarSolicitud.setUrl(tokenVerificarUrl.toString());
-		MessageProxyDTO tokenVerificiarMensaje = new MessageProxyDTO();
-		tokenVerificiarMensaje.setBody(tokenVerificarOp.toString());
-		tokenVerificarSolicitud.setMessage(tokenVerificiarMensaje);
-		
-		String tokenVerificarOpResultado = HttpClientUtils.postPerform(tokenVerificarSolicitud);
-		logger.info("tokenVerificarOpResultado " + tokenVerificarOpResultado);
-		JsonObject tokenVerificarOpResultadoObjecto = new Gson().fromJson(tokenVerificarOpResultado, JsonObject.class);
+		JsonObject tokenVerificarOpResultadoObjecto = Utilerias.performOperacion(TokenServicio, TokenVerificarOp, datosTokenVerificar);
 		logger.info("tokenVerificarOpResultadoObjecto" + tokenVerificarOpResultadoObjecto);
 		
-		JsonObject tokenVerificar = tokenVerificarOpResultadoObjecto.has("tokenVerificar") 
-				&& tokenVerificarOpResultadoObjecto.get("tokenVerificar").isJsonObject() 
-				? tokenVerificarOpResultadoObjecto.get("tokenVerificar").getAsJsonObject()
-						: null;
+		JsonObject tokenVerificar = Utilerias.getJsonObjectProperty(tokenVerificarOpResultadoObjecto, "tokenVerificar");
 		
 		if(tokenVerificar != null && tokenVerificar.has("Tov_FecVen")) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.21");
 			bimMessageDTO.addMergeVariable("fecha", tokenVerificar.get("Tov_FecVen").getAsString());
 			throw new ConflictException(bimMessageDTO.toString());
 		}
-		
-		logger.info("usuarioActualizacionOp " + usuarioActualizacionOp.toString());
-		usuarioActualizacionSolicitud = new RequestDTO();
-		usuarioActualizacionSolicitud.setUrl(usuarioActualizacionUrl.toString());
-		usuarioActualizacionMensaje = new MessageProxyDTO();
-		usuarioActualizacionMensaje.setBody(usuarioActualizacionOp.toString());
-		usuarioActualizacionSolicitud.setMessage(usuarioActualizacionMensaje);
-		
-		usuarioActualizacionOpResultado = HttpClientUtils.postPerform(usuarioActualizacionSolicitud);
-		logger.info("usuarioActualizacionOpResultado " + usuarioActualizacionOpResultado);
-		usuarioActualizacionOpResultadoObjecto = new Gson().fromJson(usuarioActualizacionOpResultado, JsonObject.class);
+
+		usuarioActualizacionOpResultadoObjecto = Utilerias.performOperacion(UsuarioServicio, UsuarioActualizacionOp, datosUsuarioActualizacion);
 		logger.info("usuarioActualizacionOpResultadoObjecto" + usuarioActualizacionOpResultadoObjecto);
 		
 		String bitUsuari = usuarioConsultarOpResultadoObjeto.get("usuario").getAsJsonObject().get("Usu_Numero").getAsString();
 
 		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
+		
 		String bitDireIP = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("User-Agent") : "";
 		String bitPriRef = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("X-Forwarded-For") : "";
 		
@@ -495,28 +377,13 @@ public class LoginCtrl extends BimBaseCtrl {
 		datosBitacoraCreacion.addProperty("SucOrigen", BitacoraCreacionOpSucOrigen);
 		datosBitacoraCreacion.addProperty("SucDestino", BitacoraCreacionOpSucDestino);
 		datosBitacoraCreacion.addProperty("Modulo", BitacoraCreacionOpModulo);		
-			
-		JsonObject bitacoraCreacionOp = new JsonObject();
-		bitacoraCreacionOp.add("bitacoraCreacionOp", datosBitacoraCreacion);
 		
-		StringBuilder bitacoraCreacionOpUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(BitacoraServicio)
-				.append("/")
-				.append(BitacoraCreacionOp);
-		RequestDTO bitacoraCreacionOpSolicitud = new RequestDTO();
-		MessageProxyDTO bitacoraCreacionOpMensaje = new MessageProxyDTO();
-		bitacoraCreacionOpMensaje.setBody(bitacoraCreacionOp.toString());
-		bitacoraCreacionOpSolicitud.setUrl(bitacoraCreacionOpUrl.toString());
-		bitacoraCreacionOpSolicitud.setMessage(bitacoraCreacionOpMensaje);
+		Utilerias.performOperacion(BitacoraServicio, BitacoraCreacionOp, datosBitacoraCreacion);
 		
-		HttpClientUtils.postPerform(bitacoraCreacionOpSolicitud);
-		
-		String usuClient = usuario.has("Usu_Client") ? usuario.get("Usu_Client").getAsString() : null;
-		String usuNombre = usuario.has("Usu_Nombre") ? usuario.get("Usu_Nombre").getAsString() : null;
-		String usuEmail = usuario.has("Usu_Email") ? usuario.get("Usu_Email").getAsString() : null;
-		String usuUsuAdm = usuario.has("Usu_UsuAdm") ? usuario.get("Usu_UsuAdm").getAsString() : null;
+		String usuClient = Utilerias.getStringProperty(usuario, "Usu_Client");
+		String usuNombre = Utilerias.getStringProperty(usuario, "Usu_Nombre");
+		String usuEmail = Utilerias.getStringProperty(usuario, "Usu_Email");
+		String usuUsuAdm = Utilerias.getStringProperty(usuario, "Usu_UsuAdm");
 		
 		JsonObject usuarioResultado = new JsonObject();
 		usuarioResultado.addProperty("usuClave ", usuClave);

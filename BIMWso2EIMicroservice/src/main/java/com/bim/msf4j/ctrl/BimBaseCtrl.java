@@ -16,6 +16,14 @@ import com.bim.msf4j.exceptions.BimExceptionMapper;
 public class BimBaseCtrl implements Microservice {
 
 	protected static Properties properties;
+	protected static String SaldoServicio;
+	protected static String ClienteServicio;
+	protected static String TransaccionServicio;
+	protected static String BitacoraServicio;
+	protected static String MovimientosServicio;
+	protected static String UsuarioServicio;
+	protected static String ConfiguracionServicio;
+	protected static String TokenServicio;
 
 	public BimBaseCtrl() {
 		Map<String, MicroservicesRegistryImpl> microserviceRegistryMap = DataHolder.getInstance().getMicroservicesRegistries();
@@ -37,6 +45,16 @@ public class BimBaseCtrl implements Microservice {
 		catch(IOException ioException) {
 			ioException.printStackTrace();
 		}
+
+		SaldoServicio = properties.getProperty("data_service.saldo_servicio");
+		ClienteServicio = properties.getProperty("data_service.cliente_servicio");
+		TransaccionServicio = properties.getProperty("data_service.transaccion_servicio");
+		BitacoraServicio = properties.getProperty("data_service.bitacora_servicio");
+		MovimientosServicio = properties.getProperty("data_service.movimientos_servicio");
+		UsuarioServicio = properties.getProperty("data_service.usuario_servicio");
+		ConfiguracionServicio = properties.getProperty("data_service.configuracion_servicio");
+		TokenServicio = properties.getProperty("data_service.token_servicio");
+		
 	}
 	
 	private void addResourceToRegistry(MicroservicesRegistryImpl microservicesRegistryImpl) {

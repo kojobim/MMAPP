@@ -89,6 +89,9 @@
             <element column="Tit_Numero" name="Tit_Numero" xsdType="xs:string" optional="true"/>
             <element column="Cli_SucAti" name="Cli_SucAti" xsdType="xs:string" optional="true"/>
             <element column="Adi_Email" name="Adi_Email" xsdType="xs:string" optional="true"/>
+            <element column="Loc_Nombre" name="Loc_Nombre" xsdType="xs:string" optional="true"/>
+            <element column="Ent_Nombre" name="Ent_Nombre" xsdType="xs:string" optional="true"/>
+            <element column="Pai_Nombre" name="Pai_Nombre" xsdType="xs:string" optional="true"/>
         </result>
     </query>
     <operation name="clienteConsultarOp">
