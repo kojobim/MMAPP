@@ -2,6 +2,7 @@ package com.bim.msf4j.ctrl;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -13,6 +14,7 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
 
+import com.bim.commons.utils.Racal;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -38,6 +40,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 	private static String FolioTransaccionGenerarOpSucOrigen;
 	private static String BitacoraCreacionOp;
 	private static String BitacoraCreacionOpBitTipOpe;
+	private static String BitacoraCreacionOpEnvioCorreoMovimientosBitTipOpe;
 	private static String BitacoraCreacionOpTransaccio;
 	private static String BitacoraCreacionOpUsuario;
 	private static String BitacoraCreacionOpSucOrigen;
@@ -77,7 +80,8 @@ public class CuentasCtrl extends BimBaseCtrl {
 		BitacoraCreacionOpSucOrigen = properties.getProperty("op.bitacora_creacion.suc_origen");
 		BitacoraCreacionOpTransaccio = properties.getProperty("op.bitacora_creacion.suc_destino");
 		BitacoraCreacionOpUsuario = properties.getProperty("op.bitacora_creacion.modulo");
-
+		BitacoraCreacionOpEnvioCorreoMovimientosBitTipOpe = properties.getProperty("op.bitacora_creacion.envio_correo_movimientos.bit_tipope");
+		
 		FolioTransaccionGenerarOp = properties.getProperty("transaccion_servicio.op.folio_transaccion_generar");
 		FolioTransaccionGenerarOpSucOrigen = properties.getProperty("op.folio_transaccion_generar.suc_origen");
 		
@@ -241,6 +245,8 @@ public class CuentasCtrl extends BimBaseCtrl {
 		datosFolioTransaccion.addProperty("Num_Transa", "");
 		datosFolioTransaccion.addProperty("SucOrigen", FolioTransaccionGenerarOpSucOrigen);
 		
+		logger.info("- datosFolioTransaccion " + datosFolioTransaccion);
+		
 		JsonObject folioTransaccionGenerarResultadoObjeto =  Utilerias
 				.performOperacion(TransaccionServicio, FolioTransaccionGenerarOp, 
 						datosFolioTransaccion);
@@ -342,5 +348,71 @@ public class CuentasCtrl extends BimBaseCtrl {
 		return Response
 				.ok(response.toString(), MediaType.APPLICATION_JSON)
 				.build();
+	}
+	
+	@Path("/envio-movimientos")
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void movimientosRegistro(JsonObject datosEnvioCorreoMovimientos, @Context Request solicitud) {
+		logger.info("CTRL: Empezando movimientosRegistro metodo");
+		String bearerToken = solicitud.getHeader("Authorization");
+		
+		JsonObject principal = Utilerias.getPrincipal(bearerToken);
+		
+		logger.info("- principal " + principal);
+	
+		JsonObject datosfolioTransaccion = new JsonObject();
+		datosfolioTransaccion.addProperty("Num_Transa", "");
+		datosfolioTransaccion.addProperty("SucOrigen", FolioTransaccionGenerarOpSucOrigen);
+		
+		JsonObject folioTransaccionResultado = Utilerias.performOperacion(TransaccionServicio, FolioTransaccionGenerarOp, datosfolioTransaccion);
+		logger.info("- folioTransaccionResultado " + folioTransaccionResultado );
+		
+		JsonObject transaccion = Utilerias.getJsonObjectProperty(folioTransaccionResultado, "transaccion");
+		
+		JsonObject datosCorreoMovimientos = Utilerias.getJsonObjectProperty(datosEnvioCorreoMovimientos, "enviaCorreoMovimientos");
+		logger.info("- datosCorreoMovimientos " + datosCorreoMovimientos);
+		
+		String claveRSA = Utilerias.getStringProperty(datosCorreoMovimientos, "cpRSAToken");
+		logger.info("- claveRSA " + claveRSA);
+		
+		String resultado = Racal.validaToken(claveRSA);
+		logger.info("- resultado Racal.validaToken " + resultado);
+		
+		String bitUsuari = Utilerias.getStringProperty(principal, "usuNumero");
+		String fechaSis = Utilerias.getFechaSis();
+		String bitPriRef = Utilerias.getStringProperty(principal, "usuClient");
+		String bitDireIp = solicitud.getHeader("X_Forwarded_For");
+		String numTransac = Utilerias.getStringProperty(transaccion, "Fol_Transa");
+		
+		JsonObject datosBitacoraCreacion = new JsonObject();
+		datosBitacoraCreacion.addProperty("Bit_Usuari", bitUsuari);
+		datosBitacoraCreacion.addProperty("Bit_Fecha", fechaSis);
+		datosBitacoraCreacion.addProperty("Bit_PriRef", bitPriRef);
+		datosBitacoraCreacion.addProperty("Bit_DireIP", bitDireIp);
+		datosBitacoraCreacion.addProperty("Num_Transac", numTransac);
+		datosBitacoraCreacion.addProperty("Bit_NumTra", "");
+		datosBitacoraCreacion.addProperty("Bit_CueOri", "");
+		datosBitacoraCreacion.addProperty("Bit_CueDes", "");
+		datosBitacoraCreacion.addProperty("Bit_Monto", 0);
+		datosBitacoraCreacion.addProperty("Bit_SegRef", "");
+		datosBitacoraCreacion.addProperty("Bit_TipOpe", BitacoraCreacionOpEnvioCorreoMovimientosBitTipOpe);
+		datosBitacoraCreacion.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
+		datosBitacoraCreacion.addProperty("Usuario", BitacoraCreacionOpUsuario);
+		datosBitacoraCreacion.addProperty("SucOrigen", BitacoraCreacionOpSucOrigen);
+		datosBitacoraCreacion.addProperty("SucDestino", BitacoraCreacionOpSucDestino);
+		datosBitacoraCreacion.addProperty("Modulo", BitacoraCreacionOpModulo);
+		
+		Utilerias.performOperacion(BitacoraServicio, BitacoraCreacionOp, datosBitacoraCreacion);
+		
+		String anio = Utilerias.getStringProperty(datosCorreoMovimientos, "cpAnio");
+		String mes = Utilerias.getStringProperty(datosCorreoMovimientos, "cpMes");
+		String cliNumero = Utilerias.getStringProperty(datosCorreoMovimientos, "cliNumero");
+		
+		logger.info("- anio " + anio);
+		logger.info("- mes " + mes);
+		logger.info("- cliNumero " + cliNumero);
+		logger.info("CTRL: Terminando movimientosRegistro metodo");
 	}
 }

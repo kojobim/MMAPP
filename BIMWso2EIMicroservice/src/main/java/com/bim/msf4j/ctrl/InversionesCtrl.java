@@ -16,7 +16,6 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
-import org.wso2.msf4j.internal.MicroservicesRegistryImpl;
 
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.dto.MessageProxyDTO;
@@ -27,7 +26,6 @@ import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Utilerias;
-import com.bim.msf4j.exceptions.BimExceptionMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -767,7 +765,4 @@ public class InversionesCtrl extends BimBaseCtrl {
 				.build();
     }
 	
-	private void addResourceToRegistry(MicroservicesRegistryImpl microservicesRegistryImpl) {
-		microservicesRegistryImpl.addExceptionMapper(new BimExceptionMapper());
-	}
 }
