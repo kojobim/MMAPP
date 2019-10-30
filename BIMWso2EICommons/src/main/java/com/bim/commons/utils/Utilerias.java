@@ -132,7 +132,7 @@ public class Utilerias {
 	
 	public static Boolean isNumber(String value) {
 		logger.info("COMMONS: Iniciando isNumber metodo...");
-		String regex = "\\d+";
+		String regex = "\\d+";		
 		logger.info("COMMONS: Finalizando isNumber metodo...");
 		return value.matches(regex);
 	}
@@ -160,7 +160,7 @@ public class Utilerias {
 			if(j < args.length - 1) 
 				resultado.append(" ");
 		}
-		logger.info("COMMONS: Iniciando concat metodo...");
+		logger.info("COMMONS: Finalizando concat metodo...");
 		return resultado.toString();	
 	}
 	

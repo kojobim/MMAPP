@@ -156,8 +156,10 @@ public class InversionesCtrl extends BimBaseCtrl {
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 
-		if(filterBy != null && !filterBy.equals(InversionesFilterBy))
-			throw new BadRequestException("BIM.MENSAJ.6");
+        if(filterBy != null && !filterBy.equals(InversionesFilterBy)) {
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.6");
+            throw new BadRequestException(bimMessageDTO.toString());
+        }
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
