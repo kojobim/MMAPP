@@ -21,6 +21,10 @@ import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.enums.InversionesCategoriasEnum;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.ConflictException;
+import com.bim.commons.service.BitacoraServicio;
+import com.bim.commons.service.ConfiguracionServicio;
+import com.bim.commons.service.InversionesServicio;
+import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
@@ -32,39 +36,11 @@ public class InversionesCtrl extends BimBaseCtrl {
 	
 	private static final Logger logger = Logger.getLogger(InversionesCtrl.class);
 
-	private static String FolioTransaccionGenerarOp;
-	private static String BitacoraCreacionOp;
-	private static String InversionesObtenerOp;
-	private static String InversionesPagareNumeroUsuarioObtenerOp;
-	private static String HorarioInversionOp;
+	private BitacoraServicio bitacoraServicio;
+	private ConfiguracionServicio configuracionServicio;
+	private TransaccionServicio transaccionServicio;
+	private InversionesServicio inversionesServicio;
 
-	private static String FolioTransaccionGenerarOpSucOrigen;
-	private static String BitacoraCreacionOpBitTipOpe;
-	private static String BitacoraCreacionOpTransaccio;
-	private static String BitacoraCreacionOpUsuario;
-	private static String BitacoraCreacionOpSucOrigen;
-	private static String BitacoraCreacionOpSucDestino;
-	private static String BitacoraCreacionOpModulo;
-	private static String BitacoraCreacionOpBitMonto;
-	private static String InversionesObtenerOpInvMoneda;
-	private static String InversionesObtenerOpTransaccio;
-	private static String InversionesObtenerOpUsuario;
-	private static String InversionesObtenerOpSucOrigen;
-	private static String InversionesObtenerOpSucDestino;
-	private static String InversionesObtenerOpModulo;
-	private static String InversionesPagareNumeroUsuarioObtenerOpTipConsul;
-	private static String InversionesPagareNumeroUsuarioObtenerOpTransaccio;
-	private static String InversionesPagareNumeroUsuarioObtenerOpUsuario;
-	private static String InversionesPagareNumeroUsuarioObtenerOpSucOrigen;
-	private static String InversionesPagareNumeroUsuarioObtenerOpSucDestino;
-	private static String InversionesPagareNumeroUsuarioObtenerOpModulo;
-	private static String HorarioInversionOpTipConsul;
-	private static String HorarioInversionOpTipTransf;
-	private static String HorarioInversionOpTransaccio;
-	private static String HorarioInversionOpUsuario;
-	private static String HorarioInversionOpSucOrigen;
-	private static String HorarioInversionOpSucDestino;
-	private static String HorarioInversionOpModulo;
 
 	private static String InversionesFilterBy;
 	private static Integer InversionesMaximoPagina;
@@ -72,45 +48,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 	public InversionesCtrl() {
 		super();
 		logger.info("Ctrl: Empezando metodo init...");
-		
-		FolioTransaccionGenerarOpSucOrigen = properties.getProperty("op.folio_transaccion_generar.suc_origen");
-		
-		BitacoraCreacionOpBitTipOpe = properties.getProperty("op.bitacora_creacion.bit_tipope.inversiones_listado");
-		BitacoraCreacionOpTransaccio = properties.getProperty("op.bitacora_creacion.transaccio");
-		BitacoraCreacionOpUsuario = properties.getProperty("op.bitacora_creacion.usuario");
-		BitacoraCreacionOpSucOrigen = properties.getProperty("op.bitacora_creacion.suc_origen");
-		BitacoraCreacionOpSucDestino= properties.getProperty("op.bitacora_creacion.suc_destino");
-		BitacoraCreacionOpModulo = properties.getProperty("op.bitacora_creacion.modulo");
-		BitacoraCreacionOpBitMonto = properties.getProperty("op.bitacora_creacion.bit_monto");
-
-		InversionesObtenerOpInvMoneda = properties.getProperty("op.inversiones_obtener.inv_moneda");
-		InversionesObtenerOpTransaccio = properties.getProperty("op.inversiones_obtener.transaccio");
-		InversionesObtenerOpUsuario = properties.getProperty("op.inversiones_obtener.usuario");
-		InversionesObtenerOpSucOrigen = properties.getProperty("op.inversiones_obtener.suc_origen");
-		InversionesObtenerOpSucDestino = properties.getProperty("op.inversiones_obtener.suc_destino");
-		InversionesObtenerOpModulo = properties.getProperty("op.inversiones_obtener.modulo");
-
-		InversionesPagareNumeroUsuarioObtenerOpTipConsul = properties.getProperty("op.inversiones_pagare_numero_usuario_obtener.tip_consul");
-		InversionesPagareNumeroUsuarioObtenerOpTransaccio = properties.getProperty("op.inversiones_pagare_numero_usuario_obtener.transaccio");
-		InversionesPagareNumeroUsuarioObtenerOpUsuario = properties.getProperty("op.inversiones_pagare_numero_usuario_obtener.usuario");
-		InversionesPagareNumeroUsuarioObtenerOpSucOrigen = properties.getProperty("op.inversiones_pagare_numero_usuario_obtener.suc_origen");
-		InversionesPagareNumeroUsuarioObtenerOpSucDestino = properties.getProperty("op.inversiones_pagare_numero_usuario_obtener.suc_destino");
-		InversionesPagareNumeroUsuarioObtenerOpModulo = properties.getProperty("op.inversiones_pagare_numero_usuario_obtener.modulo");
-
-		HorarioInversionOpTipConsul = properties.getProperty("op.horario_inversion.tip_consul");
-		HorarioInversionOpTipTransf = properties.getProperty("op.horario_inversion.tip_transf");
-		HorarioInversionOpTransaccio = properties.getProperty("op.horario_inversion.transaccio");
-		HorarioInversionOpUsuario = properties.getProperty("op.horario_inversion.usuario");
-		HorarioInversionOpSucOrigen = properties.getProperty("op.horario_inversion.suc_origen");
-		HorarioInversionOpSucDestino = properties.getProperty("op.horario_inversion.suc_destino");
-		HorarioInversionOpModulo = properties.getProperty("op.horario_inversion.modulo");
-		
-		
-		FolioTransaccionGenerarOp = properties.getProperty("transaccion_servicio.op.folio_transaccion_generar");
-		BitacoraCreacionOp = properties.getProperty("bitacora_servicio.op.bitacora_creacion");
-		InversionesObtenerOp = properties.getProperty("inversiones_servicio.op.inversiones_obtener");
-		InversionesPagareNumeroUsuarioObtenerOp = properties.getProperty("inversiones_servicio.op.inversiones_pagare_numero_usuario_obtener");
-		HorarioInversionOp = properties.getProperty("configuracion_servicio.op.horario_inversion");
+		this.bitacoraServicio = new BitacoraServicio();
+		this.transaccionServicio = new TransaccionServicio();
+		this.inversionesServicio = new InversionesServicio();
 		
 		InversionesFilterBy = properties.getProperty("inversiones_servicio.filter_by");
 		InversionesMaximoPagina = Integer.parseInt(properties.getProperty("inversiones_servicio.maximo_pagina"));
@@ -165,12 +105,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		Date fecha = new Date();
 		String fechaSis = simpleDateFormat.format(fecha);
 		
-		JsonObject datosTransaccion = new JsonObject();
-		datosTransaccion.addProperty("Num_Transa", "");
-		datosTransaccion.addProperty("SucOrigen", FolioTransaccionGenerarOpSucOrigen);
-		
-		logger.info("datosTransaccion" + datosTransaccion);
-		JsonObject folioTransaccionGenerarOpResultadoObjeto = Utilerias.performOperacion(TransaccionServicio, TransaccionServicio, datosTransaccion);
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
 		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
 
 		String numTransac = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
@@ -186,51 +121,26 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject datosBitacora = new JsonObject();
 		datosBitacora.addProperty("Bit_Usuari", usuNumero);
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
-		datosBitacora.addProperty("Bit_NumTra", "");
-		datosBitacora.addProperty("Bit_TipOpe", BitacoraCreacionOpBitTipOpe);
-		datosBitacora.addProperty("Bit_CueOri", "");
-		datosBitacora.addProperty("Bit_CueDes", "");
-		datosBitacora.addProperty("Bit_Monto", 0);
 		datosBitacora.addProperty("Bit_PriRef", bit_PriRef);
-		datosBitacora.addProperty("Bit_SegRef", "");
 		datosBitacora.addProperty("Bit_DireIP", bit_DireIP);
 		datosBitacora.addProperty("NumTransac", numTransac);
-		datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
-		datosBitacora.addProperty("Usuario", BitacoraCreacionOpUsuario);
 		datosBitacora.addProperty("FechaSis", fechaSis);
-		datosBitacora.addProperty("SucOrigen", BitacoraCreacionOpSucOrigen);
-		datosBitacora.addProperty("SucDestino", BitacoraCreacionOpSucDestino);
-		datosBitacora.addProperty("Modulo", BitacoraCreacionOpModulo);
 
-		Utilerias.performOperacion(BitacoraServicio, BitacoraCreacionOp, datosBitacora);
+		this.bitacoraServicio.creacionBitacora(datosBitacora);
 
 		JsonObject inversionesObtener = new JsonObject();
 		inversionesObtener.addProperty("Inv_Client", usuClient);
-		inversionesObtener.addProperty("Inv_Moneda", InversionesObtenerOpInvMoneda);
-		inversionesObtener.addProperty("NumTransac", "");
-		inversionesObtener.addProperty("Transaccio", InversionesObtenerOpTransaccio);
-		inversionesObtener.addProperty("Usuario", InversionesObtenerOpUsuario);
 		inversionesObtener.addProperty("FechaSis", fechaSis);
-		inversionesObtener.addProperty("SucOrigen", InversionesObtenerOpSucOrigen);
-		inversionesObtener.addProperty("SucDestino", InversionesObtenerOpSucDestino);
-		inversionesObtener.addProperty("Modulo", InversionesObtenerOpModulo);
 				
-		JsonObject inversionesObtenerOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesObtenerOp, inversionesObtener);//new Gson().fromJson(inversionesObtenerOpResultado, JsonObject.class);
+		JsonObject inversionesObtenerOpResultadoObjeto = this.inversionesServicio.inversionesObtener(inversionesObtener);
 		logger.info("inversionesObtenerOpResultadoObjeto" + inversionesObtenerOpResultadoObjeto);
 		
 		JsonObject inversionesPagareNumeroUsuarioObtener = new JsonObject();
-		inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
 		inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Usuari", usuNumero);
-		inversionesPagareNumeroUsuarioObtener.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
 		inversionesPagareNumeroUsuarioObtener.addProperty("NumTransac", numTransac);
-		inversionesPagareNumeroUsuarioObtener.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
-		inversionesPagareNumeroUsuarioObtener.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);
 		inversionesPagareNumeroUsuarioObtener.addProperty("FechaSis", fechaSis);
-		inversionesPagareNumeroUsuarioObtener.addProperty("SucOrigen", InversionesPagareNumeroUsuarioObtenerOpSucOrigen);
-		inversionesPagareNumeroUsuarioObtener.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
-		inversionesPagareNumeroUsuarioObtener.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
 	
-		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = Utilerias.performOperacion(InversionesServicio, InversionesServicio, inversionesPagareNumeroUsuarioObtener);//new Gson().fromJson(inversionesPagareNumeroUsuarioObtenerOpResultado, JsonObject.class);
+		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = this.inversionesServicio.inversionesPagareNumeroUsuarioObtener(inversionesPagareNumeroUsuarioObtener);
 		logger.info("inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto" + inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto);
 		
 		JsonArray inversionesResultado = new JsonArray();
@@ -238,20 +148,11 @@ public class InversionesCtrl extends BimBaseCtrl {
 		inversionesResultado.addAll(inversionesObtenerOpResultadoObjeto.get("inversiones").getAsJsonObject().get("inversion").getAsJsonArray());
 
 		JsonObject datosHorario = new JsonObject();
-		datosHorario.addProperty("Tip_Consul", HorarioInversionOpTipConsul);
-		datosHorario.addProperty("Tip_Transf", HorarioInversionOpTipTransf);
-		datosHorario.addProperty("Err_Codigo", "");
-		datosHorario.addProperty("Msj_Error", "");
 		datosHorario.addProperty("NumTransac", numTransac);
-		datosHorario.addProperty("Transaccio", HorarioInversionOpTransaccio);
-		datosHorario.addProperty("Usuario", HorarioInversionOpUsuario);
 		datosHorario.addProperty("FechaSis", fechaSis);
-		datosHorario.addProperty("SucOrigen", HorarioInversionOpSucOrigen);
-		datosHorario.addProperty("SucDestino", HorarioInversionOpSucDestino);
-		datosHorario.addProperty("Modulo", HorarioInversionOpModulo);
 
 		logger.info("datosHorario" + datosHorario);
-		JsonObject horarioInversionOpResultadoObjecto = Utilerias.performOperacion(ConfiguracionServicio, HorarioInversionOp, datosHorario);
+		JsonObject horarioInversionOpResultadoObjecto = this.configuracionServicio.horariosConsultar(datosHorario);
 		logger.info("horarioInversionOpResultadoObjecto" + horarioInversionOpResultadoObjecto);
 
 		JsonObject horariosObjecto = horarioInversionOpResultadoObjecto.get("horariosInversion").getAsJsonObject();
@@ -351,12 +252,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 				throw new BadRequestException(bimMessageDTO.toString());
 		}
 
-		JsonObject datosTransaccion = new JsonObject();
-		datosTransaccion.addProperty("Num_Transa", "");
-		datosTransaccion.addProperty("SucOrigen", FolioTransaccionGenerarOpSucOrigen);
-
-		logger.info("datosTransaccion" + datosTransaccion);
-		JsonObject folioTransaccionGenerarOpResultadoObjeto = Utilerias.performOperacion(TransaccionServicio, FolioTransaccionGenerarOp, datosTransaccion);
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
 		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
 
 		String FolioTransaccionGenerarOpFolTransa = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
@@ -374,77 +270,43 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject datosBitacora = new JsonObject();
 		datosBitacora.addProperty("Bit_Usuari", usuNumero);
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
-		datosBitacora.addProperty("Bit_NumTra", "");
-		datosBitacora.addProperty("Bit_TipOpe", BitacoraCreacionOpBitTipOpe);
-		datosBitacora.addProperty("Bit_CueOri", "");
-		datosBitacora.addProperty("Bit_CueDes", "");
-		datosBitacora.addProperty("Bit_Monto", Integer.parseInt(BitacoraCreacionOpBitMonto));
 		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
-		datosBitacora.addProperty("Bit_SegRef", "");
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
 		datosBitacora.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
-		datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
-		datosBitacora.addProperty("Usuario", BitacoraCreacionOpUsuario);
 		datosBitacora.addProperty("FechaSis", fechaSis);
-		datosBitacora.addProperty("SucOrigen", BitacoraCreacionOpSucOrigen);
-		datosBitacora.addProperty("SucDestino", BitacoraCreacionOpSucDestino);
-		datosBitacora.addProperty("Modulo", BitacoraCreacionOpModulo);
 
 		logger.info("datosBitacora" + datosBitacora);
-		JsonObject bitacoraCreacionOpResultadoObjeto = Utilerias.performOperacion(BitacoraServicio, BitacoraCreacionOp, datosBitacora);
+		JsonObject bitacoraCreacionOpResultadoObjeto = this.bitacoraServicio.creacionBitacora(datosBitacora);
 		logger.info("bitacoraCreacionOpResultadoObjeto" + bitacoraCreacionOpResultadoObjeto);
 		
 		JsonObject datosInversion = new JsonObject();
 		datosInversion.addProperty("FechaSis", fechaSis);
 
-		String inversionesConsultarOp;
-		if (categoria.equals(InversionesCategoriasEnum.PAGARE.toString())) {
-			datosInversion.addProperty("Inv_Numero", "");
-			datosInversion.addProperty("Inv_Usuari", usuNumero);
-			datosInversion.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
-			datosInversion.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
-			datosInversion.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
-			datosInversion.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);			
-			datosInversion.addProperty("SucOrigen", InversionesPagareNumeroUsuarioObtenerOpSucOrigen);
-			datosInversion.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
-			datosInversion.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
 
-			inversionesConsultarOp = InversionesPagareNumeroUsuarioObtenerOp;
+		JsonObject inversionConsultarOpResultadoObjeto = null;
+		if (categoria.equals(InversionesCategoriasEnum.PAGARE.toString())) {
+			datosInversion.addProperty("Inv_Usuari", usuNumero);
+			datosInversion.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
+
+			inversionConsultarOpResultadoObjeto = this.inversionesServicio.inversionesPagareNumeroUsuarioObtener(datosInversion);
 		} else {
 			datosInversion.addProperty("Inv_Client", usuClient);
-			datosInversion.addProperty("Inv_Moneda", InversionesObtenerOpInvMoneda);
 			datosInversion.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
-			datosInversion.addProperty("Transaccio", InversionesObtenerOpTransaccio);
-			datosInversion.addProperty("Usuario", InversionesObtenerOpUsuario);
-			datosInversion.addProperty("SucOrigen", InversionesObtenerOpSucOrigen);
-			datosInversion.addProperty("SucDestino", InversionesObtenerOpSucDestino);
-			datosInversion.addProperty("Modulo", InversionesObtenerOpModulo);
-
-			inversionesConsultarOp = InversionesObtenerOp;
+			inversionConsultarOpResultadoObjeto = this.inversionesServicio.inversionesObtener(datosInversion);
 		}
 
 		logger.info("datosInversion" + datosInversion);
-		JsonObject inversionConsultarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, inversionesConsultarOp, datosInversion);
 		logger.info("inversionConsultarOpResultadoObjeto" + inversionConsultarOpResultadoObjeto);
 
 		JsonObject inversionesObjecto = inversionConsultarOpResultadoObjeto.get("inversiones").getAsJsonObject();
 		JsonArray inversionesArreglo = inversionesObjecto.has("inversion") ? inversionesObjecto.get("inversion").getAsJsonArray() : new JsonArray();
 
 		JsonObject datosHorario = new JsonObject();
-		datosHorario.addProperty("Tip_Consul", HorarioInversionOpTipConsul);
-		datosHorario.addProperty("Tip_Transf", HorarioInversionOpTipTransf);
-		datosHorario.addProperty("Err_Codigo", "");
-		datosHorario.addProperty("Msj_Error", "");
 		datosHorario.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
-		datosHorario.addProperty("Transaccio", HorarioInversionOpTransaccio);
-		datosHorario.addProperty("Usuario", HorarioInversionOpUsuario);
 		datosHorario.addProperty("FechaSis", fechaSis);
-		datosHorario.addProperty("SucOrigen", HorarioInversionOpSucOrigen);
-		datosHorario.addProperty("SucDestino", HorarioInversionOpSucDestino);
-		datosHorario.addProperty("Modulo", HorarioInversionOpModulo);
 
 		logger.info("datosHorario" + datosHorario);
-		JsonObject horarioInversionOpResultadoObjecto = Utilerias.performOperacion(ConfiguracionServicio, HorarioInversionOp, datosHorario);
+		JsonObject horarioInversionOpResultadoObjecto  = this.configuracionServicio.horariosConsultar(datosHorario);
 		logger.info("horarioInversionOpResultadoObjecto" + horarioInversionOpResultadoObjecto);
 
 		JsonObject horariosObjecto = horarioInversionOpResultadoObjecto.get("horariosInversion").getAsJsonObject();
