@@ -10,10 +10,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.soap.SOAPException;
 
 import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
 
+import com.bim.commons.service.SoapService;
 import com.bim.commons.utils.Racal;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
@@ -23,6 +25,7 @@ import com.google.gson.JsonObject;
 public class CuentasCtrl extends BimBaseCtrl {
 
 	private static final Logger logger = Logger.getLogger(CuentasCtrl.class);
+	private SoapService soapService;
 	private static String SaldosClienteConsultarOp;
 	private static String SaldosClienteConsultarOpTransaccio;
 	private static String SaldosClienteConsultarOpUsuario;
@@ -57,6 +60,8 @@ public class CuentasCtrl extends BimBaseCtrl {
 	
 	public CuentasCtrl() {
 		super();
+		
+		this.soapService = new SoapService();
 		
 		SaldosClienteConsultarOp = properties.getProperty("saldo_servicio.op.saldos_cliente_consultar");
 		SaldosClienteConsultarOpModulo = properties.getProperty("op.saldos_cliente_consultar.modulo");
@@ -413,6 +418,14 @@ public class CuentasCtrl extends BimBaseCtrl {
 		logger.info("- anio " + anio);
 		logger.info("- mes " + mes);
 		logger.info("- cliNumero " + cliNumero);
+		
+		try {
+			soapService.movimientosEnvioCorreo(anio, mes, cliNumero);
+		} catch (SOAPException e) {
+			e.printStackTrace();
+		}
 		logger.info("CTRL: Terminando movimientosRegistro metodo");
+		
+		
 	}
 }
