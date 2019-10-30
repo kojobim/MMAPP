@@ -16,7 +16,7 @@ public enum Month {
 	
 	private final String month;
 	
-	public static String validarMes(String mes) {
+	public static String validateMonth(String mes) {
 		if(mes == null || mes.isEmpty())
 			return null;
 		
