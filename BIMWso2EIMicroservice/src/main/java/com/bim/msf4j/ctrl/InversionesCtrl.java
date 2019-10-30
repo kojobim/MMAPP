@@ -25,7 +25,7 @@ import com.bim.commons.exceptions.ForbiddenException;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.HttpClientUtils;
-import com.bim.commons.utils.Racal;
+import com.bim.commons.utils.Token;
 import com.bim.commons.utils.Utilerias;
 import com.bim.msf4j.exceptions.BimExceptionMapper;
 import com.google.gson.Gson;
@@ -176,10 +176,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 	private static String InversionesFilterBy;
 	private static Integer InversionesMaximoPagina;
-	private static String InversionesCategoriaFija;
-	private static String InversionesCategoriaValor;
-	private static String InversionesCategoriaCedeRi;
-	private static String InversionesCategoriaPagare;
 	
 	public InversionesCtrl() {
 		super();
@@ -340,10 +336,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		
 		InversionesFilterBy = properties.getProperty("inversiones_servicio.filter_by");
 		InversionesMaximoPagina = Integer.parseInt(properties.getProperty("inversiones_servicio.maximo_pagina"));
-		InversionesCategoriaFija = properties.getProperty("inversiones_servicio.categoria.fija");
-		InversionesCategoriaValor = properties.getProperty("inversiones_servicio.categoria.valor");
-		InversionesCategoriaCedeRi = properties.getProperty("inversiones_servicio.categoria.cede_ri");
-		InversionesCategoriaPagare = properties.getProperty("inversiones_servicio.categoria.pagare");
 		
 		logger.info("Ctrl: Terminando metodo init...");
 	}
@@ -1418,7 +1410,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		 */
 
 		String cpRSAToken = renovarInversion.has("cpRSAToken") ? renovarInversion.get("cpRSAToken").getAsString() : "";
-		String validarToken = Utilerias.validarTokenTransaccion(cpRSAToken, usuNumero);
+		String validarToken = Token.validarTokenOperacion(cpRSAToken, usuNumero);
 
 		logger.info("validarToken   " + validarToken);
 

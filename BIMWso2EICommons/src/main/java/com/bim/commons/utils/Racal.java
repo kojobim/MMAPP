@@ -4,6 +4,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
+import com.google.gson.JsonObject;
+
 import org.apache.log4j.Logger;
 
 public class Racal {
@@ -110,7 +113,7 @@ public class Racal {
 		return caracter;
 	}
 
-	public static void logToken(String tkn, String respValidacion, String tipoOPe) {
+	public static void logToken(String tkn, String respValidacion) {
 		String TokenServicio = properties.getProperty("data_service.token_servicio");
 		String LogCreacionOp = properties.getProperty("token_servicio.op.token_verificar");
 
@@ -120,7 +123,7 @@ public class Racal {
 		JsonObject datosToken = new JsonObject();
 		datosToken.addProperty("serieToken", tokSerie);
 		datosToken.addProperty("respuesta", respValidacion);
-		datosToken.addProperty("scriptName", tipoOPe);
+		datosToken.addProperty("scriptName", "");
 		datosToken.addProperty("valueEnter", tokValue);
 
 		logger.info("datosToken" + datosToken);
@@ -128,9 +131,9 @@ public class Racal {
 		logger.info("logCreacionOpResultadoObjeto" + logCreacionOpResultadoObjeto);
 	}
 
-	public static String validaTokenOpera(String clave){
+	public static String validaTokenOpera(String clave) {
 		String returnVal = validaToken(clave);
-		logToken(clave, returnVal, "/nb/pagare/rne/rneAperturaDePagare.cfm");
+		logToken(clave, returnVal);
 		return returnVal;
 	}
 }

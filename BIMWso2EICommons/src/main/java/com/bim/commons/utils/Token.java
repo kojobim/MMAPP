@@ -5,9 +5,13 @@ import org.apache.log4j.Logger;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+
+import com.bim.commons.dto.MessageProxyDTO;
+import com.bim.commons.dto.RequestDTO;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-public class Tokens {
+public class Token {
 
     private static final Logger logger = Logger.getLogger(Token.class);
     private static Properties properties;
@@ -25,7 +29,7 @@ public class Tokens {
 		}
 	}
 
-    public static String validarTokenTransaccion(String cpRSAToken, String tokUsuari) {
+    public static String validarTokenOperacion(String cpRSAToken, String tokUsuari) {
 		logger.info("COMMONS: Iniciando validarTokenTransaccion metodo...");
 
 		String DataServiceHost = properties.getProperty("data_service.host");
@@ -37,7 +41,7 @@ public class Tokens {
 		String IntentosActualizacionOpSucDestino = properties.getProperty("op.intentos_actualizacion.suc_destino");
 		String IntentosActualizacionOpModulo = properties.getProperty("op.intentos_actualizacion.modulo");
 
-		String validaToken = Racal.validaToken(cpRSAToken);
+		String validaToken = Racal.validaTokenOpera(cpRSAToken);
 		String tipActual = "01".equals(validaToken) ? "2" : "1";
 		String usuStatus = "01".equals(validaToken) ? "C" : "A";
 
