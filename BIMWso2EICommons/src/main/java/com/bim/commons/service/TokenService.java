@@ -1,4 +1,4 @@
-package com.bim.commons.utils;
+package com.bim.commons.service;
 
 import java.util.Properties;
 import org.apache.log4j.Logger;
@@ -8,12 +8,14 @@ import java.io.IOException;
 
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
+import com.bim.commons.utils.Racal;
+import com.bim.commons.utils.HttpClientUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
-public class Token {
+public class TokenService {
 
-    private static final Logger logger = Logger.getLogger(Token.class);
+    private static final Logger logger = Logger.getLogger(TokenService.class);
     private static Properties properties;
     
     static {
@@ -29,7 +31,7 @@ public class Token {
 		}
 	}
 
-    public static String validarTokenOperacion(String cpRSAToken, String tokUsuari) {
+    public static String validarTokenOperacion(String tokFolio, String cpRSAToken, String tokUsuari) {
 		logger.info("COMMONS: Iniciando validarTokenTransaccion metodo...");
 
 		String DataServiceHost = properties.getProperty("data_service.host");
@@ -41,7 +43,8 @@ public class Token {
 		String IntentosActualizacionOpSucDestino = properties.getProperty("op.intentos_actualizacion.suc_destino");
 		String IntentosActualizacionOpModulo = properties.getProperty("op.intentos_actualizacion.modulo");
 
-		String validaToken = Racal.validaTokenOpera(cpRSAToken);
+		String clave = "0" + tokFolio + cpRSAToken;
+		String validaToken = Racal.validaTokenOpera(clave);
 		String tipActual = "01".equals(validaToken) ? "2" : "1";
 		String usuStatus = "01".equals(validaToken) ? "C" : "A";
 
