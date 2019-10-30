@@ -160,7 +160,7 @@ public class Utilerias {
 			if(j < args.length - 1) 
 				resultado.append(" ");
 		}
-		logger.info("COMMONS: Iniciando concat metodo...");
+		logger.info("COMMONS: Finalizando concat metodo...");
 		return resultado.toString();	
 	}
 	

@@ -23,10 +23,11 @@ public class TokenCtrl implements Microservice {
 	public Response validarToken(@QueryParam("token") String token) {
 		logger.info("CTRL: Empezando metodo validarToken");
 		String validaToken = Racal.validaToken(token);
-		
+
+		logger.info("validarToken " + validaToken);
 		if(validaToken.isEmpty())
 			return Response
-					.status(Response.Status.CONFLICT)
+					.status(Response.Status.CONFLICT)	
 					.build();
 					
 		logger.info("CTRL: Terminando metodo validarToken");
