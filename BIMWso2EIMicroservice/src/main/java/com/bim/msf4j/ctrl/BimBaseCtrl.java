@@ -24,7 +24,8 @@ public class BimBaseCtrl implements Microservice {
 	protected static String UsuarioServicio;
 	protected static String ConfiguracionServicio;
 	protected static String TokenServicio;
-
+	protected static String InversionesServicio;
+	
 	public BimBaseCtrl() {
 		Map<String, MicroservicesRegistryImpl> microserviceRegistryMap = DataHolder.getInstance().getMicroservicesRegistries();
 		MicroservicesRegistryImpl microservicesRegistryImpl = microserviceRegistryMap.get(MSF4JConstants.CHANNEL_ID);
@@ -54,7 +55,7 @@ public class BimBaseCtrl implements Microservice {
 		UsuarioServicio = properties.getProperty("data_service.usuario_servicio");
 		ConfiguracionServicio = properties.getProperty("data_service.configuracion_servicio");
 		TokenServicio = properties.getProperty("data_service.token_servicio");
-		
+		InversionesServicio = properties.getProperty("data_service.inversiones_servicio");
 	}
 	
 	private void addResourceToRegistry(MicroservicesRegistryImpl microservicesRegistryImpl) {

@@ -16,19 +16,13 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
-import org.wso2.msf4j.internal.MicroservicesRegistryImpl;
 
 import com.bim.commons.dto.BimMessageDTO;
-import com.bim.commons.dto.MessageProxyDTO;
-import com.bim.commons.dto.RequestDTO;
 import com.bim.commons.enums.InversionesCategoriasEnum;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.utils.Filtrado;
-import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Utilerias;
-import com.bim.msf4j.exceptions.BimExceptionMapper;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,13 +31,6 @@ import com.google.gson.JsonObject;
 public class InversionesCtrl extends BimBaseCtrl {
 	
 	private static final Logger logger = Logger.getLogger(InversionesCtrl.class);
-	
-	private static String DataServiceHost;
-	
-	private static String TransaccionServicio;
-	private static String BitacoraServicio;
-	private static String InversionesServicio;
-	private static String ConfiguracionServicio;
 
 	private static String FolioTransaccionGenerarOp;
 	private static String BitacoraCreacionOp;
@@ -118,14 +105,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		HorarioInversionOpSucDestino = properties.getProperty("op.horario_inversion.suc_destino");
 		HorarioInversionOpModulo = properties.getProperty("op.horario_inversion.modulo");
 		
-		DataServiceHost = properties.getProperty("data_service.host");
-		
-		logger.info("DataServiceHost" + DataServiceHost);
-		
-		TransaccionServicio = properties.getProperty("data_service.transaccion_servicio");
-		BitacoraServicio = properties.getProperty("data_service.bitacora_servicio");
-		InversionesServicio = properties.getProperty("data_service.inversiones_servicio");
-		ConfiguracionServicio = properties.getProperty("data_service.configuracion_servicio");
 		
 		FolioTransaccionGenerarOp = properties.getProperty("transaccion_servicio.op.folio_transaccion_generar");
 		BitacoraCreacionOp = properties.getProperty("bitacora_servicio.op.bitacora_creacion");
@@ -189,24 +168,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosTransaccion.addProperty("SucOrigen", FolioTransaccionGenerarOpSucOrigen);
 		
 		logger.info("datosTransaccion" + datosTransaccion);
-		StringBuilder folioTransaccionGenerarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(TransaccionServicio)
-				.append("/")
-				.append(FolioTransaccionGenerarOp);
-		JsonObject folioTransaccionGenerarOp = new JsonObject();
-		folioTransaccionGenerarOp.add("folioTransaccionGenerarOp", datosTransaccion);
-		logger.info("folioTransaccionGenerarOp" + folioTransaccionGenerarOp);
-
-		RequestDTO folioTransaccionGenerarOpSolicitud = new RequestDTO();
-		folioTransaccionGenerarOpSolicitud.setUrl(folioTransaccionGenerarUrl.toString());
-		MessageProxyDTO folioTransaccionGenerarOpMensaje= new MessageProxyDTO();
-		folioTransaccionGenerarOpMensaje.setBody(folioTransaccionGenerarOp.toString());
-		folioTransaccionGenerarOpSolicitud.setMessage(folioTransaccionGenerarOpMensaje);
-
-		String folioTransaccionGenerarOpResultado = HttpClientUtils.postPerform(folioTransaccionGenerarOpSolicitud);
-		JsonObject folioTransaccionGenerarOpResultadoObjeto = new Gson().fromJson(folioTransaccionGenerarOpResultado, JsonObject.class);
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = Utilerias.performOperacion(TransaccionServicio, TransaccionServicio, datosTransaccion);
 		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
 
 		String numTransac = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
@@ -215,13 +177,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
 		String bit_DireIP = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("User-Agent") : "";
 		String bit_PriRef = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("X-Forwarded-For") : "";
-		
-		/* 
-			Parametros obtenidos por medio del principal 
-				Bit_Usuari = usuNumero
-				Inv_Client = usuClient
-				Inv_Usuari = usuNumero
-		*/
 		
 		String usuNumero = "001844";
 		String usuClient = "00193500";
@@ -245,22 +200,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("SucDestino", BitacoraCreacionOpSucDestino);
 		datosBitacora.addProperty("Modulo", BitacoraCreacionOpModulo);
 
-		StringBuilder bitacoraCreacionOpUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(BitacoraServicio)
-				.append("/")
-				.append(BitacoraCreacionOp);
-		JsonObject bitacoraCreacionOp = new JsonObject();
-		bitacoraCreacionOp.add("bitacoraCreacionOp", datosBitacora);
-		logger.info("bitacoraCreacionOp" + bitacoraCreacionOp);
-
-		RequestDTO bitacoraCreacionSolicitud = new RequestDTO();
-		bitacoraCreacionSolicitud.setUrl(bitacoraCreacionOpUrl.toString());
-		MessageProxyDTO bitacoraCreacionOpMensaje= new MessageProxyDTO();
-		bitacoraCreacionOpMensaje.setBody(bitacoraCreacionOp.toString());
-		bitacoraCreacionSolicitud.setMessage(bitacoraCreacionOpMensaje);
-		HttpClientUtils.postPerform(bitacoraCreacionSolicitud);
+		Utilerias.performOperacion(BitacoraServicio, BitacoraCreacionOp, datosBitacora);
 
 		JsonObject inversionesObtener = new JsonObject();
 		inversionesObtener.addProperty("Inv_Client", usuClient);
@@ -273,62 +213,25 @@ public class InversionesCtrl extends BimBaseCtrl {
 		inversionesObtener.addProperty("SucDestino", InversionesObtenerOpSucDestino);
 		inversionesObtener.addProperty("Modulo", InversionesObtenerOpModulo);
 				
-		StringBuilder inversionesObtenerUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(InversionesServicio)
-				.append("/")
-				.append(InversionesObtenerOp);
-		JsonObject inversionesObtenerOp = new JsonObject();
-		inversionesObtenerOp.add("inversionesObtenerOp", inversionesObtener);
-		logger.info("inversionesObtenerOp" + inversionesObtenerOp);
-
-		RequestDTO inversionesObtenerSolicitud = new RequestDTO();
-		inversionesObtenerSolicitud.setUrl(inversionesObtenerUrl.toString());
-		MessageProxyDTO inversionesObtenerMensaje = new MessageProxyDTO();
-		inversionesObtenerMensaje.setBody(inversionesObtenerOp.toString());
-		inversionesObtenerSolicitud.setMessage(inversionesObtenerMensaje);
-		logger.info("inversionesObtenerSolicitud " + inversionesObtenerSolicitud.toString());
-		String inversionesObtenerOpResultado = HttpClientUtils.postPerform(inversionesObtenerSolicitud);
-		JsonObject inversionesObtenerOpResultadoObjeto = new Gson().fromJson(inversionesObtenerOpResultado, JsonObject.class);
+		JsonObject inversionesObtenerOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesObtenerOp, inversionesObtener);//new Gson().fromJson(inversionesObtenerOpResultado, JsonObject.class);
 		logger.info("inversionesObtenerOpResultadoObjeto" + inversionesObtenerOpResultadoObjeto);
 		
 		JsonObject inversionesPagareNumeroUsuarioObtener = new JsonObject();
-			inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
-			inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Usuari", usuNumero);
-			inversionesPagareNumeroUsuarioObtener.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
-			inversionesPagareNumeroUsuarioObtener.addProperty("NumTransac", numTransac);
-			inversionesPagareNumeroUsuarioObtener.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
-			inversionesPagareNumeroUsuarioObtener.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);
-			inversionesPagareNumeroUsuarioObtener.addProperty("FechaSis", fechaSis);
-			inversionesPagareNumeroUsuarioObtener.addProperty("SucOrigen", InversionesPagareNumeroUsuarioObtenerOpSucOrigen);
-			inversionesPagareNumeroUsuarioObtener.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
-			inversionesPagareNumeroUsuarioObtener.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
+		inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
+		inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Usuari", usuNumero);
+		inversionesPagareNumeroUsuarioObtener.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
+		inversionesPagareNumeroUsuarioObtener.addProperty("NumTransac", numTransac);
+		inversionesPagareNumeroUsuarioObtener.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
+		inversionesPagareNumeroUsuarioObtener.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);
+		inversionesPagareNumeroUsuarioObtener.addProperty("FechaSis", fechaSis);
+		inversionesPagareNumeroUsuarioObtener.addProperty("SucOrigen", InversionesPagareNumeroUsuarioObtenerOpSucOrigen);
+		inversionesPagareNumeroUsuarioObtener.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
+		inversionesPagareNumeroUsuarioObtener.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
 	
-		StringBuilder inversionesPagareNumeroUsuarioObtenerUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(InversionesServicio)
-				.append("/")
-				.append(InversionesPagareNumeroUsuarioObtenerOp);
-		JsonObject inversionesPagareNumeroUsuarioObtenerOp = new JsonObject();
-		inversionesPagareNumeroUsuarioObtenerOp.add("inversionesPagareNumeroUsuarioObtenerOp", inversionesPagareNumeroUsuarioObtener);
-		logger.info("inversionesPagareNumeroUsuarioObtenerOp" + inversionesPagareNumeroUsuarioObtenerOp);
-
-		RequestDTO inversionesPagareNumeroUsuarioObtenerSolicitud = new RequestDTO();
-		inversionesPagareNumeroUsuarioObtenerSolicitud.setUrl(inversionesPagareNumeroUsuarioObtenerUrl.toString());
-		MessageProxyDTO inversionesPagareNumeroUsuarioObtenerMensaje = new MessageProxyDTO();
-		inversionesPagareNumeroUsuarioObtenerMensaje.setBody(inversionesPagareNumeroUsuarioObtenerOp.toString());
-		inversionesPagareNumeroUsuarioObtenerSolicitud.setMessage(inversionesPagareNumeroUsuarioObtenerMensaje);
-		
-		String inversionesPagareNumeroUsuarioObtenerOpResultado = HttpClientUtils.postPerform(inversionesPagareNumeroUsuarioObtenerSolicitud);
-		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = new Gson().fromJson(inversionesPagareNumeroUsuarioObtenerOpResultado, JsonObject.class);
+		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = Utilerias.performOperacion(InversionesServicio, InversionesServicio, inversionesPagareNumeroUsuarioObtener);//new Gson().fromJson(inversionesPagareNumeroUsuarioObtenerOpResultado, JsonObject.class);
 		logger.info("inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto" + inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto);
 		
 		JsonArray inversionesResultado = new JsonArray();
-		if(inversionesPagareNumeroUsuarioObtenerOp.has("inversiones") && inversionesPagareNumeroUsuarioObtenerOp.get("inversiones").getAsJsonObject().has("inversion")) {
-			inversionesResultado.addAll(inversionesPagareNumeroUsuarioObtenerOp.get("inversiones").getAsJsonObject().get("inversion").getAsJsonArray());
-		}
 
 		inversionesResultado.addAll(inversionesObtenerOpResultadoObjeto.get("inversiones").getAsJsonObject().get("inversion").getAsJsonArray());
 
@@ -346,25 +249,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosHorario.addProperty("Modulo", HorarioInversionOpModulo);
 
 		logger.info("datosHorario" + datosHorario);
-		StringBuilder horarioInversionUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(ConfiguracionServicio)
-				.append("/")
-				.append(HorarioInversionOp);
-
-		JsonObject horarioInversionOp = new JsonObject();
-		horarioInversionOp.add("horarioInversionOp", datosHorario);
-		logger.info("horarioInversionOp" + horarioInversionOp);
-
-		RequestDTO horarioInversionOpSolicitud = new RequestDTO();
-		horarioInversionOpSolicitud.setUrl(horarioInversionUrl.toString());
-		MessageProxyDTO horarioInversionOpMensaje = new MessageProxyDTO();
-		horarioInversionOpMensaje.setBody(horarioInversionOp.toString());
-		horarioInversionOpSolicitud.setMessage(horarioInversionOpMensaje);
-
-		String horarioInversionOpResultado = HttpClientUtils.postPerform(horarioInversionOpSolicitud);
-		JsonObject horarioInversionOpResultadoObjecto = new Gson().fromJson(horarioInversionOpResultado, JsonObject.class);
+		JsonObject horarioInversionOpResultadoObjecto = Utilerias.performOperacion(ConfiguracionServicio, HorarioInversionOp, datosHorario);
 		logger.info("horarioInversionOpResultadoObjecto" + horarioInversionOpResultadoObjecto);
 
 		JsonObject horariosObjecto = horarioInversionOpResultadoObjecto.get("horariosInversion").getAsJsonObject();
@@ -688,8 +573,5 @@ public class InversionesCtrl extends BimBaseCtrl {
 		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
     }
-	
-	private void addResourceToRegistry(MicroservicesRegistryImpl microservicesRegistryImpl) {
-		microservicesRegistryImpl.addExceptionMapper(new BimExceptionMapper());
-	}
+
 }
