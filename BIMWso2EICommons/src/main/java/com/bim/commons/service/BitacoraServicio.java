@@ -4,6 +4,12 @@ package com.bim.commons.service;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
+/**
+ * Esta clase define las operaciones sobre la bitacora
+ * @author Backend Team MedioMelon
+ * @version BackendMM022019
+ *
+ */
 public class BitacoraServicio extends BaseService {
 
 	private static String BitacoraServicio;
@@ -29,6 +35,24 @@ public class BitacoraServicio extends BaseService {
 		BitacoraCreacionOpUsuario = properties.getProperty("op.bitacora_creacion.modulo");
 	}
 	
+	
+	
+	/**
+	 * Método de creacion de bitacora
+	 * @param datosBitacora
+	 * <pre> 
+	 * { 
+	 *	Bit_Usuari: String, 
+	 *	Bit_Fecha:  String,
+	 *	Bit_PriRef: String,
+	 *	Bit_DireIP: String,
+	 *	NumTransac: String,
+	 *	FechaSis: String
+	 * }
+	 * </pre>
+	 * @return 
+	 * { }
+	 */
 	public JsonObject creacionBitacora(JsonObject datosBitacora) {
 		if(!datosBitacora.has("Bit_NumTra"))
 			datosBitacora.addProperty("Bit_NumTra", "");
@@ -49,6 +73,6 @@ public class BitacoraServicio extends BaseService {
 				.performOperacion(BitacoraServicio, BitacoraCreacionOp, 
 						datosBitacora);
 		return result;
-	}
+	}//Cierre del método
 	
 }

@@ -5,6 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Esta clase define las caracteristicas genericas de los servicios
+ * @author Backend Team MedioMelon
+ * @version BackendMM022019
+ *
+ */
 public class BaseService {
 
 	protected static Properties properties;
