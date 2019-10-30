@@ -48,7 +48,8 @@ public class InversionesServicio extends BaseService {
 
 	public JsonObject inversionesObtener(JsonObject datosInversionesObtener) {
 		datosInversionesObtener.addProperty("Inv_Moneda", InversionesObtenerOpInvMoneda);
-		datosInversionesObtener.addProperty("NumTransac", "");
+		if(!datosInversionesObtener.has("NumTransac"))
+			datosInversionesObtener.addProperty("NumTransac", "");
 		datosInversionesObtener.addProperty("Transaccio", InversionesObtenerOpTransaccio);
 		datosInversionesObtener.addProperty("Usuario", InversionesObtenerOpUsuario);
 		datosInversionesObtener.addProperty("SucOrigen", InversionesObtenerOpSucOrigen);
@@ -59,7 +60,8 @@ public class InversionesServicio extends BaseService {
 	}
 	
 	public JsonObject inversionesPagareNumeroUsuarioObtener(JsonObject datosInversionesPagareNumeroUsuarioObtener) {
-		datosInversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
+		if(!datosInversionesPagareNumeroUsuarioObtener.has("Inv_Numero"))
+			datosInversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);

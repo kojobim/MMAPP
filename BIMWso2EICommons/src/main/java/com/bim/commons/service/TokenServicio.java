@@ -27,7 +27,8 @@ public class TokenServicio extends BaseService {
 	}
 	
 	public JsonObject tokenVerificar(JsonObject datosTokenVerificar) {
-		datosTokenVerificar.addProperty("NumTransac", "");
+		if(!datosTokenVerificar.has("NumTransac"))
+			datosTokenVerificar.addProperty("NumTransac", "");
 		datosTokenVerificar.addProperty("Transaccio", TokenVerificarOpTransaccio);
 		datosTokenVerificar.addProperty("Usuario", TokenVerificarOpUsuario);
 		datosTokenVerificar.addProperty("SucOrigen", TokenVerificarOpSucOrigen);

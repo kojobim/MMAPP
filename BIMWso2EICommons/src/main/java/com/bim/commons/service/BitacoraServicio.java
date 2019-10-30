@@ -30,12 +30,16 @@ public class BitacoraServicio extends BaseService {
 	}
 	
 	public JsonObject creacionBitacora(JsonObject datosBitacora) {
-		datosBitacora.addProperty("Bit_NumTra", "");
+		if(!datosBitacora.has("Bit_NumTra"))
+			datosBitacora.addProperty("Bit_NumTra", "");
 		datosBitacora.addProperty("Bit_TipOpe", BitacoraCreacionOpBitTipOpe);
-		datosBitacora.addProperty("Bit_CueOri", "");
-		datosBitacora.addProperty("Bit_CueDes", "");
+		if(!datosBitacora.has("Bit_CueOri"))
+			datosBitacora.addProperty("Bit_CueOri", "");
+		if(!datosBitacora.has("Bit_CueDes"))
+			datosBitacora.addProperty("Bit_CueDes", "");
 		datosBitacora.addProperty("Bit_Monto", "0");
-		datosBitacora.addProperty("Bit_SegRef", "");
+		if(!datosBitacora.has("Bit_SegRef"))
+			datosBitacora.addProperty("Bit_SegRef", "");
 		datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
 		datosBitacora.addProperty("Usuario", BitacoraCreacionOpUsuario);
 		datosBitacora.addProperty("SucOrigen", BitacoraCreacionOpSucOrigen);

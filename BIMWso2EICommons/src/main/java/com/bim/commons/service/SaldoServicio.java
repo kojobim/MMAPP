@@ -28,8 +28,10 @@ public class SaldoServicio extends BaseService {
 	}
 
 	public JsonObject saldosClienteConsultar(JsonObject datosSaldosClienteConsultar) {
-		datosSaldosClienteConsultar.addProperty("Cue_Numero", "");
-		datosSaldosClienteConsultar.addProperty("NumTransac", "");
+		if(!datosSaldosClienteConsultar.has("Cue_Numero"))
+			datosSaldosClienteConsultar.addProperty("Cue_Numero", "");
+		if(!datosSaldosClienteConsultar.has("NumTransac"))
+			datosSaldosClienteConsultar.addProperty("NumTransac", "");
 		datosSaldosClienteConsultar.addProperty("Transaccio", SaldosClienteConsultarOpTransaccio);
 		datosSaldosClienteConsultar.addProperty("Usuario", SaldosClienteConsultarOpUsuario);
 		datosSaldosClienteConsultar.addProperty("SucOrigen", SaldosClienteConsultarOpSucOrigen);

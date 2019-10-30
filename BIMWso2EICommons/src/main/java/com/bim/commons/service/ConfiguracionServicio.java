@@ -48,8 +48,10 @@ public class ConfiguracionServicio extends BaseService {
 	public JsonObject horariosConsultar(JsonObject datosHorario) {
 		datosHorario.addProperty("Tip_Consul", HorarioInversionOpTipConsul);
 		datosHorario.addProperty("Tip_Transf", HorarioInversionOpTipTransf);
-		datosHorario.addProperty("Err_Codigo", "");
-		datosHorario.addProperty("Msj_Error", "");
+		if(!datosHorario.has("Err_Codigo"))
+			datosHorario.addProperty("Err_Codigo", "");
+		if(!datosHorario.has("Msj_Error"))
+			datosHorario.addProperty("Msj_Error", "");
 		datosHorario.addProperty("Transaccio", HorarioInversionOpTransaccio);
 		datosHorario.addProperty("Usuario", HorarioInversionOpUsuario);
 		datosHorario.addProperty("SucOrigen", HorarioInversionOpSucOrigen);

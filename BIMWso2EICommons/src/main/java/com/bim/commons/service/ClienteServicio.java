@@ -29,10 +29,13 @@ public class ClienteServicio extends BaseService {
 	}
 	
 	public JsonObject clienteConsultar(JsonObject datosClienteConsultar) {
-		datosClienteConsultar.addProperty("Cli_Sucurs", "");
-		datosClienteConsultar.addProperty("Cli_Nombre", "");
+		if(!datosClienteConsultar.has("Cli_Sucurs"))
+			datosClienteConsultar.addProperty("Cli_Sucurs", "");
+		if(!datosClienteConsultar.has("Cli_Nombre"))
+			datosClienteConsultar.addProperty("Cli_Nombre", "");
 		datosClienteConsultar.addProperty("Tip_Consul", ClienteConsultarOpTipConsul);
-		datosClienteConsultar.addProperty("NumTransac", "");
+		if(!datosClienteConsultar.has("NumTransac"))
+			datosClienteConsultar.addProperty("NumTransac", "");
 		datosClienteConsultar.addProperty("Transaccio", ClienteConsultarOpTransaccio);
 		datosClienteConsultar.addProperty("Usuario", ClienteConsultarOpUsuario);
 		datosClienteConsultar.addProperty("SucOrigen", ClienteConsultarOpSucOrigen);

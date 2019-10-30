@@ -50,30 +50,47 @@ public class UsuarioServicio extends BaseService {
 		datosUsuarioConsultar.addProperty("SucOrigen", UsuarioConsultarOpSucOrigen);
 		datosUsuarioConsultar.addProperty("SucDestino", UsuarioConsultarOpSucDestino);
 		datosUsuarioConsultar.addProperty("Modulo", UsuarioConsultarOpModulo);
-		datosUsuarioConsultar.addProperty("Usu_Numero", "");
-		datosUsuarioConsultar.addProperty("Usu_UsuAdm", "");
-		datosUsuarioConsultar.addProperty("Usu_Client", "");
+		if(!datosUsuarioConsultar.has("Usu_Numero"))
+			datosUsuarioConsultar.addProperty("Usu_Numero", "");
+		if(!datosUsuarioConsultar.has("Usu_UsuAdm"))
+			datosUsuarioConsultar.addProperty("Usu_UsuAdm", "");
+		if(!datosUsuarioConsultar.has("Usu_Client"))
+			datosUsuarioConsultar.addProperty("Usu_Client", "");
 		datosUsuarioConsultar.addProperty("Usu_FolNip", 0);
-		datosUsuarioConsultar.addProperty("Usu_FolTok", "");
-		datosUsuarioConsultar.addProperty("Usu_Status", "");
-		datosUsuarioConsultar.addProperty("Usu_CuCaCo", "");
-		datosUsuarioConsultar.addProperty("Usu_SucMod", "");
-		datosUsuarioConsultar.addProperty("NumTransac", "");	
+		if(!datosUsuarioConsultar.has("Usu_FolTok"))
+			datosUsuarioConsultar.addProperty("Usu_FolTok", "");
+		if(!datosUsuarioConsultar.has("Usu_Status"))
+			datosUsuarioConsultar.addProperty("Usu_Status", "");
+		if(!datosUsuarioConsultar.has("Usu_CuCaCo"))
+			datosUsuarioConsultar.addProperty("Usu_CuCaCo", "");
+		if(!datosUsuarioConsultar.has("Usu_SucMod"))
+			datosUsuarioConsultar.addProperty("Usu_SucMod", "");
+		if(!datosUsuarioConsultar.has("NumTransac"))
+			datosUsuarioConsultar.addProperty("NumTransac", "");	
 		JsonObject usuarioConsultarOpResultadoObjeto = Utilerias.performOperacion(UsuarioServicio, UsuarioConsultarOp, datosUsuarioConsultar);
 		return usuarioConsultarOpResultadoObjeto;
 	}
 	
 	public JsonObject usuarioActualizar(JsonObject datosUsuarioActualizar) {
-		datosUsuarioActualizar.addProperty("Usu_Numero", "");
-		datosUsuarioActualizar.addProperty("Usu_Passwo", "");
-		datosUsuarioActualizar.addProperty("Usu_Status", "");
-		datosUsuarioActualizar.addProperty("Usu_Email", "");
-		datosUsuarioActualizar.addProperty("Usu_UsuAdm", "");
-		datosUsuarioActualizar.addProperty("Usu_FolTok", "");
-		datosUsuarioActualizar.addProperty("Usu_Client", "");
-		datosUsuarioActualizar.addProperty("Usu_SucMod", "");
+		if(!datosUsuarioActualizar.has("Usu_Numero"))
+			datosUsuarioActualizar.addProperty("Usu_Numero", "");
+		if(!datosUsuarioActualizar.has("Usu_Passwo"))
+			datosUsuarioActualizar.addProperty("Usu_Passwo", "");
+		if(!datosUsuarioActualizar.has("Usu_Status"))
+			datosUsuarioActualizar.addProperty("Usu_Status", "");
+		if(!datosUsuarioActualizar.has("Usu_Email"))
+			datosUsuarioActualizar.addProperty("Usu_Email", "");
+		if(!datosUsuarioActualizar.has("Usu_UsuAdm"))
+			datosUsuarioActualizar.addProperty("Usu_UsuAdm", "");
+		if(!datosUsuarioActualizar.has("Usu_FolTok"))
+			datosUsuarioActualizar.addProperty("Usu_FolTok", "");
+		if(!datosUsuarioActualizar.has("Usu_Client"))
+			datosUsuarioActualizar.addProperty("Usu_Client", "");
+		if(!datosUsuarioActualizar.has("Usu_SucMod"))
+			datosUsuarioActualizar.addProperty("Usu_SucMod", "");
 		datosUsuarioActualizar.addProperty("Usu_FolNip", "0");
-		datosUsuarioActualizar.addProperty("Usu_Nombre", "");
+		if(!datosUsuarioActualizar.has("Usu_Nombre"))
+			datosUsuarioActualizar.addProperty("Usu_Nombre", "");
 		datosUsuarioActualizar.addProperty("Usuario", UsuarioActualizacionOpUsuario);
 		datosUsuarioActualizar.addProperty("Tip_Actual", UsuarioActualizacionOpTipActual);
 		datosUsuarioActualizar.addProperty("Transaccio", UsuarioActualizacionOpTransaccio);

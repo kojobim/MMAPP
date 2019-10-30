@@ -30,13 +30,17 @@ public class MovimientosServicio extends BaseService {
 	}
 	
 	public JsonObject movimientosListado(JsonObject datosMovimientosListado) {
-		datosMovimientosListado.addProperty("Mov_Natura", "");
-		datosMovimientosListado.addProperty("Mov_PalCla", "");
+		if(!datosMovimientosListado.has("Mov_Natura"))
+			datosMovimientosListado.addProperty("Mov_Natura", "");
+		if(!datosMovimientosListado.has("Mov_PalCla"))
+			datosMovimientosListado.addProperty("Mov_PalCla", "");
 		datosMovimientosListado.addProperty("Mov_MonIni", 0);
 		datosMovimientosListado.addProperty("Mov_MonFin", 0);
-		datosMovimientosListado.addProperty("Mov_Clasif", "");
+		if(!datosMovimientosListado.has("Mov_Clasif"))
+			datosMovimientosListado.addProperty("Mov_Clasif", "");
 		datosMovimientosListado.addProperty("Tip_Consul", MovimientosListadoOpTipConsul);
-		datosMovimientosListado.addProperty("NumTransac", "");
+		if(!datosMovimientosListado.has("NumTransac"))
+			datosMovimientosListado.addProperty("NumTransac", "");
 		datosMovimientosListado.addProperty("Transaccio", MovimientosListadoOpTransaccio);
 		datosMovimientosListado.addProperty("Usuario", MovimientosListadoOpUsuario);
 		datosMovimientosListado.addProperty("SucOrigen", MovimientosListadoOpSucOrigen);
