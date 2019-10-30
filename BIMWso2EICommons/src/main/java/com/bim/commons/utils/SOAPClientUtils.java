@@ -21,12 +21,10 @@ public class SOAPClientUtils {
 	public static JsonObject callSoapWebService(SOAPMessage soapRequest, String endpoint) {
 		System.out.println("COMMONS: Comenzando callSoapWebService metodo");
 		try {
-            System.out.println("SOAP Request: ");
             soapRequest.writeTo(System.out);
 			SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 			SOAPMessage soapResponse = soapConnection.call(soapRequest, endpoint);
-            System.out.println("\nSOAP Response: \n");
             soapResponse.writeTo(System.out);
 
             soapConnection.close();
@@ -34,22 +32,21 @@ public class SOAPClientUtils {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             soapResponse.writeTo(stream);
             String message = new String(stream.toByteArray(), "utf-8");
-            System.out.println("@@@ message " + message);
             
             JSONObject data = XML.toJSONObject(message);
-            System.out.println("@@@ data " + data);
             
             JsonObject responseData = new Gson().fromJson(data.toString(), JsonObject.class);
-            System.out.println("responseData " + responseData.toString());
             
             removeNamesapceAndPrefix(responseData);
-            
-            System.out.println("responseData " + responseData);
             JsonObject result = formatResult(responseData);
 
-            System.out.println("result " + result);
+            JsonObject envelope = Utilerias.getJsonObjectProperty(result, "Envelope");
+            
+            JsonObject body = Utilerias.getJsonObjectProperty(envelope, "Body");
+            		
+            System.out.println("- body" + body);
             System.out.println("COMMONS: Finalizando callSoapWebService metodo");
-            return result;
+            return body;
 		} catch (Exception e) {
 			System.err.println("\nError al enviar el SOAP Request al Servidor\n");
 			e.printStackTrace();
@@ -76,10 +73,11 @@ public class SOAPClientUtils {
 		for(String key: removedkeys) {
 			parentObject.remove(key);
 		}
-        System.out.println("COMMONS: Comenzando removeNamesapceAndPrefix metodo");
+        System.out.println("COMMONS: Finalizando removeNamesapceAndPrefix metodo");
 	}
 	
 	private static JsonObject formatResult(JsonObject responseObject) {
+		System.out.println("COMMONS: Comenzando formatResult metodo");
 		JsonObject parentObject = new JsonObject();
 		for(Entry<String, JsonElement> entry : responseObject.entrySet()) {
 			String key;
@@ -93,6 +91,7 @@ public class SOAPClientUtils {
 			else 
 				parentObject.add(key, formatResult((JsonObject)entry.getValue()));
 		}
+		System.out.println("COMMONS: Finalizando formatResult metodo");
 		return parentObject;
 	}
 }
