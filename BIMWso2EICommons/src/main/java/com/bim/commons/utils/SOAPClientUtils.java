@@ -1,7 +1,11 @@
 package com.bim.commons.utils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -18,6 +22,24 @@ import com.google.gson.JsonObject;
 
 public class SOAPClientUtils {
 	
+	private static Properties properties;
+	private static String Charset;
+	
+	static {
+		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/services.properties")) {
+			properties = new Properties();
+			
+			if(inputStream != null) {
+				properties.load(inputStream);
+			}			
+		}
+		catch(IOException ioException) {
+			ioException.printStackTrace();
+		}
+		
+		Charset = properties.getProperty("charset");
+	}
+	
 	public static JsonObject callSoapWebService(SOAPMessage soapRequest, String endpoint) {
 		System.out.println("COMMONS: Comenzando callSoapWebService metodo");
 		try {
@@ -31,7 +53,7 @@ public class SOAPClientUtils {
             
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             soapResponse.writeTo(stream);
-            String message = new String(stream.toByteArray(), "utf-8");
+            String message = new String(stream.toByteArray(), Charset);
             
             JSONObject data = XML.toJSONObject(message);
             
