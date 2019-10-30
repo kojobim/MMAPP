@@ -109,4 +109,28 @@ public class Racal {
 		
 		return caracter;
 	}
+
+	public static void logToken(String tkn, String respValidacion, String tipoOPe) {
+		String TokenServicio = properties.getProperty("data_service.token_servicio");
+		String LogCreacionOp = properties.getProperty("token_servicio.op.token_verificar");
+
+		String tokSerie = tkn.substring(0, 10);
+		String tokValue = tkn.substring(10, 16);
+
+		JsonObject datosToken = new JsonObject();
+		datosToken.addProperty("serieToken", tokSerie);
+		datosToken.addProperty("respuesta", respValidacion);
+		datosToken.addProperty("scriptName", tipoOPe);
+		datosToken.addProperty("valueEnter", tokValue);
+
+		logger.info("datosToken" + datosToken);
+		JsonObject logCreacionOpResultadoObjeto = Utilerias.performOperacion(TokenServicio, LogCreacionOp, datosToken);
+		logger.info("logCreacionOpResultadoObjeto" + logCreacionOpResultadoObjeto);
+	}
+
+	public static String validaTokenOpera(String clave){
+		String returnVal = validaToken(clave);
+		logToken(clave, returnVal, "/nb/pagare/rne/rneAperturaDePagare.cfm");
+		return returnVal;
+	}
 }

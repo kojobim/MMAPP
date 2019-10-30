@@ -22,8 +22,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import org.apache.log4j.Logger;
-
 public class Utilerias {
 
 	private static final Logger logger = Logger.getLogger(Utilerias.class);
