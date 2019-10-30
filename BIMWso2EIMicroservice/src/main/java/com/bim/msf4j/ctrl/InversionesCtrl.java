@@ -21,7 +21,6 @@ import com.bim.commons.dto.RequestDTO;
 import com.bim.commons.enums.InversionesCategoriasEnum;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.ConflictException;
-import com.bim.commons.exceptions.ForbiddenException;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.HttpClientUtils;
@@ -896,71 +895,56 @@ public class InversionesCtrl extends BimBaseCtrl {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response reinversion(@PathParam("invNumero") String invNumero,	
 			@QueryParam("categoria") String categoria, @Context final Request solicitud) {
-			logger.info("CTRL: Comenzando reinversion metodo");
-			String mensaje = null;
-			try {
-				mensaje = HttpClientUtils.getStringContent(solicitud);	
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			JsonObject inversionesObjeto = new Gson().fromJson(mensaje, JsonObject.class);
-			JsonObject renovarInversion = inversionesObjeto.getAsJsonObject("renovarInversion");				
+		logger.info("CTRL: Comenzando reinversion metodo");
+		String mensaje = null;
+		try {
+			mensaje = HttpClientUtils.getStringContent(solicitud);	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		JsonObject inversionesObjeto = new Gson().fromJson(mensaje, JsonObject.class);
+		JsonObject renovarInversion = inversionesObjeto.getAsJsonObject("renovarInversion");	
+			
+		// String bearerToken = solicitud.getHeader("Authorization");
+		// JsonObject principalResultadoObjecto = Utilerias.getPrincipal(bearerToken);
+		
+		// String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
+		// String usuClient = principalResultadoObjecto.get("usuClient").getAsString();
+		
+		String usuClient = "00193500";
+		
+		String bitPriRef = solicitud.getHeader("User-Agent");
+		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
+		String fechaSis = Utilerias.getFechaSis();
 		
 		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
-		String bitPriRef = solicitud.getHeader("User-Agent");
-		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
-	
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-		Date fecha = new Date();
-		String fechaSis = simpleDateFormat.format(fecha);
-		JsonObject resultado = null;
 
+		JsonObject resultado = null;
 		JsonObject datosTransaccion = new JsonObject();
+
 		datosTransaccion.addProperty("Num_Transa", "");
 		datosTransaccion.addProperty("SucOrigen", FolioTransaccionGenerarOpSucOrigen);
 		
 		logger.info("datosTransaccion" + datosTransaccion);
-		StringBuilder folioTransaccionGenerarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(TransaccionServicio)
-				.append("/")
-				.append(FolioTransaccionGenerarOp);
-
-		JsonObject folioTransaccionGenerarOp = new JsonObject();
-		folioTransaccionGenerarOp.add("folioTransaccionGenerarOp", datosTransaccion);
-		logger.info("folioTransaccionGenerarOp" + folioTransaccionGenerarOp);
-
-		RequestDTO folioTransaccionGenerarOpSolicitud = new RequestDTO();
-		folioTransaccionGenerarOpSolicitud.setUrl(folioTransaccionGenerarUrl.toString());
-		MessageProxyDTO folioTransaccionGenerarOpMensaje= new MessageProxyDTO();
-		folioTransaccionGenerarOpMensaje.setBody(folioTransaccionGenerarOp.toString());
-		folioTransaccionGenerarOpSolicitud.setMessage(folioTransaccionGenerarOpMensaje);
-
-		String folioTransaccionGenerarOpResultado = HttpClientUtils.postPerform(folioTransaccionGenerarOpSolicitud);
-		JsonObject folioTransaccionGenerarOpResultadoObjeto = new Gson().fromJson(folioTransaccionGenerarOpResultado, JsonObject.class);
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = Utilerias.performOperacion(TransaccionServicio, FolioTransaccionGenerarOp, datosTransaccion);
 		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
 
 		JsonObject transaccion = folioTransaccionGenerarOpResultadoObjeto.has("transaccion") ? folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject() : new JsonObject();
 		String numTransac = transaccion.has("Fol_Transa") ? transaccion.get("Fol_Transa").getAsString() : ""; 
 				
 		/* 
-			Parametros obtenidos por medio del principal 
-				Inv_Usuari = usuNumero
-				003870
+			SP 2   NBINVERSCON
+			Este SP se encarga de obtener los datos de inversion de un usuario
+			Se verifica que el numero de inversion proporcionado por fron se encuentre en las inversiónes de usuario
 		*/
 		
 		String usuNumero = "001844";
 
 		JsonObject datosInversion = new JsonObject();
 		datosInversion.addProperty("FechaSis", fechaSis);
-		StringBuilder inversionConsultarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(InversionesServicio)
-				.append("/");
-
+		String inversionesConsultarOp;
 		if ("PAGARE".equals(categoria)) {
 			datosInversion.addProperty("Inv_Numero", "");
 			datosInversion.addProperty("Inv_Usuari", usuNumero);
@@ -971,29 +955,14 @@ public class InversionesCtrl extends BimBaseCtrl {
 			datosInversion.addProperty("SucOrigen", InversionesPagareNumeroUsuarioObtenerOpSucOrigen);
 			datosInversion.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
 			datosInversion.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
-
-			inversionConsultarUrl
-					.append(InversionesPagareNumeroUsuarioObtenerOp);
+			inversionesConsultarOp = InversionesPagareNumeroUsuarioObtenerOp;
 		} else {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.27");
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 
 		logger.info("datosInversion" + datosInversion);
-
-		JsonObject inversionConsultarOp = new JsonObject();
-		inversionConsultarOp.add("inversionConsultarOp", datosInversion);
-		logger.info("inversionConsultarOp" + inversionConsultarOp);
-
-		RequestDTO inversionConsultarOpSolicitud = new RequestDTO();
-		inversionConsultarOpSolicitud.setUrl(inversionConsultarUrl.toString());
-		MessageProxyDTO inversionConsultarOpMensaje = new MessageProxyDTO();
-		inversionConsultarOpMensaje.setBody(inversionConsultarOp.toString());
-		inversionConsultarOpSolicitud.setMessage(inversionConsultarOpMensaje);
-
-		String inversionConsultarOpResultado = HttpClientUtils.postPerform(inversionConsultarOpSolicitud);
-		JsonObject inversionConsultarOpResultadoObjeto = new Gson().fromJson(inversionConsultarOpResultado,
-				JsonObject.class);
+		JsonObject inversionConsultarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, inversionesConsultarOp, datosInversion);
 		logger.info("inversionConsultarOpResultadoObjeto" + inversionConsultarOpResultadoObjeto);
 
 		JsonObject inversionesObjecto = inversionConsultarOpResultadoObjeto.get("inversiones").getAsJsonObject();
@@ -1014,14 +983,11 @@ public class InversionesCtrl extends BimBaseCtrl {
 			throw new ConflictException(bimMessageDTO.toString());
 		}
 
-		logger.info("INVERSION" + inversion);
+		logger.info("INVERSION " + inversion);
 
 		/* 
-			Parametros obtenidos por medio del principal
-				Cli_Numero = Usu_Client se otiene de sp1
-		*/
-	
-		String usuClient = "00193500";
+			SP3 CLCLIENTCON se consultan los datos del cliente
+		*/	
 		
 		JsonObject datosCliente = new JsonObject();
 		datosCliente.addProperty("Cli_Numero", usuClient);
@@ -1037,30 +1003,16 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosCliente.addProperty("Modulo", ClienteConsultarOpModulo);
 		
 		logger.info("datosCliente" + datosCliente);
-		StringBuilder clienteConsultarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(ClienteServicio)
-				.append("/")
-				.append(ClienteConsultarOp);
-
-		JsonObject clienteConsultarOp = new JsonObject();
-		clienteConsultarOp.add("clienteConsultarOp", datosCliente);
-		logger.info("clienteConsultarOp" + clienteConsultarOp);
-
-		RequestDTO clienteConsultarOpSolicitud = new RequestDTO();
-		clienteConsultarOpSolicitud.setUrl(clienteConsultarUrl.toString());
-		MessageProxyDTO clienteConsultarOpMensaje= new MessageProxyDTO();
-		clienteConsultarOpMensaje.setBody(clienteConsultarOp.toString());
-		clienteConsultarOpSolicitud.setMessage(clienteConsultarOpMensaje);
-
-		String clienteConsultarOpResultado = HttpClientUtils.postPerform(clienteConsultarOpSolicitud);
-		JsonObject clienteConsultarOpResultadoObjeto = new Gson().fromJson(clienteConsultarOpResultado, JsonObject.class);
+		JsonObject clienteConsultarOpResultadoObjeto = Utilerias.performOperacion(ClienteServicio, ClienteConsultarOp, datosCliente);
 		logger.info("clienteConsultarOpResultadoObjeto" + clienteConsultarOpResultadoObjeto);
 
 		JsonObject cliente = clienteConsultarOpResultadoObjeto.has("cliente") ? clienteConsultarOpResultadoObjeto.get("cliente").getAsJsonObject() : new JsonObject();
 		String cliSucurs = cliente.has("Cli_Sucurs") ? cliente.get("Cli_Sucurs").getAsString() : "";
 		String cliComple = cliente.has("Cli_Comple") ? cliente.get("Cli_Comple").getAsString() : "";
+
+		/* 
+			SP4 NBCUEORICON se consulta 
+		*/
 
 		JsonObject datosSucursal = new JsonObject();
 		datosSucursal.addProperty("Par_Sucurs", cliSucurs);
@@ -1074,27 +1026,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosSucursal.addProperty("Modulo", informacionSucursalObtenerOpModulo);
 
 		logger.info("datosSucursal" + datosSucursal);
-		StringBuilder informacionSucursalObtenerUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(ConfiguracionServicio)
-				.append("/")
-				.append(InformacionSucursalObtenerOp);
-
-		JsonObject informacionSucursalObtenerOp = new JsonObject();
-		informacionSucursalObtenerOp.add("informacionSucursalObtenerOp", datosSucursal);
-		logger.info("informacionSucursalObtenerOp" + informacionSucursalObtenerOp);
-
-		RequestDTO informacionSucursalObtenerOpSolicitud = new RequestDTO();
-		informacionSucursalObtenerOpSolicitud.setUrl(informacionSucursalObtenerUrl.toString());
-		MessageProxyDTO informacionSucursalObtenerOpMensaje= new MessageProxyDTO();
-		informacionSucursalObtenerOpMensaje.setBody(informacionSucursalObtenerOp.toString());
-		informacionSucursalObtenerOpSolicitud.setMessage(informacionSucursalObtenerOpMensaje);
-
-		String informacionSucursalObtenerOpResultado = HttpClientUtils.postPerform(informacionSucursalObtenerOpSolicitud);
-		JsonObject informacionSucursalObtenerOpResultadoObjeto = new Gson().fromJson(informacionSucursalObtenerOpResultado, JsonObject.class);
+		JsonObject informacionSucursalObtenerOpResultadoObjeto = Utilerias.performOperacion(ConfiguracionServicio, InformacionSucursalObtenerOp, datosSucursal);
 		logger.info("informacionSucursalObtenerOpResultadoObjeto" + informacionSucursalObtenerOpResultadoObjeto);		
-		
 
 		JsonObject datosPerfilRiesgo = new JsonObject();
 		datosPerfilRiesgo.addProperty("Apl_Client", usuClient);
@@ -1109,25 +1042,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosPerfilRiesgo.addProperty("Modulo", UsuarioPerfilRiesgoConsultarOpModulo);
 
 		logger.info("datosPerfilRiesgo" + datosPerfilRiesgo);
-		StringBuilder usuarioPerfilRiesgoConsultarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(UsuarioServicio)
-				.append("/")
-				.append(UsuarioPerfilRiesgoConsultarOp);
-
-		JsonObject usuarioPerfilRiesgoConsultarOp = new JsonObject();
-		usuarioPerfilRiesgoConsultarOp.add("usuarioPerfilRiesgoConsultarOp", datosPerfilRiesgo);
-		logger.info("usuarioPerfilRiesgoConsultarOp" + usuarioPerfilRiesgoConsultarOp);
-
-		RequestDTO usuarioPerfilRiesgoConsultarOpSolicitud = new RequestDTO();
-		usuarioPerfilRiesgoConsultarOpSolicitud.setUrl(usuarioPerfilRiesgoConsultarUrl.toString());
-		MessageProxyDTO usuarioPerfilRiesgoConsultarOpMensaje= new MessageProxyDTO();
-		usuarioPerfilRiesgoConsultarOpMensaje.setBody(usuarioPerfilRiesgoConsultarOp.toString());
-		usuarioPerfilRiesgoConsultarOpSolicitud.setMessage(usuarioPerfilRiesgoConsultarOpMensaje);
-
-		String usuarioPerfilRiesgoConsultarOpResultado = HttpClientUtils.postPerform(usuarioPerfilRiesgoConsultarOpSolicitud);
-		JsonObject usuarioPerfilRiesgoConsultarOpResultadoObjeto = new Gson().fromJson(usuarioPerfilRiesgoConsultarOpResultado, JsonObject.class);
+		JsonObject usuarioPerfilRiesgoConsultarOpResultadoObjeto = Utilerias.performOperacion(UsuarioServicio, UsuarioPerfilRiesgoConsultarOp, datosPerfilRiesgo);
 		logger.info("usuarioPerfilRiesgoConsultarOpResultadoObjeto" + usuarioPerfilRiesgoConsultarOpResultadoObjeto);
 
 		/* 
@@ -1149,25 +1064,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosFechaHabil.addProperty("Modulo", fechaHabilConsultarOpModulo);
 
 		logger.info("datosFechaHabil" + datosFechaHabil);
-		StringBuilder fechaHabilConsultarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(ReinversionServicio)
-				.append("/")
-				.append(fechaHabilConsultarOp);
-
-		JsonObject fechaHabilConsultarOp = new JsonObject();
-		fechaHabilConsultarOp.add("fechaHabilConsultarOp", datosFechaHabil);
-		logger.info("fechaHabilConsultarOp" + fechaHabilConsultarOp);
-
-		RequestDTO fechaHabilConsultarOpSolicitud = new RequestDTO();
-		fechaHabilConsultarOpSolicitud.setUrl(fechaHabilConsultarUrl.toString());
-		MessageProxyDTO fechaHabilConsultarOpMensaje= new MessageProxyDTO();
-		fechaHabilConsultarOpMensaje.setBody(fechaHabilConsultarOp.toString());
-		fechaHabilConsultarOpSolicitud.setMessage(fechaHabilConsultarOpMensaje);
-
-		String fechaHabilConsultarOpResultado = HttpClientUtils.postPerform(fechaHabilConsultarOpSolicitud);
-		JsonObject fechaHabilConsultarOpResultadoObjeto = new Gson().fromJson(fechaHabilConsultarOpResultado, JsonObject.class);
+		JsonObject fechaHabilConsultarOpResultadoObjeto = Utilerias.performOperacion(ReinversionServicio, fechaHabilConsultarOp, datosFechaHabil);
 		logger.info("fechaHabilConsultarOpResultadoObjeto" + fechaHabilConsultarOpResultadoObjeto);
 
 		/* 
@@ -1177,9 +1074,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 		*/		
 
 		String cliTipo = cliente.has("Cli_Tipo") ? cliente.get("Cli_Tipo").getAsString() : "";
-
 		String invFecVen = inversion.has("Inv_FecVen") ? inversion.get("Inv_FecVen").getAsString() : "";
 		Date fecVen = null;
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		
 		try {
 			fecVen = simpleDateFormat.parse(invFecVen);	
@@ -1217,25 +1114,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosTasaCliente.addProperty("Modulo", tasaClienteConsultarOpModulo);
 
 		logger.info("datosTasaCliente" + datosTasaCliente);
-		StringBuilder tasaClienteConsultarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(TasaServicio)
-				.append("/")
-				.append(tasaClienteConsultarOp);
-
-		JsonObject tasaClienteConsultarOp = new JsonObject();
-		tasaClienteConsultarOp.add("tasaClienteConsultarOp", datosTasaCliente);
-		logger.info("tasaClienteConsultarOp" + tasaClienteConsultarOp);
-
-		RequestDTO tasaClienteConsultarOpSolicitud = new RequestDTO();
-		tasaClienteConsultarOpSolicitud.setUrl(tasaClienteConsultarUrl.toString());
-		MessageProxyDTO tasaClienteConsultarOpMensaje= new MessageProxyDTO();
-		tasaClienteConsultarOpMensaje.setBody(tasaClienteConsultarOp.toString());
-		tasaClienteConsultarOpSolicitud.setMessage(tasaClienteConsultarOpMensaje);
-
-		String tasaClienteConsultarOpResultado = HttpClientUtils.postPerform(tasaClienteConsultarOpSolicitud);
-		JsonObject tasaClienteConsultarOpResultadoObjeto = new Gson().fromJson(tasaClienteConsultarOpResultado, JsonObject.class);
+		JsonObject tasaClienteConsultarOpResultadoObjeto = Utilerias.performOperacion(TasaServicio, tasaClienteConsultarOp, datosTasaCliente);
 		logger.info("tasaClienteConsultarOpResultadoObjeto" + tasaClienteConsultarOpResultadoObjeto);
 		
 		/* 
@@ -1257,31 +1136,13 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosMoneda.addProperty("Modulo", tasaMonedaConsultarOpModulo);
 
 		logger.info("datosMoneda" + datosMoneda);
-		StringBuilder tasaMonedaConsultarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(TasaServicio)
-				.append("/")
-				.append(tasaMonedaConsultarOp);
-		JsonObject tasaMonedaConsultarOp = new JsonObject();
-		tasaMonedaConsultarOp.add("tasaMonedaConsultarOp", datosMoneda);
-		logger.info("tasaMonedaConsultarOp" + tasaMonedaConsultarOp);
-
-		RequestDTO tasaMonedaConsultarOpSolicitud = new RequestDTO();
-		tasaMonedaConsultarOpSolicitud.setUrl(tasaMonedaConsultarUrl.toString());
-		MessageProxyDTO tasaMonedaConsultarOpMensaje= new MessageProxyDTO();
-		tasaMonedaConsultarOpMensaje.setBody(tasaMonedaConsultarOp.toString());
-		tasaMonedaConsultarOpSolicitud.setMessage(tasaMonedaConsultarOpMensaje);
-
-		String tasaMonedaConsultarOpResultado = HttpClientUtils.postPerform(tasaMonedaConsultarOpSolicitud);
-		JsonObject tasaMonedaConsultarOpResultadoObjeto = new Gson().fromJson(tasaMonedaConsultarOpResultado, JsonObject.class);
+		JsonObject tasaMonedaConsultarOpResultadoObjeto = Utilerias.performOperacion(TasaServicio, tasaMonedaConsultarOp, datosMoneda);
 		logger.info("tasaMonedaConsultarOpResultadoObjeto" + tasaMonedaConsultarOpResultadoObjeto);
 
 		JsonObject monedaConsultar = tasaMonedaConsultarOpResultadoObjeto.has("monedaConsultar") ? tasaMonedaConsultarOpResultadoObjeto.get("monedaConsultar").getAsJsonObject() : new JsonObject();
 		Double monFixCom = monedaConsultar.has("Mon_FixCom") ? monedaConsultar.get("Mon_FixCom").getAsDouble() : 0;
 		Double invCantid = inversion.has("Inv_Cantid") ? inversion.get("Inv_Cantid").getAsDouble() : 0;
 		Double MonTotUDI = 400000.00;
-
 		Double invGAT = 0.00;
 		Double invGATRea = 0.00;
 
@@ -1292,7 +1153,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		
 			/* 
 				Parametros obtenidos por medio del principal
-				Mon_Comisi = 0 de donde se obtiene pendiente para validar
 			*/
 
 			JsonObject datosGAT = new JsonObject();
@@ -1311,24 +1171,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			datosGAT.addProperty("Modulo", tasaGATConsultaCalcularOpModulo);
 
 			logger.info("datosGAT" + datosGAT);
-			StringBuilder tasaGATConsultaCalcularUrl = new StringBuilder()
-					.append(DataServiceHost)
-					.append("/")
-					.append(TasaServicio)
-					.append("/")
-					.append(tasaGATConsultaCalcularOp);
-			JsonObject tasaGATConsultaCalcularOp = new JsonObject();
-			tasaGATConsultaCalcularOp.add("tasaGATConsultaCalcularOp", datosGAT);
-			logger.info("tasaGATConsultaCalcularOp" + tasaGATConsultaCalcularOp);
-
-			RequestDTO tasaGATConsultaCalcularOpSolicitud = new RequestDTO();
-			tasaGATConsultaCalcularOpSolicitud.setUrl(tasaGATConsultaCalcularUrl.toString());
-			MessageProxyDTO tasaGATConsultaCalcularOpMensaje= new MessageProxyDTO();
-			tasaGATConsultaCalcularOpMensaje.setBody(tasaGATConsultaCalcularOp.toString());
-			tasaGATConsultaCalcularOpSolicitud.setMessage(tasaGATConsultaCalcularOpMensaje);
-
-			String tasaGATConsultaCalcularOpResultado = HttpClientUtils.postPerform(tasaGATConsultaCalcularOpSolicitud);
-			JsonObject tasaGATConsultaCalcularOpResultadoObjeto = new Gson().fromJson(tasaGATConsultaCalcularOpResultado, JsonObject.class);
+			JsonObject tasaGATConsultaCalcularOpResultadoObjeto = Utilerias.performOperacion(TasaServicio, tasaGATConsultaCalcularOp, datosGAT);
 			logger.info("tasaGATConsultaCalcularOpResultadoObjeto" + tasaGATConsultaCalcularOpResultadoObjeto);
 
 			JsonObject GATConsultaCalcular = tasaGATConsultaCalcularOpResultadoObjeto.has("GATConsultaCalcular") ? tasaGATConsultaCalcularOpResultadoObjeto.get("GATConsultaCalcular").getAsJsonObject() : new JsonObject();
@@ -1350,24 +1193,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			datosGATRea.addProperty("Modulo", tasaGATReaConsultaCalcularOpModulo);
 
 			logger.info("datosGATRea" + datosGATRea);
-			StringBuilder tasaGATRealConsultaCalcularUrl = new StringBuilder()
-					.append(DataServiceHost)
-					.append("/")
-					.append(TasaServicio)
-					.append("/")
-					.append(tasaGATRealConsultaCalcularOp);
-			JsonObject tasaGATRealConsultaCalcularOp = new JsonObject();
-			tasaGATRealConsultaCalcularOp.add("tasaGATRealConsultaCalcularOp", datosGATRea);
-			logger.info("tasaGATRealConsultaCalcularOp" + tasaGATRealConsultaCalcularOp);
-
-			RequestDTO tasaGATRealConsultaCalcularOpSolicitud = new RequestDTO();
-			tasaGATRealConsultaCalcularOpSolicitud.setUrl(tasaGATRealConsultaCalcularUrl.toString());
-			MessageProxyDTO tasaGATRealConsultaCalcularOpMensaje= new MessageProxyDTO();
-			tasaGATRealConsultaCalcularOpMensaje.setBody(tasaGATRealConsultaCalcularOp.toString());
-			tasaGATRealConsultaCalcularOpSolicitud.setMessage(tasaGATRealConsultaCalcularOpMensaje);
-
-			String tasaGATRealConsultaCalcularOpResultado = HttpClientUtils.postPerform(tasaGATRealConsultaCalcularOpSolicitud);
-			JsonObject tasaGATRealConsultaCalcularOpResultadoObjeto = new Gson().fromJson(tasaGATRealConsultaCalcularOpResultado, JsonObject.class);
+			JsonObject tasaGATRealConsultaCalcularOpResultadoObjeto = Utilerias.performOperacion(TasaServicio, tasaGATRealConsultaCalcularOp, datosGATRea);
 			logger.info("tasaGATRealConsultaCalcularOpResultadoObjeto" + tasaGATRealConsultaCalcularOpResultadoObjeto);
 
 			JsonObject GATRealConsultaCalcular = tasaGATRealConsultaCalcularOpResultadoObjeto.has("GATRealConsultaCalcular") ? tasaGATRealConsultaCalcularOpResultadoObjeto.get("GATRealConsultaCalcular").getAsJsonObject() : new JsonObject();
@@ -1375,8 +1201,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		}	
 
 		int invPlazo =  inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsInt() : 0;
-		JsonObject resultadoCalculaTasa = null; 
-
+		JsonObject resultadoCalculaTasa = null;
 		JsonObject informacionSucursal = informacionSucursalObtenerOpResultadoObjeto.has("informacionSucursal") ? informacionSucursalObtenerOpResultadoObjeto.get("informacionSucursal").getAsJsonObject() : new JsonObject();
 
 		int Par_DiBaIn = informacionSucursal.has("Par_DiBaIn") ? informacionSucursal.get("Par_DiBaIn").getAsInt() : 0;
@@ -1398,7 +1223,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		calculaTasa.addProperty("Cli_CobISR", Cli_CobISR);
 
 		resultadoCalculaTasa = Utilerias.calculaTasa(calculaTasa);
-
 		logger.info("resultadoCalculaTasa" + resultadoCalculaTasa);
 
 		/* 
@@ -1414,15 +1238,15 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		logger.info("validarToken   " + validarToken);
 
-		if ("B".equals(validarToken)) {
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
-			throw new ForbiddenException(bimMessageDTO.toString());
-		}
+		// if ("B".equals(validarToken)) {
+		// 	BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
+		// 	throw new ForbiddenException(bimMessageDTO.toString());
+		// }
 
-		if ("C".equals(validarToken)) {
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.28");
-			throw new ForbiddenException(bimMessageDTO.toString());
-		}
+		// if ("C".equals(validarToken)) {
+		// 	BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.28");
+		// 	throw new ForbiddenException(bimMessageDTO.toString());
+		// }
 		
 		/* 
 			Parametros obtenidos por medio del principal
@@ -1431,7 +1255,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject datosStatusActualizar = new JsonObject();
 		datosStatusActualizar.addProperty("Adi_Invers", inversion.has("Inv_Numero") ? inversion.get("Inv_Numero").getAsString() : "");
 		datosStatusActualizar.addProperty("Adi_InsLiq", inversionesStatusActualizarOpAdiInsLiq);
-		datosStatusActualizar.addProperty("Adi_MoReGr", inversionesStatusActualizarOpAdiMoReGr);
+		datosStatusActualizar.addProperty("Adi_MoReGr", Integer.parseInt(inversionesStatusActualizarOpAdiMoReGr));
 		datosStatusActualizar.addProperty("NumTransac", numTransac);
 		datosStatusActualizar.addProperty("Transaccio", inversionesStatusActualizarOpTransaccio);
 		datosStatusActualizar.addProperty("Usuario", inversionesStatusActualizarOpUsuari);
@@ -1441,29 +1265,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosStatusActualizar.addProperty("Modulo", inversionesStatusActualizarOpModulo);
 
 		logger.info("datosStatusActualizar" + datosStatusActualizar);
-		StringBuilder inversionesStatusActualizarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(InversionesServicio)
-				.append("/")
-				.append(inversionesStatusActualizarOp);
-		JsonObject inversionesStatusActualizarOp = new JsonObject();
-		inversionesStatusActualizarOp.add("inversionesStatusActualizarOp", datosStatusActualizar);
-		logger.info("inversionesStatusActualizarOp" + inversionesStatusActualizarOp);
-
-		RequestDTO inversionesStatusActualizarOpSolicitud = new RequestDTO();
-		inversionesStatusActualizarOpSolicitud.setUrl(inversionesStatusActualizarUrl.toString());
-		MessageProxyDTO inversionesStatusActualizarOpMensaje= new MessageProxyDTO();
-		inversionesStatusActualizarOpMensaje.setBody(inversionesStatusActualizarOp.toString());
-		inversionesStatusActualizarOpSolicitud.setMessage(inversionesStatusActualizarOpMensaje);
-
-		String inversionesStatusActualizarOpResultado = HttpClientUtils.postPerform(inversionesStatusActualizarOpSolicitud);
-		JsonObject inversionesStatusActualizarOpResultadoObjeto = new Gson().fromJson(inversionesStatusActualizarOpResultado, JsonObject.class);
+		JsonObject inversionesStatusActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, inversionesStatusActualizarOp, datosStatusActualizar);
 		logger.info("inversionesStatusActualizarOpResultadoObjeto" + inversionesStatusActualizarOpResultadoObjeto);
-
-		/* 
-			Parametros obtenidos por medio del principal
-		 */
+		
 		JsonObject fechaHabil = fechaHabilConsultarOpResultadoObjeto.has("fechaHabil") ? fechaHabilConsultarOpResultadoObjeto.get("fechaHabil").getAsJsonObject() : new JsonObject();
 
 		String sigFecha = fechaHabil.has("Fecha") ? fechaHabil.get("Fecha").getAsString() : "";
@@ -1493,6 +1297,10 @@ public class InversionesCtrl extends BimBaseCtrl {
 			}
 		}
 
+		/* 
+			Parametros obtenidos por medio del principal
+		*/
+
 		JsonObject datosInversionFinalizada = new JsonObject();
 		datosInversionFinalizada.addProperty("Inv_Numero", inversion.has("Inv_Numero") ? inversion.get("Inv_Numero").getAsString() : "");
 		datosInversionFinalizada.addProperty("Inv_Deposi", invCanTot);
@@ -1503,7 +1311,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosInversionFinalizada.addProperty("Inv_rAutor", inversionesImportesDeInvercionFinalizadaActualizarOpUsuari);
 		datosInversionFinalizada.addProperty("Inv_rISR", invISR);
 		datosInversionFinalizada.addProperty("Inv_rCuent", inversion.has("Inv_Cuenta") ? inversion.get("Inv_Cuenta").getAsString() : "");
-		datosInversionFinalizada.addProperty("Inv_rTBrut", 4.65);//verificar invCanBru
+		datosInversionFinalizada.addProperty("Inv_rTBrut", invTasInt);
 		datosInversionFinalizada.addProperty("NumTransac", numTransac);		
 		datosInversionFinalizada.addProperty("Transaccio", inversionesImportesDeInvercionFinalizadaActualizarOpTransaccio);
 		datosInversionFinalizada.addProperty("Usuario", inversionesImportesDeInvercionFinalizadaActualizarOpUsuari);
@@ -1513,26 +1321,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosInversionFinalizada.addProperty("Modulo", inversionesImportesDeInvercionFinalizadaActualizarOpModulo);
 
 		logger.info("datosInversionFinalizada" + datosInversionFinalizada);
-		StringBuilder inversionesImportesDeInvercionFinalizadaActualizarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(InversionesServicio)
-				.append("/")
-				.append(inversionesImportesDeInvercionFinalizadaActualizarOp);
-		JsonObject inversionesImportesDeInvercionFinalizadaActualizarOp = new JsonObject();
-		inversionesImportesDeInvercionFinalizadaActualizarOp.add("inversionesImportesDeInvercionFinalizadaActualizarOp", datosInversionFinalizada);
-		logger.info("inversionesImportesDeInvercionFinalizadaActualizarOp" + inversionesImportesDeInvercionFinalizadaActualizarOp);
-
-		RequestDTO inversionesImportesDeInvercionFinalizadaActualizarOpSolicitud = new RequestDTO();
-		inversionesImportesDeInvercionFinalizadaActualizarOpSolicitud.setUrl(inversionesImportesDeInvercionFinalizadaActualizarUrl.toString());
-		MessageProxyDTO inversionesImportesDeInvercionFinalizadaActualizarOpMensaje= new MessageProxyDTO();
-		inversionesImportesDeInvercionFinalizadaActualizarOpMensaje.setBody(inversionesImportesDeInvercionFinalizadaActualizarOp.toString());
-		inversionesImportesDeInvercionFinalizadaActualizarOpSolicitud.setMessage(inversionesImportesDeInvercionFinalizadaActualizarOpMensaje);
-
-		String inversionesImportesDeInvercionFinalizadaActualizarOpResultado = HttpClientUtils.postPerform(inversionesImportesDeInvercionFinalizadaActualizarOpSolicitud);
-		JsonObject inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto = new Gson().fromJson(inversionesImportesDeInvercionFinalizadaActualizarOpResultado, JsonObject.class);
-		
-
+		JsonObject inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, inversionesImportesDeInvercionFinalizadaActualizarOp, datosInversionFinalizada);
 		logger.info("inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto" + inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto);
 
 		/* 
@@ -1550,7 +1339,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosProcesoLiquidacion.addProperty("Inv_rCuent", inversion.has("Inv_Cuenta") ? inversion.get("Inv_Cuenta").getAsString() : "");
 		datosProcesoLiquidacion.addProperty("Dias_Base", Par_DiBaIn);		
 		datosProcesoLiquidacion.addProperty("Inv_Fecha", fecVen != null ? simpleDateFormat.format(fecVen) : "");
-		datosProcesoLiquidacion.addProperty("Inv_rTBrut", 4.65);//PENDIENTE VALIDAR EFREN
+		datosProcesoLiquidacion.addProperty("Inv_rTBrut", invTasInt);
 		datosProcesoLiquidacion.addProperty("Inv_MonRef", inversionesProcesoLiquidacionGenerarOpInvMonRef);
 		datosProcesoLiquidacion.addProperty("NumTransac", numTransac);		
 		datosProcesoLiquidacion.addProperty("Transaccio", inversionesProcesoLiquidacionGenerarOpTransaccio);
@@ -1561,26 +1350,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosProcesoLiquidacion.addProperty("Modulo", inversionesProcesoLiquidacionGenerarOpModulo);
 
 		logger.info("datosProcesoLiquidacion" + datosProcesoLiquidacion);
-		StringBuilder inversionesProcesoLiquidacionGenerarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(InversionesServicio)
-				.append("/")
-				.append(inversionesProcesoLiquidacionGenerarOp);
-		JsonObject inversionesProcesoLiquidacionGenerarOp = new JsonObject();
-		inversionesProcesoLiquidacionGenerarOp.add("inversionesProcesoLiquidacionGenerarOp", datosProcesoLiquidacion);
-		logger.info("inversionesProcesoLiquidacionGenerarOp" + inversionesProcesoLiquidacionGenerarOp);
-
-		RequestDTO inversionesProcesoLiquidacionGenerarOpSolicitud = new RequestDTO();
-		inversionesProcesoLiquidacionGenerarOpSolicitud.setUrl(inversionesProcesoLiquidacionGenerarUrl.toString());
-		MessageProxyDTO inversionesProcesoLiquidacionGenerarOpMensaje= new MessageProxyDTO();
-		inversionesProcesoLiquidacionGenerarOpMensaje.setBody(inversionesProcesoLiquidacionGenerarOp.toString());
-		inversionesProcesoLiquidacionGenerarOpSolicitud.setMessage(inversionesProcesoLiquidacionGenerarOpMensaje);
-
-		String inversionesProcesoLiquidacionGenerarOpResultado = HttpClientUtils.postPerform(inversionesProcesoLiquidacionGenerarOpSolicitud);
-		JsonObject inversionesProcesoLiquidacionGenerarOpResultadoObjeto = new Gson().fromJson(inversionesProcesoLiquidacionGenerarOpResultado, JsonObject.class);
+		JsonObject inversionesProcesoLiquidacionGenerarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, inversionesProcesoLiquidacionGenerarOp, datosProcesoLiquidacion);
 		logger.info("inversionesProcesoLiquidacionGenerarOpResultadoObjeto" + inversionesProcesoLiquidacionGenerarOpResultadoObjeto);
-
 		
 		JsonObject ProcesoLiquidacionGenerar = inversionesProcesoLiquidacionGenerarOpResultadoObjeto.has("ProcesoLiquidacionGenerar") ? inversionesProcesoLiquidacionGenerarOpResultadoObjeto.get("ProcesoLiquidacionGenerar").getAsJsonObject() : new JsonObject();
 		String errCodigo = ProcesoLiquidacionGenerar.has("Err_Codigo") ? ProcesoLiquidacionGenerar.get("Err_Codigo").getAsString() : "";
@@ -1594,7 +1365,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		}		
 
 		/* 
-			SP 16 PENDIENTE MAPEO
+			SP 16 
 		*/
 
 		JsonObject datosBitacora = new JsonObject();
@@ -1617,25 +1388,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Modulo", BitacoraCreacionOpModulo);
 
 		logger.info("datosBitacora" + datosBitacora);
-		StringBuilder bitacoraCreacionUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(BitacoraServicio)
-				.append("/")
-				.append(BitacoraCreacionOp);
-
-		JsonObject bitacoraCreacionOp = new JsonObject();
-		bitacoraCreacionOp.add("bitacoraCreacionOp", datosBitacora);
-		logger.info("bitacoraCreacionOp" + bitacoraCreacionOp);
-
-		RequestDTO bitacoraCreacionOpSolicitud = new RequestDTO();
-		bitacoraCreacionOpSolicitud.setUrl(bitacoraCreacionUrl.toString());
-		MessageProxyDTO bitacoraCreacionOpMensaje = new MessageProxyDTO();
-		bitacoraCreacionOpMensaje.setBody(bitacoraCreacionOp.toString());
-		bitacoraCreacionOpSolicitud.setMessage(bitacoraCreacionOpMensaje);
-
-		String bitacoraCreacionOpResultado = HttpClientUtils.postPerform(bitacoraCreacionOpSolicitud);
-		JsonObject bitacoraCreacionOpResultadoObjeto = new Gson().fromJson(bitacoraCreacionOpResultado, JsonObject.class);
+		JsonObject bitacoraCreacionOpResultadoObjeto = Utilerias.performOperacion(BitacoraServicio, BitacoraCreacionOp, datosBitacora);
 		logger.info("bitacoraCreacionOpResultadoObjeto" + bitacoraCreacionOpResultadoObjeto);
 		
 		/* 
@@ -1660,69 +1413,31 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosIversionVsEstadoCuenta.addProperty("Modulo", inversionesContraEstadoCuentaActualizarOpModulo);
 
 		logger.info("datosIversionVsEstadoCuenta" + datosIversionVsEstadoCuenta);
-		StringBuilder inversionesContraEstadoCuentaActualizarUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(InversionesServicio)
-				.append("/")
-				.append(inversionesContraEstadoCuentaActualizarOp);
-		JsonObject inversionesContraEstadoCuentaActualizarOp = new JsonObject();
-		inversionesContraEstadoCuentaActualizarOp.add("inversionesContraEstadoCuentaActualizarOp", datosIversionVsEstadoCuenta);
-		logger.info("inversionesContraEstadoCuentaActualizarOp" + inversionesContraEstadoCuentaActualizarOp);
-
-		RequestDTO inversionesContraEstadoCuentaActualizarOpSolicitud = new RequestDTO();
-		inversionesContraEstadoCuentaActualizarOpSolicitud.setUrl(inversionesContraEstadoCuentaActualizarUrl.toString());
-		MessageProxyDTO inversionesContraEstadoCuentaActualizarOpMensaje= new MessageProxyDTO();
-		inversionesContraEstadoCuentaActualizarOpMensaje.setBody(inversionesContraEstadoCuentaActualizarOp.toString());
-		inversionesContraEstadoCuentaActualizarOpSolicitud.setMessage(inversionesContraEstadoCuentaActualizarOpMensaje);
-
-		String inversionesContraEstadoCuentaActualizarOpResultado = HttpClientUtils.postPerform(inversionesContraEstadoCuentaActualizarOpSolicitud);
-		JsonObject inversionesContraEstadoCuentaActualizarOpResultadoObjeto = new Gson().fromJson(inversionesContraEstadoCuentaActualizarOpResultado, JsonObject.class);
+		JsonObject inversionesContraEstadoCuentaActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, inversionesContraEstadoCuentaActualizarOp, datosIversionVsEstadoCuenta);
 		logger.info("inversionesContraEstadoCuentaActualizarOpResultadoObjeto" + inversionesContraEstadoCuentaActualizarOpResultadoObjeto);
-
 		
 		/* 
 			SP 18 PENDIENTE MAPEO
-		*/
-		
+		*/		
 
 		JsonObject inversionesPagareNumeroUsuarioObtener = new JsonObject();
-			inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
-			inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Usuari", usuNumero);
-			inversionesPagareNumeroUsuarioObtener.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
-			inversionesPagareNumeroUsuarioObtener.addProperty("NumTransac", numTransac);
-			inversionesPagareNumeroUsuarioObtener.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
-			inversionesPagareNumeroUsuarioObtener.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);
-			inversionesPagareNumeroUsuarioObtener.addProperty("FechaSis", fechaSis);
-			inversionesPagareNumeroUsuarioObtener.addProperty("SucOrigen", InversionesPagareNumeroUsuarioObtenerOpSucOrigen);
-			inversionesPagareNumeroUsuarioObtener.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
-			inversionesPagareNumeroUsuarioObtener.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
-	
-		StringBuilder inversionesPagareNumeroUsuarioObtenerUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(InversionesServicio)
-				.append("/")
-				.append(InversionesPagareNumeroUsuarioObtenerOp);
-		JsonObject inversionesPagareNumeroUsuarioObtenerOp = new JsonObject();
-		inversionesPagareNumeroUsuarioObtenerOp.add("inversionesPagareNumeroUsuarioObtenerOp", inversionesPagareNumeroUsuarioObtener);
-		logger.info("inversionesPagareNumeroUsuarioObtenerOp" + inversionesPagareNumeroUsuarioObtenerOp);
-
-		RequestDTO inversionesPagareNumeroUsuarioObtenerSolicitud = new RequestDTO();
-		inversionesPagareNumeroUsuarioObtenerSolicitud.setUrl(inversionesPagareNumeroUsuarioObtenerUrl.toString());
-		MessageProxyDTO inversionesPagareNumeroUsuarioObtenerMensaje = new MessageProxyDTO();
-		inversionesPagareNumeroUsuarioObtenerMensaje.setBody(inversionesPagareNumeroUsuarioObtenerOp.toString());
-		inversionesPagareNumeroUsuarioObtenerSolicitud.setMessage(inversionesPagareNumeroUsuarioObtenerMensaje);
+		inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
+		inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Usuari", usuNumero);
+		inversionesPagareNumeroUsuarioObtener.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
+		inversionesPagareNumeroUsuarioObtener.addProperty("NumTransac", numTransac);
+		inversionesPagareNumeroUsuarioObtener.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
+		inversionesPagareNumeroUsuarioObtener.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);
+		inversionesPagareNumeroUsuarioObtener.addProperty("FechaSis", fechaSis);
+		inversionesPagareNumeroUsuarioObtener.addProperty("SucOrigen", InversionesPagareNumeroUsuarioObtenerOpSucOrigen);
+		inversionesPagareNumeroUsuarioObtener.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
+		inversionesPagareNumeroUsuarioObtener.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
 		
-		String inversionesPagareNumeroUsuarioObtenerOpResultado = HttpClientUtils.postPerform(inversionesPagareNumeroUsuarioObtenerSolicitud);
-		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = new Gson().fromJson(inversionesPagareNumeroUsuarioObtenerOpResultado, JsonObject.class);
+		logger.info("inversionesPagareNumeroUsuarioObtener" + inversionesPagareNumeroUsuarioObtener);
+		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = Utilerias.performOperacion(InversionesServicio, InversionesPagareNumeroUsuarioObtenerOp, inversionesPagareNumeroUsuarioObtener);
 		logger.info("inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto" + inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto);
-
-
 
 		JsonObject inversiones = inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto.has("inversiones") ? inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto.get("inversiones").getAsJsonObject() : new JsonObject();
 		JsonArray inversionesArreglos = inversiones.has("inversion") ? inversiones.get("inversion").getAsJsonArray() : new JsonArray();
-
 
 		for (JsonElement invElemento : inversionesArreglos) {
 			JsonObject inversionObj = invElemento.getAsJsonObject();
@@ -1731,8 +1446,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 				resultado = new JsonObject();
 				JsonObject inversionRenovada = new JsonObject();
 				inversionRenovada.addProperty("invCuenta", inversionObj.has("Inv_Cuenta") ? inversionObj.get("Inv_Cuenta").getAsString() : "");
-				inversionRenovada.addProperty("invNueva", inversionObj.has("Inv_Numero") ? inversionObj.get("Inv_Numero").getAsString() : "");
-				inversionRenovada.addProperty("invCantidad", inversionObj.has("Inv_Cuenta") ? inversionObj.get("Inv_Cuenta").getAsString() : "");
+				inversionRenovada.addProperty("invNueva", invNueva);
+				inversionRenovada.addProperty("invCantidad", inversionObj.has("Inv_Cantid") ? inversionObj.get("Inv_Cantid").getAsString() : "");
 				inversionRenovada.addProperty("invDeposi", invCanTot);
 				inversionRenovada.addProperty("invPlazo", inversionObj.has("Inv_Plazo") ? inversionObj.get("Inv_Plazo").getAsInt() : 0);
 				inversionRenovada.addProperty("invTBruta",  inversionObj.has("Inv_TBruta") ? inversionObj.get("Inv_TBruta").getAsInt() : 0);

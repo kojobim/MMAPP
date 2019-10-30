@@ -13,6 +13,7 @@ public class Racal {
 
 	private static final Logger logger = Logger.getLogger(Racal.class);
 	private static Properties properties;
+	private static String tokenEnc;
 	
 	static {
 		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/services.properties")) {
@@ -39,6 +40,7 @@ public class Racal {
 		clave = clave + repiteCaracterString(16 - clave.length(), " ");
 		claveEncriptada = encriptar(clave, 16);
 		respuesta = socket.creaConexionSocket(server, port);
+		tokenEnc = claveEncriptada;
 
 		if (respuesta == 0) {
 			mensaje = "VP" + claveEncriptada + repiteCaracterString(18, " ");
@@ -133,7 +135,7 @@ public class Racal {
 
 	public static String validaTokenOpera(String clave) {
 		String returnVal = validaToken(clave);
-		logToken(clave, returnVal);
+		logToken(tokenEnc, returnVal);
 		return returnVal;
 	}
 }
