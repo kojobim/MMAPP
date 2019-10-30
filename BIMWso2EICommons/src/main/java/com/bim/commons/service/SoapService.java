@@ -91,7 +91,7 @@ public class SoapService extends BaseService {
             throw new BadRequestException(bimMessageDTO.toString());
         }
         
-        if(Month.validarMes(mes) == null) {
+        if(Month.validateMonth(mes) == null) {
             BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.40");
             bimMessageDTO.addMergeVariable("mes", mes);
             throw new BadRequestException(bimMessageDTO.toString());        	
