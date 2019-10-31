@@ -3,12 +3,8 @@ package com.bim.commons.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bim.commons.dto.MessageProxyDTO;
-import com.bim.commons.dto.RequestDTO;
-import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Racal;
 import com.bim.commons.utils.Utilerias;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 /**
@@ -30,8 +26,7 @@ public class TokenService extends BaseService {
 	 */
     public String validarTokenOperacion(String tokFolio, String cpRSAToken, String tokUsuari, String numTransac) {
 		logger.info("COMMONS: Iniciando validarTokenTransaccion metodo...");
-
-		String DataServiceHost = properties.getProperty("data_service.host");
+		
 		String TokenServicio = properties.getProperty("data_service.token_servicio");
 		String IntentosActualizacionOp = properties.getProperty("token_servicio.op.intentos_actualizacion");
 		String IntentosActualizacionOpTransaccio = properties.getProperty("op.intentos_actualizacion.transaccio");
@@ -43,9 +38,8 @@ public class TokenService extends BaseService {
 		String fechaSis = Utilerias.getFechaSis();
 		String clave = "0" + tokFolio + cpRSAToken;
 		String validaToken = Racal.validaTokenOpera(clave);
-		logger.info("validaToken " + validaToken);
-		String tipActual = "01".equals(validaToken) ? "2" : "1";
-		String usuStatus = "01".equals(validaToken) ? "C" : "A";
+		String tipActual = !"00".equals(validaToken) ? "2" : "1";
+		String usuStatus = !"00".equals(validaToken) ? "C" : "A";
 
 		JsonObject datosToken = new JsonObject();
 		datosToken.addProperty("Tok_Folio", tokFolio);
@@ -60,13 +54,6 @@ public class TokenService extends BaseService {
 		datosToken.addProperty("SucOrigen", IntentosActualizacionOpSucOrigen);
 		datosToken.addProperty("SucDestino", IntentosActualizacionOpSucDestino);
 		datosToken.addProperty("Modulo", IntentosActualizacionOpModulo);
-		
-		StringBuilder intentosActualizacionUrl = new StringBuilder()
-				.append(DataServiceHost)
-				.append("/")
-				.append(TokenServicio)
-				.append("/")
-				.append(IntentosActualizacionOp);
 
 		JsonObject intentosActualizacionOpResultadoObjecto = Utilerias.performOperacion(TokenServicio, IntentosActualizacionOp, datosToken);
 		JsonObject intentosActualizacion = Utilerias.getJsonObjectProperty(intentosActualizacionOpResultadoObjecto, "intentosActualizacion");
