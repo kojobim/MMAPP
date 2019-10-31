@@ -4,12 +4,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+
+import com.google.gson.JsonObject;
+
 import org.apache.log4j.Logger;
 
 public class Racal {
 
 	private static final Logger logger = Logger.getLogger(Racal.class);
 	private static Properties properties;
+	private static String tokenEnc;
 	
 	static {
 		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/services.properties")) {
@@ -36,6 +40,7 @@ public class Racal {
 		clave = clave + repiteCaracterString(16 - clave.length(), " ");
 		claveEncriptada = encriptar(clave, 16);
 		respuesta = socket.creaConexionSocket(server, port);
+		tokenEnc = claveEncriptada;
 
 		if (respuesta == 0) {
 			mensaje = "VP" + claveEncriptada + repiteCaracterString(18, " ");
@@ -108,5 +113,29 @@ public class Racal {
 			caracter = (char) (caracter ^ cadena.charAt(i++));
 		
 		return caracter;
+	}
+
+	public static void logToken(String tkn, String respValidacion) {
+		String TokenServicio = properties.getProperty("data_service.token_servicio");
+		String LogCreacionOp = properties.getProperty("token_servicio.op.token_verificar");
+
+		String tokSerie = tkn.substring(0, 10);
+		String tokValue = tkn.substring(10, 16);
+
+		JsonObject datosToken = new JsonObject();
+		datosToken.addProperty("serieToken", tokSerie);
+		datosToken.addProperty("respuesta", respValidacion);
+		datosToken.addProperty("scriptName", "");
+		datosToken.addProperty("valueEnter", tokValue);
+
+		logger.info("datosToken" + datosToken);
+		JsonObject logCreacionOpResultadoObjeto = Utilerias.performOperacion(TokenServicio, LogCreacionOp, datosToken);
+		logger.info("logCreacionOpResultadoObjeto" + logCreacionOpResultadoObjeto);
+	}
+
+	public static String validaTokenOpera(String clave) {
+		String returnVal = validaToken(clave);
+		logToken(tokenEnc, returnVal);
+		return returnVal;
 	}
 }
