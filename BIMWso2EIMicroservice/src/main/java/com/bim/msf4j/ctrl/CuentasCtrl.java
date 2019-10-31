@@ -204,9 +204,11 @@ public class CuentasCtrl extends BimBaseCtrl {
 		datosCuentasCliente.addProperty("cpCliDir", cpCliDir);
 		datosCuentasCliente.add("cuentas", saldosResult);
 
+		JsonObject datosCuenta = new JsonObject();
+		datosCuenta.add("cuenta", datosCuentasCliente);
 		logger.info("CTRL: Terminando cuentasListado metodo");
 		return Response
-				.ok(datosCuentasCliente.toString(), MediaType.APPLICATION_JSON)
+				.ok(datosCuenta.toString(), MediaType.APPLICATION_JSON)
 				.build();
 	}
 	
