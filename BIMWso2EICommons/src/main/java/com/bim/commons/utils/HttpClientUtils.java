@@ -41,19 +41,19 @@ public class HttpClientUtils {
 	
 	public static String postPerform(RequestDTO request) {
 		try {
-			System.out.println("$$$$$$$RequestDTO$$$$$" +  request.toString());
+			System.out.println("- RequestDTO: " +  request.toString());
 			CloseableHttpClient client = HttpClients.createDefault();
 			final URIBuilder uriBuilder = new URIBuilder(request.getUrl());
 			
 			HttpPost post = new HttpPost(uriBuilder.build());
 			if(request.getMessage() != null) {
 				StringEntity entity = new StringEntity(request.getMessage().getBody());
-				System.out.println("&&&&&Message&&&&" + new Gson().toJson(request.getMessage()));
+				System.out.println("- Message: " + new Gson().toJson(request.getMessage()));
 				post.setEntity(entity);
 			}
 			if(request.getBody() != null) {
 				StringEntity entity = new StringEntity(request.getBody().toString());
-				System.out.println("&&&&&Body&&&&" + new Gson().toJson(request.getMessage()));
+				System.out.println("- Body: " + new Gson().toJson(request.getMessage()));
 				post.setEntity(entity);
 			}
 			post.setHeader("Accept", "application/json");
@@ -77,7 +77,7 @@ public class HttpClientUtils {
 	
 	public static String getPerform(RequestDTO request) {
 		try {
-			System.out.println("$$$$$$$RequestDTO$$$$$" +  request.toString());
+			System.out.println("- RequestDTO: " +  request.toString());
 			
 			CloseableHttpClient client = null;
 					
@@ -92,7 +92,7 @@ public class HttpClientUtils {
 			final URIBuilder uriBuilder = new URIBuilder(url);
 			uriBuilder.setCharset(StandardCharsets.UTF_8);
 			
-			System.out.println(">>>>>>uriBuilder " + uriBuilder.toString());
+			System.out.println("- uriBuilder: " + uriBuilder.toString());
 			
 			HttpGet get = new HttpGet(uriBuilder.build());
 			
@@ -152,7 +152,6 @@ public class HttpClientUtils {
 
 	private static CloseableHttpClient createAcceptSelfSignedCertificateClient() {
 
-        // use the TrustSelfSignedStrategy to allow Self Signed Certificates
         SSLContext sslContext = null;
 		try {
 			sslContext = SSLContextBuilder
@@ -160,19 +159,13 @@ public class HttpClientUtils {
 			        .loadTrustMaterial(new TrustSelfSignedStrategy())
 			        .build();
 		} catch (KeyManagementException | NoSuchAlgorithmException | KeyStoreException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-        // we can optionally disable hostname verification. 
-        // if you don't want to further weaken the security, you don't have to include this.
         HostnameVerifier allowAllHosts = new NoopHostnameVerifier();
         
-        // create an SSL Socket Factory to use the SSLContext with the trust self signed certificate strategy
-        // and allow all hosts verifier.
         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, allowAllHosts);
         
-        // finally create the HttpClient using HttpClient factory methods and assign the ssl socket factory
         return HttpClients
                 .custom()
                 .setSSLSocketFactory(connectionFactory)

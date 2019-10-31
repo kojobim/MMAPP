@@ -8,11 +8,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Filtrado {
 
-	private static final Logger logger = Logger.getLogger(Filtrado.class);
+	private static final Logger logger = LoggerFactory.getLogger(Filtrado.class);
 	
     public static JsonObject filtroInversiones(JsonArray inversionArray, Integer page, Integer per_page, String filter_by) {
 		logger.info("COMMONS: Comenzando filtroInversiones metodo");
@@ -62,18 +63,18 @@ public class Filtrado {
 			elementosObjeto.addProperty("invNumero", invNumero);
 			elementosObjeto.addProperty("invCantid", invCantid);
 			
-			SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+			SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
 			String invFecVen = null;
 			if(elemento.has("Inv_FecVen"))
 				invFecVen = elemento.get("Inv_FecVen").getAsString();
-			Date fecha1 = new Date();
+			Date fechaActual = new Date();
 			if(invFecVen != null && !invFecVen.contains("Proximo Vencimiento ")) {
 				try {
-					fecha1 = format.parse(invFecVen);
+					fechaActual = formatoFecha.parse(invFecVen);
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
-				elementosObjeto.addProperty("Inv_FecVen", simpleDateFormat.format(fecha1));
+				elementosObjeto.addProperty("Inv_FecVen", simpleDateFormat.format(fechaActual));
 			}
 			elementosObjeto.addProperty("cpRenInv", cpRenInv);
 			

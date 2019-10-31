@@ -6,8 +6,12 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class TcpSocket {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class TcpSocket {
+	
+	private static final Logger logger = LoggerFactory.getLogger(TcpSocket.class);
 	private Socket socket;
 	private DataOutputStream flujoSalida;
 	private DataInputStream flujoEntrada;
@@ -21,6 +25,7 @@ public class TcpSocket {
 	}
 
 	public int creaConexionSocket(String nombreEquipo, int numeroPuerto) {
+		logger.info("COMMONS: Comenzando creaConexionSocket metodo");
 		int exito = 0;
 
 		if (socket != null) {
@@ -37,10 +42,13 @@ public class TcpSocket {
 				exito = 1;
 			}
 		}
+		logger.info("COMMONS: Finalizando creaConexionSocket metodo");
 		return exito;
 	}
 
 	public void cierraConexionSocket() {
+		logger.info("COMMONS: Comenzando cierraConexionSocket metodo");
+
 		try {
 			flujoEntrada.close();
 			flujoEntrada = null;
@@ -64,6 +72,7 @@ public class TcpSocket {
 			sMsgErr = "cierraConexionSocket,3:" + e3;
 			e3.printStackTrace();
 		}
+		logger.info("COMMONS: Finalizando cierraConexionSocket metodo");
 	}
 
 	public void enviaMensaje(String mensaje) {
@@ -107,6 +116,7 @@ public class TcpSocket {
 	}
 
 	public int creaConexionSocketTO(String nombreEquipo, int numeroPuerto, int timeOutMs) {
+		logger.info("COMMONS: Comenzando creaConexionSocketTO metodo");
 		int exito = 0;
 		
 		if (socket != null) {
@@ -122,6 +132,7 @@ public class TcpSocket {
 				exito = 1;
 			}
 		}
+		logger.info("COMMONS: Finalizando creaConexionSocketTO metodo");
 		return exito;
 	}
 

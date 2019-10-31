@@ -131,7 +131,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		String entNombre = Utilerias.getStringProperty(cliente,"Ent_Nombre");
 		String paiNombre = Utilerias.getStringProperty(cliente,"Pai_Nombre");
 		
-		String cpCliDir = Utilerias.concat(cliCalle, cliCalNum, cliCodPos, cliColoni, locNombre, entNombre, paiNombre);
+		String cpCliDir = Utilerias.concatenar(cliCalle, cliCalNum, cliCodPos, cliColoni, locNombre, entNombre, paiNombre);
 		
 		JsonObject datosCuentasCliente = new JsonObject();
 		datosCuentasCliente.addProperty("cliNumero", cliNumero);

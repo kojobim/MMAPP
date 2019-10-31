@@ -47,7 +47,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 	
 	public InversionesCtrl() {
 		super();
-		logger.info("Ctrl: Empezando metodo init...");
+		logger.info("CTRL: Comenzando metodo init...");
 		this.bitacoraServicio = new BitacoraServicio();
 		this.transaccionServicio = new TransaccionServicio();
 		this.inversionesServicio = new InversionesServicio();
@@ -55,7 +55,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		InversionesFilterBy = properties.getProperty("inversiones_servicio.filter_by");
 		InversionesMaximoPagina = Integer.parseInt(properties.getProperty("inversiones_servicio.maximo_pagina"));
 		
-		logger.info("Ctrl: Terminando metodo init...");
+		logger.info("CTRL: Terminando metodo init...");
 	}
 	
 	@Path("/")
@@ -68,13 +68,13 @@ public class InversionesCtrl extends BimBaseCtrl {
 		if(page == null || perPage == null) 
 			throw new BadRequestException("BIM.MENSAJ.2");
 		
-		if(!Utilerias.isNumber(page)) {
+		if(!Utilerias.validaNumero(page)) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.9");
 			bimMessageDTO.addMergeVariable("page", page);
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 		
-		if(!Utilerias.isNumber(perPage)) {
+		if(!Utilerias.validaNumero(perPage)) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.22");
 			bimMessageDTO.addMergeVariable("perPage", perPage);
 			throw new BadRequestException(bimMessageDTO.toString());
@@ -240,7 +240,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		String bearerToken = solicitud.getHeader("Authorization");
 		JsonObject principalResultadoObjecto = Utilerias.getPrincipal(bearerToken);
 
-		if(!Utilerias.isNumber(invNumero)) {
+		if(!Utilerias.validaNumero(invNumero)) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.23");
 			bimMessageDTO.addMergeVariable("invNumero", invNumero);
 			throw new BadRequestException(bimMessageDTO.toString());

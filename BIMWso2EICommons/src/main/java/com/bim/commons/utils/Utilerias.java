@@ -10,7 +10,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.dto.RequestDTO;
@@ -22,7 +23,7 @@ import com.google.gson.JsonObject;
 
 public class Utilerias {
 
-	private static final Logger logger = Logger.getLogger(Utilerias.class);
+	private static final Logger logger = LoggerFactory.getLogger(Utilerias.class);
 	private static Properties properties;
 	private static String IdentityServer;
 	private static String DataServer;
@@ -45,126 +46,125 @@ public class Utilerias {
 	
 	@SuppressWarnings("unchecked")
 	public static JsonArray paginado(JsonArray datos, int page, int per_page) {
-		logger.info("Inicio paginado");
-		ArrayList<JsonElement> list = (ArrayList<JsonElement>)new Gson().fromJson(datos.toString(), ArrayList.class);
-		if(per_page > list.size())
+		logger.info("COMMONS: Comenzando paginado metodo");
+		ArrayList<JsonElement> listaElementos = (ArrayList<JsonElement>)new Gson().fromJson(datos.toString(), ArrayList.class);
+		if(per_page > listaElementos.size())
 			return datos; 
-		int numDatos = (page - 1) * per_page;
-		List<JsonElement> listResult = list.subList(numDatos, numDatos + per_page);
-		logger.info("Termino paginado");
-		return new Gson().fromJson(new Gson().toJson(listResult), JsonArray.class);
+		int numeroDatos = (page - 1) * per_page;
+		List<JsonElement> listaElementosPaginados = listaElementos.subList(numeroDatos, numeroDatos + per_page);
+		logger.info("COMMONS: Finalizando paginado metodo");
+		return new Gson().fromJson(new Gson().toJson(listaElementosPaginados), JsonArray.class);
 	}
 	   
-	public static Boolean calcularVencimiento(Date fechaVen, Date horIni, Date horFin) {
-		logger.info("COMMONS: Iniciando calcularVencimiento...");
+	public static Boolean calcularVencimiento(Date fechaVencimiento, Date horIni, Date horFin) {
+		logger.info("COMMONS: Comenzando calcularVencimiento metodo");
 
-		if(fechaVen == null)
+		if(fechaVencimiento == null)
 			return false;
 		
 		Date fechaActual = null;
 
-		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.YEAR, 1900);
-		calendar.set(Calendar.MONTH, Calendar.JANUARY);
-		calendar.set(Calendar.DAY_OF_MONTH, 1);
-		Date horaActual = calendar.getTime();
+		Calendar calendario = Calendar.getInstance();
+		calendario.set(Calendar.YEAR, 1900);
+		calendario.set(Calendar.MONTH, Calendar.JANUARY);
+		calendario.set(Calendar.DAY_OF_MONTH, 1);
+		Date horaActual = calendario.getTime();
 
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			fechaActual = sdf.parse(sdf.format(new Date()));
 		} catch (Exception e) {
-			logger.info("formato de fecha no valido.");
+			logger.info("formato de fecha no válido.");
 		}
 
 		Date calHorIni = null;
 		Date calHorFin = null;
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			calendar.setTime(horIni);
-			calendar.add(Calendar.MINUTE, -1);
-			calHorIni = sdf.parse(sdf.format(calendar.getTime()));
+			calendario.setTime(horIni);
+			calendario.add(Calendar.MINUTE, -1);
+			calHorIni = sdf.parse(sdf.format(calendario.getTime()));
 		} catch (Exception e) {
 			logger.info("error al formatear calHorIni.");
 		}
 
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			calendar.setTime(horFin);
-			calendar.add(Calendar.MINUTE, 1);
-			calHorFin = sdf.parse(sdf.format(calendar.getTime()));
+			calendario.setTime(horFin);
+			calendario.add(Calendar.MINUTE, 1);
+			calHorFin = sdf.parse(sdf.format(calendario.getTime()));
 		} catch (Exception e) {
 			logger.info("error al formatear calHorFin.");
 		}
 
-		logger.info(">>>>> fechaActual: " + fechaActual);
-		logger.info(">>>>> HoraActual: " + horaActual);
-		logger.info(">>>>> fechaVen: " + fechaVen);
-		logger.info(">>>>> calHorIni: " + calHorIni);
-		logger.info(">>>>> calHorFin: " + calHorFin);
+		logger.info("- fechaActual: " + fechaActual);
+		logger.info("- HoraActual: " + horaActual);
+		logger.info("- fechaVencimiento: " + fechaVencimiento);
+		logger.info("- calHorIni: " + calHorIni);
+		logger.info("- calHorFin: " + calHorFin);
 		
-		logger.info("COMMONS: Finalizando calcularVencimiento...");
-		if(fechaVen.compareTo(fechaActual) == 0 &&
+		if(fechaVencimiento.compareTo(fechaActual) == 0 &&
 			(horaActual.after(calHorIni) && horaActual.before(calHorFin)))
 				return true;
-
+		logger.info("COMMONS: Finalizando calcularVencimiento metodo");
 		return false;
 	}
 	
 	public static double redondear(double cantidad, int decimales) {
-		logger.info("COMMONS: Iniciando redondear...");
+		logger.info("COMMONS: Comenzando redondear metodo...");
 	    double escala = Math.pow(10, decimales);
-	    logger.info("COMMONS: Finalizando redondear...");
+	    logger.info("COMMONS: Finalizando redondear metodo...");
     	return Math.round(cantidad * escala) / escala;
 	}
 	
 	public static String convertirFechaAFormatoSimple(String fecha) {
-		logger.info("COMMONS: Iniciando convertirFecha...");
-		String fechaConv = fecha.trim();
-		if(fechaConv.length() == 10 && fechaConv.contains("/")) {
-			fechaConv = fechaConv.substring(6)
-				+ "-" + fechaConv.substring(3, 5)
-				+ "-" + fechaConv.substring(0, 2);
-		}
-		
-		logger.info("COMMONS: Finalizando convertirFecha...");
-		return fechaConv;
+		logger.info("COMMONS: Comenzando convertirFecha metodo...");
+		String fechaConvertir = fecha.trim();
+		if(fechaConvertir.length() == 10 && fechaConvertir.contains("/")) {
+			fechaConvertir = fechaConvertir.substring(6)
+				+ "-" + fechaConvertir.substring(3, 5)
+				+ "-" + fechaConvertir.substring(0, 2);
+		}		
+		logger.info("COMMONS: Finalizando convertirFecha metodo...");
+		return fechaConvertir;
 	}
 	
-	public static Boolean isNumber(String value) {
-		logger.info("COMMONS: Iniciando isNumber metodo...");
+	public static Boolean validaNumero(String valor) {
+		logger.info("COMMONS: Comenzando validaNumero metodo...");
 		String regex = "\\d+";
-		logger.info("COMMONS: Finalizando isNumber metodo...");
-		return value.matches(regex);
+		logger.info("COMMONS: Finalizando validaNumero metodo...");
+		return valor.matches(regex);
 	}
 	
-	public static String concat(String ...args) {
-		logger.info("COMMONS: Iniciando concat metodo...");
+	public static String concatenar(String ...args) {
+		logger.info("COMMONS: Comenzando concatenar metodo...");
 		StringBuilder resultado = new StringBuilder();
 		for(int j = 0; j < args.length; j++) {
 			String arg = args[j];
 			if(arg == null || arg.isEmpty())
 				continue;
 			
-			String []argItems = arg.split(" ");
+			String []argElementos = arg.split(" ");
 			
-			for(int i = 0; i < argItems.length; i++) {
-				if(argItems[i].isEmpty())
+			for(int i = 0; i < argElementos.length; i++) {
+				if(argElementos[i].isEmpty())
 					continue;
 				
-				resultado.append(argItems[i]);
+				resultado.append(argElementos[i]);
 				
-				if(i < argItems.length - 1) 
+				if(i < argElementos.length - 1) 
 					resultado.append(" ");
 			}	
 
 			if(j < args.length - 1) 
 				resultado.append(" ");
 		}
-		logger.info("COMMONS: Finalizando concat metodo...");
+		logger.info("COMMONS: Finalizando concatenar metodo...");
 		return resultado.toString();	
 	}
 	
 	public static JsonObject getPrincipal(String bearerToken) {
+		logger.info("COMMONS: Comenzando getPrincipal metodo...");
 		RequestDTO principalSolicitud = new RequestDTO();
 		principalSolicitud.setUrl(IdentityServer);
 		principalSolicitud.setIsHttps(true);
@@ -179,13 +179,15 @@ public class Utilerias {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.29");
 			throw new UnauthorizedException(bimMessageDTO.toString());
 		}
-		
+		logger.info("COMMONS: Finalizando getPrincipal metodo...");
 		return principalResultadoObjecto;
 	}
 	
 	public static String getFechaSis() {
+		logger.info("COMMONS: Comenzando getFechaSis metodo");
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
+		logger.info("COMMONS: Finalizando getFechaSis metodo");
 		return simpleDateFormat.format(fecha);	
 	}
 	

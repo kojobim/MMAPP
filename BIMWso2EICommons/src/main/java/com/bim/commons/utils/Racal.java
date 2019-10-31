@@ -4,11 +4,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import org.apache.log4j.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Racal {
 
-	private static final Logger logger = Logger.getLogger(Racal.class);
+	private static final Logger logger = LoggerFactory.getLogger(Racal.class);
 	private static Properties properties;
 	
 	static {
@@ -25,6 +27,7 @@ public class Racal {
 	}
 	
 	public static String validaToken(String clave) {
+		logger.info("COMMONS: Comenzando validaToken metodo");
 		String server = properties.getProperty("token.server");
 		int port = Integer.parseInt(properties.getProperty("token.port"));
 		TcpSocket socket = new TcpSocket();
@@ -43,19 +46,22 @@ public class Racal {
 			validaToken = socket.recibeMensaje(2);
 			socket.cierraConexionSocket();
 		}
+		logger.info("COMMONS: Finalizando validaToken metodo");
 		return validaToken;
 	}
 
 	public static String repiteCaracterString(int repeticionEnt, String caracterStr) {
+		logger.info("COMMONS: Comenzando repiteCaracterString metodo");
 		StringBuffer caracterRepetidoStr = new StringBuffer();
 
 		for (int i = 0; i < repeticionEnt; i++) 
 			caracterRepetidoStr.append(caracterStr);
-		
+		logger.info("COMMONS: Finalizando repiteCaracterString metodo");
 		return caracterRepetidoStr.toString();
 	}
 
 	public static String cifraPassword_HSM(String password) {
+		logger.info("COMMONS: Comenzando cifraPassword_HSM metodo");
 		String server = properties.getProperty("hsm.server");
 		int port = Integer.parseInt(properties.getProperty("hsm.port"));
 		logger.info("server: " + server);
@@ -78,13 +84,12 @@ public class Racal {
 			first = passwordCifrado.indexOf("0001CQ00") + "0001CQ00".length();
 			socket.cierraConexionSocket();
 		}
-		logger.info(">>>>>>>>>>>>>>> passwordCifrado >>>>>>>>>>>>" + passwordCifrado);
-		logger.info(">>>>>>>>>>>>>>> first >>>>>>>>>>>>" + first);
-
+		logger.info("COMMONS: Finalizando cifraPassword_HSM metodo");
 		return passwordCifrado.substring(first, first + 8);
 	}
 	
 	public static String encriptar(String password, int longitud) {
+		logger.info("COMMONS: Comenzando encriptar metodo");
 		StringBuffer passwordEncriptado = new StringBuffer(repiteCaracterString(16, " "));
 		StringBuffer cadena = new StringBuffer("85C2DCA4CBCED3DF");
 		char caracter = ' ';
@@ -96,17 +101,18 @@ public class Racal {
 			caracter = xor(password.charAt(i - 1), cadena.toString());
 			passwordEncriptado.replace(i - 1, i, String.valueOf(caracter));
 		}
-
+		logger.info("COMMONS: Finalizando encriptar metodo");
 		return passwordEncriptado.toString();
 	}
 	
 
 	private static char xor(char caracter, String cadena) {
+		logger.info("COMMONS: Comenzando xor metodo");
 		int i = 0;
 
 		while (i < cadena.length()) 
 			caracter = (char) (caracter ^ cadena.charAt(i++));
-		
+		logger.info("COMMONS: Finalizando xor metodo");
 		return caracter;
 	}
 }

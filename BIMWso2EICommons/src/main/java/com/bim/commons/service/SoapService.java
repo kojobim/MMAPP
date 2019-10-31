@@ -14,10 +14,11 @@ import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.bim.commons.dto.BimMessageDTO;
-import com.bim.commons.enums.Month;
+import com.bim.commons.enums.MesesEnum;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.utils.SOAPClientUtils;
@@ -31,7 +32,7 @@ import com.google.gson.JsonObject;
  */
 public class SoapService extends BaseService {
 	
-	private static final Logger logger = Logger.getLogger(SoapService.class);
+	private static final Logger logger = LoggerFactory.getLogger(SoapService.class);
 
 	private static String SoapEndpoint;
 	private static String SoapAction;
@@ -82,7 +83,7 @@ public class SoapService extends BaseService {
             throw new BadRequestException(bimMessageDTO.toString());
         }
                 
-        if(!Utilerias.isNumber(anio)) {
+        if(!Utilerias.validaNumero(anio)) {
             BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.35");
             bimMessageDTO.addMergeVariable("anio", anio);
             throw new BadRequestException(bimMessageDTO.toString());
@@ -98,13 +99,13 @@ public class SoapService extends BaseService {
             throw new BadRequestException(bimMessageDTO.toString());
         }
         
-        if(!Utilerias.isNumber(mes)) {
+        if(!Utilerias.validaNumero(mes)) {
             BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.36");
             bimMessageDTO.addMergeVariable("mes", mes);
             throw new BadRequestException(bimMessageDTO.toString());
         }
         
-        if(Month.validateMonth(mes) == null) {
+        if(MesesEnum.validaMes(mes) == null) {
             BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.40");
             bimMessageDTO.addMergeVariable("mes", mes);
             throw new BadRequestException(bimMessageDTO.toString());        	
@@ -120,7 +121,7 @@ public class SoapService extends BaseService {
         }
         
         
-        if(!Utilerias.isNumber(cliente)) {
+        if(!Utilerias.validaNumero(cliente)) {
             BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.37");
             bimMessageDTO.addMergeVariable("cliente", cliente);
             throw new BadRequestException(bimMessageDTO.toString());

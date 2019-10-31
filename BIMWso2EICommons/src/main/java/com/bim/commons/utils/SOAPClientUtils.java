@@ -15,6 +15,8 @@ import javax.xml.soap.SOAPMessage;
 
 import org.json.JSONObject;
 import org.json.XML;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -22,6 +24,7 @@ import com.google.gson.JsonObject;
 
 public class SOAPClientUtils {
 	
+	private static final Logger logger = LoggerFactory.getLogger(SOAPClientUtils.class);
 	private static Properties properties;
 	private static String Charset;
 	
@@ -41,7 +44,7 @@ public class SOAPClientUtils {
 	}
 	
 	public static JsonObject callSoapWebService(SOAPMessage soapRequest, String endpoint) {
-		System.out.println("COMMONS: Comenzando callSoapWebService metodo");
+		logger.info("COMMONS: Comenzando callSoapWebService metodo");
 		try {
             soapRequest.writeTo(System.out);
 			SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
@@ -66,18 +69,18 @@ public class SOAPClientUtils {
             
             JsonObject body = Utilerias.getJsonObjectProperty(envelope, "Body");
             		
-            System.out.println("- body" + body);
-            System.out.println("COMMONS: Finalizando callSoapWebService metodo");
+            logger.info("- body" + body);
+            logger.info("COMMONS: Finalizando callSoapWebService metodo");
             return body;
 		} catch (Exception e) {
-			System.err.println("\nError al enviar el SOAP Request al Servidor\n");
+			logger.info("Error al enviar el SOAP Request al Servidor");
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
 	private static void removeNamesapceAndPrefix(JsonObject parentObject) {
-        System.out.println("COMMONS: Comenzando removeNamesapceAndPrefix metodo");
+		logger.info("COMMONS: Comenzando removeNamesapceAndPrefix metodo");
         Set<String> removedkeys = new HashSet<>();
 		for(Entry<String, JsonElement> entry : parentObject.entrySet()) {
 			if(entry.getKey().contains("xmlns")
@@ -95,11 +98,11 @@ public class SOAPClientUtils {
 		for(String key: removedkeys) {
 			parentObject.remove(key);
 		}
-        System.out.println("COMMONS: Finalizando removeNamesapceAndPrefix metodo");
+		logger.info("COMMONS: Finalizando removeNamesapceAndPrefix metodo");
 	}
 	
 	private static JsonObject formatResult(JsonObject responseObject) {
-		System.out.println("COMMONS: Comenzando formatResult metodo");
+		logger.info("COMMONS: Comenzando formatResult metodo");
 		JsonObject parentObject = new JsonObject();
 		for(Entry<String, JsonElement> entry : responseObject.entrySet()) {
 			String key;
@@ -113,7 +116,7 @@ public class SOAPClientUtils {
 			else 
 				parentObject.add(key, formatResult((JsonObject)entry.getValue()));
 		}
-		System.out.println("COMMONS: Finalizando formatResult metodo");
+		logger.info("COMMONS: Finalizando formatResult metodo");
 		return parentObject;
 	}
 }
