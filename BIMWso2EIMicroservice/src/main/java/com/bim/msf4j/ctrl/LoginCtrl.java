@@ -169,7 +169,9 @@ public class LoginCtrl extends BimBaseCtrl {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
-			
+		
+		logger.info("- usuario " + usuario);
+		
 		String usuNumero = Utilerias.getStringProperty(usuario, "Usu_Numero");
 		String usuStatus = Utilerias.getStringProperty(usuario, "Usu_Status");
 		
@@ -384,6 +386,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		String usuNombre = Utilerias.getStringProperty(usuario, "Usu_Nombre");
 		String usuEmail = Utilerias.getStringProperty(usuario, "Usu_Email");
 		String usuUsuAdm = Utilerias.getStringProperty(usuario, "Usu_UsuAdm");
+		String usuFolTok = Utilerias.getStringProperty(usuario, "Usu_FolTok");
 		
 		JsonObject usuarioResultado = new JsonObject();
 		usuarioResultado.addProperty("usuClave ", usuClave);
@@ -392,6 +395,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		usuarioResultado.addProperty("usuNombre ", usuNombre);
 		usuarioResultado.addProperty("usuEmail ", usuEmail);
 		usuarioResultado.addProperty("usuUsuAdm ", usuUsuAdm);
+		usuarioResultado.addProperty("usuFolTok ", usuFolTok);
 		logger.info("CTRL: Terminando login metodo");
 		return Response.ok(usuarioResultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
