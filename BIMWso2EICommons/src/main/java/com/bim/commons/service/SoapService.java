@@ -171,10 +171,10 @@ public class SoapService extends BaseService {
 		soapElementMes.addTextNode(mes);
 		
 		JsonObject jsonObject = SOAPClientUtils.callSoapWebService(soapRequest, SoapEndpoint);
-		JsonObject datosClienteResponse = Utilerias.getJsonObjectProperty(jsonObject, "DatosClienteResponse");
-		JsonObject datosClienteResult = Utilerias.getJsonObjectProperty(datosClienteResponse, "DatosClienteResult");
-		JsonObject mCorreoRespons = Utilerias.getJsonObjectProperty(datosClienteResult, "MCorreoRespons");
-		Integer codigoError = Utilerias.getIntProperty(mCorreoRespons, "codigoError");
+		JsonObject datosClienteResponse = Utilerias.obtenerJsonObjectPropiedad(jsonObject, "DatosClienteResponse");
+		JsonObject datosClienteResult = Utilerias.obtenerJsonObjectPropiedad(datosClienteResponse, "DatosClienteResult");
+		JsonObject mCorreoRespons = Utilerias.obtenerJsonObjectPropiedad(datosClienteResult, "MCorreoRespons");
+		Integer codigoError = Utilerias.obtenerIntPropiedad(mCorreoRespons, "codigoError");
 		
 		if(codigoError.intValue() == 0) {
             BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.38");

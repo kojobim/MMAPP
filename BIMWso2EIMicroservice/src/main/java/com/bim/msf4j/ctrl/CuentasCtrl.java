@@ -33,7 +33,6 @@ public class CuentasCtrl extends BimBaseCtrl {
 	private MovimientosServicio movimientosServicio;
 	private SaldoServicio saldoServicio;
 	
-	
 	public CuentasCtrl() {
 		super();
 		
@@ -75,7 +74,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		
 		logger.info(">>>>>>>>>saldosClienteConsultarResultadoObjecto " + saldosClienteConsultarResultadoObjecto);
 		
-		JsonObject cuenta = Utilerias.getJsonObjectProperty(saldosClienteConsultarResultadoObjecto, "cuenta");
+		JsonObject cuenta = Utilerias.obtenerJsonObjectPropiedad(saldosClienteConsultarResultadoObjecto, "cuenta");
 		
 		JsonArray saldos = new JsonArray();
 		
@@ -92,11 +91,11 @@ public class CuentasCtrl extends BimBaseCtrl {
 		
 		for(int i = 0; i < saldos.size(); i++) {
 			JsonObject saldo = (JsonObject) saldos.get(i);
-			String salCuenta = Utilerias.getStringProperty(saldo, "Sal_Cuenta");
-			String salCLAVE = Utilerias.getStringProperty(saldo, "Sal_CLABE");
-			String tipDescri = Utilerias.getStringProperty(saldo, "Tip_Descri");
-			String monDescri = Utilerias.getStringProperty(saldo, "Mon_Descri");
-			Double salDispon = Utilerias.getDoubleProperty(saldo, "Sal_Dispon");
+			String salCuenta = Utilerias.obtenerStringPropiedad(saldo, "Sal_Cuenta");
+			String salCLAVE = Utilerias.obtenerStringPropiedad(saldo, "Sal_CLABE");
+			String tipDescri = Utilerias.obtenerStringPropiedad(saldo, "Tip_Descri");
+			String monDescri = Utilerias.obtenerStringPropiedad(saldo, "Mon_Descri");
+			Double salDispon = Utilerias.obtenerDoublePropiedad(saldo, "Sal_Dispon");
 			
 			Double salDisponValue = Utilerias.redondear(salDispon.doubleValue(), 2); 
 			JsonObject saldoResult = new JsonObject();
@@ -119,18 +118,18 @@ public class CuentasCtrl extends BimBaseCtrl {
 		
 		logger.info("clienteConsultarResultadoObjecto " + clienteConsultarResultadoObjecto);
 		
-		JsonObject cliente = Utilerias.getJsonObjectProperty(clienteConsultarResultadoObjecto, "cliente");
+		JsonObject cliente = Utilerias.obtenerJsonObjectPropiedad(clienteConsultarResultadoObjecto, "cliente");
 		
-		String cliComple = Utilerias.getStringProperty(cliente, "Cli_Numero");
-		String cliRFC = Utilerias.getStringProperty(cliente, "Cli_RFC").trim();
-		String cliTelefo = Utilerias.getStringProperty(cliente,"Cli_Telefo");
-		String cliCalle = Utilerias.getStringProperty(cliente,"Cli_Calle");
-		String cliCalNum = Utilerias.getStringProperty(cliente,"Cli_CalNum");
-		String cliCodPos = Utilerias.getStringProperty(cliente,"Cli_CodPos");
-		String cliColoni = Utilerias.getStringProperty(cliente,"Cli_Coloni");
-		String locNombre = Utilerias.getStringProperty(cliente,"Loc_Nombre");
-		String entNombre = Utilerias.getStringProperty(cliente,"Ent_Nombre");
-		String paiNombre = Utilerias.getStringProperty(cliente,"Pai_Nombre");
+		String cliComple = Utilerias.obtenerStringPropiedad(cliente, "Cli_Numero");
+		String cliRFC = Utilerias.obtenerStringPropiedad(cliente, "Cli_RFC").trim();
+		String cliTelefo = Utilerias.obtenerStringPropiedad(cliente,"Cli_Telefo");
+		String cliCalle = Utilerias.obtenerStringPropiedad(cliente,"Cli_Calle");
+		String cliCalNum = Utilerias.obtenerStringPropiedad(cliente,"Cli_CalNum");
+		String cliCodPos = Utilerias.obtenerStringPropiedad(cliente,"Cli_CodPos");
+		String cliColoni = Utilerias.obtenerStringPropiedad(cliente,"Cli_Coloni");
+		String locNombre = Utilerias.obtenerStringPropiedad(cliente,"Loc_Nombre");
+		String entNombre = Utilerias.obtenerStringPropiedad(cliente,"Ent_Nombre");
+		String paiNombre = Utilerias.obtenerStringPropiedad(cliente,"Pai_Nombre");
 		
 		String cpCliDir = Utilerias.concatenar(cliCalle, cliCalNum, cliCodPos, cliColoni, locNombre, entNombre, paiNombre);
 		
@@ -179,8 +178,8 @@ public class CuentasCtrl extends BimBaseCtrl {
 		
 		logger.info("- folioTransaccionGenerarResultadoObjeto " + folioTransaccionGenerarResultadoObjeto); 
 		
-		JsonObject transaccion = Utilerias.getJsonObjectProperty(folioTransaccionGenerarResultadoObjeto,"transaccion");
-		String folTransa = Utilerias.getStringProperty(transaccion,"Fol_Transa");
+		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarResultadoObjeto,"transaccion");
+		String folTransa = Utilerias.obtenerStringPropiedad(transaccion,"Fol_Transa");
 		
 		JsonObject datosMovimientos = new JsonObject();
 		datosMovimientos.addProperty("Cue_Numero", salCuenta);
@@ -192,29 +191,29 @@ public class CuentasCtrl extends BimBaseCtrl {
 		
 		logger.info("- movimientosListadoResultadoObjeto " + movimientosListadoResultadoObjeto);
 		
-		JsonObject cuenta = Utilerias.getJsonObjectProperty(movimientosListadoResultadoObjeto , "cuenta");
+		JsonObject cuenta = Utilerias.obtenerJsonObjectPropiedad(movimientosListadoResultadoObjeto , "cuenta");
 		
 		JsonArray movimientosResultado = new JsonArray();
 		
 		JsonArray movimientos = new JsonArray();
 		
 		if(cuenta.has("movimientos") && cuenta.get("movimientos").isJsonObject()) {
-			JsonObject movimiento = Utilerias.getJsonObjectProperty(cuenta, "movimientos");
+			JsonObject movimiento = Utilerias.obtenerJsonObjectPropiedad(cuenta, "movimientos");
 			if(movimiento != null)
 				movimientos.add(movimiento);
 		}
 		if(cuenta.has("movimientos") && cuenta.get("movimientos").isJsonArray()) {
-			movimientos = Utilerias.getJsonArrayProperty(cuenta, "movimientos");
+			movimientos = Utilerias.obtenerJsonArrayPropiedad(cuenta, "movimientos");
 		}
 		
 		logger.info("- movimientos " + movimientos);
 		
 		for(int i = 0; i < movimientos.size(); i++) {
 			JsonObject movimiento = (JsonObject) movimientos.get(i);
-			String movDescri = Utilerias.getStringProperty(movimiento, "Mov_Descri").trim();
-			String fechaVal = Utilerias.getStringProperty(movimiento, "Fecha_Val");
-			Float movCantid = Utilerias.getFloatProperty(movimiento, "Mov_Cantid");
-			Integer movNatura = Utilerias.getIntProperty(movimiento, "Mov_Natura");
+			String movDescri = Utilerias.obtenerStringPropiedad(movimiento, "Mov_Descri").trim();
+			String fechaVal = Utilerias.obtenerStringPropiedad(movimiento, "Fecha_Val");
+			Float movCantid = Utilerias.obtenerFloatPropiedad(movimiento, "Mov_Cantid");
+			Integer movNatura = Utilerias.obtenerIntPropiedad(movimiento, "Mov_Natura");
 			
 			Float movCantidValor = (float) Utilerias.redondear(movCantid, 2); 
 			JsonObject movimientoResultado = new JsonObject();

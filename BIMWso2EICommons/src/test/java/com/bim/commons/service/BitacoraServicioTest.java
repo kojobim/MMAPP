@@ -17,9 +17,9 @@ import com.google.gson.JsonObject;
 
 @RunWith(JUnitPlatform.class)
 @SelectPackages({"com.bim.commons.service", "com.bim.commons.utils"})
-public class BitacoraServiceTest {
+public class BitacoraServicioTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(BitacoraServiceTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(BitacoraServicioTest.class);
 	
 	private static BitacoraServicio bitacoraServicio;
 	
@@ -30,8 +30,8 @@ public class BitacoraServiceTest {
 	}
 	
 	@Test
-	public void creacionBitacoraShouldCreated() {
-		logger.info("TEST: Starting creacionBitacoraShouldCreated method");
+	public void creacionBitacoraDeberiaCrear() {
+		logger.info("TEST: Empezando creacionBitacoraShouldCreated metodo");
 		JsonObject datosBitacora = new JsonObject();
 		datosBitacora.addProperty("Bit_Usuari", "001844");
 		datosBitacora.addProperty("Bit_Fecha", "2019-09-24 13:38:13");
@@ -41,17 +41,17 @@ public class BitacoraServiceTest {
 		datosBitacora.addProperty("Bit_DireIP", "127.0.0.1");
 		datosBitacora.addProperty("NumTransac", "49646240");
 		datosBitacora.addProperty("FechaSis", "2019-09-24 13:38:13");
-		JsonObject result =  bitacoraServicio.creacionBitacora(datosBitacora );
+		JsonObject resultado =  bitacoraServicio.creacionBitacora(datosBitacora );
 
-		logger.info("- result " + result);
-		assertTrue(result.has("REQUEST_STATUS"));
+		logger.info("- resultado " + resultado);
+		assertTrue(resultado.has("REQUEST_STATUS"));
 		
-		String requestStatus = Utilerias.getStringProperty(result, "REQUEST_STATUS");
-		logger.info("- requestStatus " + requestStatus);
+		String statusSolicitud = Utilerias.obtenerStringPropiedad(resultado, "REQUEST_STATUS");
+		logger.info("- requestStatus " + statusSolicitud);
 		
-		assertNotNull(requestStatus);
-		assertEquals("SUCCESSFUL", requestStatus.toString());
-		
-		logger.info("TEST: Starting creacionBitacoraShouldCreated method");
+		assertNotNull(statusSolicitud);
+		assertEquals("SUCCESSFUL", statusSolicitud.toString());
+
+		logger.info("TEST: Terminando creacionBitacoraShouldCreated metodo");
 	}
 }
