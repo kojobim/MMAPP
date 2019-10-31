@@ -53,14 +53,14 @@ public class LoginCtrl extends BimBaseCtrl {
 		logger.info("CTRL: Comenzando login metodo");
 		logger.info("datosUsuario " + datosUsuario);
 		
-		String usuClave = Utilerias.getStringProperty(datosUsuario, "Usu_Clave");
+		String usuClave = Utilerias.obtenerStringPropiedad(datosUsuario, "Usu_Clave");
 		 
 		if(usuClave == null || usuClave.isEmpty()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.4");
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 		
-		String usuPasswo = Utilerias.getStringProperty(datosUsuario, "Usu_Passwo"); 
+		String usuPasswo = Utilerias.obtenerStringPropiedad(datosUsuario, "Usu_Passwo"); 
 		
 		if(usuPasswo == null || usuPasswo.isEmpty()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.5");
@@ -71,7 +71,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		
 		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
 		
-		String folTransa = Utilerias.getStringProperty(folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject(), "Fol_Transa");
+		String folTransa = Utilerias.obtenerStringPropiedad(folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject(), "Fol_Transa");
 		
 		datosUsuario.addProperty("FechaSis",fechaSis);	
 		
@@ -80,15 +80,15 @@ public class LoginCtrl extends BimBaseCtrl {
 		logger.info("usuarioConsultarOpResultadoObject" + usuarioConsultarOpResultadoObjeto);
 
 		datosUsuario.addProperty("Usu_Passwo", usuPasswo);
-		JsonObject usuario = Utilerias.getJsonObjectProperty(usuarioConsultarOpResultadoObjeto, "usuario");
+		JsonObject usuario = Utilerias.obtenerJsonObjectPropiedad(usuarioConsultarOpResultadoObjeto, "usuario");
 		
 		if(usuario == null || usuario.isJsonPrimitive()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
 			
-		String usuNumero = Utilerias.getStringProperty(usuario, "Usu_Numero");
-		String usuStatus = Utilerias.getStringProperty(usuario, "Usu_Status");
+		String usuNumero = Utilerias.obtenerStringPropiedad(usuario, "Usu_Numero");
+		String usuStatus = Utilerias.obtenerStringPropiedad(usuario, "Usu_Status");
 		
 		if(usuNumero == null || (usuStatus == null || usuStatus.isEmpty())) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
@@ -105,7 +105,7 @@ public class LoginCtrl extends BimBaseCtrl {
 			throw new ConflictException(bimMessageDTO.toString());
 		}
 		
-		String tokStatus = Utilerias.getStringProperty(usuario, "Tok_Status");
+		String tokStatus = Utilerias.obtenerStringPropiedad(usuario, "Tok_Status");
 		
 		if(tokStatus == null || tokStatus.isEmpty()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
@@ -117,9 +117,9 @@ public class LoginCtrl extends BimBaseCtrl {
 			throw new ConflictException(bimMessageDTO.toString());
 		}
 		
-		Integer usuCoAcNe = Utilerias.getIntProperty(usuario, "Usu_CoAcNe"); 
-		Integer usuCoDeNe = Utilerias.getIntProperty(usuario, "Usu_CoDeNe");
-		Integer usuCoPaNe = Utilerias.getIntProperty(usuario, "Usu_CoPaNe");
+		Integer usuCoAcNe = Utilerias.obtenerIntPropiedad(usuario, "Usu_CoAcNe"); 
+		Integer usuCoDeNe = Utilerias.obtenerIntPropiedad(usuario, "Usu_CoDeNe");
+		Integer usuCoPaNe = Utilerias.obtenerIntPropiedad(usuario, "Usu_CoPaNe");
 		
 		if(usuCoAcNe == null || usuCoDeNe == null || usuCoPaNe == null) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
@@ -141,7 +141,7 @@ public class LoginCtrl extends BimBaseCtrl {
 			throw new ConflictException(bimMessageDTO.toString());
 		}
 		
-		String usuStaSes = Utilerias.getStringProperty(usuario, "Usu_StaSes");
+		String usuStaSes = Utilerias.obtenerStringPropiedad(usuario, "Usu_StaSes");
 
 		if(usuStaSes == null) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
@@ -174,7 +174,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		JsonObject configuracionBancoDetalleOpResultadoObjecto = this.configuracionServicio.configuracionBancoConsultarDetalle(datosConfiguracion); 
 		logger.info("configuracionBancoDetalleOpResultadoObjecto" + configuracionBancoDetalleOpResultadoObjecto);
 		
-		JsonObject configuracionesBanco = Utilerias.getJsonObjectProperty(configuracionBancoDetalleOpResultadoObjecto, "configuracionesBanco");
+		JsonObject configuracionesBanco = Utilerias.obtenerJsonObjectPropiedad(configuracionBancoDetalleOpResultadoObjecto, "configuracionesBanco");
 							
 		JsonObject configuracionBanco = configuracionesBanco.has("configuracionBanco") ? 
 				configuracionesBanco.get("configuracionBanco").isJsonObject() 
@@ -182,7 +182,7 @@ public class LoginCtrl extends BimBaseCtrl {
 						: configuracionesBanco.get("configuracionBanco").getAsJsonArray().get(0).getAsJsonObject()
 				: null; 
 						
-		String parAcceso = Utilerias.getStringProperty(configuracionBanco, "Par_Acceso");
+		String parAcceso = Utilerias.obtenerStringPropiedad(configuracionBanco, "Par_Acceso");
 		
 		if(parAcceso.equals("N")) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
@@ -220,7 +220,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		JsonObject usuarioActualizacionOpResultadoObjecto = this.usuarioServicio.usuarioActualizar(datosUsuarioActualizacion);
 		logger.info("usuarioActualizacionOpResultadoObjecto" + usuarioActualizacionOpResultadoObjecto);
 		
-		String tovSerie = Utilerias.getStringProperty(usuarioConsultarOpResultadoObjeto.get("usuario").getAsJsonObject(), "Usu_FolTok");
+		String tovSerie = Utilerias.obtenerStringPropiedad(usuarioConsultarOpResultadoObjeto.get("usuario").getAsJsonObject(), "Usu_FolTok");
 		
 		JsonObject datosTokenVerificar = new JsonObject();
 		datosTokenVerificar.addProperty("Tov_Serie", tovSerie);
@@ -229,7 +229,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		JsonObject tokenVerificarOpResultadoObjecto = this.tokenServicio.tokenVerificar(datosTokenVerificar);
 		logger.info("tokenVerificarOpResultadoObjecto" + tokenVerificarOpResultadoObjecto);
 		
-		JsonObject tokenVerificar = Utilerias.getJsonObjectProperty(tokenVerificarOpResultadoObjecto, "tokenVerificar");
+		JsonObject tokenVerificar = Utilerias.obtenerJsonObjectPropiedad(tokenVerificarOpResultadoObjecto, "tokenVerificar");
 		
 		if(tokenVerificar != null && tokenVerificar.has("Tov_FecVen")) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.21");
@@ -258,10 +258,10 @@ public class LoginCtrl extends BimBaseCtrl {
 
 		this.bitacoraServicio.creacionBitacora(datosBitacoraCreacion);
 		
-		String usuClient = Utilerias.getStringProperty(usuario, "Usu_Client");
-		String usuNombre = Utilerias.getStringProperty(usuario, "Usu_Nombre");
-		String usuEmail = Utilerias.getStringProperty(usuario, "Usu_Email");
-		String usuUsuAdm = Utilerias.getStringProperty(usuario, "Usu_UsuAdm");
+		String usuClient = Utilerias.obtenerStringPropiedad(usuario, "Usu_Client");
+		String usuNombre = Utilerias.obtenerStringPropiedad(usuario, "Usu_Nombre");
+		String usuEmail = Utilerias.obtenerStringPropiedad(usuario, "Usu_Email");
+		String usuUsuAdm = Utilerias.obtenerStringPropiedad(usuario, "Usu_UsuAdm");
 		
 		JsonObject usuarioResultado = new JsonObject();
 		usuarioResultado.addProperty("usuClave ", usuClave);

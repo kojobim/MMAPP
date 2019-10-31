@@ -65,9 +65,9 @@ public class SOAPClientUtils {
             removeNamesapceAndPrefix(responseData);
             JsonObject result = formatResult(responseData);
 
-            JsonObject envelope = Utilerias.getJsonObjectProperty(result, "Envelope");
+            JsonObject envelope = Utilerias.obtenerJsonObjectPropiedad(result, "Envelope");
             
-            JsonObject body = Utilerias.getJsonObjectProperty(envelope, "Body");
+            JsonObject body = Utilerias.obtenerJsonObjectPropiedad(envelope, "Body");
             		
             logger.info("- body" + body);
             logger.info("COMMONS: Finalizando callSoapWebService metodo");

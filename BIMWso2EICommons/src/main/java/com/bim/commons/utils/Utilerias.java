@@ -213,39 +213,47 @@ public class Utilerias {
 		return resultadoObjeto;
 	}
 
-	public static String getStringProperty(JsonObject datos, String propertyName) {
+	private static Boolean validarDatosPropiedad(JsonObject datos, String nombrePropiedad) {
 		if(datos == null)
-			return null;
-		return datos.has(propertyName) && datos.get(propertyName).isJsonPrimitive() ? datos.get(propertyName).getAsString() : null;
+			return false;
+		if(nombrePropiedad == null || nombrePropiedad.isEmpty())
+			return false;
+		return true;
 	}
 	
-	public static Integer getIntProperty(JsonObject datos, String propertyName) {
-		if(datos == null)
+	public static String obtenerStringPropiedad(JsonObject datos, String nombrePropiedad) {
+		if(!validarDatosPropiedad(datos, nombrePropiedad))
 			return null;
-		return datos.has(propertyName) && datos.get(propertyName).isJsonPrimitive() ? datos.get(propertyName).getAsInt() : null;
+		return datos.has(nombrePropiedad) && datos.get(nombrePropiedad).isJsonPrimitive() ? datos.get(nombrePropiedad).getAsString() : null;
 	}
 	
-	public static Double getDoubleProperty(JsonObject datos, String propertyName) {
-		if(datos == null)
+	public static Integer obtenerIntPropiedad(JsonObject datos, String nombrePropiedad) {
+		if(!validarDatosPropiedad(datos, nombrePropiedad))
 			return null;
-		return datos.has(propertyName) && datos.get(propertyName).isJsonPrimitive() ? datos.get(propertyName).getAsDouble() : null;
+		return datos.has(nombrePropiedad) && datos.get(nombrePropiedad).isJsonPrimitive() ? datos.get(nombrePropiedad).getAsInt() : null;
 	}
 	
-	public static Float getFloatProperty(JsonObject datos, String propertyName) {
-		if(datos == null)
+	public static Double obtenerDoublePropiedad(JsonObject datos, String nombrePropiedad) {
+		if(!validarDatosPropiedad(datos, nombrePropiedad))
 			return null;
-		return datos.has(propertyName) && datos.get(propertyName).isJsonPrimitive() ? datos.get(propertyName).getAsFloat() : null;
+		return datos.has(nombrePropiedad) && datos.get(nombrePropiedad).isJsonPrimitive() ? datos.get(nombrePropiedad).getAsDouble() : null;
 	}
 	
-	public static JsonObject getJsonObjectProperty(JsonObject datos, String propertyName) {
-		if(datos == null)
+	public static Float obtenerFloatPropiedad(JsonObject datos, String nombrePropiedad) {
+		if(!validarDatosPropiedad(datos, nombrePropiedad))
 			return null;
-		return datos.has(propertyName)  && datos.get(propertyName).isJsonObject() ? datos.get(propertyName).getAsJsonObject() : null;
+		return datos.has(nombrePropiedad) && datos.get(nombrePropiedad).isJsonPrimitive() ? datos.get(nombrePropiedad).getAsFloat() : null;
 	}
 	
-	public static JsonArray getJsonArrayProperty(JsonObject datos, String propertyName) {
-		if(datos == null)
+	public static JsonObject obtenerJsonObjectPropiedad(JsonObject datos, String nombrePropiedad) {
+		if(!validarDatosPropiedad(datos, nombrePropiedad))
 			return null;
-		return datos.has(propertyName)  && datos.get(propertyName).isJsonArray() ? datos.get(propertyName).getAsJsonArray() : null;
+		return datos.has(nombrePropiedad)  && datos.get(nombrePropiedad).isJsonObject() ? datos.get(nombrePropiedad).getAsJsonObject() : null;
+	}
+	
+	public static JsonArray obtenerJsonArrayPropiedad(JsonObject datos, String nombrePropiedad) {
+		if(!validarDatosPropiedad(datos, nombrePropiedad))
+			return null;
+		return datos.has(nombrePropiedad)  && datos.get(nombrePropiedad).isJsonArray() ? datos.get(nombrePropiedad).getAsJsonArray() : null;
 	}
 }
