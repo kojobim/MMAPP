@@ -78,7 +78,7 @@ public class ConfiguracionServicio extends BaseService {
 	 * @return
 	 * <pre>
 	 * {
-	 *	horariosInversion: {
+	 *	horariosInversion: [{
 	 *		EsHorariID: Integer,
 	 *		Hor_Numero: Integer,
 	 *		Hor_TipMod: String,
@@ -86,11 +86,10 @@ public class ConfiguracionServicio extends BaseService {
 	 *		Hor_HorIni: Date,
 	 *		Hor_HorFin: Date,
 	 *		Hor_DiaHab: String
-	 *	}
+	 *	}]
 	 * }
 	 * </pre>
 	 */
-	
 	public JsonObject horariosConsultar(JsonObject datosHorario) {
 		logger.info("COMMONS: Comienzo horariosConsultar... ");
 		datosHorario.addProperty("Tip_Consul", HorarioInversionOpTipConsul);
