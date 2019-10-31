@@ -10,7 +10,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.wso2.msf4j.Request;
 
 import com.bim.commons.service.BitacoraServicio;
@@ -25,7 +26,7 @@ import com.google.gson.JsonObject;
 @Path("/cuentas")
 public class CuentasCtrl extends BimBaseCtrl {
 
-	private static final Logger logger = Logger.getLogger(CuentasCtrl.class);
+	private static final Logger logger = LoggerFactory.getLogger(CuentasCtrl.class);
 	private BitacoraServicio bitacoraServicio;
 	private ClienteServicio clienteServicio;
 	private TransaccionServicio transaccionServicio;

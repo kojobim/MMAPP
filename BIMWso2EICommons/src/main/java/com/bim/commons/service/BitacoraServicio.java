@@ -1,5 +1,8 @@
 package com.bim.commons.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
@@ -11,6 +14,8 @@ import com.google.gson.JsonObject;
  */
 public class BitacoraServicio extends BaseService {
 
+	private static final Logger logger = LoggerFactory.getLogger(BitacoraServicio.class);
+ 
 	private static String BitacoraServicio;
 	private static String BitacoraCreacionOp;
 	private static String BitacoraCreacionOpBitTipOpe;
@@ -64,6 +69,7 @@ public class BitacoraServicio extends BaseService {
 	 * { }
 	 */
 	public JsonObject creacionBitacora(JsonObject datosBitacora) {
+		logger.info("COMMONS: Comenzando creacionBitacora...");
 		if(!datosBitacora.has("Bit_NumTra"))
 			datosBitacora.addProperty("Bit_NumTra", "");
 		datosBitacora.addProperty("Bit_TipOpe", BitacoraCreacionOpBitTipOpe);
@@ -71,7 +77,7 @@ public class BitacoraServicio extends BaseService {
 			datosBitacora.addProperty("Bit_CueOri", "");
 		if(!datosBitacora.has("Bit_CueDes"))
 			datosBitacora.addProperty("Bit_CueDes", "");
-		datosBitacora.addProperty("Bit_Monto", "0");
+		datosBitacora.addProperty("Bit_Monto", 0);
 		if(!datosBitacora.has("Bit_SegRef"))
 			datosBitacora.addProperty("Bit_SegRef", "");
 		datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
@@ -82,6 +88,7 @@ public class BitacoraServicio extends BaseService {
 		JsonObject result = Utilerias
 				.performOperacion(BitacoraServicio, BitacoraCreacionOp, 
 						datosBitacora);
+		logger.info("COMMONS: Finalizando creacionBitacora...");
 		return result;
 	}//Cierre del método
 	
