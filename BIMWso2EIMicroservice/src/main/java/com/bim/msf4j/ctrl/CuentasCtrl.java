@@ -52,12 +52,12 @@ public class CuentasCtrl extends BimBaseCtrl {
 		logger.info("Authorization " + solicitud.getHeader("Authorization"));
 		
 		String bearerToken = solicitud.getHeader("Authorization");
-		JsonObject principalResultadoObjecto = Utilerias.getPrincipal(bearerToken);
+		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
 		
 		logger.info(">>>>>>>>>principalResultadoObjecto: " + principalResultadoObjecto);
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
 		
-		String fechaSis = Utilerias.getFechaSis();
+		String fechaSis = Utilerias.obtenerFechaSis();
 		
 		String cueClient = principalResultadoObjecto.get("usuClient").getAsString();
 		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
@@ -161,7 +161,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		logger.info("Authorization " + solicitud.getHeader("Authorization"));
 		
 		String bearerToken = solicitud.getHeader("Authorization");
-		JsonObject principalResultadoObjecto = Utilerias.getPrincipal(bearerToken); 
+		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken); 
 		
 		String usuNumero = principalResultadoObjecto.has("usuNumero") ? principalResultadoObjecto.get("usuNumero").getAsString() : null;
 		
@@ -169,7 +169,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		logger.info(">>>>>X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
 		
 		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
-		String fechaSis = Utilerias.getFechaSis();
+		String fechaSis = Utilerias.obtenerFechaSis();
 		
 		logger.info(">>>>>fechaSis " + fechaSis);
 		

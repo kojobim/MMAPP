@@ -238,7 +238,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("CTRL: Empezando detalleInversion Method...");
 
 		String bearerToken = solicitud.getHeader("Authorization");
-		JsonObject principalResultadoObjecto = Utilerias.getPrincipal(bearerToken);
+		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
 
 		if(!Utilerias.validaNumero(invNumero)) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.23");
@@ -257,7 +257,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		String FolioTransaccionGenerarOpFolTransa = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
 
-		String fechaSis = Utilerias.getFechaSis();
+		String fechaSis = Utilerias.obtenerFechaSis();
 
 		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));

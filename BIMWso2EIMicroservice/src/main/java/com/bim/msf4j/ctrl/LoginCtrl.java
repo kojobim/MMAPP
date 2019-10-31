@@ -67,7 +67,7 @@ public class LoginCtrl extends BimBaseCtrl {
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 		
-		String fechaSis = Utilerias.getFechaSis();
+		String fechaSis = Utilerias.obtenerFechaSis();
 		
 		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
 		

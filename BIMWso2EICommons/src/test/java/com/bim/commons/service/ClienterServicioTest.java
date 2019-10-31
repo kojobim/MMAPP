@@ -1,5 +1,7 @@
 package com.bim.commons.service;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.platform.runner.JUnitPlatform;
@@ -20,14 +22,15 @@ public class ClienterServicioTest {
 	private static ClienteServicio clienteServicio;
 	
 	@BeforeClass
-	public static void innit() {
+	public static void init() {
 		logger.info("init...");
 		clienteServicio = new ClienteServicio();
 	}
 	
 	@Test
 	public void clienteConsultarTestDeberiaConsular() {
-		String fechaSis = Utilerias.getFechaSis();
+		logger.info("TEST: Empezando clienteConsultarTestDeberiaConsular metodo");
+		String fechaSis = Utilerias.obtenerFechaSis();
 		JsonObject datosClienteConsultar = new JsonObject();
 		datosClienteConsultar.addProperty("Cli_Numero", "00193500");
 		datosClienteConsultar.addProperty("Tip_Consul", "C1");
@@ -38,6 +41,17 @@ public class ClienterServicioTest {
 		datosClienteConsultar.addProperty("SucDestino", "001");
 		datosClienteConsultar.addProperty("Modulo", "NB");
 		
-		clienteServicio.clienteConsultar(datosClienteConsultar);
+		JsonObject resultado = clienteServicio.clienteConsultar(datosClienteConsultar);
+		
+		logger.info("- resultado " + resultado );
+
+		assertTrue(resultado.has("cliente"));
+		
+		JsonObject cliente  = Utilerias.obtenerJsonObjectPropiedad(resultado, "cliente");
+		
+		assertTrue(cliente != null);
+		
+		assertTrue(cliente.has("Cli_Numero"));
+		logger.info("TEST: Terminando clienteConsultarTestDeberiaConsular metodo");
 	}
 }

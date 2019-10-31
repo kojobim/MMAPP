@@ -163,7 +163,7 @@ public class Utilerias {
 		return resultado.toString();	
 	}
 	
-	public static JsonObject getPrincipal(String bearerToken) {
+	public static JsonObject obtenerPrincipal(String bearerToken) {
 		logger.info("COMMONS: Comenzando getPrincipal metodo...");
 		RequestDTO principalSolicitud = new RequestDTO();
 		principalSolicitud.setUrl(IdentityServer);
@@ -183,7 +183,7 @@ public class Utilerias {
 		return principalResultadoObjecto;
 	}
 	
-	public static String getFechaSis() {
+	public static String obtenerFechaSis() {
 		logger.info("COMMONS: Comenzando getFechaSis metodo");
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
