@@ -915,7 +915,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		
 		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
 		String usuClient = principalResultadoObjecto.get("usuClient").getAsString();		
-		String folToken = principalResultadoObjecto.get("folToken").getAsString();
+		String usuFolTok = principalResultadoObjecto.get("usuFolTok").getAsString();
 		
 		String bitPriRef = solicitud.getHeader("User-Agent");
 		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
@@ -1178,7 +1178,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		 */
 
 		String cpRSAToken = renovarInversion.has("cpRSAToken") ? renovarInversion.get("cpRSAToken").getAsString() : "";
-		String validarToken = TokenService.validarTokenOperacion(folToken, cpRSAToken, usuNumero);
+		String validarToken = TokenService.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero);
 
 		logger.info("validarToken   " + validarToken);
 		if ("B".equals(validarToken)) {
