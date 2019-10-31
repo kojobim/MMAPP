@@ -40,6 +40,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 	
 	private static final Logger logger = Logger.getLogger(InversionesCtrl.class);
 	
+	private TokenService tokenService;
 	private static String DataServiceHost;
 	
 	private static String TransaccionServicio;
@@ -178,6 +179,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 	public InversionesCtrl() {
 		super();
 		logger.info("Ctrl: Empezando metodo init...");
+		this.tokenService = new TokenService();
 		
 		FolioTransaccionGenerarOpSucOrigen = properties.getProperty("op.folio_transaccion_generar.suc_origen");
 		
@@ -1176,7 +1178,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		 */
 
 		String cpRSAToken = renovarInversion.has("cpRSAToken") ? renovarInversion.get("cpRSAToken").getAsString() : "";
-		String validarToken = TokenService.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero);
+		String validarToken = this.tokenService.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero);
 
 		logger.info("validarToken   " + validarToken);
 		if ("B".equals(validarToken)) {

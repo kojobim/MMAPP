@@ -10,13 +10,12 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.soap.SOAPException;
 
 import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
 
 import com.bim.commons.service.SoapService;
-import com.bim.commons.utils.Racal;
+import com.bim.commons.service.TokenService;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -26,6 +25,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 
 	private static final Logger logger = Logger.getLogger(CuentasCtrl.class);
 	private SoapService soapService;
+	private TokenService tokenService;
 	private static String SaldosClienteConsultarOp;
 	private static String SaldosClienteConsultarOpTransaccio;
 	private static String SaldosClienteConsultarOpUsuario;
@@ -62,6 +62,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		super();
 		
 		this.soapService = new SoapService();
+		this.tokenService = new TokenService();
 		
 		SaldosClienteConsultarOp = properties.getProperty("saldo_servicio.op.saldos_cliente_consultar");
 		SaldosClienteConsultarOpModulo = properties.getProperty("op.saldos_cliente_consultar.modulo");
@@ -379,13 +380,17 @@ public class CuentasCtrl extends BimBaseCtrl {
 		JsonObject datosCorreoMovimientos = Utilerias.getJsonObjectProperty(datosEnvioCorreoMovimientos, "enviaCorreoMovimientos");
 		logger.info("- datosCorreoMovimientos " + datosCorreoMovimientos);
 		
-		String claveRSA = Utilerias.getStringProperty(datosCorreoMovimientos, "cpRSAToken");
-		logger.info("- claveRSA " + claveRSA);
-		
-		String resultado = Racal.validaToken(claveRSA);
-		logger.info("- resultado Racal.validaToken " + resultado);
-		
+		String cpRSAToken = Utilerias.getStringProperty(datosCorreoMovimientos, "cpRSAToken");
+		logger.info("- claveRSA " + cpRSAToken);
+
+		String folTok = Utilerias.getStringProperty(principal, "usuFolTok");
+		logger.info("- folTok " + folTok);
+
 		String bitUsuari = Utilerias.getStringProperty(principal, "usuNumero");
+		logger.info("- bitUsuari " + bitUsuari);
+		
+		this.tokenService.validarTokenOperacion(folTok, cpRSAToken, bitUsuari);
+
 		String fechaSis = Utilerias.getFechaSis();
 		String bitPriRef = Utilerias.getStringProperty(principal, "usuClient");
 		String bitDireIp = solicitud.getHeader("X_Forwarded_For");
@@ -419,11 +424,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		logger.info("- mes " + mes);
 		logger.info("- cliNumero " + cliNumero);
 		
-		try {
-			soapService.movimientosEnvioCorreo(anio, mes, cliNumero);
-		} catch (SOAPException e) {
-			e.printStackTrace();
-		}
+		this.soapService.movimientosEnvioCorreo(anio, mes, cliNumero);
 		logger.info("CTRL: Terminando movimientosRegistro metodo");
 		
 		

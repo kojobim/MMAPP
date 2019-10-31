@@ -1,15 +1,12 @@
 package com.bim.commons.service;
 
-import java.util.Properties;
-import org.apache.log4j.Logger;
-import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
-import com.bim.commons.utils.Racal;
 import com.bim.commons.utils.HttpClientUtils;
+import com.bim.commons.utils.Racal;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -18,23 +15,9 @@ import com.google.gson.JsonObject;
  * @author Backend Team MedioMelon
  * @version BackendMM022019
  */
-public class TokenService {
+public class TokenService extends BaseService {
 
-    private static final Logger logger = Logger.getLogger(TokenService.class);
-    private static Properties properties;
-    
-    static {
-		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/services.properties")) {
-			properties = new Properties();
-			
-			if(inputStream != null) {
-				properties.load(inputStream);
-			}			
-		}
-		catch(IOException ioException) {
-			ioException.printStackTrace();
-		}
-	}
+    private static final Logger logger = LoggerFactory.getLogger(TokenService.class);
 
 	/**
 	 * Método que se encarga de validar el token de operación
@@ -44,7 +27,7 @@ public class TokenService {
 	 * @return
 	 * String
 	 */
-    public static String validarTokenOperacion(String tokFolio, String cpRSAToken, String tokUsuari) {
+    public String validarTokenOperacion(String tokFolio, String cpRSAToken, String tokUsuari) {
 		logger.info("COMMONS: Iniciando validarTokenTransaccion metodo...");
 
 		String DataServiceHost = properties.getProperty("data_service.host");
@@ -67,10 +50,10 @@ public class TokenService {
 		datosToken.addProperty("Tok_Usuari", tokUsuari);
 		datosToken.addProperty("Tok_ComCan", "");
 		datosToken.addProperty("Tip_Actual", tipActual);
-		datosToken.addProperty("NumTransac", "");
+		datosToken.addProperty("NumTransac", "49646238");
 		datosToken.addProperty("Transaccio", IntentosActualizacionOpTransaccio);
 		datosToken.addProperty("Usuario", IntentosActualizacionOpUsuario);
-		datosToken.addProperty("FechaSis", "");
+		datosToken.addProperty("FechaSis", "2019-09-24 13:38:11");
 		datosToken.addProperty("SucOrigen", IntentosActualizacionOpSucOrigen);
 		datosToken.addProperty("SucDestino", IntentosActualizacionOpSucDestino);
 		datosToken.addProperty("Modulo", IntentosActualizacionOpModulo);
@@ -100,7 +83,6 @@ public class TokenService {
 			usuStatus = intentosActualizacion.get("Usu_Status").getAsString();
 
 		return usuStatus;
-	}
-	//Cierre del método
+	}//Cierre del método
 
 }

@@ -10,8 +10,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-import com.bim.commons.dto.MessageProxyDTO;
-import com.bim.commons.dto.RequestDTO;
 import org.apache.log4j.Logger;
 
 import com.bim.commons.dto.BimMessageDTO;
