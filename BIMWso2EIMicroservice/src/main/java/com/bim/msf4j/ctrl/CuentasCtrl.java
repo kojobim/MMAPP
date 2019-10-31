@@ -388,13 +388,14 @@ public class CuentasCtrl extends BimBaseCtrl {
 
 		String bitUsuari = Utilerias.getStringProperty(principal, "usuNumero");
 		logger.info("- bitUsuari " + bitUsuari);
+
+		String numTransac = Utilerias.getStringProperty(transaccion, "Fol_Transa");
 		
-		this.tokenService.validarTokenOperacion(folTok, cpRSAToken, bitUsuari);
+		this.tokenService.validarTokenOperacion(folTok, cpRSAToken, bitUsuari, numTransac);
 
 		String fechaSis = Utilerias.getFechaSis();
 		String bitPriRef = Utilerias.getStringProperty(principal, "usuClient");
 		String bitDireIp = solicitud.getHeader("X_Forwarded_For");
-		String numTransac = Utilerias.getStringProperty(transaccion, "Fol_Transa");
 		
 		JsonObject datosBitacoraCreacion = new JsonObject();
 		datosBitacoraCreacion.addProperty("Bit_Usuari", bitUsuari);

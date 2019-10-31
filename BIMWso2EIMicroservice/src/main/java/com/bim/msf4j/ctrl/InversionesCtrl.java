@@ -3,6 +3,7 @@ package com.bim.msf4j.ctrl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -897,25 +898,19 @@ public class InversionesCtrl extends BimBaseCtrl {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response reinversion(@PathParam("invNumero") String invNumero,	
-			@QueryParam("categoria") String categoria, @Context final Request solicitud) {
+			@QueryParam("categoria") String categoria, JsonObject inversionesObjeto, 
+			@Context final Request solicitud) {
 		logger.info("CTRL: Comenzando reinversion metodo");
-		String mensaje = null;
-		
-		try {
-			mensaje = HttpClientUtils.getStringContent(solicitud);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		JsonObject inversionesObjeto = new Gson().fromJson(mensaje, JsonObject.class);
 		JsonObject renovarInversion = inversionesObjeto.getAsJsonObject("renovarInversion");	
 			
 		String bearerToken = solicitud.getHeader("Authorization");
 		JsonObject principalResultadoObjecto = Utilerias.getPrincipal(bearerToken);
+		logger.info("Principal papuuuu: >>>>> " + principalResultadoObjecto);
 		
 		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
 		String usuClient = principalResultadoObjecto.get("usuClient").getAsString();		
-		String usuFolTok = principalResultadoObjecto.get("usuFolTok").getAsString();
+		// String usuFolTok = principalResultadoObjecto.get("usuFolTok").getAsString();
+		String usuFolTok = "416218850";
 		
 		String bitPriRef = solicitud.getHeader("User-Agent");
 		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
@@ -1178,7 +1173,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		 */
 
 		String cpRSAToken = renovarInversion.has("cpRSAToken") ? renovarInversion.get("cpRSAToken").getAsString() : "";
-		String validarToken = this.tokenService.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero);
+		String validarToken = this.tokenService.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac);
 
 		logger.info("validarToken   " + validarToken);
 		if ("B".equals(validarToken)) {
@@ -1240,20 +1235,46 @@ public class InversionesCtrl extends BimBaseCtrl {
 		}
 		
 		try {
-			rfecVe = simpleDateFormat.parse(sigFecha);	
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSzzzz");
+			rfecVe = sdf.parse(sigFecha);	
+			// Date aux1 = sdf.parse(sigFecha);
+			// logger.info("- aux1" + aux1);
+			// String pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSz";
+			// sdf = new SimpleDateFormat(pattern);
+			// aux1 = sdf.parse(sigFecha);
+			// logger.info("- aux1" + aux1);
+			// pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
+			// sdf = new SimpleDateFormat(pattern);
+			// aux1 = sdf.parse(sigFecha);
+			// logger.info("- aux1" + aux1);
+			// pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXX";
+			// sdf = new SimpleDateFormat(pattern);
+			// aux1 = sdf.parse(sigFecha);
+			// logger.info("- aux1" + aux1);
+			// pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSzzzz";
+			// sdf = new SimpleDateFormat(pattern);
+			// aux1 = sdf.parse(sigFecha);
+			// logger.info("- aux1" + aux1);
+			// pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZ";
+			// sdf = new SimpleDateFormat(pattern);
+			// aux1 = sdf.parse(sigFecha);
+			// logger.info(aux1);
 		} catch (Exception e) {
 			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				rfecVe = sdf.parse(sigFecha);
+				rfecVe = simpleDateFormat.parse(sigFecha);
 			} catch (Exception ex) {
 				try {
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 					rfecVe = sdf.parse(sigFecha);
 				} catch (Exception ei) {
 					logger.info("Error en el formato de fecha.");
 				}
 			}
 		}
+
+		logger.info("rfecIn >>> " + rfecIn);
+		logger.info("rfecVe >>> " + rfecVe);
+		logger.info("- rfecVe " + simpleDateFormat.format(rfecVe));
 
 		JsonObject datosInversionFinalizada = new JsonObject();
 		datosInversionFinalizada.addProperty("Inv_Numero", inversion.has("Inv_Numero") ? inversion.get("Inv_Numero").getAsString() : "");

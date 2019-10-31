@@ -7,6 +7,7 @@ import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
 import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Racal;
+import com.bim.commons.utils.Utilerias;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -27,7 +28,7 @@ public class TokenService extends BaseService {
 	 * @return
 	 * String
 	 */
-    public String validarTokenOperacion(String tokFolio, String cpRSAToken, String tokUsuari) {
+    public String validarTokenOperacion(String tokFolio, String cpRSAToken, String tokUsuari, String numTransac) {
 		logger.info("COMMONS: Iniciando validarTokenTransaccion metodo...");
 
 		String DataServiceHost = properties.getProperty("data_service.host");
@@ -39,8 +40,10 @@ public class TokenService extends BaseService {
 		String IntentosActualizacionOpSucDestino = properties.getProperty("op.intentos_actualizacion.suc_destino");
 		String IntentosActualizacionOpModulo = properties.getProperty("op.intentos_actualizacion.modulo");
 
+		String fechaSis = Utilerias.getFechaSis();
 		String clave = "0" + tokFolio + cpRSAToken;
 		String validaToken = Racal.validaTokenOpera(clave);
+		logger.info("validaToken " + validaToken);
 		String tipActual = "01".equals(validaToken) ? "2" : "1";
 		String usuStatus = "01".equals(validaToken) ? "C" : "A";
 
@@ -50,10 +53,10 @@ public class TokenService extends BaseService {
 		datosToken.addProperty("Tok_Usuari", tokUsuari);
 		datosToken.addProperty("Tok_ComCan", "");
 		datosToken.addProperty("Tip_Actual", tipActual);
-		datosToken.addProperty("NumTransac", "49646238");
+		datosToken.addProperty("NumTransac", numTransac);
 		datosToken.addProperty("Transaccio", IntentosActualizacionOpTransaccio);
 		datosToken.addProperty("Usuario", IntentosActualizacionOpUsuario);
-		datosToken.addProperty("FechaSis", "2019-09-24 13:38:11");
+		datosToken.addProperty("FechaSis", fechaSis);
 		datosToken.addProperty("SucOrigen", IntentosActualizacionOpSucOrigen);
 		datosToken.addProperty("SucDestino", IntentosActualizacionOpSucDestino);
 		datosToken.addProperty("Modulo", IntentosActualizacionOpModulo);
@@ -65,19 +68,8 @@ public class TokenService extends BaseService {
 				.append("/")
 				.append(IntentosActualizacionOp);
 
-		JsonObject intentosActualizacionOp = new JsonObject();
-		intentosActualizacionOp.add("intentosActualizacionOp", datosToken);
-
-		RequestDTO intentosActualizacionOpSolicitud = new RequestDTO();
-		intentosActualizacionOpSolicitud.setUrl(intentosActualizacionUrl.toString());
-		MessageProxyDTO intentosActualizacionOpMensaje = new MessageProxyDTO();
-		intentosActualizacionOpMensaje.setBody(intentosActualizacionOp.toString());
-		intentosActualizacionOpSolicitud.setMessage(intentosActualizacionOpMensaje);
-
-		String intentosActualizacionOpResultado = HttpClientUtils.postPerform(intentosActualizacionOpSolicitud);
-		JsonObject intentosActualizacionOpResultadoObjecto = new Gson().fromJson(intentosActualizacionOpResultado, JsonObject.class);
-		JsonObject intentosActualizacion = intentosActualizacionOpResultadoObjecto.has("intentosActualizacion")
-			? intentosActualizacionOpResultadoObjecto.get("intentosActualizacion").getAsJsonObject() : new JsonObject();
+		JsonObject intentosActualizacionOpResultadoObjecto = Utilerias.performOperacion(TokenServicio, IntentosActualizacionOp, datosToken);
+		JsonObject intentosActualizacion = Utilerias.getJsonObjectProperty(intentosActualizacionOpResultadoObjecto, "intentosActualizacion");
 		
 		if(intentosActualizacion.has("Usu_Status"))
 			usuStatus = intentosActualizacion.get("Usu_Status").getAsString();
