@@ -378,8 +378,10 @@ public class InversionesCtrl extends BimBaseCtrl {
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 
-		if(filterBy != null && !filterBy.equals(InversionesFilterBy))
-			throw new BadRequestException("BIM.MENSAJ.6");
+        if(filterBy != null && !filterBy.equals(InversionesFilterBy)) {
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.6");
+            throw new BadRequestException(bimMessageDTO.toString());
+        }
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
@@ -898,6 +900,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			@QueryParam("categoria") String categoria, @Context final Request solicitud) {
 		logger.info("CTRL: Comenzando reinversion metodo");
 		String mensaje = null;
+		
 		try {
 			mensaje = HttpClientUtils.getStringContent(solicitud);
 		} catch (Exception e) {
@@ -911,7 +914,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject principalResultadoObjecto = Utilerias.getPrincipal(bearerToken);
 		
 		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
-		String usuClient = principalResultadoObjecto.get("usuClient").getAsString();
+		String usuClient = principalResultadoObjecto.get("usuClient").getAsString();		
+		String folToken = principalResultadoObjecto.get("folToken").getAsString();
 		
 		String bitPriRef = solicitud.getHeader("User-Agent");
 		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
@@ -930,13 +934,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		JsonObject transaccion = folioTransaccionGenerarOpResultadoObjeto.has("transaccion") ? folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject() : new JsonObject();
 		String numTransac = transaccion.has("Fol_Transa") ? transaccion.get("Fol_Transa").getAsString() : ""; 
-				
-		/* 
-			SP 2   NBINVERSCON
-			Este SP se encarga de obtener los datos de inversion de un usuario
-			Se verifica que el numero de inversion proporcionado por fron se encuentre en las inversiónes de usuario
-		*/
-
+		
 		JsonObject datosInversion = new JsonObject();
 		datosInversion.addProperty("FechaSis", fechaSis);
 		String inversionesConsultarOp;
@@ -978,10 +976,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		}
 
 		logger.info("INVERSION " + inversion);
-
-		/* 
-			SP3 CLCLIENTCON se consultan los datos del cliente
-		*/	
 		
 		JsonObject datosCliente = new JsonObject();
 		datosCliente.addProperty("Cli_Numero", usuClient);
@@ -1003,10 +997,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject cliente = clienteConsultarOpResultadoObjeto.has("cliente") ? clienteConsultarOpResultadoObjeto.get("cliente").getAsJsonObject() : new JsonObject();
 		String cliSucurs = cliente.has("Cli_Sucurs") ? cliente.get("Cli_Sucurs").getAsString() : "";
 		String cliComple = cliente.has("Cli_Comple") ? cliente.get("Cli_Comple").getAsString() : "";
-
-		/* 
-			SP4 NBCUEORICON se consulta 
-		*/
 
 		JsonObject datosSucursal = new JsonObject();
 		datosSucursal.addProperty("Par_Sucurs", cliSucurs);
@@ -1039,12 +1029,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject usuarioPerfilRiesgoConsultarOpResultadoObjeto = Utilerias.performOperacion(UsuarioServicio, UsuarioPerfilRiesgoConsultarOp, datosPerfilRiesgo);
 		logger.info("usuarioPerfilRiesgoConsultarOpResultadoObjeto" + usuarioPerfilRiesgoConsultarOpResultadoObjeto);
 
-		/* 
-			Parametros obtenidos por medio del principal
-				Fecha =  fecha actual del sistema
-				NumDia=  plazo
-		 */
-
 		JsonObject datosFechaHabil = new JsonObject();
 		datosFechaHabil.addProperty("Fecha", fechaSis);
 		datosFechaHabil.addProperty("NumDia", inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsInt() : 0);
@@ -1059,13 +1043,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		logger.info("datosFechaHabil" + datosFechaHabil);
 		JsonObject fechaHabilConsultarOpResultadoObjeto = Utilerias.performOperacion(ReinversionServicio, fechaHabilConsultarOp, datosFechaHabil);
-		logger.info("fechaHabilConsultarOpResultadoObjeto" + fechaHabilConsultarOpResultadoObjeto);
-
-		/* 
-			Parametros obtenidos por medio del principal
-				Cli_Numero = usu_Client
-				Inv_Moneda=  01 constante
-		*/		
+		logger.info("fechaHabilConsultarOpResultadoObjeto" + fechaHabilConsultarOpResultadoObjeto);		
 
 		String cliTipo = cliente.has("Cli_Tipo") ? cliente.get("Cli_Tipo").getAsString() : "";
 
@@ -1091,11 +1069,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("datosTasaCliente" + datosTasaCliente);
 		JsonObject tasaClienteConsultarOpResultadoObjeto = Utilerias.performOperacion(TasaServicio, tasaClienteConsultarOp, datosTasaCliente);
 		logger.info("tasaClienteConsultarOpResultadoObjeto" + tasaClienteConsultarOpResultadoObjeto);
-		
-		/* 
-			Parametros obtenidos por medio del principal
-			Mon_Numero =  99 constante para obtener la udi
- 		*/
 
 		JsonObject datosMoneda = new JsonObject();
 		datosMoneda.addProperty("Mon_Numero", tasaMonedaConsultarOpMonNumero);
@@ -1114,6 +1087,10 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject tasaMonedaConsultarOpResultadoObjeto = Utilerias.performOperacion(TasaServicio, tasaMonedaConsultarOp, datosMoneda);
 		logger.info("tasaMonedaConsultarOpResultadoObjeto" + tasaMonedaConsultarOpResultadoObjeto);
 
+		/**
+		 * REGLA DE NEGOCIO: verifica que la cantidad de inversión en UDIS sea menor a 400,000.00 para calcular GAT y GATReal
+		 */
+
 		JsonObject monedaConsultar = tasaMonedaConsultarOpResultadoObjeto.has("monedaConsultar") ? tasaMonedaConsultarOpResultadoObjeto.get("monedaConsultar").getAsJsonObject() : new JsonObject();
 		Double monFixCom = monedaConsultar.has("Mon_FixCom") ? monedaConsultar.get("Mon_FixCom").getAsDouble() : 0;
 		Double invCantid = inversion.has("Inv_Cantid") ? inversion.get("Inv_Cantid").getAsDouble() : 0;
@@ -1125,10 +1102,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		Double invTasInt = clienteConsultar.has("TasInv") ? clienteConsultar.get("TasInv").getAsDouble() : 0;
 
 		if((invCantid / monFixCom) < MonTotUDI) {
-		
-			/* 
-				Parametros obtenidos por medio del principal
-			*/
 
 			JsonObject datosGAT = new JsonObject();
 			datosGAT.addProperty("Inv_Dias",  inversion.has("Inv_Plazo") ? inversion.get("Inv_Plazo").getAsInt() : 0);
@@ -1150,11 +1123,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			logger.info("tasaGATConsultaCalcularOpResultadoObjeto" + tasaGATConsultaCalcularOpResultadoObjeto);
 
 			JsonObject GATConsultaCalcular = tasaGATConsultaCalcularOpResultadoObjeto.has("GATConsultaCalcular") ? tasaGATConsultaCalcularOpResultadoObjeto.get("GATConsultaCalcular").getAsJsonObject() : new JsonObject();
-			invGAT = GATConsultaCalcular.has("Inv_GAT") ? GATConsultaCalcular.get("Inv_GAT").getAsDouble() : 0;			
-
-			/* 
-				STORED PROCEDURE INCALINFPRO
-			*/		
+			invGAT = GATConsultaCalcular.has("Inv_GAT") ? GATConsultaCalcular.get("Inv_GAT").getAsDouble() : 0;		
 
 			JsonObject datosGATRea = new JsonObject();
 			datosGATRea.addProperty("Inv_GAT", invGAT);
@@ -1183,6 +1152,10 @@ public class InversionesCtrl extends BimBaseCtrl {
 		Double Cli_TasISR = cliente.has("Cli_TasISR") ? cliente.get("Cli_TasISR").getAsDouble() : 0;
 		String Cli_CobISR = cliente.has("Cli_CobISR") ? cliente.get("Cli_CobISR").getAsString() : "";
 
+		/**
+		 * REGLA DE NEGOCIO: verifica que la cantidad de inversión sea mayor a 5000 y el plazo sea mayor a cero 
+		 */
+
 		if(invCantid < 5000 || invPlazo <= 0){
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.26");
 			bimMessageDTO.addMergeVariable("invCatid", invCantid.toString());
@@ -1200,20 +1173,14 @@ public class InversionesCtrl extends BimBaseCtrl {
 		resultadoCalculaTasa = Utilerias.calculaTasa(calculaTasa);
 		logger.info("resultadoCalculaTasa" + resultadoCalculaTasa);
 
-		/* 
-			*************************************************************************
-			*************************************************************************
-			Empiezan reglas de negocio
-			*************************************************************************
-			*************************************************************************
+		/**
+		 * REGLA DE NEGOCIO: valida token de transacción y bloquea al usuario en caso de 5 intentos fallidos
 		 */
 
-		String folToken = renovarInversion.has("folToken") ? renovarInversion.get("folToken").getAsString() : "";;
 		String cpRSAToken = renovarInversion.has("cpRSAToken") ? renovarInversion.get("cpRSAToken").getAsString() : "";
 		String validarToken = TokenService.validarTokenOperacion(folToken, cpRSAToken, usuNumero);
 
 		logger.info("validarToken   " + validarToken);
-
 		if ("B".equals(validarToken)) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
 			throw new ForbiddenException(bimMessageDTO.toString());
@@ -1223,10 +1190,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.28");
 			throw new ForbiddenException(bimMessageDTO.toString());
 		}
-		
-		/* 
-			Parametros obtenidos por medio del principal
-		*/
 
 		JsonObject datosStatusActualizar = new JsonObject();
 		datosStatusActualizar.addProperty("Adi_Invers", inversion.has("Inv_Numero") ? inversion.get("Inv_Numero").getAsString() : "");
@@ -1292,10 +1255,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 			}
 		}
 
-		/* 
-			Parametros obtenidos por medio del principal
-		*/
-
 		JsonObject datosInversionFinalizada = new JsonObject();
 		datosInversionFinalizada.addProperty("Inv_Numero", inversion.has("Inv_Numero") ? inversion.get("Inv_Numero").getAsString() : "");
 		datosInversionFinalizada.addProperty("Inv_Deposi", invCapita);
@@ -1318,10 +1277,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("datosInversionFinalizada" + datosInversionFinalizada);
 		JsonObject inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, inversionesImportesDeInvercionFinalizadaActualizarOp, datosInversionFinalizada);
 		logger.info("inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto" + inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto);
-
-		/* 
-			SP 15 LISTO MAPEO
-		*/		
 
 		JsonObject datosProcesoLiquidacion = new JsonObject();
 		datosProcesoLiquidacion.addProperty("Inv_Numero", inversion.has("Inv_Numero") ? inversion.get("Inv_Numero").getAsString() : "");
@@ -1357,11 +1312,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.31");			
 			bimMessageDTO.addMergeVariable("errMensaj", errMensaj);
 			throw new InternalServerException(bimMessageDTO.toString());
-		}		
-
-		/* 
-			SP 16 
-		*/
+		}
 
 		JsonObject datosBitacora = new JsonObject();
 		datosBitacora.addProperty("Bit_Usuari", usuNumero);
@@ -1385,10 +1336,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("datosBitacora" + datosBitacora);
 		JsonObject bitacoraCreacionOpResultadoObjeto = Utilerias.performOperacion(BitacoraServicio, BitacoraCreacionOp, datosBitacora);
 		logger.info("bitacoraCreacionOpResultadoObjeto" + bitacoraCreacionOpResultadoObjeto);
-		
-		/* 
-			SP 17 EN PROGRESO MAPEO
-		*/	
 
 		JsonObject datosIversionVsEstadoCuenta = new JsonObject();
 		datosIversionVsEstadoCuenta.addProperty("Cor_Usuari", usuNumero);
@@ -1411,10 +1358,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject inversionesContraEstadoCuentaActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, inversionesContraEstadoCuentaActualizarOp, datosIversionVsEstadoCuenta);
 		logger.info("inversionesContraEstadoCuentaActualizarOpResultadoObjeto" + inversionesContraEstadoCuentaActualizarOpResultadoObjeto);
 		
-		/* 
-			SP 18 PENDIENTE MAPEO
-		*/		
-
 		JsonObject inversionesPagareNumeroUsuarioObtener = new JsonObject();
 		inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
 		inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Usuari", usuNumero);
@@ -1482,9 +1425,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
-    	}
+	}
 	
-		private void addResourceToRegistry(MicroservicesRegistryImpl microservicesRegistryImpl) {
-			microservicesRegistryImpl.addExceptionMapper(new BimExceptionMapper());
+	private void addResourceToRegistry(MicroservicesRegistryImpl microservicesRegistryImpl) {
+		microservicesRegistryImpl.addExceptionMapper(new BimExceptionMapper());
 	}
 }

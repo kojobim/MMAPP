@@ -13,6 +13,11 @@ import com.bim.commons.utils.HttpClientUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+/**
+ * Clase para realizar operaciones que requieran token
+ * @author Backend Team MedioMelon
+ * @version BackendMM022019
+ */
 public class TokenService {
 
     private static final Logger logger = Logger.getLogger(TokenService.class);
@@ -31,6 +36,14 @@ public class TokenService {
 		}
 	}
 
+	/**
+	 * Método que se encarga de validar el token de operación
+	 * @param tokFolio String
+	 * @param cpRSAToken String
+	 * @param tokUsuari String
+	 * @return
+	 * String
+	 */
     public static String validarTokenOperacion(String tokFolio, String cpRSAToken, String tokUsuari) {
 		logger.info("COMMONS: Iniciando validarTokenTransaccion metodo...");
 
@@ -88,5 +101,6 @@ public class TokenService {
 
 		return usuStatus;
 	}
+	//Cierre del método
 
 }

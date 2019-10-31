@@ -132,15 +132,30 @@ public class Utilerias {
 		return fechaConv;
 	}
 
+	/**
+	 * Método que calcula tasa
+	 * @param datos
+	 * <pre>
+	 * {
+	 * 	Inv_Plazo: int,
+	 * 	Inv_Cantid: double,
+	 * 	TasInv: double,
+	 * 	Par_DiBaIn: int,
+	 * 	Par_ISR: double,
+	 * 	Cli_CobISR: String
+	 * }
+	 * </pre>
+	 * @return
+	 * { }
+	 */	
 	public static JsonObject calculaTasa(JsonObject datos) {
-		/*
-			Inv_Plazo = Se obtiene de la inversión a renovar en la propiedad 'Inv_Plazo'.
-			Inv_Cantid = Se obtiene de la inversión a renovar en la propiedad 'Inv_Cantid'.
-			TasInv = Se obtiene al consultar el SP CLTAGRCACON.
-			Par_DiBaIn = Se obtiene al consultar el SP SOPARAMSCON.
-			Par_ISR = Cli_TasISR Se obtiene al consultar el SP CLCLIENTCON.
-			Cli_CobISR = Se obtiene de consultar al SP CLCLIENTCON.
-		*/
+		/**
+		 * PARÁMETROS OBTENIDOS DE SP Y VARIABLE CORRESPONDIENTE
+		 * 	TasInv = Se obtiene al consultar el SP CLTAGRCACON.
+		 * 	Par_DiBaIn = Se obtiene al consultar el SP SOPARAMSCON.
+		 * 	Par_ISR = Cli_TasISR Se obtiene al consultar el SP CLCLIENTCON.
+		 * 	Cli_CobISR = Se obtiene de consultar al SP CLCLIENTCON.
+		 */
 		int invPlazo = datos.get("Inv_Plazo").getAsInt();
 		double invCantid = datos.get("Inv_Cantid").getAsDouble();
 		double invTBruta = datos.get("TasInv").getAsDouble();
@@ -174,6 +189,7 @@ public class Utilerias {
 
 		return resultado;
 	}
+	//Cierre del método
 
 	
 	public static Boolean isNumber(String value) {
@@ -183,6 +199,12 @@ public class Utilerias {
 		return value.matches(regex);
 	}
 
+	/**
+	 * Método que genera una clave numérica a partir de una cadena de texto
+	 * @param sVarEncode String
+	 * @return
+	 * String
+	 */
 	public static String generarDigitoVerificador(String sVarEncode) {
 		int matrizd1[][] = new int[2][2];
 		int matrizd2[][] = new int[2][2];
@@ -269,6 +291,7 @@ public class Utilerias {
 		claveEnc += claveEnc1;
 		return claveEnc;
 	}
+	//Cierre del método
 	
 	public static String concat(String ...args) {
 		logger.info("COMMONS: Iniciando concat metodo...");
@@ -293,7 +316,7 @@ public class Utilerias {
 			if(j < args.length - 1) 
 				resultado.append(" ");
 		}
-		logger.info("COMMONS: Iniciando concat metodo...");
+		logger.info("COMMONS: Finalizando concat metodo...");
 		return resultado.toString();	
 	}
 	
