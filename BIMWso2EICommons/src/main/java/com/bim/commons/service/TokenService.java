@@ -49,7 +49,7 @@ public class TokenService {
 		String usuStatus = "01".equals(validaToken) ? "C" : "A";
 
 		JsonObject datosToken = new JsonObject();
-		datosToken.addProperty("Tok_Folio", "");
+		datosToken.addProperty("Tok_Folio", tokFolio);
 		datosToken.addProperty("Tok_UsuAdm", "");
 		datosToken.addProperty("Tok_Usuari", tokUsuari);
 		datosToken.addProperty("Tok_ComCan", "");

@@ -907,13 +907,11 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject inversionesObjeto = new Gson().fromJson(mensaje, JsonObject.class);
 		JsonObject renovarInversion = inversionesObjeto.getAsJsonObject("renovarInversion");	
 			
-		// String bearerToken = solicitud.getHeader("Authorization");
-		// JsonObject principalResultadoObjecto = Utilerias.getPrincipal(bearerToken);
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjecto = Utilerias.getPrincipal(bearerToken);
 		
-		// String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
-		// String usuClient = principalResultadoObjecto.get("usuClient").getAsString();
-		
-		String usuClient = "00193500";
+		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
+		String usuClient = principalResultadoObjecto.get("usuClient").getAsString();
 		
 		String bitPriRef = solicitud.getHeader("User-Agent");
 		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
@@ -938,8 +936,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 			Este SP se encarga de obtener los datos de inversion de un usuario
 			Se verifica que el numero de inversion proporcionado por fron se encuentre en las inversiónes de usuario
 		*/
-		
-		String usuNumero = "001844";
 
 		JsonObject datosInversion = new JsonObject();
 		datosInversion.addProperty("FechaSis", fechaSis);
@@ -1212,7 +1208,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			*************************************************************************
 		 */
 
-		String folToken = "416218850";
+		String folToken = renovarInversion.has("folToken") ? renovarInversion.get("folToken").getAsString() : "";;
 		String cpRSAToken = renovarInversion.has("cpRSAToken") ? renovarInversion.get("cpRSAToken").getAsString() : "";
 		String validarToken = TokenService.validarTokenOperacion(folToken, cpRSAToken, usuNumero);
 
@@ -1254,8 +1250,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		Double invCanTot = resultadoCalculaTasa.has("Inv_CanTot") ? resultadoCalculaTasa.get("Inv_CanTot").getAsDouble() : 0; 
 		Double invTasa = resultadoCalculaTasa.has("Inv_Tasa") ? resultadoCalculaTasa.get("Inv_Tasa").getAsDouble() : 0; 
 		Double invISR = resultadoCalculaTasa.has("Inv_ISR") ? resultadoCalculaTasa.get("Inv_ISR").getAsDouble() : 0;  
-		Double invCapita = resultadoCalculaTasa.has("Inv_Capita") ? resultadoCalculaTasa.get("Inv_Capita").getAsDouble() : 0; 		
-		Double invCanISR = resultadoCalculaTasa.has("Inv_CanISR") ? resultadoCalculaTasa.get("Inv_CanISR").getAsDouble() : 0; 
+		Double invCapita = resultadoCalculaTasa.has("Inv_Capita") ? resultadoCalculaTasa.get("Inv_Capita").getAsDouble() : 0; 
 		Double invCanNet = resultadoCalculaTasa.has("Inv_CanNet") ? resultadoCalculaTasa.get("Inv_CanNet").getAsDouble() : 0;
 		
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
