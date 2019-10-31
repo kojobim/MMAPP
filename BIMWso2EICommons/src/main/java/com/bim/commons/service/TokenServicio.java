@@ -1,5 +1,8 @@
 package com.bim.commons.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
@@ -10,6 +13,8 @@ import com.google.gson.JsonObject;
  *
  */
 public class TokenServicio extends BaseService {
+
+	private static final Logger logger = LoggerFactory.getLogger(TokenServicio.class);
 
 	private static String TokenServicio;
 	private static String TokenVerificarOp;
@@ -58,6 +63,7 @@ public class TokenServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject tokenVerificar(JsonObject datosTokenVerificar) {
+		logger.info("COMMONS: Comenzando tokenVerificar... ");
 		if(!datosTokenVerificar.has("NumTransac"))
 			datosTokenVerificar.addProperty("NumTransac", "");
 		datosTokenVerificar.addProperty("Transaccio", TokenVerificarOpTransaccio);
@@ -66,6 +72,7 @@ public class TokenServicio extends BaseService {
 		datosTokenVerificar.addProperty("SucDestino", TokenVerificarOpSucDestino);
 		datosTokenVerificar.addProperty("Modulo", TokenVerificarOpModulo);
 		JsonObject tokenVerificarOpResultadoObjecto = Utilerias.performOperacion(TokenServicio, TokenVerificarOp, datosTokenVerificar);
+		logger.info("COMMONS: Finalizando tokenVerificar... ");
 		return tokenVerificarOpResultadoObjecto;
 	}//Cierre del método
 

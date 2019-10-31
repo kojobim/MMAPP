@@ -1,5 +1,8 @@
 package com.bim.commons.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
@@ -10,6 +13,8 @@ import com.google.gson.JsonObject;
  *
  */
 public class ConfiguracionServicio extends BaseService {
+
+	private static final Logger logger = LoggerFactory.getLogger(ConfiguracionServicio.class);
 
 	private static String ConfiguracionServicio;
 	private static String HorarioInversionOp;
@@ -87,6 +92,7 @@ public class ConfiguracionServicio extends BaseService {
 	 */
 	
 	public JsonObject horariosConsultar(JsonObject datosHorario) {
+		logger.info("COMMONS: Comienzo horariosConsultar... ");
 		datosHorario.addProperty("Tip_Consul", HorarioInversionOpTipConsul);
 		datosHorario.addProperty("Tip_Transf", HorarioInversionOpTipTransf);
 		if(!datosHorario.has("Err_Codigo"))
@@ -99,6 +105,7 @@ public class ConfiguracionServicio extends BaseService {
 		datosHorario.addProperty("SucDestino", HorarioInversionOpSucDestino);
 		datosHorario.addProperty("Modulo", HorarioInversionOpModulo);
 		JsonObject horarioInversionOpResultadoObjecto = Utilerias.performOperacion(ConfiguracionServicio, HorarioInversionOp, datosHorario);
+		logger.info("COMMONS: Finalizando horariosConsultar... ");
 		return horarioInversionOpResultadoObjecto;
 	}//Cierre del método
 	
@@ -142,6 +149,7 @@ public class ConfiguracionServicio extends BaseService {
 	 *</pre>
 	 */
 	public JsonObject configuracionBancoConsultarDetalle(JsonObject datosConfiguracion) {
+		logger.info("COMMONS: Comenzando configuracionBancoConsultarDetalle... ");
 		datosConfiguracion.addProperty("Tip_Consul", ConfiguracionBancoDetalleOpTipConsul);
 		if(!datosConfiguracion.has("NumTransac"))
 			datosConfiguracion.addProperty("NumTransac", "");
@@ -151,6 +159,7 @@ public class ConfiguracionServicio extends BaseService {
 		datosConfiguracion.addProperty("SucDestino", ConfiguracionBancoDetalleOpSucDestino);
 		datosConfiguracion.addProperty("Modulo", ConfiguracionBancoDetalleOpModulo);
 		JsonObject configuracionBancoConsultarDetalleResultado = Utilerias.performOperacion(ConfiguracionServicio, ConfiguracionBancoDetalleOp, datosConfiguracion);
+		logger.info("COMMONS: Finalizando configuracionBancoConsultarDetalle... ");
 		return configuracionBancoConsultarDetalleResultado;
 	}//Cierre del método
 	

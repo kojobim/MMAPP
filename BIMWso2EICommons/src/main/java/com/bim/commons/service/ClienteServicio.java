@@ -1,5 +1,8 @@
 package com.bim.commons.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
@@ -11,6 +14,8 @@ import com.google.gson.JsonObject;
  */
 public class ClienteServicio extends BaseService {
 
+	private static final Logger logger = LoggerFactory.getLogger(ClienteServicio.class);
+	
 	private static String ClienteServicio;
 	private static String ClienteConsultarOp;
 	private static String ClienteConsultarOpTipConsul;
@@ -126,6 +131,7 @@ public class ClienteServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject clienteConsultar(JsonObject datosClienteConsultar) {
+		logger.info("COMMONS: Comenzando clienteConsultar...");
 		if(!datosClienteConsultar.has("Cli_Sucurs"))
 			datosClienteConsultar.addProperty("Cli_Sucurs", "");
 		if(!datosClienteConsultar.has("Cli_Nombre"))
@@ -141,6 +147,7 @@ public class ClienteServicio extends BaseService {
 		JsonObject clienteConsultarResultadoObjecto = Utilerias
 				.performOperacion(ClienteServicio, ClienteConsultarOp, 
 						datosClienteConsultar);
+		logger.info("COMMONS: Finalizando clienteConsultar...");
 		return clienteConsultarResultadoObjecto;
 	}//Cierre del método
 

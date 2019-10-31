@@ -1,5 +1,8 @@
 package com.bim.commons.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
@@ -10,6 +13,8 @@ import com.google.gson.JsonObject;
  *
  */
 public class SaldoServicio extends BaseService {
+
+	private static final Logger logger = LoggerFactory.getLogger(SaldoServicio.class);
 
 	protected static String SaldoServicio;
 	private static String SaldosClienteConsultarOp;
@@ -81,6 +86,7 @@ public class SaldoServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject saldosClienteConsultar(JsonObject datosSaldosClienteConsultar) {
+		logger.info("COMMONS: Comenzando saldosClienteConsultar... ");
 		if(!datosSaldosClienteConsultar.has("Cue_Numero"))
 			datosSaldosClienteConsultar.addProperty("Cue_Numero", "");
 		if(!datosSaldosClienteConsultar.has("NumTransac"))
@@ -91,6 +97,7 @@ public class SaldoServicio extends BaseService {
 		datosSaldosClienteConsultar.addProperty("SucDestino", SaldosClienteConsultarOpSucDestino);
 		datosSaldosClienteConsultar.addProperty("Modulo", SaldosClienteConsultarOpModulo);
 		JsonObject saldosClienteConsultarResultadoObjecto = Utilerias.performOperacion(SaldoServicio, SaldosClienteConsultarOp, datosSaldosClienteConsultar);
+		logger.info("COMMONS: Finalizando saldosClienteConsultar... ");
 		return saldosClienteConsultarResultadoObjecto;
 	}//Cierre del método
 	

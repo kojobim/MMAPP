@@ -1,5 +1,8 @@
 package com.bim.commons.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
@@ -10,6 +13,8 @@ import com.google.gson.JsonObject;
  *
  */
 public class UsuarioServicio extends BaseService {
+
+	private static final Logger logger = LoggerFactory.getLogger(UsuarioServicio.class);
 
 	private static String UsuarioServicio;
 	private static String UsuarioConsultarOp;
@@ -132,6 +137,7 @@ public class UsuarioServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject usuarioConsultar(JsonObject datosUsuarioConsultar) {
+		logger.info("COMMONS: Comenzando usuarioConsultar... ");
 		if(!datosUsuarioConsultar.has("Usu_Passwo"))
 			datosUsuarioConsultar.addProperty("Usu_Passwo", "");
 		datosUsuarioConsultar.addProperty("Tip_Consul", UsuarioConsultarOpTipConsul);
@@ -158,6 +164,7 @@ public class UsuarioServicio extends BaseService {
 		if(!datosUsuarioConsultar.has("NumTransac"))
 			datosUsuarioConsultar.addProperty("NumTransac", "");	
 		JsonObject usuarioConsultarOpResultadoObjeto = Utilerias.performOperacion(UsuarioServicio, UsuarioConsultarOp, datosUsuarioConsultar);
+		logger.info("COMMONS: Finalizando usuarioConsultar... ");
 		return usuarioConsultarOpResultadoObjeto;
 	}//Cierre del método
 	
@@ -198,6 +205,7 @@ public class UsuarioServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject usuarioActualizar(JsonObject datosUsuarioActualizar) {
+		logger.info("COMMONS: Comenzando usuarioActualizar... ");
 		if(!datosUsuarioActualizar.has("Usu_Numero"))
 			datosUsuarioActualizar.addProperty("Usu_Numero", "");
 		if(!datosUsuarioActualizar.has("Usu_Passwo"))
@@ -224,6 +232,7 @@ public class UsuarioServicio extends BaseService {
 		datosUsuarioActualizar.addProperty("SucDestino", UsuarioActualizacionOpSucDestion);
 		datosUsuarioActualizar.addProperty("Modulo", UsuarioActualizacionOpModulo);
 		JsonObject usuarioActualizacionOpResultadoObjecto = Utilerias.performOperacion(UsuarioServicio, UsuarioActualizacionOp, datosUsuarioActualizar);
+		logger.info("COMMONS: Finalizando usuarioActualizar... ");
 		return usuarioActualizacionOpResultadoObjecto;
 	}//Cierre del método
 	

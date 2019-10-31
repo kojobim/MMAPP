@@ -1,5 +1,8 @@
 package com.bim.commons.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
@@ -11,8 +14,9 @@ import com.google.gson.JsonObject;
  */
 public class TransaccionServicio extends BaseService {
 
+	private static final Logger logger = LoggerFactory.getLogger(TransaccionServicio.class);
+
 	private static String TransaccionServicio;
-	
 	private static String FolioTransaccionGenerarOp;
 	private static String FolioTransaccionGenerarOpSucOrigen;
 
@@ -37,12 +41,14 @@ public class TransaccionServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject folioTransaccionGenerar() {
+		logger.info("COMMONS: Comenzando folioTransaccionGenerar... ");
 		JsonObject datosFolioTransaccion = new JsonObject();
 		datosFolioTransaccion.addProperty("Num_Transa", "");
 		datosFolioTransaccion.addProperty("SucOrigen", FolioTransaccionGenerarOpSucOrigen);
 		JsonObject folioTransaccionGenerarResultadoObjeto =  Utilerias
 				.performOperacion(TransaccionServicio, FolioTransaccionGenerarOp, 
 						datosFolioTransaccion);
+		logger.info("COMMONS: Finalizando folioTransaccionGenerar... ");
 		return folioTransaccionGenerarResultadoObjeto;
 	}//Cierre del método
 }

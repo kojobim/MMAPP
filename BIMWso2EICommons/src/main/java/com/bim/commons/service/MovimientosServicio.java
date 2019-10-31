@@ -1,5 +1,8 @@
 package com.bim.commons.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
@@ -10,6 +13,8 @@ import com.google.gson.JsonObject;
  *
  */
 public class MovimientosServicio extends BaseService {
+
+	private static final Logger logger = LoggerFactory.getLogger(MovimientosServicio.class);
 
 	private static String MovimientosServicio;
 	private static String MovimientosListadoOp;
@@ -86,6 +91,7 @@ public class MovimientosServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject movimientosListado(JsonObject datosMovimientosListado) {
+		logger.info("COMMONS: Comenzando movimientosListado... ");
 		if(!datosMovimientosListado.has("Mov_Natura"))
 			datosMovimientosListado.addProperty("Mov_Natura", "");
 		if(!datosMovimientosListado.has("Mov_PalCla"))
@@ -105,6 +111,7 @@ public class MovimientosServicio extends BaseService {
 		JsonObject movimientosListadoResultadoObjeto = Utilerias
 				.performOperacion(MovimientosServicio, MovimientosListadoOp, 
 						datosMovimientosListado);
+		logger.info("COMMONS: Finalizando movimientosListado... ");
 		return movimientosListadoResultadoObjeto;
 	}//Cierre del método
 }

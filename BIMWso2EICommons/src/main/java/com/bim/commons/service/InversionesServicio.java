@@ -1,5 +1,8 @@
 package com.bim.commons.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
@@ -10,6 +13,8 @@ import com.google.gson.JsonObject;
  *
  */
 public class InversionesServicio extends BaseService {
+
+	private static final Logger logger = LoggerFactory.getLogger(InversionesServicio.class);
 
 	private static String InversionesServicio;
 	private static String InversionesObtenerOp;
@@ -108,6 +113,7 @@ public class InversionesServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject inversionesObtener(JsonObject datosInversionesObtener) {
+		logger.info("COMMONS: Comenzando inversionesObtener... ");
 		datosInversionesObtener.addProperty("Inv_Moneda", InversionesObtenerOpInvMoneda);
 		if(!datosInversionesObtener.has("NumTransac"))
 			datosInversionesObtener.addProperty("NumTransac", "");
@@ -117,6 +123,7 @@ public class InversionesServicio extends BaseService {
 		datosInversionesObtener.addProperty("SucDestino", InversionesObtenerOpSucDestino);
 		datosInversionesObtener.addProperty("Modulo", InversionesObtenerOpModulo);
 		JsonObject inversionesObtenerOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesObtenerOp, datosInversionesObtener);
+		logger.info("COMMONS: Finalizando inversionesObtener... ");
 		return inversionesObtenerOpResultadoObjeto;
 	}//Cierre del método
 	
@@ -169,6 +176,7 @@ public class InversionesServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject inversionesPagareNumeroUsuarioObtener(JsonObject datosInversionesPagareNumeroUsuarioObtener) {
+		logger.info("COMMONS: Comenzando inversionesPagareNumeroUsuarioObtener... ");
 		if(!datosInversionesPagareNumeroUsuarioObtener.has("Inv_Numero"))
 			datosInversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
@@ -178,6 +186,7 @@ public class InversionesServicio extends BaseService {
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
 		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = Utilerias.performOperacion(InversionesServicio, InversionesPagareNumeroUsuarioObtenerOp, datosInversionesPagareNumeroUsuarioObtener);
+		logger.info("COMMONS: Finalizando inversionesPagareNumeroUsuarioObtener... ");
 		return inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto;
 	}//Cierre del método
 }
