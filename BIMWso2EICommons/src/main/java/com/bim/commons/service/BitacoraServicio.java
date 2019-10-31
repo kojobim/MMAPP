@@ -1,11 +1,10 @@
-
 package com.bim.commons.service;
 
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
 /**
- * Esta clase define las operaciones sobre la bitacora
+ * Esta clase define las operaciones sobre la bitácora
  * @author Backend Team MedioMelon
  * @version BackendMM022019
  *
@@ -36,18 +35,29 @@ public class BitacoraServicio extends BaseService {
 	}
 	
 	
-	
 	/**
-	 * Método de creacion de bitacora
+	 * Método de creación de bitácora
+	 * ProcedureName: NBBITACOALT
 	 * @param datosBitacora
 	 * <pre> 
 	 * { 
-	 *	Bit_Usuari: String, 
+	 *	Bit_Usuari: String,	 
 	 *	Bit_Fecha:  String,
+	 *	Bit_NumTra?: String,
+	 *	Bit_TipOpe: String,
+	 *	Bit_CueOri?: String,
+	 *	Bit_CueDes?: String,
+	 *	Bit_Monto: Integer,
 	 *	Bit_PriRef: String,
+	 *	Bit_SegRef?: String,
 	 *	Bit_DireIP: String,
 	 *	NumTransac: String,
-	 *	FechaSis: String
+	 *	Transaccio: String,
+	 *	Usuario: String,
+	 *	FechaSis: String,
+	 *	SucOrigen: String,
+	 *	SucDestino: String,
+	 *	Modulo: String
 	 * }
 	 * </pre>
 	 * @return 

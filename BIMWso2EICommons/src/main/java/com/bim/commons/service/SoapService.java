@@ -24,6 +24,11 @@ import com.bim.commons.utils.SOAPClientUtils;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
+/**
+ * @author Backend Team MedioMelon
+ * @version BackendMM022019
+ *
+ */
 public class SoapService extends BaseService {
 	
 	private static final Logger logger = Logger.getLogger(SoapService.class);
@@ -51,6 +56,14 @@ public class SoapService extends BaseService {
 		
 	}
 	
+	/**
+	 * Método para envío de correo de movimientos
+	 * @param anio: String
+	 * @param cliente: String
+	 * @param mes: String
+	 * @return 
+	 * { }
+	 */
 	public void movimientosEnvioCorreo(String anio, String mes, String cliente) throws SOAPException {
 		logger.info("SERVICE: Comenzando movimientosEnvioCorreo metodo");
 		
@@ -168,5 +181,5 @@ public class SoapService extends BaseService {
         }
 		
 		logger.info("SERVICE: Finalizando movimientosEnvioCorreo metodo");
-	}
+	}//Cierre del método
 }

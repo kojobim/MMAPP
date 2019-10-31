@@ -3,6 +3,12 @@ package com.bim.commons.service;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
+/**
+ * Esta clase define las operaciones sobre movimientos
+ * @author Backend Team MedioMelon
+ * @version BackendMM022019
+ *
+ */
 public class MovimientosServicio extends BaseService {
 
 	private static String MovimientosServicio;
@@ -29,6 +35,56 @@ public class MovimientosServicio extends BaseService {
 		MovimientosListadoOpUsuario = properties.getProperty("op.movimientos_listado.usuario");
 	}
 	
+	/**
+	 * Método de listado de movimientos
+	 * ProcedureName: NBMOVCHECON
+	 * @param datosMovimientosListado
+	 * <pre>
+	 * {
+	 *	Cue_Numero: String,
+	 *	Fec_Inicia: String,
+	 *	Fec_Final: String,
+	 *	Mov_Natura?: String,
+	 *	Mov_PalCla?: String,
+	 *	Mov_MonIni: Integer,
+	 *	Mov_MonFin: Integer,
+	 *	Mov_Clasif?: String,
+	 *	Tip_Consul: String,
+	 * 	NumTransac?: String,
+	 *	Transaccio: String, 
+	 *	Usuario: String,
+	 *	FechaSis: String, 
+	 *	SucOrigen: String, 
+	 *	SucDestino: String, 
+	 *	Modulo: String 
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 *     cuenta: {
+	 *         movimientos: [
+	 *             {
+	 *                 Mov_Cuenta: String,
+	 *                 Mov_Numero: String,
+	 *                 Mov_Consec: String,
+	 *                 Mov_Natura: String,
+	 *                 Fecha_Val: String,
+	 *                 Mov_Descri: String,
+	 *                 Mov_Refere: String,
+	 *                 Mov_Cantid: Double,
+	 *                 Usuario: String,
+	 *                 Transaccio: String,
+	 *                 Mov_Saldo: Double,
+	 *                 Mov_Tipo: String,
+	 *                 Mov_Clasif: String,
+	 *                 Mov_DesCla: String
+	 *             }
+	 *         ]
+	 *     }
+	 * }
+	 * </pre>
+	 */
 	public JsonObject movimientosListado(JsonObject datosMovimientosListado) {
 		if(!datosMovimientosListado.has("Mov_Natura"))
 			datosMovimientosListado.addProperty("Mov_Natura", "");
@@ -50,5 +106,5 @@ public class MovimientosServicio extends BaseService {
 				.performOperacion(MovimientosServicio, MovimientosListadoOp, 
 						datosMovimientosListado);
 		return movimientosListadoResultadoObjeto;
-	}
+	}//Cierre del método
 }

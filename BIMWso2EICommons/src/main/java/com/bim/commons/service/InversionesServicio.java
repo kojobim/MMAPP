@@ -3,6 +3,12 @@ package com.bim.commons.service;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
+/**
+ * Esta clase define las operaciones sobre las inversiones
+ * @author Backend Team MedioMelon
+ * @version BackendMM022019
+ *
+ */
 public class InversionesServicio extends BaseService {
 
 	private static String InversionesServicio;
@@ -46,6 +52,61 @@ public class InversionesServicio extends BaseService {
 
 	}
 
+	/**
+	 * Método para obtener datos de las inversiones
+	 * ProcedureName: NBSALCEDCON
+	 * @param datosInversionesObtener
+	 * <pre>
+	 * {
+	 * 	Inv_Client: String,
+	 * 	Inv_Moneda: String,
+	 * 	NumTransac?: String,
+	 *	Transaccio: String, 
+	 *	Usuario: String,
+	 *	FechaSis: String, 
+	 *	SucOrigen: String, 
+	 *	SucDestino: String, 
+	 *	Modulo: String 
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 *	inversiones: {
+	 *		inversion: [
+	 *			{
+	 *				Inv_Numero: String,
+	 *				Inv_Cuenta: String,
+	 *				Inv_ForTas: String,
+	 *				Inv_FecIni: String,
+	 *				Inv_FecVen: String,
+	 *				Inv_Cantid: Double,
+	 *				Amo_Tasa: Double,
+	 *				Amo_ISR: Double,
+	 *				Amo_FecIni: String,
+	 *				Amo_FecVen: String,
+	 *				Amo_Numero: String,
+	 *				Inv_Cantid: Double,
+	 *				Imp_Intere: Double,
+	 *				Imp_ISR: Double,
+	 *				Plazo: Integer,
+	 *				Pla_Intere: Integer,
+	 *				Imp_Total: Double,
+	 *				Fot_Descri: String,
+	 *				Inv_Tipo: String,
+	 *				Inv_Gat: Double,
+	 *				Inv_GatRea: Double,
+	 *				Inv_IntBru: Double,
+	 *				Inv_IntNet: Double,
+	 *				Inv_ISRTot: Double,
+	 *				Inv_Total: Double,
+	 *				Inv_Esquema: String
+	 *			}
+	 *		]
+	 *	}
+	 * }
+	 * </pre>
+	 */
 	public JsonObject inversionesObtener(JsonObject datosInversionesObtener) {
 		datosInversionesObtener.addProperty("Inv_Moneda", InversionesObtenerOpInvMoneda);
 		if(!datosInversionesObtener.has("NumTransac"))
@@ -57,8 +118,56 @@ public class InversionesServicio extends BaseService {
 		datosInversionesObtener.addProperty("Modulo", InversionesObtenerOpModulo);
 		JsonObject inversionesObtenerOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesObtenerOp, datosInversionesObtener);
 		return inversionesObtenerOpResultadoObjeto;
-	}
+	}//Cierre del método
 	
+	
+	/**
+	 * Método para obtener datos de inversiones pagaré
+	 * ProcedureName: NBINVERSCON
+	 * @param datosInversionesPagareNumeroUsuarioObtener
+	 * <pre>
+	 * {
+	 *	Inv_Numero?: String,
+	 *	Inv_Usuari: String,
+	 *	Tip_Consul: String,
+	 * 	NumTransac: String,
+	 *	Transaccio: String, 
+	 *	Usuario: String,
+	 *	FechaSis: String, 
+	 *	SucOrigen: String, 
+	 *	SucDestino: String, 
+	 *	Modulo: String
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 *	inversiones: {
+	 *		inversion: [
+	 *			{
+	 *				Inv_Numero: String,
+	 *				Inv_FecIni: Date,
+	 *				Inv_FecVen: Date,
+	 *				Inv_Cantid: Double,
+	 *				Inv_Tasa: Double,
+	 *				Inv_Cuenta: String,
+	 *				Inv_ISR: Double,
+	 *				Inv_TBruta: Double,
+	 *				Adi_InsLiq: String,
+	 *				Mon_Descri: String,
+	 *				Inv_Plazo: Integer,
+	 *				Inv_GAT: Double,
+	 *				Inv_GATRea: Double,
+	 *				Gar_ComFon: String,
+	 *				Imp_ISR: Double,
+	 *				Imp_Intere: Double,
+	 *				Inv_Total: Double		
+	 *			}
+	 *		]
+	 *	}
+	 * }
+	 * </pre>
+	 */
 	public JsonObject inversionesPagareNumeroUsuarioObtener(JsonObject datosInversionesPagareNumeroUsuarioObtener) {
 		if(!datosInversionesPagareNumeroUsuarioObtener.has("Inv_Numero"))
 			datosInversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
@@ -70,5 +179,5 @@ public class InversionesServicio extends BaseService {
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
 		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = Utilerias.performOperacion(InversionesServicio, InversionesPagareNumeroUsuarioObtenerOp, datosInversionesPagareNumeroUsuarioObtener);
 		return inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto;
-	}
+	}//Cierre del método
 }

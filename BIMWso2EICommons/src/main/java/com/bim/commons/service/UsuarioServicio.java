@@ -3,6 +3,12 @@ package com.bim.commons.service;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
+/**
+ * Esta clase define las operaciones sobre el usuario
+ * @author Backend Team MedioMelon
+ * @version BackendMM022019
+ *
+ */
 public class UsuarioServicio extends BaseService {
 
 	private static String UsuarioServicio;
@@ -42,8 +48,92 @@ public class UsuarioServicio extends BaseService {
 		UsuarioActualizacionOpModulo = properties.getProperty("op.usuario_actualizacion.modulo");
 	}
 	
+	/**
+	 * Método para consultar usuario
+	 * ProcedureName: NBUSUARICON
+	 * @param datosUsuarioConsultar
+	 * <pre> 
+	 * {
+	 * 	Usu_Numero?: String,
+	 * 	Usu_UsuAdm?: String,
+	 * 	Usu_Clave: String,
+	 * 	Usu_Passwo?: String,
+	 * 	Usu_Client?: String,
+	 * 	Usu_FolNip: Integer,
+	 * 	Usu_FolTok?: String,
+	 * 	Usu_Status?: String,
+	 * 	Usu_CuCaCo?: String,
+	 * 	Usu_SucMod?: String,
+	 * 	Tip_Consul: String,
+	 * 	NumTransac?: String,
+	 *	Transaccio: String, 
+	 *	Usuario: String,
+	 *	FechaSis: String, 
+	 *	SucOrigen: String, 
+	 *	SucDestino: String, 
+	 *	Modulo: String 
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre> 
+	 * {
+	 *	usuario: {
+	 *		Usu_Numero: String,
+	 *		Usu_UsuAdm: String,
+	 *		Usu_Client: String,
+	 *		Usu_CuCaCo: String,
+	 *		Usu_Nombre: String,
+	 *		Usu_Clave: String,
+	 *		Usu_Passwo: String, 
+	 *		Usu_Seguro: String,
+	 *		Usu_Tipo: String, 
+	 *		Usu_Origen: String,
+	 *		Usu_TipSer: String, 
+	 *		Usu_Status: String, 
+	 *		Usu_FolNip: Integer,
+	 *		Usu_FolTok: String, 
+	 *		Usu_StaTok: String, 
+	 *		Usu_Email: String, 
+	 *		Usu_FeUlAc: String,
+	 *		Usu_FeAcPa: String,
+	 *		Usu_FecAlt: String,
+	 *		Usu_FecCan: String,
+	 *		Usu_MotCan: String, 
+	 *		Usu_CoAcNe: Integer,
+	 *		Usu_ToAcNe: Integer,
+	 *		Usu_StaSes: String, 
+	 *		Usu_CoDeNe: Integer,
+	 *		Usu_CoPaNe: Integer,
+	 *		Pau_Usuari: String,
+	 *		Pau_OpMeHa: String,
+	 *		Pau_ImaSeg: String,
+	 *		Pau_FraSeg: String,
+	 *		Pau_PanIni: String,
+	 *		Pau_PrPrSe: String,
+	 *		Pau_PrPrPe: String,
+	 *		Pau_PrReSe: String,
+	 *		Pau_SePrSe: String,
+	 *		Pau_SePrPe: String,
+	 *		Pau_SeReSe: String,
+	 *		Pau_ArMeHa: String,
+	 *		Pau_TipAcc: String,
+	 *		Pau_ConCue: String,
+	 *		Pau_AltCue: String,
+	 *		Pau_CarCue: String,
+	 *		Pau_Solici: String,
+	 *		Pau_Autori: String,
+	 *		Pau_NivFir: String,
+	 *		Pau_UlPrSe: String,
+	 *		Tok_Status: String,
+	 *		Usu_EmaAdm: String,
+	 *		Usu_DesSta: String
+	 *	}
+	 * }
+	 * </pre>
+	 */
 	public JsonObject usuarioConsultar(JsonObject datosUsuarioConsultar) {
-		datosUsuarioConsultar.addProperty("Usu_Passwo", "");
+		if(!datosUsuarioConsultar.has("Usu_Passwo"))
+			datosUsuarioConsultar.addProperty("Usu_Passwo", "");
 		datosUsuarioConsultar.addProperty("Tip_Consul", UsuarioConsultarOpTipConsul);
 		datosUsuarioConsultar.addProperty("Transaccio", UsuarioConsultarOpTransaccio);
 		datosUsuarioConsultar.addProperty("Usuario", UsuarioConsultarOpUsuario);
@@ -69,8 +159,44 @@ public class UsuarioServicio extends BaseService {
 			datosUsuarioConsultar.addProperty("NumTransac", "");	
 		JsonObject usuarioConsultarOpResultadoObjeto = Utilerias.performOperacion(UsuarioServicio, UsuarioConsultarOp, datosUsuarioConsultar);
 		return usuarioConsultarOpResultadoObjeto;
-	}
+	}//Cierre del método
 	
+	/**
+	 * Método para actualizar el usuario
+	 * ProcedureName: NBUSUARIACT
+	 * @param datosUsuarioActualizar
+	 * <pre> 
+	 * {
+	 * 	Usu_Numero?: String,
+	 * 	Usu_Clave: String,
+	 * 	Usu_Passwo?: String,
+	 *	Usu_Status?: String,
+	 *	Usu_Email?: String,
+	 * 	Usu_UsuAdm?: String,
+	 * 	Usu_FolTok?: String,
+	 *	Usu_Client?: String,
+	 *	Usu_SucMod?: String,
+	 * 	Usu_FolNip: Integer,
+	 * 	Usu_Nombre?: String,
+	 * 	Tip_Actual: String,
+	 * 	NumTransac?: String,
+	 *	Transaccio: String, 
+	 *	Usuario: String,
+	 *	FechaSis: String, 
+	 *	SucOrigen: String, 
+	 *	SucDestino: String, 
+	 *	Modulo: String 
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 * 	usuario: {
+	 * 		Usu_CoAcNe: Integer
+	 * 	}
+	 * }
+	 * </pre>
+	 */
 	public JsonObject usuarioActualizar(JsonObject datosUsuarioActualizar) {
 		if(!datosUsuarioActualizar.has("Usu_Numero"))
 			datosUsuarioActualizar.addProperty("Usu_Numero", "");
@@ -99,7 +225,6 @@ public class UsuarioServicio extends BaseService {
 		datosUsuarioActualizar.addProperty("Modulo", UsuarioActualizacionOpModulo);
 		JsonObject usuarioActualizacionOpResultadoObjecto = Utilerias.performOperacion(UsuarioServicio, UsuarioActualizacionOp, datosUsuarioActualizar);
 		return usuarioActualizacionOpResultadoObjecto;
-	}
+	}//Cierre del método
 	
-
 }

@@ -3,6 +3,12 @@ package com.bim.commons.service;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
+/**
+ * Esta clase define las operaciones sobre la configuración
+ * @author Backend Team MedioMelon
+ * @version BackendMM022019
+ *
+ */
 public class ConfiguracionServicio extends BaseService {
 
 	private static String ConfiguracionServicio;
@@ -45,6 +51,41 @@ public class ConfiguracionServicio extends BaseService {
 		ConfiguracionBancoDetalleOpModulo = properties.getProperty("op.configuracion_banco_detalle.modulo");
 	}
 	
+	/**
+	 * Método para consulta de horarios
+	 * ProcedureName: ESHORARICON
+	 * @param datosHorario
+	 * <pre>
+	 * {
+	 *	Tip_Consul: String,
+	 *	Tip_Transf: String,
+	 *	Err_Codigo?: String, 
+	 *	Msj_Error?: String, 
+	 *	NumTransac: String,
+	 *	Transaccio: String, 
+	 *	Usuario: String,
+	 *	FechaSis: String, 
+	 *	SucOrigen: String, 
+	 *	SucDestino: String, 
+	 *	Modulo: String 
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 *	horariosInversion: {
+	 *		EsHorariID: Integer,
+	 *		Hor_Numero: Integer,
+	 *		Hor_TipMod: String,
+	 *		Hor_TipHor: String,
+	 *		Hor_HorIni: Date,
+	 *		Hor_HorFin: Date,
+	 *		Hor_DiaHab: String
+	 *	}
+	 * }
+	 * </pre>
+	 */
+	
 	public JsonObject horariosConsultar(JsonObject datosHorario) {
 		datosHorario.addProperty("Tip_Consul", HorarioInversionOpTipConsul);
 		datosHorario.addProperty("Tip_Transf", HorarioInversionOpTipTransf);
@@ -59,8 +100,47 @@ public class ConfiguracionServicio extends BaseService {
 		datosHorario.addProperty("Modulo", HorarioInversionOpModulo);
 		JsonObject horarioInversionOpResultadoObjecto = Utilerias.performOperacion(ConfiguracionServicio, HorarioInversionOp, datosHorario);
 		return horarioInversionOpResultadoObjecto;
-	}
+	}//Cierre del método
 	
+	
+	/**
+	 * Método para consultar detalle de configuración de banco
+	 * ProcedureName: NBPARAMECON
+	 * @param datosConfiguracion
+	 * <pre>
+	 * {
+	 *	Tip_Consul: String,
+	 * 	NumTransac: String,
+	 *	Transaccio: String, 
+	 *	Usuario: String,
+	 *	FechaSis: String, 
+	 *	SucOrigen: String, 
+	 *	SucDestino: String, 
+	 *	Modulo: String 
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 * 	configuracionesBanco: {
+	 * 		configuracionBanco: [
+	 * 			{
+	 * 				Par_FecAct: Date,
+	 * 				Par_FeOpEs: Date,
+	 * 				Par_Acceso: String,
+	 * 				Par_HoInSP: Date,
+	 * 				Par_FeDiNa: Date,
+	 * 				Par_HoCaPI: Date,
+	 * 				Par_MiCuDe: Integer,
+	 * 				Par_RECAMo: String,
+	 * 				Par_RECAFi: String,
+	 * 				Par_RECAFA: String
+	 * 			}
+	 * 		]
+	 * 	}
+	 * }
+	 *</pre>
+	 */
 	public JsonObject configuracionBancoConsultarDetalle(JsonObject datosConfiguracion) {
 		datosConfiguracion.addProperty("Tip_Consul", ConfiguracionBancoDetalleOpTipConsul);
 		if(!datosConfiguracion.has("NumTransac"))
@@ -72,6 +152,6 @@ public class ConfiguracionServicio extends BaseService {
 		datosConfiguracion.addProperty("Modulo", ConfiguracionBancoDetalleOpModulo);
 		JsonObject configuracionBancoConsultarDetalleResultado = Utilerias.performOperacion(ConfiguracionServicio, ConfiguracionBancoDetalleOp, datosConfiguracion);
 		return configuracionBancoConsultarDetalleResultado;
-	}
+	}//Cierre del método
 	
 }

@@ -4,10 +4,18 @@
         <property name="carbon_datasource_name">bim_db</property>
     </config>
     <query id="inversionesObtenerSQL" useConfig="BIMDB">
-        <sql>EXECUTE NBSALCEDCON @Inv_Client = :invClient, @Inv_Moneda = :invMoneda, 
-        	@NumTransac = :numTransac, @Transaccio = :transaccio, @Usuario = :usuario,
-        	@FechaSis = :fechaSis, @SucOrigen = :sucOrigen, @SucDestino = :sucDestino,
-        	@Modulo = :modulo</sql>
+        <sql>
+        	EXECUTE NBSALCEDCON 
+        	@Inv_Client = :invClient, 
+        	@Inv_Moneda = :invMoneda, 
+        	@NumTransac = :numTransac, 
+        	@Transaccio = :transaccio, 
+        	@Usuario = :usuario,
+        	@FechaSis = :fechaSis, 
+        	@SucOrigen = :sucOrigen, 
+        	@SucDestino = :sucDestino,
+        	@Modulo = :modulo
+        </sql>
         <param name="invClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="invMoneda" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
@@ -47,7 +55,8 @@
         </result>
     </query>
     <query id="inversionesPagareNumeroUsuarioObtenerSQL" useConfig="BIMDB">
-        <sql>EXECUTE NBINVERSCON
+        <sql>
+        	EXECUTE NBINVERSCON
         	@Inv_Numero = :invNumero,
         	@Inv_Usuari = :invUsuari,
         	@Tip_Consul = :tipConsul,
