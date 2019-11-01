@@ -30,9 +30,9 @@ import com.google.gson.JsonObject;
  * @version BackendMM022019
  *
  */
-public class SoapService extends BaseService {
+public class SoapServicio extends BaseService {
 	
-	private static final Logger logger = LoggerFactory.getLogger(SoapService.class);
+	private static final Logger logger = LoggerFactory.getLogger(SoapServicio.class);
 
 	private static String SoapEndpoint;
 	private static String SoapAction;
@@ -43,7 +43,7 @@ public class SoapService extends BaseService {
 	private static String NamespaceSoapenv;
 	private static String PrefixSoapenv;
 	
-	public SoapService() {
+	public SoapServicio() {
 		super();
 		
 		SoapEndpoint = properties.getProperty("soap.movimientos_envio_correo.endpoint");

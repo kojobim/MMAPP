@@ -79,13 +79,11 @@ public class ConfiguracionServicioTest {
 		JsonObject resultado = configuracionServicio.configuracionBancoConsultarDetalle(datosConfiguracionDetalle);
 		logger.info("- resultado " + resultado);
 		
-		
 		assertTrue("No viene la propiedad configuracionesBanco", resultado.has("configuracionesBanco"));
 		assertTrue("La propiedad configuracionesBanco no es un JsonObject", resultado.get("configuracionesBanco").isJsonObject());
 
 		JsonObject configuracionesBanco = Utilerias.obtenerJsonObjectPropiedad(resultado, "configuracionesBanco");
-		
-		
+
 		assertTrue("No viene la propiedad configuracionBanco", configuracionesBanco.has("configuracionBanco"));
 		assertTrue("La propiedad configuracionBanco no es un JsonArray o un JsonObject", configuracionesBanco.get("configuracionBanco").isJsonArray() || configuracionesBanco.get("configuracionBanco").isJsonObject());
 		
