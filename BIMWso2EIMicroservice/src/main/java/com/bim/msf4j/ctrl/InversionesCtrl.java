@@ -2,8 +2,8 @@ package com.bim.msf4j.ctrl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -905,7 +905,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 			
 		String bearerToken = solicitud.getHeader("Authorization");
 		JsonObject principalResultadoObjecto = Utilerias.getPrincipal(bearerToken);
-		logger.info("Principal papuuuu: >>>>> " + principalResultadoObjecto);
 		
 		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
 		String usuClient = principalResultadoObjecto.get("usuClient").getAsString();		
@@ -1204,7 +1203,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		
 		JsonObject fechaHabil = fechaHabilConsultarOpResultadoObjeto.has("fechaHabil") ? fechaHabilConsultarOpResultadoObjeto.get("fechaHabil").getAsJsonObject() : new JsonObject();
 		
-		String sigFecha = fechaHabil.has("Fecha") ? fechaHabil.get("Fecha").getAsString() : "";
+		int dias = fechaHabil.has("Dias") ? fechaHabil.get("Dias").getAsInt() : 0;
 		Double invCanTot = resultadoCalculaTasa.has("Inv_CanTot") ? resultadoCalculaTasa.get("Inv_CanTot").getAsDouble() : 0; 
 		Double invTasa = resultadoCalculaTasa.has("Inv_Tasa") ? resultadoCalculaTasa.get("Inv_Tasa").getAsDouble() : 0; 
 		Double invISR = resultadoCalculaTasa.has("Inv_ISR") ? resultadoCalculaTasa.get("Inv_ISR").getAsDouble() : 0;  
@@ -1215,66 +1214,20 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		Date rfecIn = null;
 		Date rfecVe = null;
-		logger.info("FECHA DEL SISTEMA" + fechaSis);
-		logger.info("FECHA SIGUENTE HABIL" + sigFecha);
-
 		try {
 			rfecIn = simpleDateFormat.parse(fechaSis);	
 		} catch (Exception e) {
-			try {
-				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				rfecIn = sdf.parse(fechaSis);
-			} catch (Exception ex) {
-				try {
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-					rfecIn = sdf.parse(fechaSis);
-				} catch (Exception ei) {
-					logger.info("Error en el formato de fecha.");
-				}
-			}
+			logger.info("Error en el formato de fecha.");
 		}
 		
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSzzzz");
-			rfecVe = sdf.parse(sigFecha);	
-			// Date aux1 = sdf.parse(sigFecha);
-			// logger.info("- aux1" + aux1);
-			// String pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSz";
-			// sdf = new SimpleDateFormat(pattern);
-			// aux1 = sdf.parse(sigFecha);
-			// logger.info("- aux1" + aux1);
-			// pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX";
-			// sdf = new SimpleDateFormat(pattern);
-			// aux1 = sdf.parse(sigFecha);
-			// logger.info("- aux1" + aux1);
-			// pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXXX";
-			// sdf = new SimpleDateFormat(pattern);
-			// aux1 = sdf.parse(sigFecha);
-			// logger.info("- aux1" + aux1);
-			// pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSzzzz";
-			// sdf = new SimpleDateFormat(pattern);
-			// aux1 = sdf.parse(sigFecha);
-			// logger.info("- aux1" + aux1);
-			// pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZ";
-			// sdf = new SimpleDateFormat(pattern);
-			// aux1 = sdf.parse(sigFecha);
-			// logger.info(aux1);
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(rfecIn);
+			calendar.add(Calendar.DATE, dias);
+			rfecVe = simpleDateFormat.parse(simpleDateFormat.format(calendar.getTime()));
 		} catch (Exception e) {
-			try {
-				rfecVe = simpleDateFormat.parse(sigFecha);
-			} catch (Exception ex) {
-				try {
-					SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-					rfecVe = sdf.parse(sigFecha);
-				} catch (Exception ei) {
-					logger.info("Error en el formato de fecha.");
-				}
-			}
+			logger.info("Error en el formato de fecha.");
 		}
-
-		logger.info("rfecIn >>> " + rfecIn);
-		logger.info("rfecVe >>> " + rfecVe);
-		logger.info("- rfecVe " + simpleDateFormat.format(rfecVe));
 
 		JsonObject datosInversionFinalizada = new JsonObject();
 		datosInversionFinalizada.addProperty("Inv_Numero", inversion.has("Inv_Numero") ? inversion.get("Inv_Numero").getAsString() : "");
