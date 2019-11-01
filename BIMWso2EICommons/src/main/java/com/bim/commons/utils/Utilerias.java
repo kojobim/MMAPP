@@ -323,7 +323,7 @@ public class Utilerias {
 		principalSolicitud.setUrl(IdentityServer);
 		principalSolicitud.setIsHttps(true);
 		principalSolicitud.addHeader("Authorization", bearerToken);
-		principalSolicitud.addHeader("Content-Type", "application/json");
+		principalSolicitud.addHeader("Content-Type", "application/x-www-form-urlencoded");
 		principalSolicitud.addHeader("Accept", "application/json");
 		
 		String principalResultado = HttpClientUtils.getPerform(principalSolicitud);
