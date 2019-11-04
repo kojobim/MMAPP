@@ -44,13 +44,22 @@ public class InversionesServicioTest {
 		inversionesObtener.addProperty("SucDestino", "001");
 		inversionesObtener.addProperty("Modulo", "NB");
 		
+		/*
+		 *	Mockup Test
+		 *	String json = "{\"inversiones\":{\"inversion\":[{\"Inv_Numero\":\"String\",\"Inv_Cuenta\":\"String\",\"Inv_ForTas\":\"String\",\"Inv_FecIni\":\"String\",\"Inv_FecVen\":\"String\",\"Inv_Cantid\":\"Double\",\"Amo_Tasa\":\"Double\",\"Amo_ISR\":\"Double\",\"Amo_FecIni\":\"String\",\"Amo_FecVen\":\"String\",\"Amo_Numero\":\"String\",\"Imp_Intere\":\"Double\",\"Imp_ISR\":\"Double\",\"Plazo\":\"Integer\",\"Pla_Intere\":\"Integer\",\"Imp_Total\":\"Double\",\"Fot_Descri\":\"String\",\"Inv_Tipo\":\"String\",\"Inv_Gat\":\"Double\",\"Inv_GatRea\":\"Double\",\"Inv_IntBru\":\"Double\",\"Inv_IntNet\":\"Double\",\"Inv_ISRTot\":\"Double\",\"Inv_Total\":\"Double\",\"Inv_Esquema\":\"String\"}]}}";
+		 *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+
+		/*
+		 * Test
+		 */
 		JsonObject resultado = inversionesServicio.inversionesObtener(inversionesObtener);
 		logger.info("- resultado: "+ resultado);
 		
 		assertTrue("No viene la propiedad inversiones", resultado.has("inversiones"));
 		assertTrue("La propiedad inversiones no es un JsonObject", resultado.get("inversiones").isJsonObject());
 		
-		JsonObject inversiones = Utilerias.obtenerJsonObjectPropiedad(resultado, "inversion");
+		JsonObject inversiones = Utilerias.obtenerJsonObjectPropiedad(resultado, "inversiones");
 		
 		assertTrue("No viene la propiedad inversion", inversiones.has("inversion"));
 		assertTrue("La propiedad inversiones no es un JsonArray o un JsonObject", inversiones.get("inversion").isJsonArray() || inversiones.get("inversion").isJsonObject());
@@ -63,14 +72,14 @@ public class InversionesServicioTest {
 			assertTrue("El elemento de inversion no es un JsonObject", inversion.get(0).isJsonObject());
 			
 			inversionElemento = inversion.get(0).getAsJsonObject();
+			
+			assertTrue("La propiedad Inv_Numero no se encuentra en inversion", inversionElemento.has("Inv_Numero"));
+			assertTrue("La propiedad Inv_Cantid no se encuentra en inversion", inversionElemento.has("Inv_Cantid"));
 		}
 		else
 			inversionElemento = inversiones.get("inversion").getAsJsonObject();
 		
 		assertNotNull("El elemento inversion es nulo", inversionElemento);
-
-		assertTrue("La propiedad Inv_Numero no se encuentra en inversion", inversionElemento.has("Inv_Numero"));
-		assertTrue("La propiedad Inv_Cantid no se encuentra en inversion", inversionElemento.has("Inv_Cantid"));
 		
 		logger.info("TEST: Finalizando inversionesObtenerTestDeberiaSerExitoso metodo");
 	}
@@ -91,32 +100,43 @@ public class InversionesServicioTest {
 		datosInversionesPagare.addProperty("SucDestino", "001");
 		datosInversionesPagare.addProperty("Modulo", "NB");
 		
+		/*
+		 *	Mockup Test
+		 *	String json = "{\"inversiones\":{\"inversion\":[{\"Inv_Numero\":\"String\",\"Inv_FecIni\":\"Date\",\"Inv_FecVen\":\"Date\",\"Inv_Cantid\":\"Double\",\"Inv_Tasa\":\"Double\",\"Inv_Cuenta\":\"String\",\"Inv_ISR\":\"Double\",\"Inv_TBruta\":\"Double\",\"Adi_InsLiq\":\"String\",\"Mon_Descri\":\"String\",\"Inv_Plazo\":\"Integer\",\"Inv_GAT\":\"Double\",\"Inv_GATRea\":\"Double\",\"Gar_ComFon\":\"String\",\"Imp_ISR\":\"Double\",\"Imp_Intere\":\"Double\",\"Inv_Total\":\"Double\"}]}}";
+		 *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+		
+		/*
+		 * Test
+		 */
 		JsonObject resultado = inversionesServicio.inversionesPagareNumeroUsuarioObtener(datosInversionesPagare);
 		logger.info("- resultado: "+ resultado);
 		
 		assertTrue("No viene la propiedad inversiones", resultado.has("inversiones"));
 		assertTrue("La propiedad inversiones no es un JsonObject", resultado.get("inversiones").isJsonObject());
-		
-		JsonObject inversiones = Utilerias.obtenerJsonObjectPropiedad(resultado, "inversion");
-		
-		assertTrue("No viene la propiedad inversion", inversiones.has("inversion"));
-		assertTrue("La propiedad inversiones no es un JsonArray", inversiones.get("inversion").isJsonArray());
-		
-		JsonObject inversionElemento = null;
-		if(inversiones.get("inversion").isJsonArray()) {
-			JsonArray inversion = Utilerias.obtenerJsonArrayPropiedad(inversiones, "inversion");
-			
-			assertTrue("La propiedad inversion no tiene elementos", inversion.size() > 0);
-			assertTrue("El elemento de inversion no es un JsonObject", inversion.get(0).isJsonObject());
-			
-			inversionElemento = inversion.get(0).getAsJsonObject();
-		}
-		
-		assertNotNull("El elemento inversion es nulo", inversionElemento);
+				
+		JsonObject inversiones = Utilerias.obtenerJsonObjectPropiedad(resultado, "inversiones");
 
-		assertTrue("La propiedad Inv_Numero no se encuentra en inversion", inversionElemento.has("Inv_Numero"));
-		assertTrue("La propiedad Inv_Cantid no se encuentra en inversion", inversionElemento.has("Inv_Cantid"));
-		
+		if(inversiones.has("inversion")) {
+			assertTrue("La propiedad inversion no es un JsonArray", inversiones.get("inversion").isJsonArray());
+			
+			JsonObject inversionElemento = null;
+			if(inversiones.get("inversion").isJsonArray()) {
+				JsonArray inversion = Utilerias.obtenerJsonArrayPropiedad(inversiones, "inversion");
+				
+				assertTrue("La propiedad inversion no tiene elementos", inversion.size() > 0);
+				assertTrue("El elemento de inversion no es un JsonObject", inversion.get(0).isJsonObject());
+				
+				inversionElemento = inversion.get(0).getAsJsonObject();
+				
+				assertTrue("La propiedad Inv_Numero no se encuentra en inversion", inversionElemento.has("Inv_Numero"));
+				assertTrue("La propiedad Inv_Cantid no se encuentra en inversion", inversionElemento.has("Inv_Cantid"));			
+			}else 
+				inversionElemento = inversiones.get("inversion").getAsJsonObject();
+			
+			assertNotNull("El elemento inversion es nulo", inversionElemento);			
+		}
+
 		logger.info("TEST: Finalizando inversionesPagareNumeroUsuarioObtenerTestDeberiaSerExitoso metodo...");	
 	}
 }

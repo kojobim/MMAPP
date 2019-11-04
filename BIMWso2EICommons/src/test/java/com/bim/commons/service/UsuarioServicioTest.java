@@ -52,6 +52,15 @@ public class UsuarioServicioTest {
 		datosUsuarioConsultar.addProperty("SucDestino", "001");
 		datosUsuarioConsultar.addProperty("Modulo", "NB");
 		
+		/*
+		 * Mockup Test
+		 * String json = "{\"usuario\":{\"Usu_Numero\":\"String\",\"Usu_UsuAdm\":\"String\",\"Usu_Client\":\"String\",\"Usu_CuCaCo\":\"String\",\"Usu_Nombre\":\"String\",\"Usu_Clave\":\"String\",\"Usu_Passwo\":\"String\",\"Usu_Seguro\":\"String\",\"Usu_Tipo\":\"String\",\"Usu_Origen\":\"String\",\"Usu_TipSer\":\"String\",\"Usu_Status\":\"String\",\"Usu_FolNip\":\"Integer\",\"Usu_FolTok\":\"String\",\"Usu_StaTok\":\"String\",\"Usu_Email\":\"String\",\"Usu_FeUlAc\":\"String\",\"Usu_FeAcPa\":\"String\",\"Usu_FecAlt\":\"String\",\"Usu_FecCan\":\"String\",\"Usu_MotCan\":\"String\",\"Usu_CoAcNe\":\"Integer\",\"Usu_ToAcNe\":\"Integer\",\"Usu_StaSes\":\"String\",\"Usu_CoDeNe\":\"Integer\",\"Usu_CoPaNe\":\"Integer\",\"Pau_Usuari\":\"String\",\"Pau_OpMeHa\":\"String\",\"Pau_ImaSeg\":\"String\",\"Pau_FraSeg\":\"String\",\"Pau_PanIni\":\"String\",\"Pau_PrPrSe\":\"String\",\"Pau_PrPrPe\":\"String\",\"Pau_PrReSe\":\"String\",\"Pau_SePrSe\":\"String\",\"Pau_SePrPe\":\"String\",\"Pau_SeReSe\":\"String\",\"Pau_ArMeHa\":\"String\",\"Pau_TipAcc\":\"String\",\"Pau_ConCue\":\"String\",\"Pau_AltCue\":\"String\",\"Pau_CarCue\":\"String\",\"Pau_Solici\":\"String\",\"Pau_Autori\":\"String\",\"Pau_NivFir\":\"String\",\"Pau_UlPrSe\":\"String\",\"Tok_Status\":\"String\",\"Usu_EmaAdm\":\"String\",\"Usu_DesSta\":\"String\"}}";
+		 * JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+		
+		/*
+		 * Test
+		 */
 		JsonObject resultado = usuarioServicio.usuarioConsultar(datosUsuarioConsultar);
 		logger.info("- resultado " + resultado);
 		
@@ -84,7 +93,7 @@ public class UsuarioServicioTest {
 		datosUsuarioActualizar.addProperty("Usu_SucMod", "");
 		datosUsuarioActualizar.addProperty("Usu_FolNip", 0);
 		datosUsuarioActualizar.addProperty("Usu_Nombre", "");
-		datosUsuarioActualizar.addProperty("Tip_Actual", "C1");
+		datosUsuarioActualizar.addProperty("Tip_Actual", "A");
 		datosUsuarioActualizar.addProperty("NumTransac", "255927");
 		datosUsuarioActualizar.addProperty("Transaccio", "HKC");
 		datosUsuarioActualizar.addProperty("Usuario", "000100");
@@ -93,6 +102,15 @@ public class UsuarioServicioTest {
 		datosUsuarioActualizar.addProperty("SucDestino", "001");
 		datosUsuarioActualizar.addProperty("Modulo", "NB");
 		
+		/*
+		 *	Mockup Test
+		 * 	String json = "{\"usuario\":{\"Usu_CoAcNe\":\"Integer\"}}";
+		 * 	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+
+		/*
+		 * Test
+		 */
 		JsonObject resultado = usuarioServicio.usuarioActualizar(datosUsuarioActualizar);
 		logger.info("- resultado " + resultado);
 		

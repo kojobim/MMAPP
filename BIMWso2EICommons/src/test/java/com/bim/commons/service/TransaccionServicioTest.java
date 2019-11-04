@@ -31,7 +31,16 @@ public class TransaccionServicioTest {
 	@Test
 	public void folioTransaccionGenerarDeberiaSerExitoso() {
 		logger.info("TEST: Comenzando folioTransaccionGenerarDeberiaSerExitoso metodo");
-				
+	
+		/*
+		 *	Mockup Test
+		 * 	String json = "{\"transaccion\":{\"Fol_Transa\":\"String\"}}";
+		 * 	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+		
+		/*
+		 * Test
+		 */
 		JsonObject resultado = transaccionServicio.folioTransaccionGenerar();
 		logger.info("- resultado " + resultado);
 		

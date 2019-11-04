@@ -46,13 +46,22 @@ public class SaldoServicioTest {
 		datosSaldosClienteConsultar.addProperty("SucDestino", "001");
 		datosSaldosClienteConsultar.addProperty("Modulo", "NB");
 		
+		/*
+		 *	Mockup Test
+		 *	String json = "{\"cuenta\":{\"saldos\":[{\"Sal_Cuenta\":\"String\",\"Sal_CLABE\":\"String\",\"Sal_Dispon\":\"Double\",\"Mon_Descri\":\"String\",\"Tip_Descri\":\"String\",\"Sal_SBC2\":\"Double\",\"Sal_SBC1\":\"Double\",\"Sal_PI\":\"Double\",\"Sal_Bloque\":\"Double\",\"Sal_BloqLF\":\"Double\",\"Sal_Pagare\":\"Integer\",\"Sal_Mesa\":\"Integer\",\"Sal_Fondos\":\"Integer\",\"Sal_Cedes\":\"Integer\",\"Cor_Alias\":\"String\",\"Sal_Saldo\":\"Double\"}]}}";
+		 *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+		
+		/*
+		 *	Test
+		 */
 		JsonObject resultado = saldoServicio.saldosClienteConsultar(datosSaldosClienteConsultar);
 		logger.info("- resultado: "+ resultado);
 		
 		assertTrue("No viene la propiedad cuenta", resultado.has("cuenta"));
 		assertTrue("La propiedad cuenta no es un JsonObject", resultado.get("cuenta").isJsonObject());
 		
-		JsonObject cuenta = Utilerias.obtenerJsonObjectPropiedad(resultado, "saldos");
+		JsonObject cuenta = Utilerias.obtenerJsonObjectPropiedad(resultado, "cuenta");
 		
 		assertTrue("No viene la propiedad saldos", cuenta.has("saldos"));
 		assertTrue("La propiedad saldos no es un JsonArray", cuenta.get("saldos").isJsonArray());
@@ -65,12 +74,12 @@ public class SaldoServicioTest {
 			assertTrue("El elemento de saldos no es un JsonObject", saldos.get(0).isJsonObject());
 			
 			saldosElemento = saldos.get(0).getAsJsonObject();
+
+			assertTrue("La propiedad Sal_Cuenta no se encuentra en movimientos", saldosElemento.has("Sal_Cuenta"));
+			assertTrue("La propiedad Mon_Descri no se encuentra en movimientos", saldosElemento.has("Mon_Descri"));
 		}
 		
 		assertNotNull("El elemento saldosElemento es nulo", saldosElemento);
-
-		assertTrue("La propiedad Sal_Cuenta no se encuentra en movimientos", saldosElemento.has("Sal_Cuenta"));
-		assertTrue("La propiedad Mon_Descri no se encuentra en movimientos", saldosElemento.has("Mon_Descri"));
 		
 		logger.info("TEST: Finalizando saldosClienteConsultarTestDeberiaSerExitoso metodo...");
 	}

@@ -42,6 +42,15 @@ public class TokenServicioTest {
 		datosTokenVerificar.addProperty("SucDestino", "799");
 		datosTokenVerificar.addProperty("Modulo", "NB");
 		
+		/*
+		 *	Mockup Test
+		 *	String json = "{\"tokenVerificar\":{\"Tov_FecVen\":\"Date\"}}";
+		 *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+		
+		/*
+		 *	Test
+		 */
 		JsonObject resultado = tokenServicio.tokenVerificar(datosTokenVerificar);
 		logger.info("- resultado " + resultado);
 		

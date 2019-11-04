@@ -78,15 +78,17 @@ public class ConfiguracionServicio extends BaseService {
 	 * @return
 	 * <pre>
 	 * {
-	 *	horariosInversion: [{
-	 *		EsHorariID: Integer,
-	 *		Hor_Numero: Integer,
-	 *		Hor_TipMod: String,
-	 *		Hor_TipHor: String,
-	 *		Hor_HorIni: Date,
-	 *		Hor_HorFin: Date,
-	 *		Hor_DiaHab: String
-	 *	}]
+	 *	horariosInversion: [
+	 *		{
+	 *			EsHorariID: Integer,
+	 *			Hor_Numero: Integer,
+	 *			Hor_TipMod: String,
+	 *			Hor_TipHor: String,
+	 *			Hor_HorIni: Date,
+	 *			Hor_HorFin: Date,
+	 *			Hor_DiaHab: String
+	 *		}
+	 *	]
 	 * }
 	 * </pre>
 	 */

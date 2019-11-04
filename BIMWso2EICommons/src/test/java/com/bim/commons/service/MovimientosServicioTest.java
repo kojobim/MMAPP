@@ -51,13 +51,22 @@ public class MovimientosServicioTest {
 		datosMovimientosListado.addProperty("SucDestino", "001");
 		datosMovimientosListado.addProperty("Modulo", "NB");
 		
+		/* 
+		 *	Mockup Test
+		 * 	String json = "{\"cuenta\":{\"movimientos\":[{\"Mov_Cuenta\":\"String\",\"Mov_Numero\":\"String\",\"Mov_Consec\":\"String\",\"Mov_Natura\":\"String\",\"Fecha_Val\":\"String\",\"Mov_Descri\":\"String\",\"Mov_Refere\":\"String\",\"Mov_Cantid\":\"Double\",\"Usuario\":\"String\",\"Transaccio\":\"String\",\"Mov_Saldo\":\"Double\",\"Mov_Tipo\":\"String\",\"Mov_Clasif\":\"String\",\"Mov_DesCla\":\"String\"}]}}";
+		 * 	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+		
+		/*
+         * Test
+         */
 		JsonObject resultado = movimientosServicio.movimientosListado(datosMovimientosListado);
 		logger.info("- resultado: "+ resultado);
 		
 		assertTrue("No viene la propiedad cuenta", resultado.has("cuenta"));
 		assertTrue("La propiedad cuenta no es un JsonObject", resultado.get("cuenta").isJsonObject());
 		
-		JsonObject cuenta = Utilerias.obtenerJsonObjectPropiedad(resultado, "movimientos");
+		JsonObject cuenta = Utilerias.obtenerJsonObjectPropiedad(resultado, "cuenta");
 		
 		assertTrue("No viene la propiedad movimientos", cuenta.has("movimientos"));
 		assertTrue("La propiedad movimientos no es un JsonArray", cuenta.get("movimientos").isJsonArray());
@@ -70,12 +79,12 @@ public class MovimientosServicioTest {
 			assertTrue("El elemento de movimientos no es un JsonObject", movimientos.get(0).isJsonObject());
 			
 			movimientosElemento = movimientos.get(0).getAsJsonObject();
+			
+			assertTrue("La propiedad Mov_Cuenta no se encuentra en movimientos", movimientosElemento.has("Mov_Cuenta"));
+			assertTrue("La propiedad Mov_Descri no se encuentra en movimientos", movimientosElemento.has("Mov_Descri"));
 		}
 		
 		assertNotNull("El elemento movimientosElemento es nulo", movimientosElemento);
-
-		assertTrue("La propiedad Mov_Cuenta no se encuentra en movimientos", movimientosElemento.has("Mov_Cuenta"));
-		assertTrue("La propiedad Mov_Descri no se encuentra en movimientos", movimientosElemento.has("Mov_Descri"));
 		
 		logger.info("TEST: Finalizando movimientosListadoTestDeberiaSerExitoso metodo...");
 	}

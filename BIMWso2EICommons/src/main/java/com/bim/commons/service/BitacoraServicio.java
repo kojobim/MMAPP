@@ -65,8 +65,12 @@ public class BitacoraServicio extends BaseService {
 	 *	Modulo: String
 	 * }
 	 * </pre>
-	 * @return 
-	 * { }
+	 * @return
+	 * <pre>
+	 * { 
+	 * 	REQUEST_STATUS: String
+	 * }
+	 * </pre>
 	 */
 	public JsonObject creacionBitacora(JsonObject datosBitacora) {
 		logger.info("COMMONS: Comenzando creacionBitacora...");

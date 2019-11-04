@@ -46,18 +46,37 @@ public class ConfiguracionServicioTest {
 		datoshorariosConsultar.addProperty("SucDestino", "001");
 		datoshorariosConsultar.addProperty("Modulo", "NB");
 	
+		/*
+		 * Mockup Test
+		 * String json = "{\"horariosInversion\":[{\"EsHorariID\":\"Integer\",\"Hor_Numero\":\"Integer\",\"Hor_TipMod\":\"String\",\"Hor_TipHor\":\"String\",\"Hor_HorIni\":\"Date\",\"Hor_HorFin\":\"Date\",\"Hor_DiaHab\":\"String\"}]}";
+		 * JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+         */
+		
+		/*
+		 * Test
+		 */
 		JsonObject resultado = configuracionServicio.horariosConsultar(datoshorariosConsultar);
 		logger.info("- resultado " + resultado);
 		
 		assertTrue("No viene la propiedad horariosInversion", resultado.has("horariosInversion"));
-		assertTrue("La propiedad horariosInversion no es un JsonObject", resultado.get("horariosInversion").isJsonObject());
+		assertTrue("La propiedad horariosInversion no es un JsonArray o un JsonObject", resultado.get("horariosInversion").isJsonArray() || resultado.get("horariosInversion").isJsonObject());
 		
-		JsonObject horariosInversion = Utilerias.obtenerJsonObjectPropiedad(resultado, "horariosInversion");
+		JsonObject horariosInversionElemento = null;
+		if(resultado.get("horariosInversion").isJsonArray()) {
+			JsonArray horariosInversion = Utilerias.obtenerJsonArrayPropiedad(resultado, "horariosInversion");
+			
+			assertTrue("La propiedad horariosInversion no tiene elementos", horariosInversion.size() > 0);
+			assertTrue("El elemento de horariosInversion no es un JsonObject", horariosInversion.get(0).isJsonObject());
+			
+			horariosInversionElemento = horariosInversion.get(0).getAsJsonObject();
+			
+			assertTrue("La propiedad EsHorariID no se encuentra en horariosInversion", horariosInversionElemento.has("EsHorariID"));
+			assertTrue("La propiedad Hor_Numero no se encuentra en horariosInversion", horariosInversionElemento.has("Hor_Numero"));
+		}
+		else
+			horariosInversionElemento = resultado.get("horariosInversion").getAsJsonObject();
 		
-		assertNotNull("horariosInversion es nulo", horariosInversion);
-		
-		assertTrue("La propiedad EsHorariID no se encuentra en horariosInversion", horariosInversion.has("EsHorariID"));
-		assertTrue("La propiedad Hor_Numero no se encuentra en horariosInversion", horariosInversion.has("Hor_Numero"));
+		assertNotNull("El elemento horariosInversion es nulo", horariosInversionElemento);
 
 		logger.info("TEST: Terminando horariosConsultarTestDeberiaSerExitoso metodo");
 	}
@@ -76,6 +95,15 @@ public class ConfiguracionServicioTest {
 		datosConfiguracionDetalle.addProperty("SucDestino", "001");
 		datosConfiguracionDetalle.addProperty("Modulo", "NB");
 
+		/*
+         *	Mockup Test
+         *	String json = "{\"configuracionesBanco\":{\"configuracionBanco\":[{\"Par_FecAct\":\"Date\",\"Par_FeOpEs\":\"Date\",\"Par_Acceso\":\"String\",\"Par_HoInSP\":\"Date\",\"Par_FeDiNa\":\"Date\",\"Par_HoCaPI\":\"Date\",\"Par_MiCuDe\":\"Integer\",\"Par_RECAMo\":\"String\",\"Par_RECAFi\":\"String\",\"Par_RECAFA\":\"String\"}]}}";
+         *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+         */
+		
+		/*
+         *	Test
+         */
 		JsonObject resultado = configuracionServicio.configuracionBancoConsultarDetalle(datosConfiguracionDetalle);
 		logger.info("- resultado " + resultado);
 		
@@ -95,14 +123,15 @@ public class ConfiguracionServicioTest {
 			assertTrue("El elemento de configuracionBanco no es un JsonObject", configuracionBanco.get(0).isJsonObject());
 			
 			configuracionBancoElemento = configuracionBanco.get(0).getAsJsonObject();
+			
+			assertTrue("La propiedad Par_FecAct no se encuentra en configuracionBanco", configuracionBancoElemento.has("Par_FecAct"));
+			assertTrue("La propiedad Par_Acceso no se encuentra en configuracionBanco", configuracionBancoElemento.has("Par_Acceso"));
 		}
 		else
 			configuracionBancoElemento = configuracionesBanco.get("configuracionBanco").getAsJsonObject();
 		
 		assertNotNull("El elemento configuracionBancoElemento es nulo", configuracionBancoElemento);
 		
-		assertTrue("La propiedad Par_FecAct no se encuentra en configuracionBanco", configuracionBancoElemento.has("Par_FecAct"));
-		assertTrue("La propiedad Par_Acceso no se encuentra en configuracionBanco", configuracionBancoElemento.has("Par_Acceso"));
 		
 		logger.info("TEST: Finalizando configuracionBancoConsultarDetalleTestDeberiaSerExitoso metodo");
 	}
