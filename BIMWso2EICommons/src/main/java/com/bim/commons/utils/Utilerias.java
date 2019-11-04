@@ -1,6 +1,9 @@
 package com.bim.commons.utils;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -9,10 +12,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
+import org.stringtemplate.v4.ST;
 import com.bim.commons.dto.BimMessageDTO;
+import com.bim.commons.dto.BimEmailTemplateDTO;
 import com.bim.commons.dto.RequestDTO;
 import com.bim.commons.exceptions.UnauthorizedException;
 import com.google.gson.Gson;
@@ -209,6 +215,53 @@ public class Utilerias {
 		String resultado = HttpClientUtils.postPerform(solicitudOperacion);
 		JsonObject resultadoObjeto = resultado != null ? new Gson().fromJson(resultado, JsonObject.class) : null;
 		return resultadoObjeto;
+	}
+	
+	public static String obtenerPropiedadPlantilla(String property) {
+		Properties templateProps = null;
+		
+		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/template.properties")) {
+			templateProps = new Properties();
+			
+			if(inputStream != null) {
+				templateProps.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+			}			
+		}
+		catch(IOException ioException) {
+			ioException.printStackTrace();
+		}
+
+    	return templateProps.getProperty(property);
+	}
+	
+	public static String obtenerPlantilla(String archivo) {
+		StringBuilder contentBuilder = new StringBuilder();
+		String templateBaseLocation = "/BIMWso2EICommons/src/main/resource/com/bim/commons/templates/";
+		try {
+		    BufferedReader in = new BufferedReader(
+		    		new InputStreamReader(new FileInputStream(System.getenv("BIM_HOME") + templateBaseLocation + archivo + ".html"),
+		    				StandardCharsets.ISO_8859_1));
+		    
+		    String str;
+		    while ((str = in.readLine()) != null) {
+		        contentBuilder.append(str);
+		    }
+		    in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+    	return contentBuilder.toString();
+	}
+
+	public static String obtenerMensajePlantilla(BimEmailTemplateDTO emailTemplateDTO) {		
+		ST template = new ST(emailTemplateDTO.getTemplate(), '{', '}');
+		
+		if(emailTemplateDTO.getMergeVariables() != null) 
+			for(Entry<String, String> entry : emailTemplateDTO.getMergeVariables().entrySet())
+				template.add(entry.getKey(), entry.getValue());
+			
+		return template.render().toString();
 	}
 
 	public static String getStringProperty(JsonObject datos, String propertyName) {
