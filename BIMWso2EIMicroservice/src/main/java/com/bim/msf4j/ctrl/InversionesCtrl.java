@@ -909,6 +909,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
 		String usuClient = principalResultadoObjecto.get("usuClient").getAsString();		
 		// String usuFolTok = principalResultadoObjecto.get("usuFolTok").getAsString();
+		/**
+		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
+		 */
 		String usuFolTok = "416218850";
 		
 		String bitPriRef = solicitud.getHeader("User-Agent");
