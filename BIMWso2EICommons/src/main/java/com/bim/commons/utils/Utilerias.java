@@ -154,12 +154,12 @@ public class Utilerias {
 		 * 	Par_ISR = Cli_TasISR Se obtiene al consultar el SP CLCLIENTCON.
 		 * 	Cli_CobISR = Se obtiene de consultar al SP CLCLIENTCON.
 		 */
-		int invPlazo = datos.get("Inv_Plazo").getAsInt();
-		double invCantid = datos.get("Inv_Cantid").getAsDouble();
-		double invTBruta = datos.get("TasInv").getAsDouble();
-		int parDiBaIn = datos.get("Par_DiBaIn").getAsInt();
-		double parISR = datos.get("Par_ISR").getAsDouble();
-		String cliCobISR = datos.get("Cli_CobISR").getAsString();
+		int invPlazo = Utilerias.getIntProperty(datos, "Inv_Plazo");
+		double invCantid = Utilerias.getDoubleProperty(datos, "Inv_Cantid");
+		double invTBruta = Utilerias.getDoubleProperty(datos, "TasInv");
+		int parDiBaIn = Utilerias.getIntProperty(datos, "Par_DiBaIn"); 
+		double parISR = Utilerias.getDoubleProperty(datos, "Par_ISR");
+		String cliCobISR = Utilerias.getStringProperty(datos, "Cli_CobISR")
 
 		double invCanBru = invCantid * invTBruta * invPlazo / (parDiBaIn * 100);
 
