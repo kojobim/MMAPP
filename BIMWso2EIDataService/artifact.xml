@@ -47,4 +47,7 @@
     <artifact name="CuentaDestinoServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/CuentaDestinoServicio.dbs</file>
     </artifact>
+    <artifact name="AvisoPrivacidadServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/AvisoPrivacidadServicio.dbs</file>
+    </artifact>
 </artifacts>
