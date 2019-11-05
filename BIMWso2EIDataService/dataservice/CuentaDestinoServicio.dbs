@@ -1,0 +1,55 @@
+<data name="CuentaDestinoServicio" serviceGroup="CuentaDestinoServicio" serviceNamespace="CuentaDestinoServicio">
+    <description>Servicio usado para exponer las funcionalidades de cuentas destino</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="cuentaDestinoBIMActualizarSQL" useConfig="BIMDB">
+        <sql>
+			EXECUTE NBCUDEBRACT
+			@Cdb_Consec = :cdbConsec,
+			@Cdb_UsuAdm = :cdbUsuAdm,
+			@Cdb_Cuenta = :cdbCuenta,
+			@Cdb_Random = :cdbRandom,
+			@Tip_Actual = :tipActual,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="cdbConsec" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbUsuAdm" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbCuenta" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbRandom" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipActual" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/cuentaDestinoBIMActualizarNE" element="cuentaDestino">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation returnRequestStatus="true" name="cuentaDestinoBIMActualizarOp">
+        <call-query href="cuentaDestinoBIMActualizarSQL">
+            <with-param name="cdbConsec" query-param="Cdb_Consec"/>
+            <with-param name="cdbUsuAdm" query-param="Cdb_UsuAdm"/>
+            <with-param name="cdbCuenta" query-param="Cdb_Cuenta"/>
+            <with-param name="cdbRandom" query-param="Cdb_Random"/>
+            <with-param name="tipActual" query-param="Tip_Actual"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>
