@@ -63,3 +63,8 @@ BIMWso2EICommons/bin/pom.xml
 BIMWso2EICommons/bin/src/main/java/com/bim/commons/utils/Filtrado.class
 BIMWso2EIRegistry/.settings/
 BIMWso2EIRegistry/bin/
+.settings/org.eclipse.m2e.core.prefs 
+BIMWso2EI/.settings/org.eclipse.m2e.core.prefs 
+BIMWso2EIConnectorExporter/.settings/org.eclipse.m2e.core.prefs 
+BIMWso2EIDataService/.settings/org.eclipse.m2e.core.prefs
+BIMWso2EIRegistry/.settings/org.eclipse.m2e.core.prefs
