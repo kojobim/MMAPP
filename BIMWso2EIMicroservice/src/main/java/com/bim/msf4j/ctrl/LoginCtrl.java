@@ -389,13 +389,13 @@ public class LoginCtrl extends BimBaseCtrl {
 		String usuFolTok = Utilerias.getStringProperty(usuario, "Usu_FolTok");
 		
 		JsonObject usuarioResultado = new JsonObject();
-		usuarioResultado.addProperty("usuClave ", usuClave);
-		usuarioResultado.addProperty("usuNumero ", usuNumero);
-		usuarioResultado.addProperty("usuClient ", usuClient);
-		usuarioResultado.addProperty("usuNombre ", usuNombre);
-		usuarioResultado.addProperty("usuEmail ", usuEmail);
-		usuarioResultado.addProperty("usuUsuAdm ", usuUsuAdm);
-		usuarioResultado.addProperty("usuFolTok ", usuFolTok);
+		usuarioResultado.addProperty("usuClave", usuClave);
+		usuarioResultado.addProperty("usuNumero", usuNumero);
+		usuarioResultado.addProperty("usuClient", usuClient);
+		usuarioResultado.addProperty("usuNombre", usuNombre);
+		usuarioResultado.addProperty("usuEmail", usuEmail);
+		usuarioResultado.addProperty("usuUsuAdm", usuUsuAdm);
+		usuarioResultado.addProperty("usuFolTok", usuFolTok);
 		logger.info("CTRL: Terminando login metodo");
 		return Response.ok(usuarioResultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
