@@ -1,0 +1,49 @@
+<data name="CuentaDestinoServicio" serviceGroup="CuentaDestinoServicio" serviceNamespace="CuentaDestinoServicio">
+    <description>Servicio usado para exponer las funcionalidades de cuentas destino</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="catalogoInstitucionesConsultarSQL" useConfig="BIMDB">
+        <sql>
+			EXECUTE SPINSTITCON
+			@Ins_Clave = :ins_Clave,
+			@Ins_Descri = :ins_Descri,
+			@Tip_Consul = :tip_Consul,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="ins_Clave" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="ins_Descri" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tip_Consul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/catalogoInstitucionesConsultarNE" element="instituciones" rowName="institucion">
+            <element column="Ins_Clave" name="Ins_Clave" xsdType="xs:string" optional="true"/>
+            <element column="Ins_Descri" name="Ins_Descri" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation returnRequestStatus="true" name="catalogoInstitucionesConsultarOp">
+        <call-query href="catalogoInstitucionesConsultarSQL">
+            <with-param name="ins_Clave" query-param="Ins_Clave"/>
+            <with-param name="ins_Descri" query-param="Ins_Descri"/>
+            <with-param name="tip_Consul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>
