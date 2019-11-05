@@ -159,7 +159,7 @@ public class Utilerias {
 		double invTBruta = Utilerias.getDoubleProperty(datos, "TasInv");
 		int parDiBaIn = Utilerias.getIntProperty(datos, "Par_DiBaIn"); 
 		double parISR = Utilerias.getDoubleProperty(datos, "Par_ISR");
-		String cliCobISR = Utilerias.getStringProperty(datos, "Cli_CobISR")
+		String cliCobISR = Utilerias.getStringProperty(datos, "Cli_CobISR");
 
 		double invCanBru = invCantid * invTBruta * invPlazo / (parDiBaIn * 100);
 
