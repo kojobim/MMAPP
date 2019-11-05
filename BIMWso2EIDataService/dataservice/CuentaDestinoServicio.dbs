@@ -1,5 +1,5 @@
 <data name="CuentaDestinoServicio" serviceGroup="CuentaDestinoServicio" serviceNamespace="CuentaDestinoServicio">
-    <description>Servicio usado para exponer las funcionalidades de consultas especiales</description>
+    <description>Servicio usado para exponer las funcionalidades de cuentas destino</description>
     <config id="BIMDB">
         <property name="carbon_datasource_name">bim_db</property>
     </config>
