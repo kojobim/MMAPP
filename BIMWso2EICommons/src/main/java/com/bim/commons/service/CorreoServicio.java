@@ -12,13 +12,13 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class MailService {
+public class CorreoServicio {
 	
-	private static final Logger logger = Logger.getLogger(MailService.class);
+	private static final Logger logger = Logger.getLogger(CorreoServicio.class);
 
 	private static Properties properties;
 	
-	public MailService() {
+	public CorreoServicio() {
 		super();
 		
 		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/mail.properties")) {
@@ -33,25 +33,27 @@ public class MailService {
 		}
 	}
 	
-	public void enviarCorreo(String destinario, String asunto, String mensaje) throws Exception {
+	public void enviarCorreo(String destinario, String asunto, String cuerpo) throws Exception {
 		logger.info("SERVICE: Comenzando enviarCorreo metodo...");
     	
 		Session session = Session.getDefaultInstance(properties);
-		String MailFrom = properties.getProperty("mail.data.from");
-		String MailHost = properties.getProperty("mail.smtp.host");
+		String Remitente = properties.getProperty("mail.data.from");
+		String Host = properties.getProperty("mail.smtp.host");
+		String Charset = properties.getProperty("mail.message.charset");
+		String ContentType = properties.getProperty("mail.message.content_type");
 		
-		MimeMessage msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress(MailFrom));
-        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(destinario));
-        msg.setSubject(asunto, "UTF-8");
-        msg.setContent(mensaje,"text/html");
+		MimeMessage mensaje = new MimeMessage(session);
+        mensaje.setFrom(new InternetAddress(Remitente));
+        mensaje.setRecipient(Message.RecipientType.TO, new InternetAddress(destinario));
+        mensaje.setSubject(asunto, Charset);
+        mensaje.setContent(cuerpo, ContentType);
         
         Transport transport = session.getTransport();        
 	     try
 	     {
 	         logger.info("Enviando mensaje...");
-	         transport.connect(MailHost, "", "");
-	         transport.sendMessage(msg, msg.getAllRecipients());
+	         transport.connect(Host, "", "");
+	         transport.sendMessage(mensaje, mensaje.getAllRecipients());
 	         logger.info("Correo enviado!");
 	     }
 	     catch (Exception ex) {
