@@ -129,6 +129,66 @@ public class Utilerias {
 		logger.info("COMMONS: Finalizando convertirFecha...");
 		return fechaConv;
 	}
+
+	/**
+	 * Método que calcula tasa
+	 * @param datos
+	 * <pre>
+	 * {
+	 * 	Inv_Plazo: int,
+	 * 	Inv_Cantid: double,
+	 * 	TasInv: double,
+	 * 	Par_DiBaIn: int,
+	 * 	Par_ISR: double,
+	 * 	Cli_CobISR: String
+	 * }
+	 * </pre>
+	 * @return
+	 * { }
+	 */	
+	public static JsonObject calculaTasa(JsonObject datos) {
+		/**
+		 * PARÁMETROS OBTENIDOS DE SP Y VARIABLE CORRESPONDIENTE
+		 * 	TasInv = Se obtiene al consultar el SP CLTAGRCACON.
+		 * 	Par_DiBaIn = Se obtiene al consultar el SP SOPARAMSCON.
+		 * 	Par_ISR = Cli_TasISR Se obtiene al consultar el SP CLCLIENTCON.
+		 * 	Cli_CobISR = Se obtiene de consultar al SP CLCLIENTCON.
+		 */
+		int invPlazo = Utilerias.getIntProperty(datos, "Inv_Plazo");
+		double invCantid = Utilerias.getDoubleProperty(datos, "Inv_Cantid");
+		double invTBruta = Utilerias.getDoubleProperty(datos, "TasInv");
+		int parDiBaIn = Utilerias.getIntProperty(datos, "Par_DiBaIn"); 
+		double parISR = Utilerias.getDoubleProperty(datos, "Par_ISR");
+		String cliCobISR = Utilerias.getStringProperty(datos, "Cli_CobISR")
+
+		double invCanBru = invCantid * invTBruta * invPlazo / (parDiBaIn * 100);
+
+		double tasISR = 0;
+		double tasNet = 0;
+		double canNet = 0;
+
+		if("S".equals(cliCobISR))
+			tasISR = parISR / 10;
+
+		tasNet = invTBruta - tasISR;
+		canNet = invCantid * tasNet * invPlazo / (parDiBaIn * 100);
+
+		double invCanISR = invCantid * tasISR * invPlazo / (parDiBaIn * 100);
+		double invCanTot = invCantid + canNet;
+
+		JsonObject resultado = new JsonObject();
+		resultado.addProperty("Inv_Capita", invCantid);
+		resultado.addProperty("Inv_CanBru", invCanBru);
+		resultado.addProperty("Inv_ISR", redondear(tasISR, 2));
+		resultado.addProperty("Inv_CanISR", invCanISR);
+		resultado.addProperty("Inv_Tasa", redondear(tasNet, 2));
+		resultado.addProperty("Inv_CanNet", canNet);
+		resultado.addProperty("Inv_CanTot", invCanTot);
+
+		return resultado;
+	}
+	//Cierre del método
+
 	
 	public static Boolean isNumber(String value) {
 		logger.info("COMMONS: Iniciando isNumber metodo...");
@@ -136,6 +196,100 @@ public class Utilerias {
 		logger.info("COMMONS: Finalizando isNumber metodo...");
 		return value.matches(regex);
 	}
+
+	/**
+	 * Método que genera una clave numérica a partir de una cadena de texto
+	 * @param sVarEncode String
+	 * @return
+	 * String
+	 */
+	public static String generarDigitoVerificador(String sVarEncode) {
+		int matrizd1[][] = new int[2][2];
+		int matrizd2[][] = new int[2][2];
+		int matrizenc1[][] = new int[2][2];
+		int matrizenc2[][] = new int[2][2];
+		String sVarEncodeTmp = sVarEncode;
+
+		if(sVarEncodeTmp.length() < 8) {
+			for(int i = sVarEncodeTmp.length(); i < 8; i++) {
+				sVarEncodeTmp += " ";
+			}
+		} else if(sVarEncodeTmp.length() > 8) {
+			sVarEncodeTmp = "";
+			for(int i = 0; i < 8; i++) {
+				sVarEncodeTmp += sVarEncode.charAt(i);
+			}
+		}
+
+		// Carga de la primera matriz de datos
+		for(int i = 0; i < 2; i++) {
+			for(int j = 0; j < 2; j++) {
+				if(i == 0)
+					matrizd1[j][0] = (int) sVarEncodeTmp.charAt(j);
+				else
+					matrizd1[j][1] = (int) sVarEncodeTmp.charAt(j + 2);
+			}
+		}
+
+		// Carga de la segunda matriz de datos
+		for(int i = 4; i < 6; i++) {
+			for(int j = 4; j < 6; j++) {
+				if(i == 4)
+					matrizd2[j-4][0] = (int) sVarEncodeTmp.charAt(j);
+				else
+					matrizd2[j-4][1] = (int) sVarEncodeTmp.charAt(j + 2);
+			}
+		}
+
+		// Multiplica las matrices por la matriz codificadora
+		for(int i = 0; i < 2; i++) {
+			for(int j = 0; j < 2; j++) {
+				int suma1 = 0;
+				int suma2 = 0;
+
+				for(int x = 0; x < 2; x++) {
+					suma1 += matrizd1[x][i] * matrizd2[j][x];
+					suma2 += matrizd2[x][i] * matrizd2[j][x];
+				}
+
+				matrizenc1[j][i] = suma1;
+				matrizenc2[j][i] = suma2;
+			}
+		}
+
+		String claveEnc = "";
+		String claveEnc1 = "";
+
+		for(int i = 0; i < 2; i++) {
+			for(int j = 0; j < 2; j++) {
+				if(String.valueOf(matrizenc1[j][i]).length() < 3) {
+					if(String.valueOf(matrizenc1[j][i]).length() > 1) {
+						claveEnc += "0";
+					} else {
+						claveEnc += "00";
+					}
+				}
+				claveEnc += String.valueOf(matrizenc1[j][i]);
+			}
+		}
+
+		for(int i = 0; i < 2; i++) {
+			for(int j = 0; j < 2; j++) {
+				if(String.valueOf(matrizenc2[j][i]).length() < 3) {
+					if(String.valueOf(matrizenc2[j][i]).length() > 1) {
+						claveEnc1 += "0";
+					} else {
+						claveEnc1 += "00";
+					}
+				}
+				claveEnc1 += String.valueOf(matrizenc2[j][i]);
+			}
+		}
+
+		claveEnc += claveEnc1;
+		return claveEnc;
+	}
+	//Cierre del método
 	
 	public static String concat(String ...args) {
 		logger.info("COMMONS: Iniciando concat metodo...");
