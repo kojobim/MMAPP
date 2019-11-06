@@ -3,7 +3,7 @@
     <config id="BIMDB">
         <property name="carbon_datasource_name">bim_db</property>
     </config>
-    <query id="consultasEspecialesConsultarSQL" useConfig="BIMDB">
+    <query id="cuentasEspecialesConsultarSQL" useConfig="BIMDB">
         <sql>
 			EXECUTE NBCONESPCON
 			@Ces_Client = :cesClient,
@@ -33,7 +33,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/consultasEspecialesConsultarNE" element="consultasEspeciales">
+        <result defaultNamespace="http://bem.com/cuentasEspecialesConsultarNE" element="cuentasEspeciales">
             <element column="Cue_Numero" name="Cue_Numero" xsdType="xs:string" optional="true"/>
             <element column="Cue_Moneda" name="Cue_Moneda" xsdType="xs:string" optional="true"/>
             <element column="Cue_Status" name="Cue_Status" xsdType="xs:string" optional="true"/>
@@ -45,8 +45,8 @@
             <element column="Cue_MonDep" name="Cue_MonDep" xsdType="xs:decimal" optional="true"/>
         </result>
     </query>
-    <operation name="consultasEspecialesConsultarOp">
-        <call-query href="consultasEspecialesConsultarSQL">
+    <operation name="cuentasEspecialesConsultarOp">
+        <call-query href="cuentasEspecialesConsultarSQL">
             <with-param name="cesClient" query-param="Ces_Client"/>
             <with-param name="cesCuenta" query-param="Ces_Cuenta"/>
             <with-param name="cesTarjet" query-param="Ces_Tarjet"/>
