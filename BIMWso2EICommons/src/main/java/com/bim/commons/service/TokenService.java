@@ -56,11 +56,13 @@ public class TokenService extends BaseService {
 		datosToken.addProperty("Modulo", IntentosActualizacionOpModulo);
 
 		JsonObject intentosActualizacionOpResultadoObjecto = Utilerias.performOperacion(TokenServicio, IntentosActualizacionOp, datosToken);
+		logger.info("intentosActualizacionOpResultadoObjecto: " + intentosActualizacionOpResultadoObjecto);
 		JsonObject intentosActualizacion = Utilerias.getJsonObjectProperty(intentosActualizacionOpResultadoObjecto, "intentosActualizacion");
 		
-		if(intentosActualizacion.has("Usu_Status"))
+		if(intentosActualizacion != null && intentosActualizacion.has("Usu_Status"))
 			usuStatus = intentosActualizacion.get("Usu_Status").getAsString();
 
+		logger.info("COMMONS: Terminando validarTokenTransaccion metodo...");
 		return usuStatus;
 	}//Cierre del método
 
