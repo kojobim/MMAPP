@@ -87,7 +87,7 @@
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
         </result>
     </query>
-    <query id="cuentaDestinoTransferenciasSPEIConsultarSQL" useConfig="BIMDB">
+    <query id="cuentaDestinoSPEIConsultarSQL" useConfig="BIMDB">
         <sql>
 			EXECUTE NBCUDESPCON
 			@Cds_Client = :cds_Client,
@@ -117,7 +117,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/cuentaDestinoTransferenciasNE" element="cuentasDestino" rowName="cuentaDestino">
+        <result defaultNamespace="http://bem.com/cuentaDestinoSPEIConsultarNE" element="cuentasDestino" rowName="cuentaDestino">
             <element column="Cds_UsuAdm" name="Cds_UsuAdm" xsdType="xs:string" optional="true"/>
             <element column="Cds_Consec" name="Cds_Consec" xsdType="xs:string" optional="true"/>
             <element column="Cds_CLABE" name="Cds_CLABE" xsdType="xs:string" optional="true"/>
@@ -171,8 +171,8 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <operation returnRequestStatus="true" name="cuentaDestinoTransferenciasSPEIConsultarOp">
-        <call-query href="cuentaDestinoTransferenciasSPEIConsultarSQL">
+    <operation returnRequestStatus="true" name="cuentaDestinoSPEIConsultarOp">
+        <call-query href="cuentaDestinoSPEIConsultarSQL">
             <with-param name="cds_Client" query-param="Cds_Client"/>
             <with-param name="cds_UsuAdm" query-param="Cds_UsuAdm"/>
             <with-param name="cds_Usuari" query-param="Cds_Usuari"/>
