@@ -165,7 +165,7 @@ public class Utilerias {
 		double invTBruta = Utilerias.getDoubleProperty(datos, "TasInv");
 		int parDiBaIn = Utilerias.getIntProperty(datos, "Par_DiBaIn"); 
 		double parISR = Utilerias.getDoubleProperty(datos, "Par_ISR");
-		String cliCobISR = Utilerias.getStringProperty(datos, "Cli_CobISR")
+		String cliCobISR = Utilerias.getStringProperty(datos, "Cli_CobISR");
 
 		double invCanBru = invCantid * invTBruta * invPlazo / (parDiBaIn * 100);
 
@@ -390,7 +390,7 @@ public class Utilerias {
 	
 	public static String obtenerPlantilla(String archivo) {
 		StringBuilder contentBuilder = new StringBuilder();
-		String templateBaseLocation = "/BIMWso2EICommons/src/main/resource/com/bim/commons/templates/";
+		String templateBaseLocation = obtenerPropiedadPlantilla("template.base_location");
 		try {
 		    BufferedReader in = new BufferedReader(
 		    		new InputStreamReader(new FileInputStream(System.getenv("BIM_HOME") + templateBaseLocation + archivo + ".html"),
