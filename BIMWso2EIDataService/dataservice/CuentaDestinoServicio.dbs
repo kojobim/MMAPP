@@ -94,7 +94,7 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <operation name="cuentaDestinoProcesarOp">
+    <operation returnRequestStatus="true" name="cuentaDestinoProcesarOp">
         <call-query href="cuentaDestinoProcesarSQL">
             <with-param name="cudUSuAdm" query-param="Cud_UsuAdm"/>
             <with-param name="cudCLABE" query-param="Cud_CLABE"/>
