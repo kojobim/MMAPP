@@ -50,7 +50,7 @@
             <element column="Pat_Consec" name="Pat_Consec" xsdType="xs:integer" optional="true"/>
         </result>
     </query>
-    <query id="cuentaDestinoBIMCrearSQL" useConfig="BIMDB">
+    <query id="cuentaDestinoBIMCreacionSQL" useConfig="BIMDB">
         <sql>
         	EXEC NBCUDEBRALT
             @Cdb_UsuAdm = :cdbUsuAdm,
@@ -82,7 +82,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/cuentaDestinoBIMCrearNE" element="cuentaDestinoBIM">
+        <result defaultNamespace="http://bem.com/cuentaDestinoBIMCreacionNE" element="cuentaDestinoBIM">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
         </result>
@@ -104,8 +104,8 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <operation name="cuentaDestinoBIMCrearOp">
-        <call-query href="cuentaDestinoBIMCrearSQL">
+    <operation name="cuentaDestinoBIMCreacionOp">
+        <call-query href="cuentaDestinoBIMCreacionSQL">
             <with-param name="cdbUsuAdm" query-param="Cdb_UsuAdm"/>
             <with-param name="cdbCuenta" query-param="Cdb_Cuenta"/>
             <with-param name="cdbCliUsu" query-param="Cdb_CliUsu"/>
