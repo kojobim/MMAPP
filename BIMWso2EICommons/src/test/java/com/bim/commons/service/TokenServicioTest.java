@@ -59,9 +59,10 @@ public class TokenServicioTest {
 		
 		JsonObject tokenVerificar = Utilerias.obtenerJsonObjectPropiedad(resultado, "tokenVerificar");
 		
-		assertNotNull("tokenVerificar es nulo", tokenVerificar);
-		
-		assertTrue("La propiedad Tov_FecVen no se encuentra en tokenVerificar", tokenVerificar.has("Tov_FecVen"));
+		if(!resultado.get("tokenVerificar").isJsonNull()) {
+			assertNotNull("tokenVerificar es nulo", tokenVerificar);
+		}else
+			assertTrue("La propiedad Tov_FecVen no se encuentra en tokenVerificar", tokenVerificar.has("Tov_FecVen"));
 
 		logger.info("TEST: Finalizando tokenVerificarDeberiaSerExitoso metodo");
 	}

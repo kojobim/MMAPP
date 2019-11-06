@@ -119,9 +119,11 @@ public class UsuarioServicioTest {
 		
 		JsonObject usuario = Utilerias.obtenerJsonObjectPropiedad(resultado, "usuario");
 		
-		assertNotNull("usuario es nulo", usuario);
-		
-		assertTrue("La propiedad Usu_CoAcNe no se encuentra en usuario", usuario.has("Usu_CoAcNe"));
+		if(!resultado.get("usuario").isJsonNull()) {
+			logger.info("pasa al if " + !resultado.get("usuario").isJsonNull());
+			assertNotNull("usuario es nulo", usuario);
+		}else
+			assertTrue("La propiedad Usu_CoAcNe no se encuentra en usuario", usuario.has("Usu_CoAcNe"));
 
 		logger.info("TEST: Finalizando usuarioActualizarDeberiaSerExitoso metodo");
 	}

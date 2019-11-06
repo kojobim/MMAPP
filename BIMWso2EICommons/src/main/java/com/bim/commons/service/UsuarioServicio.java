@@ -211,7 +211,7 @@ public class UsuarioServicio extends BaseService {
 		if(!datosUsuarioActualizar.has("Usu_Passwo"))
 			datosUsuarioActualizar.addProperty("Usu_Passwo", "");
 		if(!datosUsuarioActualizar.has("Usu_Status"))
-			datosUsuarioActualizar.addProperty("Usu_Status", "");
+			datosUsuarioActualizar.addProperty("Usu_Status", ""); 
 		if(!datosUsuarioActualizar.has("Usu_Email"))
 			datosUsuarioActualizar.addProperty("Usu_Email", "");
 		if(!datosUsuarioActualizar.has("Usu_UsuAdm"))
@@ -222,7 +222,7 @@ public class UsuarioServicio extends BaseService {
 			datosUsuarioActualizar.addProperty("Usu_Client", "");
 		if(!datosUsuarioActualizar.has("Usu_SucMod"))
 			datosUsuarioActualizar.addProperty("Usu_SucMod", "");
-		datosUsuarioActualizar.addProperty("Usu_FolNip", "0");
+		datosUsuarioActualizar.addProperty("Usu_FolNip", 0);
 		if(!datosUsuarioActualizar.has("Usu_Nombre"))
 			datosUsuarioActualizar.addProperty("Usu_Nombre", "");
 		datosUsuarioActualizar.addProperty("Usuario", UsuarioActualizacionOpUsuario);

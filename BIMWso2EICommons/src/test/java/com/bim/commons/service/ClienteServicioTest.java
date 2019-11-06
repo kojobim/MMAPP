@@ -28,8 +28,8 @@ public class ClienteServicioTest {
 	}
 	
 	@Test
-	public void clienteConsultarTestDeberiaConsular() {
-		logger.info("TEST: Empezando clienteConsultarTestDeberiaConsular metodo");
+	public void clienteConsultarTestDeberiaSerExitoso() {
+		logger.info("TEST: Empezando clienteConsultarTestDeberiaSerExitoso metodo");
 		String fechaSis = Utilerias.obtenerFechaSis();
 		JsonObject datosClienteConsultar = new JsonObject();
 		datosClienteConsultar.addProperty("Cli_Numero", "00193500");
@@ -53,13 +53,13 @@ public class ClienteServicioTest {
 		JsonObject resultado = clienteServicio.clienteConsultar(datosClienteConsultar);
 		logger.info("- resultado " + resultado );
 
-		assertTrue(resultado.has("cliente"));
+		assertTrue("No viene la propiedad cliente" ,resultado.has("cliente"));
 		
 		JsonObject cliente  = Utilerias.obtenerJsonObjectPropiedad(resultado, "cliente");
 		
 		assertTrue(cliente != null);
 		
 		assertTrue(cliente.has("Cli_Numero"));
-		logger.info("TEST: Terminando clienteConsultarTestDeberiaConsular metodo");
+		logger.info("TEST: Terminando clienteConsultarTestDeberiaSerExitoso metodo");
 	}
 }
