@@ -136,6 +136,31 @@
             <element column="Cds_FeAlFo" name="Cds_FeAlFo" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="cuentaDestinoSPEIActualizacionSQL" useConfig="BIMDB">
+        <sql>
+			EXECUTE NBCUDESPPRO
+			@Cds_UsuAdm = :cds_UsuAdm,
+            @NumTransac = :numTransac,
+            @Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="cds_UsuAdm" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/cuentaDestinoSPEIActualizacionNE" element="cuentaDestino">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
     <query id="catalogoInstitucionesConsultarSQL" useConfig="BIMDB">
         <sql>
 			EXECUTE SPINSTITCON
@@ -145,7 +170,7 @@
             @NumTransac = :numTransac,
 			@Transaccio = :transaccio,
             @Usuario = :usuario,
-			@FechaSis = :fechaSis,
+            @FechaSis = :fechaSis,
 			@SucOrigen = :sucOrigen,
 			@SucDestino = :sucDestino,
 			@Modulo = :modulo
@@ -208,6 +233,18 @@
             <with-param name="cds_Consec" query-param="Cds_Consec"/>
             <with-param name="cds_CLABE" query-param="Cds_CLABE"/>
             <with-param name="tip_Consul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="cuentaDestinoSPEIActualizacionOp">
+        <call-query href="cuentaDestinoSPEIActualizacionSQL">
+            <with-param name="cds_UsuAdm" query-param="Cds_UsuAdm"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
