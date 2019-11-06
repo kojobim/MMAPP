@@ -31,6 +31,37 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesPagareNumeroUsuarioObtenerOpSucOrigen;
 	private static String InversionesPagareNumeroUsuarioObtenerOpSucDestino;
 	private static String InversionesPagareNumeroUsuarioObtenerOpModulo;
+	private static String InversionesImportesDeInversionFinalizadaActualizarOp;
+	private static String InversionesImportesDeInversionFinalizadaActualizarOpInvrAutor;		
+	private static String InversionesImportesDeInversionFinalizadaActualizarOpTransaccio;
+	private static String InversionesImportesDeInversionFinalizadaActualizarOpUsuari;
+	private static String InversionesImportesDeInversionFinalizadaActualizarOpSucOrigen;
+	private static String InversionesImportesDeInversionFinalizadaActualizarOpSucDestino;
+	private static String InversionesImportesDeInversionFinalizadaActualizarOpModulo;
+	private static String InversionesStatusActualizarOp;
+	private static String InversionesStatusActualizarOpAdiInsLiq;
+	private static String InversionesStatusActualizarOpAdiMoReGr;
+	private static String InversionesStatusActualizarOpTransaccio;
+	private static String InversionesStatusActualizarOpUsuari;
+	private static String InversionesStatusActualizarOpSucOrigen;
+	private static String InversionesStatusActualizarOpSucDestino;
+	private static String InversionesStatusActualizarOpModulo;
+	private static String InversionesProcesoLiquidacionGenerarOp;
+	private static String InversionesProcesoLiquidacionGenerarOpInvMonRef;
+	private static String InversionesProcesoLiquidacionGenerarOpTransaccio;
+	private static String InversionesProcesoLiquidacionGenerarOpUsuari;
+	private static String InversionesProcesoLiquidacionGenerarOpSucOrigen;
+	private static String InversionesProcesoLiquidacionGenerarOpSucDestino;
+	private static String InversionesProcesoLiquidacionGenerarOpModulo;
+	private static String InversionesContraEstadoCuentaActualizarOp;
+	private static String InversionesContraEstadoCuentaActualizarOpCorMoLiDi;
+	private static String InversionesContraEstadoCuentaActualizarOpTipActual;		
+	private static String InversionesContraEstadoCuentaActualizarOpTransaccio;
+	private static String InversionesContraEstadoCuentaActualizarOpUsuari;
+	private static String InversionesContraEstadoCuentaActualizarOpSucOrigen;
+	private static String InversionesContraEstadoCuentaActualizarOpSucDestino;
+	private static String InversionesContraEstadoCuentaActualizarOpModulo;
+	
 	
 	public InversionesServicio() {
 		super();
@@ -179,6 +210,8 @@ public class InversionesServicio extends BaseService {
 		logger.info("COMMONS: Comenzando inversionesPagareNumeroUsuarioObtener... ");
 		if(!datosInversionesPagareNumeroUsuarioObtener.has("Inv_Numero"))
 			datosInversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
+		if(!datosInversionesPagareNumeroUsuarioObtener.has("Inv_Usuari"))
+			datosInversionesPagareNumeroUsuarioObtener.addProperty("Inv_Usuari", "");
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);
@@ -189,4 +222,56 @@ public class InversionesServicio extends BaseService {
 		logger.info("COMMONS: Finalizando inversionesPagareNumeroUsuarioObtener... ");
 		return inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto;
 	}//Cierre del método
+	
+	public JsonObject inversionesImportesDeInversionFinalizadaActualizar(JsonObject datosInversionFinalizada) {
+		datosInversionFinalizada.addProperty("Inv_rAutor", InversionesImportesDeInversionFinalizadaActualizarOpInvrAutor);		
+		datosInversionFinalizada.addProperty("Transaccio", InversionesImportesDeInversionFinalizadaActualizarOpTransaccio);
+		datosInversionFinalizada.addProperty("Usuario", InversionesImportesDeInversionFinalizadaActualizarOpUsuari);
+		datosInversionFinalizada.addProperty("SucOrigen", InversionesImportesDeInversionFinalizadaActualizarOpSucOrigen);
+		datosInversionFinalizada.addProperty("SucDestino", InversionesImportesDeInversionFinalizadaActualizarOpSucDestino);
+		datosInversionFinalizada.addProperty("Modulo", InversionesImportesDeInversionFinalizadaActualizarOpModulo);
+		JsonObject inversionesImportesDeInversionFinalizadaActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesImportesDeInversionFinalizadaActualizarOp, datosInversionFinalizada);
+		return inversionesImportesDeInversionFinalizadaActualizarOpResultadoObjeto;
+		
+	}
+	
+	public JsonObject inversionesStatusActualizar(JsonObject datosStatusActualizar) {
+		datosStatusActualizar.addProperty("Adi_InsLiq", InversionesStatusActualizarOpAdiInsLiq);
+		datosStatusActualizar.addProperty("Adi_MoReGr", Integer.parseInt(InversionesStatusActualizarOpAdiMoReGr));
+		datosStatusActualizar.addProperty("Transaccio", InversionesStatusActualizarOpTransaccio);
+		datosStatusActualizar.addProperty("Usuario", InversionesStatusActualizarOpUsuari);
+		datosStatusActualizar.addProperty("SucOrigen", InversionesStatusActualizarOpSucOrigen);
+		datosStatusActualizar.addProperty("SucDestino", InversionesStatusActualizarOpSucDestino);
+		datosStatusActualizar.addProperty("Modulo", InversionesStatusActualizarOpModulo);
+
+		JsonObject inversionesStatusActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesStatusActualizarOp, datosStatusActualizar);
+		return inversionesStatusActualizarOpResultadoObjeto;
+	}
+	
+	public JsonObject inversionesProcesoLiquidacionGenerar(JsonObject datosProcesoLiquidacion) {
+		datosProcesoLiquidacion.addProperty("Inv_rAutor", InversionesImportesDeInversionFinalizadaActualizarOpUsuari);
+		datosProcesoLiquidacion.addProperty("Inv_MonRef", InversionesProcesoLiquidacionGenerarOpInvMonRef);
+		datosProcesoLiquidacion.addProperty("Transaccio", InversionesProcesoLiquidacionGenerarOpTransaccio);
+		datosProcesoLiquidacion.addProperty("Usuario", InversionesProcesoLiquidacionGenerarOpUsuari);
+		datosProcesoLiquidacion.addProperty("SucOrigen", InversionesProcesoLiquidacionGenerarOpSucOrigen);
+		datosProcesoLiquidacion.addProperty("SucDestino", InversionesProcesoLiquidacionGenerarOpSucDestino);
+		datosProcesoLiquidacion.addProperty("Modulo", InversionesProcesoLiquidacionGenerarOpModulo);
+		JsonObject inversionesProcesoLiquidacionGenerarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesProcesoLiquidacionGenerarOp, datosProcesoLiquidacion);
+		return inversionesProcesoLiquidacionGenerarOpResultadoObjeto;
+	}
+	
+	public JsonObject inversionesContraEstadoCuentaActualizarOp(JsonObject datosIversionVsEstadoCuenta) {
+		datosIversionVsEstadoCuenta.addProperty("Cor_Status", "");
+		datosIversionVsEstadoCuenta.addProperty("Cor_CliUsu", "");
+		datosIversionVsEstadoCuenta.addProperty("Cor_Alias", "");
+		datosIversionVsEstadoCuenta.addProperty("Cor_MoLiDi", InversionesContraEstadoCuentaActualizarOpCorMoLiDi);
+		datosIversionVsEstadoCuenta.addProperty("Tip_Actual", InversionesContraEstadoCuentaActualizarOpTipActual);		
+		datosIversionVsEstadoCuenta.addProperty("Transaccio", InversionesContraEstadoCuentaActualizarOpTransaccio);
+		datosIversionVsEstadoCuenta.addProperty("Usuario", InversionesContraEstadoCuentaActualizarOpUsuari);
+		datosIversionVsEstadoCuenta.addProperty("SucOrigen", InversionesContraEstadoCuentaActualizarOpSucOrigen);
+		datosIversionVsEstadoCuenta.addProperty("SucDestino", InversionesContraEstadoCuentaActualizarOpSucDestino);
+		datosIversionVsEstadoCuenta.addProperty("Modulo", InversionesContraEstadoCuentaActualizarOpModulo);
+		JsonObject inversionesContraEstadoCuentaActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesContraEstadoCuentaActualizarOp, datosIversionVsEstadoCuenta);
+		return inversionesContraEstadoCuentaActualizarOpResultadoObjeto;
+	}
 }

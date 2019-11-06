@@ -7,6 +7,7 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.google.gson.JsonObject;
 
 public class Racal {
 
@@ -114,5 +115,29 @@ public class Racal {
 			caracter = (char) (caracter ^ cadena.charAt(i++));
 		logger.info("COMMONS: Finalizando xor metodo");
 		return caracter;
+	}
+
+	public static void logToken(String tkn, String respValidacion) {
+		String TokenServicio = properties.getProperty("data_service.token_servicio");
+		String LogCreacionOp = properties.getProperty("token_servicio.op.log_creacion");
+
+		String tokSerie = tkn.substring(0, 10);
+		String tokValue = tkn.substring(10, 16);
+
+		JsonObject datosToken = new JsonObject();
+		datosToken.addProperty("serieToken", tokSerie);
+		datosToken.addProperty("respuesta", respValidacion);
+		datosToken.addProperty("scriptName", Racal.class.toString());
+		datosToken.addProperty("valueEnter", tokValue);
+
+		logger.info("datosToken" + datosToken);
+		JsonObject logCreacionOpResultadoObjeto = Utilerias.performOperacion(TokenServicio, LogCreacionOp, datosToken);
+		logger.info("logCreacionOpResultadoObjeto" + logCreacionOpResultadoObjeto);
+	}
+
+	public static String validaTokenOpera(String clave) {
+		String returnVal = validaToken(clave);
+		logToken(clave, returnVal);
+		return returnVal;
 	}
 }

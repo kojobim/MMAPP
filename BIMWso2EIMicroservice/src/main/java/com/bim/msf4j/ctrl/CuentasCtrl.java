@@ -2,6 +2,7 @@ package com.bim.msf4j.ctrl;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -19,6 +20,8 @@ import com.bim.commons.service.ClienteServicio;
 import com.bim.commons.service.MovimientosServicio;
 import com.bim.commons.service.SaldoServicio;
 import com.bim.commons.service.TransaccionServicio;
+import com.bim.commons.service.SoapServicio;
+import com.bim.commons.service.TokenService;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -32,6 +35,8 @@ public class CuentasCtrl extends BimBaseCtrl {
 	private TransaccionServicio transaccionServicio;
 	private MovimientosServicio movimientosServicio;
 	private SaldoServicio saldoServicio;
+	private SoapServicio soapService;
+	private TokenService tokenService;
 	
 	public CuentasCtrl() {
 		super();
@@ -41,6 +46,9 @@ public class CuentasCtrl extends BimBaseCtrl {
 		this.transaccionServicio = new TransaccionServicio();
 		this.movimientosServicio = new MovimientosServicio();
 		this.saldoServicio = new SaldoServicio();
+		this.soapService = new SoapServicio();
+		this.tokenService = new TokenService();
+
 	}
 	
 	@Path("/")
@@ -141,9 +149,11 @@ public class CuentasCtrl extends BimBaseCtrl {
 		datosCuentasCliente.addProperty("cpCliDir", cpCliDir);
 		datosCuentasCliente.add("cuentas", saldosResult);
 
+		JsonObject cuentasCliente = new JsonObject();
+		cuentasCliente.add("cuentasCliente", datosCuentasCliente);
 		logger.info("CTRL: Terminando cuentasListado metodo");
 		return Response
-				.ok(datosCuentasCliente.toString(), MediaType.APPLICATION_JSON)
+				.ok(cuentasCliente.toString(), MediaType.APPLICATION_JSON)
 				.build();
 	}
 	
@@ -246,5 +256,69 @@ public class CuentasCtrl extends BimBaseCtrl {
 		return Response
 				.ok(response.toString(), MediaType.APPLICATION_JSON)
 				.build();
+	}
+	
+	@Path("/envio-movimientos")
+	@POST()
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void movimientosRegistro(JsonObject datosEnvioCorreoMovimientos, @Context Request solicitud) {
+		logger.info("CTRL: Empezando movimientosRegistro metodo");
+		String bearerToken = solicitud.getHeader("Authorization");
+		
+		JsonObject principal = Utilerias.obtenerPrincipal(bearerToken);	
+		logger.info("- principal " + principal);
+		
+		JsonObject folioTransaccionResultado = this.transaccionServicio.folioTransaccionGenerar();
+		logger.info("- folioTransaccionResultado " + folioTransaccionResultado );
+		
+		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionResultado, "transaccion");
+		
+		JsonObject datosCorreoMovimientos = Utilerias.obtenerJsonObjectPropiedad(datosEnvioCorreoMovimientos, "enviaCorreoMovimientos");
+		logger.info("- datosCorreoMovimientos " + datosCorreoMovimientos);
+		
+		String cpRSAToken = Utilerias.obtenerStringPropiedad(datosCorreoMovimientos, "cpRSAToken");
+		logger.info("- claveRSA " + cpRSAToken);
+
+		/**
+		 * Se pone la vairable folTok en duro para fines de prueba
+		 * normalemente se extraeria del principal con la utileria
+		 * Utilerias.getStringProperty(principal, "usuFolTok");
+		 */
+		String folTok = "416218850";
+		logger.info("- folTok " + folTok);
+
+		String bitUsuari = Utilerias.obtenerStringPropiedad(principal, "usuNumero");
+		logger.info("- bitUsuari " + bitUsuari);
+
+		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
+		
+		this.tokenService.validarTokenOperacion(folTok, cpRSAToken, bitUsuari, numTransac);
+
+		String fechaSis = Utilerias.obtenerFechaSis();
+		String bitPriRef = Utilerias.obtenerStringPropiedad(principal, "usuClient");
+		String bitDireIp = solicitud.getHeader("X_Forwarded_For");
+		
+		JsonObject datosBitacoraCreacion = new JsonObject();
+		datosBitacoraCreacion.addProperty("Bit_Usuari", bitUsuari);
+		datosBitacoraCreacion.addProperty("Bit_Fecha", fechaSis);
+		datosBitacoraCreacion.addProperty("Bit_PriRef", bitPriRef);
+		datosBitacoraCreacion.addProperty("Bit_DireIP", bitDireIp);
+		datosBitacoraCreacion.addProperty("Num_Transac", numTransac);
+		
+		this.bitacoraServicio.creacionBitacora(datosBitacoraCreacion);
+		
+		String anio = Utilerias.obtenerStringPropiedad(datosCorreoMovimientos, "cpAnio");
+		String mes = Utilerias.obtenerStringPropiedad(datosCorreoMovimientos, "cpMes");
+		String cliNumero = Utilerias.obtenerStringPropiedad(datosCorreoMovimientos, "cliNumero");
+		
+		logger.info("- anio " + anio);
+		logger.info("- mes " + mes);
+		logger.info("- cliNumero " + cliNumero);
+		
+		this.soapService.movimientosEnvioCorreo(anio, mes, cliNumero);
+		logger.info("CTRL: Terminando movimientosRegistro metodo");
+		
+		
 	}
 }

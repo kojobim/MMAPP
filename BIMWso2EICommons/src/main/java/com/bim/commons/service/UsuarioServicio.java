@@ -31,6 +31,14 @@ public class UsuarioServicio extends BaseService {
 	private static String UsuarioActualizacionOpSucOrigen;
 	private static String UsuarioActualizacionOpSucDestion;
 	private static String UsuarioActualizacionOpModulo;
+	private static String UsuarioPerfilRiesgoConsultarOp;
+	private static String UsuarioPerfilRiesgoConsultarOpAplClient;
+	private static String UsuarioPerfilRiesgoConsultarOpTipConsul;
+	private static String UsuarioPerfilRiesgoConsultarOpTransaccio;
+	private static String UsuarioPerfilRiesgoConsultarOpUsuari;
+	private static String UsuarioPerfilRiesgoConsultarOpSucOrigen;
+	private static String UsuarioPerfilRiesgoConsultarOpSucDestino;
+	private static String UsuarioPerfilRiesgoConsultarOpModulo;
 	
 	public UsuarioServicio() {
 		super();
@@ -236,4 +244,16 @@ public class UsuarioServicio extends BaseService {
 		return usuarioActualizacionOpResultadoObjecto;
 	}//Cierre del método
 	
+	public JsonObject usuarioPerfilRiesgoConsultar(JsonObject datosPerfilRiesgo) {
+		datosPerfilRiesgo.addProperty("Apl_Cuesti", Integer.parseInt(UsuarioPerfilRiesgoConsultarOpAplClient));
+		datosPerfilRiesgo.addProperty("Tip_Consul", UsuarioPerfilRiesgoConsultarOpTipConsul);
+		datosPerfilRiesgo.addProperty("Transaccio", UsuarioPerfilRiesgoConsultarOpTransaccio);
+		datosPerfilRiesgo.addProperty("Usuario", UsuarioPerfilRiesgoConsultarOpUsuari);
+		datosPerfilRiesgo.addProperty("SucOrigen", UsuarioPerfilRiesgoConsultarOpSucOrigen);
+		datosPerfilRiesgo.addProperty("SucDestino", UsuarioPerfilRiesgoConsultarOpSucDestino);
+		datosPerfilRiesgo.addProperty("Modulo", UsuarioPerfilRiesgoConsultarOpModulo);
+		JsonObject usuarioPerfilRiesgoOpResultadoObjecto = Utilerias.performOperacion(UsuarioServicio, UsuarioPerfilRiesgoConsultarOp, datosPerfilRiesgo);
+		logger.info("COMMONS: Finalizando usuarioActualizar... ");
+		return usuarioPerfilRiesgoOpResultadoObjecto;
+	}
 }

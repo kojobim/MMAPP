@@ -2,7 +2,6 @@ package com.bim.commons.service;
 
 import java.util.Calendar;
 import java.util.Date;
-
 import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -13,14 +12,13 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.enums.MesesEnum;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.ConflictException;
+import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.utils.SOAPClientUtils;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
@@ -65,7 +63,7 @@ public class SoapServicio extends BaseService {
 	 * @return 
 	 * { }
 	 */
-	public void movimientosEnvioCorreo(String anio, String mes, String cliente) throws SOAPException {
+	public void movimientosEnvioCorreo(String anio, String mes, String cliente){
 		logger.info("SERVICE: Comenzando movimientosEnvioCorreo metodo");
 		
         if(anio == null || anio.isEmpty()) {
@@ -128,49 +126,57 @@ public class SoapServicio extends BaseService {
         }
         
 		SOAPMessage soapRequest = null;
-		MessageFactory messageFactory = MessageFactory.newInstance();
-		soapRequest = messageFactory.createMessage();
+		JsonObject jsonObject = null;
+		try {
+			MessageFactory messageFactory = MessageFactory.newInstance();
+			soapRequest = messageFactory.createMessage();
+			
+			MimeHeaders headers =  soapRequest.getMimeHeaders();
+			headers.addHeader("SOAPAction", SoapAction);
+			
+			SOAPPart soapPart = soapRequest.getSOAPPart();
+			
+			SOAPEnvelope soapEnvelope = soapPart.getEnvelope();
+			soapEnvelope.removeNamespaceDeclaration(soapEnvelope.getPrefix());
+			soapEnvelope.addNamespaceDeclaration(PrefixSoapenv, NamespaceSoapenv);
+			soapEnvelope.addNamespaceDeclaration(PrefixTem, NamespaceTem);
+			soapEnvelope.addNamespaceDeclaration(PrefixWcf, NamespaceWcf);
+			soapEnvelope.setPrefix(PrefixSoapenv);
 		
-		MimeHeaders headers =  soapRequest.getMimeHeaders();
-		headers.addHeader("SOAPAction", SoapAction);
-		
-		SOAPPart soapPart = soapRequest.getSOAPPart();
-		
-		SOAPEnvelope soapEnvelope = soapPart.getEnvelope();
-		soapEnvelope.removeNamespaceDeclaration(soapEnvelope.getPrefix());
-		soapEnvelope.addNamespaceDeclaration(PrefixSoapenv, NamespaceSoapenv);
-		soapEnvelope.addNamespaceDeclaration(PrefixTem, NamespaceTem);
-		soapEnvelope.addNamespaceDeclaration(PrefixWcf, NamespaceWcf);
-		soapEnvelope.setPrefix(PrefixSoapenv);
+	        if(soapEnvelope.getHeader() != null) 
+	            soapEnvelope.getHeader().detachNode();
+	        
+	        SOAPHeader soapHeader = soapEnvelope.addHeader();
+	        soapHeader.setPrefix(PrefixSoapenv);
+			
+			SOAPBody soapBody = soapEnvelope.getBody();
+			soapBody.setPrefix(PrefixSoapenv);
+	       
+			QName datosClienteName = new QName(NamespaceTem, "DatosCliente", PrefixTem);
+			SOAPElement soapElementDatosCliente = soapBody.addBodyElement(datosClienteName);
+			
+			QName datosMCorreoRequestName = new QName(NamespaceTem, "MCorreoRequest", PrefixTem);
+			SOAPElement soapElementMCorreoRequest = soapElementDatosCliente.addChildElement(datosMCorreoRequestName);
+			
+			QName anioName = new QName(NamespaceWcf, "Anio", PrefixWcf);
+			SOAPElement soapElementAnio = soapElementMCorreoRequest.addChildElement(anioName);
+			soapElementAnio.addTextNode(anio);
 	
-        if(soapEnvelope.getHeader() != null) 
-            soapEnvelope.getHeader().detachNode();
-        
-        SOAPHeader soapHeader = soapEnvelope.addHeader();
-        soapHeader.setPrefix(PrefixSoapenv);
-		
-		SOAPBody soapBody = soapEnvelope.getBody();
-		soapBody.setPrefix(PrefixSoapenv);
-       
-		QName datosClienteName = new QName(NamespaceTem, "DatosCliente", PrefixTem);
-		SOAPElement soapElementDatosCliente = soapBody.addBodyElement(datosClienteName);
-		
-		QName datosMCorreoRequestName = new QName(NamespaceTem, "MCorreoRequest", PrefixTem);
-		SOAPElement soapElementMCorreoRequest = soapElementDatosCliente.addChildElement(datosMCorreoRequestName);
-		
-		QName anioName = new QName(NamespaceWcf, "Anio", PrefixWcf);
-		SOAPElement soapElementAnio = soapElementMCorreoRequest.addChildElement(anioName);
-		soapElementAnio.addTextNode(anio);
-
-		QName clienteName = new QName(NamespaceWcf, "Cliente", PrefixWcf);
-		SOAPElement soapElementCliente = soapElementMCorreoRequest.addChildElement(clienteName);
-		soapElementCliente.addTextNode(cliente);
-		
-		QName mesName = new QName(NamespaceWcf, "Mes", PrefixWcf);
-		SOAPElement soapElementMes = soapElementMCorreoRequest.addChildElement(mesName);
-		soapElementMes.addTextNode(mes);
-		
-		JsonObject jsonObject = SOAPClientUtils.callSoapWebService(soapRequest, SoapEndpoint);
+			QName clienteName = new QName(NamespaceWcf, "Cliente", PrefixWcf);
+			SOAPElement soapElementCliente = soapElementMCorreoRequest.addChildElement(clienteName);
+			soapElementCliente.addTextNode(cliente);
+			
+			QName mesName = new QName(NamespaceWcf, "Mes", PrefixWcf);
+			SOAPElement soapElementMes = soapElementMCorreoRequest.addChildElement(mesName);
+			soapElementMes.addTextNode(mes);
+			
+			jsonObject = SOAPClientUtils.callSoapWebService(soapRequest, SoapEndpoint);
+		}
+		catch (SOAPException e) {
+			logger.info(e.getMessage());
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("COMMONS.500");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
 		JsonObject datosClienteResponse = Utilerias.obtenerJsonObjectPropiedad(jsonObject, "DatosClienteResponse");
 		JsonObject datosClienteResult = Utilerias.obtenerJsonObjectPropiedad(datosClienteResponse, "DatosClienteResult");
 		JsonObject mCorreoRespons = Utilerias.obtenerJsonObjectPropiedad(datosClienteResult, "MCorreoRespons");

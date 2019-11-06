@@ -32,6 +32,13 @@ public class ConfiguracionServicio extends BaseService {
 	private static String ConfiguracionBancoDetalleOpSucOrigen;
 	private static String ConfiguracionBancoDetalleOpSucDestino;
 	private static String ConfiguracionBancoDetalleOpModulo;
+	private static String InformacionSucursalObtenerOp;
+	private static String InformacionSucursalObtenerOpTransaccio;
+	private static String InformacionSucursalObtenerOpUsuari;
+	private static String InformacionSucursalObtenerOpSucOrigen;
+	private static String InformacionSucursalObtenerOpSucDestino;
+	private static String InformacionSucursalObtenerOpModulo;
+	
 	
 	public ConfiguracionServicio() {
 		super();
@@ -164,4 +171,15 @@ public class ConfiguracionServicio extends BaseService {
 		return configuracionBancoConsultarDetalleResultado;
 	}//Cierre del método
 	
+	public JsonObject informacionSucursalObtener(JsonObject datosSucursal) {
+		datosSucursal.addProperty("Tip_Consul", "");
+		datosSucursal.addProperty("Transaccio", InformacionSucursalObtenerOpTransaccio);
+		datosSucursal.addProperty("Usuario", InformacionSucursalObtenerOpUsuari);
+		datosSucursal.addProperty("SucOrigen", InformacionSucursalObtenerOpSucOrigen);
+		datosSucursal.addProperty("SucDestino", InformacionSucursalObtenerOpSucDestino);
+		datosSucursal.addProperty("Modulo", InformacionSucursalObtenerOpModulo);
+		JsonObject informacionSucursalOpResultadoObjecto = Utilerias.performOperacion(ConfiguracionServicio, InformacionSucursalObtenerOp, datosSucursal);
+		logger.info("COMMONS: Finalizando horariosConsultar... ");
+		return informacionSucursalOpResultadoObjecto;
+	}
 }

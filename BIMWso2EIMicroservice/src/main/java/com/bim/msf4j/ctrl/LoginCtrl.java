@@ -263,13 +263,20 @@ public class LoginCtrl extends BimBaseCtrl {
 		String usuEmail = Utilerias.obtenerStringPropiedad(usuario, "Usu_Email");
 		String usuUsuAdm = Utilerias.obtenerStringPropiedad(usuario, "Usu_UsuAdm");
 		
+		/**
+		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
+		 * String usuFolTok = principalResultadoObjecto.get("usuFolTok").getAsString();
+		 */
+		String usuFolTok = "416218850";
+		
 		JsonObject usuarioResultado = new JsonObject();
-		usuarioResultado.addProperty("usuClave ", usuClave);
-		usuarioResultado.addProperty("usuNumero ", usuNumero);
-		usuarioResultado.addProperty("usuClient ", usuClient);
-		usuarioResultado.addProperty("usuNombre ", usuNombre);
-		usuarioResultado.addProperty("usuEmail ", usuEmail);
-		usuarioResultado.addProperty("usuUsuAdm ", usuUsuAdm);
+		usuarioResultado.addProperty("usuClave", usuClave);
+		usuarioResultado.addProperty("usuNumero", usuNumero);
+		usuarioResultado.addProperty("usuClient", usuClient);
+		usuarioResultado.addProperty("usuNombre", usuNombre);
+		usuarioResultado.addProperty("usuEmail", usuEmail);
+		usuarioResultado.addProperty("usuUsuAdm", usuUsuAdm);
+		usuarioResultado.addProperty("usuFolTok", usuFolTok);
 		logger.info("CTRL: Terminando login metodo");
 		return Response.ok(usuarioResultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
