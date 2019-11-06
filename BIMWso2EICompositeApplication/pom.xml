@@ -150,6 +150,13 @@
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
+    
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>CuentaDestinoServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
 
     <dependency>
       <groupId>com.bim.dataservice</groupId>
