@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy name="InversionesListadoProxy" startOnLoad="true" transports="http https" xmlns="http://ws.apache.org/ns/synapse">
+    <target>
+        <inSequence>
+            <log level="full"/>
+            <property expression="json-eval($.Inv_Client)" name="invClient" scope="default" type="STRING"/>
+            <property expression="json-eval($.Inv_Moneda)" name="invMoneda" scope="default" type="STRING"/>
+            <property expression="json-eval($.NumTransac)" name="numTransac" scope="default" type="STRING"/>
+            <property expression="json-eval($.Transaccio)" name="transaccio" scope="default" type="STRING"/>
+            <property expression="json-eval($.Usuario)" name="usuario" scope="default" type="STRING"/>
+            <property expression="json-eval($.FechaSis)" name="fechaSis" scope="default" type="STRING"/>
+            <property expression="json-eval($.SucOrigen)" name="sucOrigen" scope="default" type="STRING"/>
+            <property expression="json-eval($.SucDestino)" name="sucDestino" scope="default" type="STRING"/>
+            <property expression="json-eval($.Modulo)" name="modulo" scope="default" type="STRING"/>
+            <log>
+                <property expression="json-eval($.)" name="Before enrich"/>
+            </log>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="ORIGINAL_REQ" type="property"/>
+            </enrich>
+            <enrich>
+                <source clone="true" type="body"/>
+                <target property="REQUEST_PAYLOAD" type="property"/>
+            </enrich>
+            <log>
+                <property expression="get-property('ORIGINAL_REQ')" name="Original Request"/>
+                <property expression="json-eval($.)" name="Response Payload"/>
+            </log>
+            <send>
+                <endpoint>
+                    <address uri="http://localhost:8280/services/InversionesServicio/inversionesObtenerOp"/>
+                </endpoint>
+            </send>
+        </inSequence>
+        <outSequence>
+            <log>
+                <property expression="get-property('ORIGINAL_REQ')" name="Original Request"/>
+                <property expression="json-eval($.)" name="Response Payload"/>
+            </log>
+            <send/>
+        </outSequence>
+        <faultSequence/>
+    </target>
+</proxy>
