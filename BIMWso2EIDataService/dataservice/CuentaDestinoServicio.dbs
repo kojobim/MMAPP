@@ -50,12 +50,49 @@
             <element column="Pat_Consec" name="Pat_Consec" xsdType="xs:integer" optional="true"/>
         </result>
     </query>
+    <query id="cuentaDestinoBIMCreacionSQL" useConfig="BIMDB">
+        <sql>
+        	EXEC NBCUDEBRALT
+            @Cdb_UsuAdm = :cdbUsuAdm,
+            @Cdb_Cuenta = :cdbCuenta,
+            @Cdb_CliUsu = :cdbCliUsu,
+            @Cdb_Alias = :cdbAlias,
+            @Cdb_RFCBen = :cdbRFCBen,
+            @Cdb_EmaBen = :cdbEmaBen,
+            @Cdb_Random = :cdbRandom,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="cdbUsuAdm" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbCuenta" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbCliUsu" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbAlias" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbRFCBen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbEmaBen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbRandom" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/cuentaDestinoBIMCreacionNE" element="cuentaDestinoBIM">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
     <query id="cuentaDestinoTransferenciasSPEIActualizacionSQL" useConfig="BIMDB">
         <sql>
 			EXECUTE NBCUDESPPRO
 			@Cds_UsuAdm = :cds_UsuAdm,
             @NumTransac = :numTransac,
-			@Transaccio = :transaccio,
+            @Transaccio = :transaccio,
 			@Usuario = :usuario,
 			@FechaSis = :fechaSis,
 			@SucOrigen = :sucOrigen,
@@ -83,6 +120,24 @@
             <with-param name="cdbCuenta" query-param="Cdb_Cuenta"/>
             <with-param name="cdbStatus" query-param="Cdb_Status"/>
             <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation name="cuentaDestinoBIMCreacionOp">
+        <call-query href="cuentaDestinoBIMCreacionSQL">
+            <with-param name="cdbUsuAdm" query-param="Cdb_UsuAdm"/>
+            <with-param name="cdbCuenta" query-param="Cdb_Cuenta"/>
+            <with-param name="cdbCliUsu" query-param="Cdb_CliUsu"/>
+            <with-param name="cdbAlias" query-param="Cdb_Alias"/>
+            <with-param name="cdbRFCBen" query-param="Cdb_RFCBen"/>
+            <with-param name="cdbEmaBen" query-param="Cdb_EmaBen"/>
+            <with-param name="cdbRandom" query-param="Cdb_Random"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
