@@ -59,7 +59,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-		<result defaultNamespace="http://bem.com/avisoPrivacidadConsultarNE" element="avisoPrivacidadConsultar">
+		<result defaultNamespace="http://bem.com/avisoPrivacidadConsultarNE" element="avisoPrivacidad">
             <element column="Text_Aviso" name="Text_Aviso" xsdType="xs:string" optional="true"/>
         </result>
     </query>
