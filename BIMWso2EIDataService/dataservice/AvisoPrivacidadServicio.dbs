@@ -63,6 +63,39 @@
             <element column="Text_Aviso" name="Text_Aviso" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="avisoPrivacidadActualizacionSQL" useConfig="BIMDB">
+        <sql>
+        	EXEC NBENRMOVALT
+            @Usu_Numero = :usu_Numero,
+            @Usu_Client = :usu_Client,
+            @Usu_AceAvi = :usu_AceAvi,
+            @Usu_FecAce = :usu_FecAce,
+            @Usu_FecAct = :usu_FecAct,
+            @NumTransac = :numTransac,
+            @Transaccio = :transaccio,
+            @Usuario = :usuario,
+            @FechaSis = :fechaSis,
+            @SucOrigen = :sucOrigen,
+            @SucDestino = :sucDestino,
+            @Modulo = :modulo
+		</sql>
+        <param name="usu_Numero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usu_Client" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usu_AceAvi" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="usu_FecAce" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usu_FecAct" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/avisoPrivacidadActualizacionNE" element="avisoPrivacidad">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
     <operation name="avisoPrivacidadVerificarOp">
         <call-query href="avisoPrivacidadVerificarSQL">
             <with-param name="usuNumero" query-param="Usu_Numero"/>
@@ -78,13 +111,29 @@
     <operation returnRequestStatus="true" name="avisoPrivacidadConsultarOp">
         <call-query href="avisoPrivacidadConsultarSQL">
             <with-param name="conAviso" query-param="Con_Aviso"/>
-		<with-param name="numTransac" query-param="NumTransac"/>
-		<with-param name="transaccio" query-param="Transaccio"/>
-		<with-param name="usuario" query-param="Usuario"/>
-		<with-param name="fechaSis" query-param="FechaSis"/>
-		<with-param name="sucOrigen" query-param="SucOrigen"/>
-		<with-param name="sucDestino" query-param="SucDestino"/>
-		<with-param name="modulo" query-param="Modulo"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="avisoPrivacidadActualizacionOp">
+        <call-query href="avisoPrivacidadActualizacionSQL">
+            <with-param name="usu_Numero" query-param="Usu_Numero"/>
+            <with-param name="usu_Client" query-param="Usu_Client"/>
+            <with-param name="usu_AceAvi" query-param="Usu_AceAvi"/>
+            <with-param name="usu_FecAce" query-param="Usu_FecAce"/>
+            <with-param name="usu_FecAct" query-param="Usu_FecAct"/>
+			<with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
 </data>
