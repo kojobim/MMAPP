@@ -250,6 +250,39 @@
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="cuentaDestinoSPEIActualizacionSQL" useConfig="BIMDB">
+        <sql>
+            EXECUTE NBCUDESPACT
+            @Cds_UsuAdm = :cdsUsuAdm,
+            @Cds_Consec = :cdsConsec,
+            @Cds_CLABE = :cdsCLABE,
+            @Cds_Random = :cdsRandom,
+            @Tip_Actual = :tipActual,
+            @NumTransac = :numTransac,
+            @Transaccio = :transaccio,
+            @Usuario = :usuario,
+            @FechaSis = :fechaSis,
+            @SucOrigen = :sucOrigen,
+            @SucDestino = :sucDestino,
+            @Modulo = :modulo
+        </sql>
+        <param name="cdsUsuAdm" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdsConsec" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdsCLABE" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdsRandom" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipActual" paramType="SCALAR" sqlType="STRING" type="IN"/>
+		<param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+		<result defaultNamespace="http://bem.com/cuentaDestinoSPEIActualizacionNE" element="cuentaDestino">
+			<element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
     <operation name="cuentaDestinoBIMConsultarOp">
         <call-query href="cuentaDestinoBIMConsultarSQL">
             <with-param name="cdbClient" query-param="Cdb_Client"/>
@@ -351,6 +384,22 @@
             <with-param name="cdbRandom" query-param="Cdb_Random"/>
             <with-param name="tipActual" query-param="Tip_Actual"/>
             <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="cuentaDestinoSPEIActualizacionOp">
+        <call-query href="cuentaDestinoSPEIActualizacionSQL">
+            <with-param name="cdsUsuAdm" query-param="Cds_UsuAdm"/>
+            <with-param name="cdsConsec" query-param="Cds_Consec"/>
+            <with-param name="cdsCLABE" query-param="Cds_CLABE"/>
+            <with-param name="cdsRandom" query-param="Cds_Randoms"/>
+            <with-param name="tipActual" query-param="Tip_Actual"/>
+			<with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
             <with-param name="fechaSis" query-param="FechaSis"/>
