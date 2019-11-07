@@ -784,7 +784,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosIversionVsEstadoCuenta.addProperty("FechaSis", fechaSis);
 
 		logger.info("datosIversionVsEstadoCuenta" + datosIversionVsEstadoCuenta);
-		JsonObject inversionesContraEstadoCuentaActualizarOpResultadoObjeto = this.inversionesServicio.inversionesContraEstadoCuentaActualizarOp(datosIversionVsEstadoCuenta);
+		JsonObject inversionesContraEstadoCuentaActualizarOpResultadoObjeto = this.inversionesServicio.inversionesContraEstadoCuentaActualizar(datosIversionVsEstadoCuenta);
 		logger.info("inversionesContraEstadoCuentaActualizarOpResultadoObjeto" + inversionesContraEstadoCuentaActualizarOpResultadoObjeto);
 		
 		JsonObject inversionesPagareNumeroUsuarioObtener = new JsonObject();

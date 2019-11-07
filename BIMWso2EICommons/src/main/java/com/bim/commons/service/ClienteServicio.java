@@ -131,7 +131,7 @@ public class ClienteServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject clienteConsultar(JsonObject datosClienteConsultar) {
-		logger.info("COMMONS: Comenzando clienteConsultar...");
+		logger.info("COMMONS: Comenzando clienteConsultar metodo...");
 		if(!datosClienteConsultar.has("Cli_Sucurs"))
 			datosClienteConsultar.addProperty("Cli_Sucurs", "");
 		if(!datosClienteConsultar.has("Cli_Nombre"))
@@ -147,7 +147,7 @@ public class ClienteServicio extends BaseService {
 		JsonObject clienteConsultarResultadoObjecto = Utilerias
 				.performOperacion(ClienteServicio, ClienteConsultarOp, 
 						datosClienteConsultar);
-		logger.info("COMMONS: Finalizando clienteConsultar...");
+		logger.info("COMMONS: Finalizando clienteConsultar metodo...");
 		return clienteConsultarResultadoObjecto;
 	}//Cierre del método
 
