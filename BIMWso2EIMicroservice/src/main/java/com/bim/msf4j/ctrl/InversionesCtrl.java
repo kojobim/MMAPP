@@ -912,7 +912,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject principalResultadoObjecto = Utilerias.getPrincipal(bearerToken);
 		
 		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
-		String usuClient = principalResultadoObjecto.get("usuClient").getAsString();		
+		String usuClient = principalResultadoObjecto.get("usuClient").getAsString();
+		String usuEmail = principalResultadoObjecto.get("usuEmail").getAsString();		
 		// String usuFolTok = principalResultadoObjecto.get("usuFolTok").getAsString();
 		/**
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
@@ -1438,7 +1439,10 @@ public class InversionesCtrl extends BimBaseCtrl {
 			}
 		}
 		
-		String destinatario = "ebalseca96@gmail.com"; //obtener
+		/**
+		 * REGLA DE NEGOCIO: Envío de correo con plantilla establecida por BIM y encriptado de digito verificador
+		 */
+
 		String asunto = Utilerias.obtenerPropiedadPlantilla("mail.reinversion.asunto");
 		String plantilla = Utilerias.obtenerPlantilla("reinversion");
 
@@ -1494,7 +1498,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		try {
 			logger.info("Iniciando envio de comprobante...");
 			correoServicio = new CorreoServicio();
-			correoServicio.enviarCorreo(destinatario, asunto, cuerpo);
+			correoServicio.enviarCorreo(usuEmail, asunto, cuerpo);
 			logger.info("Terminando envio de comprobante...");
 		} catch (Exception e) {
 			logger.info("Error al realizar el envio de comprobante...");
