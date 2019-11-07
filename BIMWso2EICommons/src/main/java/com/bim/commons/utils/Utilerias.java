@@ -1,6 +1,9 @@
 package com.bim.commons.utils;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -9,10 +12,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 
+import org.stringtemplate.v4.ST;
 import com.bim.commons.dto.BimMessageDTO;
+import com.bim.commons.dto.BimEmailTemplateDTO;
 import com.bim.commons.dto.RequestDTO;
 import com.bim.commons.exceptions.UnauthorizedException;
 import com.google.gson.Gson;
@@ -197,13 +203,7 @@ public class Utilerias {
 		return value.matches(regex);
 	}
 
-	/**
-	 * Método que genera una clave numérica a partir de una cadena de texto
-	 * @param sVarEncode String
-	 * @return
-	 * String
-	 */
-	public static String generarDigitoVerificador(String sVarEncode) {
+	public static String encode(String sVarEncode) {
 		int matrizd1[][] = new int[2][2];
 		int matrizd2[][] = new int[2][2];
 		int matrizenc1[][] = new int[2][2];
@@ -289,6 +289,34 @@ public class Utilerias {
 		claveEnc += claveEnc1;
 		return claveEnc;
 	}
+
+	/**
+	 * Método que genera una clave numérica a partir de una cadena de texto
+	 * @param sVarEncode String
+	 * @return
+	 * String
+	 */
+	public static String generarDigitoVerificador(String sVarVerif) {
+		String encVerif = "";
+		String tmpEncextd = sVarVerif;
+		int lenEncextd = tmpEncextd.length();
+		sVarVerif = "";
+		String codEncextd = "";
+		int cntEncextd = 1;
+
+		for(int iEncextd = 0; iEncextd < lenEncextd; iEncextd++) {
+			sVarVerif += tmpEncextd.substring(iEncextd, iEncextd + 1);
+			if(cntEncextd == 8 || iEncextd == lenEncextd) {
+				encVerif = encode(sVarVerif);
+				sVarVerif = "";
+				codEncextd += encVerif;
+				cntEncextd = 0;
+			}
+			cntEncextd++;
+		}
+		encVerif = codEncextd;
+		return encVerif;
+	}
 	//Cierre del método
 	
 	public static String concat(String ...args) {
@@ -363,6 +391,53 @@ public class Utilerias {
 		String resultado = HttpClientUtils.postPerform(solicitudOperacion);
 		JsonObject resultadoObjeto = resultado != null ? new Gson().fromJson(resultado, JsonObject.class) : null;
 		return resultadoObjeto;
+	}
+	
+	public static String obtenerPropiedadPlantilla(String property) {
+		Properties templateProps = null;
+		
+		try (InputStream inputStream = new FileInputStream(System.getenv("BIM_HOME")+"/BIMWso2EIConfig/template.properties")) {
+			templateProps = new Properties();
+			
+			if(inputStream != null) {
+				templateProps.load(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
+			}			
+		}
+		catch(IOException ioException) {
+			ioException.printStackTrace();
+		}
+
+    	return templateProps.getProperty(property);
+	}
+	
+	public static String obtenerPlantilla(String archivo) {
+		StringBuilder contentBuilder = new StringBuilder();
+		String templateBaseLocation = obtenerPropiedadPlantilla("template.base_location");
+		try {
+		    BufferedReader in = new BufferedReader(
+		    		new InputStreamReader(new FileInputStream(System.getenv("BIM_HOME") + templateBaseLocation + archivo + ".html"),
+		    				StandardCharsets.ISO_8859_1));
+		    
+		    String str;
+		    while ((str = in.readLine()) != null) {
+		        contentBuilder.append(str);
+		    }
+		    in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+    	return contentBuilder.toString();
+	}
+
+	public static String obtenerMensajePlantilla(BimEmailTemplateDTO emailTemplateDTO) {		
+		ST template = new ST(emailTemplateDTO.getTemplate(), '{', '}');
+		
+		if(emailTemplateDTO.getMergeVariables() != null) 
+			for(Entry<String, String> entry : emailTemplateDTO.getMergeVariables().entrySet())
+				template.add(entry.getKey(), entry.getValue());
+			
+		return template.render().toString();
 	}
 
 	public static String getStringProperty(JsonObject datos, String propertyName) {
