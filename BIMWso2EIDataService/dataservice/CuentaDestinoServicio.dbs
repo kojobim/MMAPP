@@ -217,7 +217,7 @@
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
     </query>
-    <query id="cuentaDestinoBIMActualizarSQL" useConfig="BIMDB">
+    <query id="cuentaDestinoBIMActualizacionSQL" useConfig="BIMDB">
         <sql>
 			EXECUTE NBCUDEBRACT
 			@Cdb_Consec = :cdbConsec,
@@ -245,8 +245,8 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/cuentaDestinoBIMActualizarNE" element="cuentaDestino">
-            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+		<result defaultNamespace="http://bem.com/cuentaDestinoBIMActualizacionNE" element="cuentaDestino">
+			<element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
         </result>
     </query>
@@ -343,8 +343,8 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <operation returnRequestStatus="true" name="cuentaDestinoBIMActualizarOp">
-        <call-query href="cuentaDestinoBIMActualizarSQL">
+    <operation returnRequestStatus="true" name="cuentaDestinoBIMActualizacionOp">
+        <call-query href="cuentaDestinoBIMActualizacionSQL">
             <with-param name="cdbConsec" query-param="Cdb_Consec"/>
             <with-param name="cdbUsuAdm" query-param="Cdb_UsuAdm"/>
             <with-param name="cdbCuenta" query-param="Cdb_Cuenta"/>
