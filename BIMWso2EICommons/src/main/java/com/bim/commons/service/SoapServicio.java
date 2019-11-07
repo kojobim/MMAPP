@@ -24,6 +24,7 @@ import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
 /**
+ * Esta clase define las operaciones sobre soap
  * @author Backend Team MedioMelon
  * @version BackendMM022019
  *

@@ -13,6 +13,12 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+/**
+ * Esta clase define las operaciones sobre envio de correo
+ * @author Backend Team MedioMelon
+ * @version BackendMM022019
+ *
+ */
 public class CorreoServicio {
 	
 	private static final Logger logger = LoggerFactory.getLogger(CorreoServicio.class);
@@ -34,6 +40,14 @@ public class CorreoServicio {
 		}
 	}
 	
+	
+	/**
+	 * Método para envio de correo
+	 * @param destinario
+	 * @param asunto
+	 * @param cuerpo
+	 * @throws Exception
+	 */
 	public void enviarCorreo(String destinario, String asunto, String cuerpo) throws Exception {
 		logger.info("SERVICE: Comenzando enviarCorreo metodo...");
     	

@@ -179,6 +179,7 @@ public class CuentaDestinoServicio extends BaseService {
 		return result;
 	}//Cierre del método
 
+	
     /**
      * Método para consultar el catalogo de instituciones
      * ProcedureName: SPINSTITCON

@@ -6,6 +6,12 @@ import org.slf4j.LoggerFactory;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
+/**
+ * Esta clase define las operaciones sobre reinversión
+ * @author Backend Team MedioMelon
+ * @version BackendMM022019
+ *
+ */
 public class ReinversionServicio extends BaseService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UsuarioServicio.class);
@@ -34,7 +40,34 @@ public class ReinversionServicio extends BaseService {
 		FechaHabilConsultarOpModulo = properties.getProperty("op.fecha_habil_consultar.modulo");
 	}
 
-
+	/**
+	 * Método para consultar fecha habil
+	 * ProcedureName: NBSIGFECHAB
+	 * @param datosFechaHabil
+	 * <pre>
+	 * {
+	 *	Fecha: String,
+	 *	NumDia: Integer,
+	 *	FinSem: String,
+	 *	NumTransac: String,
+	 *	Transaccio: String,
+	 *	Usuario: String,
+	 *	FechaSis: String,
+	 *	SucOrigen: String,
+	 *	SucDestino: String,
+	 *	Modulo: String
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 *	fechaHabil: {
+	 *		Fecha: Date,
+	 *		Dias: Integer
+	 *     }
+	 * }
+	 * </pre>
+	 */
 	public JsonObject fechaHabilConsultar(JsonObject datosFechaHabil) {
 		logger.info("COMMONS: Comenzando fechaHabilConsultar metodo...");
 		datosFechaHabil.addProperty("FinSem", FechaHabilConsultarOpFinSem);
