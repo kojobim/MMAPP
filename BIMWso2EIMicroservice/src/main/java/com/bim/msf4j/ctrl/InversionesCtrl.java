@@ -31,7 +31,7 @@ import com.bim.commons.service.ConfiguracionServicio;
 import com.bim.commons.service.InversionesServicio;
 import com.bim.commons.service.ReinversionServicio;
 import com.bim.commons.service.TasaServicio;
-import com.bim.commons.service.TokenService;
+import com.bim.commons.service.TokenServicio;
 import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.service.UsuarioServicio;
 import com.bim.commons.utils.Filtrado;
@@ -49,7 +49,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 	private ConfiguracionServicio configuracionServicio;
 	private TransaccionServicio transaccionServicio;
 	private InversionesServicio inversionesServicio;
-	private TokenService tokenService;
+	private TokenServicio tokenServicio;
 	private ClienteServicio clienteServicio;
 	private UsuarioServicio usuarioServicio;
 	private ReinversionServicio reinversionServicio;
@@ -64,7 +64,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		this.bitacoraServicio = new BitacoraServicio();
 		this.transaccionServicio = new TransaccionServicio();
 		this.inversionesServicio = new InversionesServicio();
-		this.tokenService = new TokenService();
+		this.tokenServicio = new TokenServicio();
 		this.clienteServicio = new ClienteServicio();
 		this.usuarioServicio = new UsuarioServicio();
 		this.reinversionServicio = new ReinversionServicio();
@@ -666,7 +666,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		 */
 
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(renovarInversion, "cpRSAToken");
-		String validarToken = this.tokenService.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac);
+		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac);
 
 		if ("B".equals(validarToken)) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");

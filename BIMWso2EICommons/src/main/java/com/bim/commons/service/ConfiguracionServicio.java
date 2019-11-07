@@ -39,13 +39,15 @@ public class ConfiguracionServicio extends BaseService {
 	private static String InformacionSucursalObtenerOpSucDestino;
 	private static String InformacionSucursalObtenerOpModulo;
 	
-	
 	public ConfiguracionServicio() {
 		super();
 		
 		ConfiguracionServicio = properties.getProperty("data_service.configuracion_servicio");
 		
 		HorarioInversionOp = properties.getProperty("configuracion_servicio.op.horario_inversion");
+		ConfiguracionBancoDetalleOp = properties.getProperty("configuracion_servicio.op.configuracion_banco_detalle");
+		InformacionSucursalObtenerOp = properties.getProperty("configuracion_servicio.op.informacion_sucursal_obtener");
+		
 		HorarioInversionOpTipConsul = properties.getProperty("op.horario_inversion.tip_consul");
 		HorarioInversionOpTipTransf = properties.getProperty("op.horario_inversion.tip_transf");
 		HorarioInversionOpTransaccio = properties.getProperty("op.horario_inversion.transaccio");
@@ -54,13 +56,18 @@ public class ConfiguracionServicio extends BaseService {
 		HorarioInversionOpSucDestino = properties.getProperty("op.horario_inversion.suc_destino");
 		HorarioInversionOpModulo = properties.getProperty("op.horario_inversion.modulo");
 		
-		ConfiguracionBancoDetalleOp = properties.getProperty("configuracion_servicio.op.configuracion_banco_detalle");
 		ConfiguracionBancoDetalleOpTipConsul= properties.getProperty("op.configuracion_banco_detalle.tip_consul");
 		ConfiguracionBancoDetalleOpTransaccio = properties.getProperty("op.configuracion_banco_detalle.transaccio");
 		ConfiguracionBancoDetalleOpUsuario = properties.getProperty("op.configuracion_banco_detalle.usuario");
 		ConfiguracionBancoDetalleOpSucOrigen = properties.getProperty("op.configuracion_banco_detalle.suc_origen");
 		ConfiguracionBancoDetalleOpSucDestino = properties.getProperty("op.configuracion_banco_detalle.suc_destino");
 		ConfiguracionBancoDetalleOpModulo = properties.getProperty("op.configuracion_banco_detalle.modulo");
+		
+		InformacionSucursalObtenerOpTransaccio  = properties.getProperty("op.informacion_sucursal_obtener.transaccio");
+		InformacionSucursalObtenerOpUsuari = properties.getProperty("op.informacion_sucursal_obtener.usuario");
+		InformacionSucursalObtenerOpSucOrigen = properties.getProperty("op.informacion_sucursal_obtener.suc_origen");
+		InformacionSucursalObtenerOpSucDestino = properties.getProperty("op.informacion_sucursal_obtener.suc_destino");
+		InformacionSucursalObtenerOpModulo = properties.getProperty("op.informacion_sucursal_obtener.modulo");
 	}
 	
 	/**

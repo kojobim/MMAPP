@@ -37,6 +37,49 @@ public class TasaServicio extends BaseService {
 	private static String TasaGATReaConsultaCalcularOpSucDestino;
 	private static String TasaGATReaConsultaCalcularOpModulo;
 	
+	
+	
+	public TasaServicio() {
+		super();
+
+		TasaServicio= properties.getProperty("data_service.tasa_servicio");
+		
+		TasaClienteConsultarOp = properties.getProperty("tasa_servicio.op.tasa_cliente_consultar");
+		TasaMonedaConsultarOp = properties.getProperty("tasa_servicio.op.tasa_moneda_consultar");
+		TasaGATConsultaCalcularOp = properties.getProperty("tasa_servicio.op.tasa_gat_consulta_calcular");
+		TasaGATRealConsultaCalcularOp = properties.getProperty("tasa_servicio.op.tasa_gat_rea_consulta_calcular");
+		
+		TasaClienteConsultarOpTasa  = properties.getProperty("op.tasa_cliente_consultar.tasa");
+		TasaClienteConsultarOpTransaccio  = properties.getProperty("op.tasa_cliente_consultar.transaccio");
+		TasaClienteConsultarOpUsuari = properties.getProperty("op.tasa_cliente_consultar.usuario");
+		TasaClienteConsultarOpSucOrigen = properties.getProperty("op.tasa_cliente_consultar.suc_origen");
+		TasaClienteConsultarOpSucDestino = properties.getProperty("op.tasa_cliente_consultar.suc_destino");
+		TasaClienteConsultarOpModulo = properties.getProperty("op.tasa_cliente_consultar.modulo");		
+		TasaClienteConsultarOpInvMoneda = properties.getProperty("op.tasa_cliente_consultar.inv_moneda");
+		
+		TasaMonedaConsultarOpTransaccio  = properties.getProperty("op.tasa_moneda_consultar.transaccio");
+		TasaMonedaConsultarOpUsuari = properties.getProperty("op.tasa_moneda_consultar.usuario");
+		TasaMonedaConsultarOpSucOrigen = properties.getProperty("op.tasa_moneda_consultar.suc_origen");
+		TasaMonedaConsultarOpSucDestino = properties.getProperty("op.tasa_moneda_consultar.suc_destino");
+		TasaMonedaConsultarOpModulo = properties.getProperty("op.tasa_moneda_consultar.modulo");		
+		TasaMonedaConsultarOpMonNumero = properties.getProperty("op.tasa_moneda_consultar.mon_numero");
+		
+		TasaGATConsultaCalcularOpMonComisi  = properties.getProperty("op.tasa_gat_consulta_calcular.mon_comisi");
+		TasaGATConsultaCalcularOpTransaccio  = properties.getProperty("op.tasa_gat_consulta_calcular.transaccio");
+		TasaGATConsultaCalcularOpUsuari = properties.getProperty("op.tasa_gat_consulta_calcular.usuario");
+		TasaGATConsultaCalcularOpSucOrigen = properties.getProperty("op.tasa_gat_consulta_calcular.suc_origen");
+		TasaGATConsultaCalcularOpSucDestino = properties.getProperty("op.tasa_gat_consulta_calcular.suc_destino");
+		TasaGATConsultaCalcularOpModulo = properties.getProperty("op.tasa_gat_consulta_calcular.modulo");	
+		TasaGATConsultaCalcualrOpInvGAT = properties.getProperty("op.tasa_gat_consulta_calcular.inv_gat");
+		
+		TasaGATReaConsultaCalcularOpTransaccio  = properties.getProperty("op.tasa_gat_rea_consulta_calcular.transaccio");
+		TasaGATReaConsultaCalcularOpUsuari = properties.getProperty("op.tasa_gat_rea_consulta_calcular.usuario");
+		TasaGATReaConsultaCalcularOpSucOrigen = properties.getProperty("op.tasa_gat_rea_consulta_calcular.suc_origen");
+		TasaGATReaConsultaCalcularOpSucDestino = properties.getProperty("op.tasa_gat_rea_consulta_calcular.suc_destino");
+		TasaGATReaConsultaCalcularOpModulo = properties.getProperty("op.tasa_gat_rea_consulta_calcular.modulo");	
+		TasaGATReaConsultaCalcualrOpInvGATRea = properties.getProperty("op.tasa_gat_rea_consulta_calcular.inv_gat_rea");
+	}
+
 	public JsonObject tasaClienteConsultar(JsonObject datosTasaCliente) {
 		datosTasaCliente.addProperty("Inv_Moneda", TasaClienteConsultarOpInvMoneda);
 		datosTasaCliente.addProperty("Inv_FecVen", "");

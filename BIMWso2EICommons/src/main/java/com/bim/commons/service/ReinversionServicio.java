@@ -19,6 +19,22 @@ public class ReinversionServicio extends BaseService {
 	private static String FechaHabilConsultarOpSucDestino;
 	private static String FechaHabilConsultarOpModulo;
 	
+	public ReinversionServicio() {
+		super();
+
+		ReinversionServicio= properties.getProperty("data_service.reinversion_servicio");
+		
+		FechaHabilConsultarOp = properties.getProperty("reinversion_servicio.op.fecha_habil_consultar");
+		
+		FechaHabilConsultarOpFinSem  = properties.getProperty("op.fecha_habil_consultar.fin_sem");
+		FechaHabilConsultarOpTransaccio  = properties.getProperty("op.fecha_habil_consultar.transaccio");
+		FechaHabilConsultarOpUsuari = properties.getProperty("op.fecha_habil_consultar.usuario");
+		FechaHabilConsultarOpSucOrigen = properties.getProperty("op.fecha_habil_consultar.suc_origen");
+		FechaHabilConsultarOpSucDestino = properties.getProperty("op.fecha_habil_consultar.suc_destino");
+		FechaHabilConsultarOpModulo = properties.getProperty("op.fecha_habil_consultar.modulo");
+	}
+
+
 	public JsonObject fechaHabilConsultar(JsonObject datosFechaHabil) {
 		datosFechaHabil.addProperty("FinSem", FechaHabilConsultarOpFinSem);
 		datosFechaHabil.addProperty("Transaccio", FechaHabilConsultarOpTransaccio);

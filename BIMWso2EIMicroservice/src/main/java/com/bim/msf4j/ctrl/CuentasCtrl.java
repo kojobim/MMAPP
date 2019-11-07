@@ -21,7 +21,7 @@ import com.bim.commons.service.MovimientosServicio;
 import com.bim.commons.service.SaldoServicio;
 import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.service.SoapServicio;
-import com.bim.commons.service.TokenService;
+import com.bim.commons.service.TokenServicio;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -36,7 +36,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 	private MovimientosServicio movimientosServicio;
 	private SaldoServicio saldoServicio;
 	private SoapServicio soapService;
-	private TokenService tokenService;
+	private TokenServicio tokenServicio;
 	
 	public CuentasCtrl() {
 		super();
@@ -47,7 +47,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		this.movimientosServicio = new MovimientosServicio();
 		this.saldoServicio = new SaldoServicio();
 		this.soapService = new SoapServicio();
-		this.tokenService = new TokenService();
+		this.tokenServicio = new TokenServicio();
 
 	}
 	
@@ -293,7 +293,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 
 		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
 		
-		this.tokenService.validarTokenOperacion(folTok, cpRSAToken, bitUsuari, numTransac);
+		this.tokenServicio.validarTokenOperacion(folTok, cpRSAToken, bitUsuari, numTransac);
 
 		String fechaSis = Utilerias.obtenerFechaSis();
 		String bitPriRef = Utilerias.obtenerStringPropiedad(principal, "usuClient");
