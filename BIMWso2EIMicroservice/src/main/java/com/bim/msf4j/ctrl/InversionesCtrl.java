@@ -1,7 +1,10 @@
 package com.bim.msf4j.ctrl;
 
+import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -22,12 +25,14 @@ import org.wso2.msf4j.Request;
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.dto.MessageProxyDTO;
 import com.bim.commons.dto.RequestDTO;
+import com.bim.commons.dto.BimEmailTemplateDTO;
 import com.bim.commons.enums.InversionesCategoriasEnum;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.exceptions.ForbiddenException;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.service.TokenService;
+import com.bim.commons.service.CorreoServicio;
 import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.HttpClientUtils;
 import com.bim.commons.utils.Utilerias;
@@ -1357,12 +1362,25 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject inversiones = Utilerias.getJsonObjectProperty(inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto, "inversiones");
 		JsonArray inversionesArreglos = Utilerias.getJsonArrayProperty(inversiones, "inversion");
 
+		Double objInvGAT = null;
+		Date fecIni = null;
+		Date fecVen = null;
+		String rInvCuenta = "";
+		Double rInvCantid = null;
+		int rPlazo = 0;	
+		Double rIntTBruta = null;
+		Double rImpIntere = null;
+		Double rInvCanISR = null;
+		Double rInvTasa = null;
+		String rAdiInstLiq = "";
+		Double rInvCantTot = null;
+
 		JsonObject resultado = null;
 		for (JsonElement invElemento : inversionesArreglos) {
 			JsonObject inversionObj = invElemento.getAsJsonObject();
 
 			if (inversionObj.get("Inv_Numero").getAsString().equals(invNueva)) {
-				Double objInvGAT = Utilerias.getDoubleProperty(inversionObj, "Inv_GAT");
+				objInvGAT = Utilerias.getDoubleProperty(inversionObj, "Inv_GAT");
 				Double objInvGATRea = Utilerias.getDoubleProperty(inversionObj, "Inv_GATRea");
 
 				logger.info("invGAT calculado: " + invGAT + ", invGAT inversion: " + objInvGAT);
@@ -1370,8 +1388,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 				String invFecIni = Utilerias.getStringProperty(inversionObj, "Inv_FecIni");
 				String invFecVen = Utilerias.getStringProperty(inversionObj, "Inv_FecVen");
-				Date fecIni = null;
-				Date fecVen = null;
 
 				 try {
 					 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
@@ -1387,15 +1403,15 @@ public class InversionesCtrl extends BimBaseCtrl {
 					logger.info("Error en el formato de fecha.");
 				}
 
-				String rInvCuenta = Utilerias.getStringProperty(inversionObj, "Inv_Cuenta");
-				String rInvCantid = Utilerias.getStringProperty(inversionObj, "Inv_Cantid");
-				int rPlazo = Utilerias.getIntProperty(inversionObj, "Inv_Plazo");
-				Double rIntTBruta = Utilerias.getDoubleProperty(inversionObj, "Inv_TBruta");
-				Double rImpIntere = Utilerias.getDoubleProperty(inversionObj, "Imp_Intere");
-				Double rInvCanISR = Utilerias.getDoubleProperty(inversionObj, "Imp_ISR");
-				Double rInvTasa = Utilerias.getDoubleProperty(inversionObj, "Inv_Tasa");
-				String rAdiInstLiq = Utilerias.getStringProperty(inversionObj, "Adi_InsLiq");
-				Double rInvCantTot = Utilerias.getDoubleProperty(inversionObj, "Inv_Total");
+				rInvCuenta = Utilerias.getStringProperty(inversionObj, "Inv_Cuenta");
+				rInvCantid = Utilerias.getDoubleProperty(inversionObj, "Inv_Cantid");
+				rPlazo = Utilerias.getIntProperty(inversionObj, "Inv_Plazo");
+				rIntTBruta = Utilerias.getDoubleProperty(inversionObj, "Inv_TBruta");
+				rImpIntere = Utilerias.getDoubleProperty(inversionObj, "Imp_Intere");
+				rInvCanISR = Utilerias.getDoubleProperty(inversionObj, "Imp_ISR");
+				rInvTasa = Utilerias.getDoubleProperty(inversionObj, "Inv_Tasa");
+				rAdiInstLiq = Utilerias.getStringProperty(inversionObj, "Adi_InsLiq");
+				rInvCantTot = Utilerias.getDoubleProperty(inversionObj, "Inv_Total");
 
 
 				resultado = new JsonObject();
@@ -1407,8 +1423,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 				inversionRenovada.addProperty("invPlazo", rPlazo);
 				inversionRenovada.addProperty("invTBruta",  rIntTBruta);
 				inversionRenovada.addProperty("invCanBru", rImpIntere);
-				inversionRenovada.addProperty("invGat", invGAT);
-				inversionRenovada.addProperty("invGatRea", invGATRea);
+				inversionRenovada.addProperty("invGat", objInvGAT);
+				inversionRenovada.addProperty("invGatRea", objInvGATRea);
 				inversionRenovada.addProperty("invFecIni", fecIni != null ? simpleDateFormat.format(fecIni) : "");
 				inversionRenovada.addProperty("invISR", invISR);
 				inversionRenovada.addProperty("invCanISR", rInvCanISR);
@@ -1420,7 +1436,70 @@ public class InversionesCtrl extends BimBaseCtrl {
 				inversionRenovada.addProperty("usuNombre", cliComple);
 				resultado.add("inversionRenovada", inversionRenovada);
 			}
-		}	
+		}
+		
+		String destinatario = "ebalseca96@gmail.com"; //obtener
+		String asunto = Utilerias.obtenerPropiedadPlantilla("mail.reinversion.asunto");
+		String plantilla = Utilerias.obtenerPlantilla("reinversion");
+
+		String invNuevaOcu = "**************" + invNueva.substring(invNueva.length()-7);
+		String invCuentaOcu = "**************" + rInvCuenta.substring(rInvCuenta.length()-4);
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		Date fechaSisRedu = null;
+		try {
+			fechaSisRedu = sdf.parse(fechaSis);
+		} catch (Exception e) {
+			logger.info("Error en el formato de fecha.");
+		}
+
+		String strVerifi = "Origen:" + rInvCuenta + " Destino:" + invNueva + " Cantidad:" + rInvCantid + " Folio:" + numTransac;
+		String digitoVerificador = Utilerias.generarDigitoVerificador(strVerifi);
+		String strVerifi1 = digitoVerificador.substring(0, 70);
+		String strVerifi2 = digitoVerificador.substring(70, 140);
+		String strVerifi3 = digitoVerificador.substring(140, 210);
+		String strVerifi4 = digitoVerificador.substring(210, 280);
+		String strVerifi5 = digitoVerificador.substring(280);
+
+		DecimalFormat formatter = new DecimalFormat("#,###.00");
+
+		BimEmailTemplateDTO emailTemplateDTO = new BimEmailTemplateDTO(plantilla);
+		emailTemplateDTO.addMergeVariable("Inv_Nueva", invNuevaOcu);
+		emailTemplateDTO.addMergeVariable("Inv_Cuenta", invCuentaOcu);
+		emailTemplateDTO.addMergeVariable("Inv_Cantid", String.valueOf(formatter.format(rInvCantid)));
+		emailTemplateDTO.addMergeVariable("Inv_Deposi", String.valueOf(formatter.format(invCapita)));
+		emailTemplateDTO.addMergeVariable("Inv_Plazo", String.valueOf(rPlazo));
+		emailTemplateDTO.addMergeVariable("Inv_InfGAT", String.valueOf(formatter.format(objInvGAT)));
+		emailTemplateDTO.addMergeVariable("Inv_FecIni", fecIni != null ? simpleDateFormat.format(fecIni) : "");
+		emailTemplateDTO.addMergeVariable("Inv_FecVen", fecVen != null ? simpleDateFormat.format(fecVen) : "");
+		emailTemplateDTO.addMergeVariable("Str_InsLiq", rAdiInstLiq);
+		emailTemplateDTO.addMergeVariable("Inv_TBruta", rIntTBruta.toString());
+		emailTemplateDTO.addMergeVariable("Inv_CanBru", String.valueOf(formatter.format(rImpIntere)));
+		emailTemplateDTO.addMergeVariable("Inv_ISR", invISR.toString());
+		emailTemplateDTO.addMergeVariable("Inv_CanISR", String.valueOf(formatter.format(rInvCanISR)));
+		emailTemplateDTO.addMergeVariable("Inv_Tasa", String.valueOf(formatter.format(rInvTasa)));
+		emailTemplateDTO.addMergeVariable("Inv_CanNet", String.valueOf(formatter.format(invCanNet)));
+		emailTemplateDTO.addMergeVariable("Inv_CanTot", String.valueOf(formatter.format(rInvCantTot)));
+		emailTemplateDTO.addMergeVariable("NumTransac", numTransac);
+		emailTemplateDTO.addMergeVariable("Usu_Nombre", cliComple);
+		emailTemplateDTO.addMergeVariable("fechaSis", fechaSisRedu != null ? sdf.format(fechaSisRedu) : "");
+		emailTemplateDTO.addMergeVariable("Str_Verifi1", strVerifi1);
+		emailTemplateDTO.addMergeVariable("Str_Verifi2", strVerifi2);
+		emailTemplateDTO.addMergeVariable("Str_Verifi3", strVerifi3);
+		emailTemplateDTO.addMergeVariable("Str_Verifi4", strVerifi4);
+		emailTemplateDTO.addMergeVariable("Str_Verifi5", strVerifi5);
+		String cuerpo = Utilerias.obtenerMensajePlantilla(emailTemplateDTO);
+
+		CorreoServicio correoServicio;
+		try {
+			logger.info("Iniciando envio de comprobante...");
+			correoServicio = new CorreoServicio();
+			correoServicio.enviarCorreo(destinatario, asunto, cuerpo);
+			logger.info("Terminando envio de comprobante...");
+		} catch (Exception e) {
+			logger.info("Error al realizar el envio de comprobante...");
+			e.printStackTrace();
+		}
 
 		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 				.build();

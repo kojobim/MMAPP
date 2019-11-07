@@ -33,7 +33,7 @@ public class CorreoServicio {
 		}
 	}
 	
-	public void enviarCorreo(String destinario, String asunto, String cuerpo) throws Exception {
+	public void enviarCorreo(String destinatario, String asunto, String cuerpo) throws Exception {
 		logger.info("SERVICE: Comenzando enviarCorreo metodo...");
     	
 		Session session = Session.getDefaultInstance(properties);
@@ -44,7 +44,7 @@ public class CorreoServicio {
 		
 		MimeMessage mensaje = new MimeMessage(session);
         mensaje.setFrom(new InternetAddress(Remitente));
-        mensaje.setRecipient(Message.RecipientType.TO, new InternetAddress(destinario));
+        mensaje.setRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
         mensaje.setSubject(asunto, Charset);
         mensaje.setContent(cuerpo, ContentType);
         

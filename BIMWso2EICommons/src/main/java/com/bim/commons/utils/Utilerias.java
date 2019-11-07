@@ -203,13 +203,7 @@ public class Utilerias {
 		return value.matches(regex);
 	}
 
-	/**
-	 * Método que genera una clave numérica a partir de una cadena de texto
-	 * @param sVarEncode String
-	 * @return
-	 * String
-	 */
-	public static String generarDigitoVerificador(String sVarEncode) {
+	public static String encode(String sVarEncode) {
 		int matrizd1[][] = new int[2][2];
 		int matrizd2[][] = new int[2][2];
 		int matrizenc1[][] = new int[2][2];
@@ -294,6 +288,34 @@ public class Utilerias {
 
 		claveEnc += claveEnc1;
 		return claveEnc;
+	}
+
+	/**
+	 * Método que genera una clave numérica a partir de una cadena de texto
+	 * @param sVarEncode String
+	 * @return
+	 * String
+	 */
+	public static String generarDigitoVerificador(String sVarVerif) {
+		String encVerif = "";
+		String tmpEncextd = sVarVerif;
+		int lenEncextd = tmpEncextd.length();
+		sVarVerif = "";
+		String codEncextd = "";
+		int cntEncextd = 1;
+
+		for(int iEncextd = 0; iEncextd < lenEncextd; iEncextd++) {
+			sVarVerif += tmpEncextd.substring(iEncextd, iEncextd + 1);
+			if(cntEncextd == 8 || iEncextd == lenEncextd) {
+				encVerif = encode(sVarVerif);
+				sVarVerif = "";
+				codEncextd += encVerif;
+				cntEncextd = 0;
+			}
+			cntEncextd++;
+		}
+		encVerif = codEncextd;
+		return encVerif;
 	}
 	//Cierre del método
 	
