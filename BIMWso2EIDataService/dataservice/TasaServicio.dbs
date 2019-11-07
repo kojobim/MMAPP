@@ -41,7 +41,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/clienteConsultarNE" element="clienteConsultar">
+        <result defaultNamespace="http://bem.com/tasaClienteConsultarNE" element="tasaCliente">
             <element column="TasInv" name="TasInv" xsdType="xs:decimal" optional="true"/>
             <element column="Inv_GruTas" name="Inv_GruTas" xsdType="xs:string" optional="true"/>
             <element column="Inv_NuPoGr" name="Inv_NuPoGr" xsdType="xs:string" optional="true"/>
@@ -73,7 +73,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/monedaConsultarNE" element="monedaConsultar">
+        <result defaultNamespace="http://bem.com/tasaMonedaConsultarNE" element="tasaMoneda">
             <element column="Mon_Numero" name="Mon_Numero" xsdType="xs:string" optional="true"/>
             <element column="Mon_Descri" name="Mon_Descri" xsdType="xs:string" optional="true"/>
             <element column="Mon_Simbol" name="Mon_Simbol" xsdType="xs:string" optional="true"/>
@@ -133,7 +133,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/GATConsultaCalcularNE" element="GATConsultaCalcular">
+        <result defaultNamespace="http://bem.com/tasaGATConsultaCalcularNE" element="tasaGAT">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
             <element column="Inv_GAT" name="Inv_GAT" xsdType="xs:double" optional="true"/>
@@ -161,7 +161,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/GATRealConsultaCalcularNE" element="GATRealConsultaCalcular">
+        <result defaultNamespace="http://bem.com/tasaGATRealConsultaCalcularNE" element="tasaGATReal">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
             <element column="Inv_GATRea" name="Inv_GATRea" xsdType="xs:double" optional="true"/>
