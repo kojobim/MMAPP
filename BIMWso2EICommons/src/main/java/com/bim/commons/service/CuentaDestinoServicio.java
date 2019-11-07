@@ -19,21 +19,20 @@ public class CuentaDestinoServicio extends BaseService {
     private static String CuentaDestinoServicio;
     
 	private static String CuentaDestinoSPEIActualizacionOp;
+    private static String CuentaDestinoSPEIConsultarOp;
+    private static String CatalogoInstitucionesConsultarOp;
+
 	private static String CuentaDestinoSPEIActualizacionOpTransaccio;
 	private static String CuentaDestinoSPEIActualizacionOpUsuario;
 	private static String CuentaDestinoSPEIActualizacionOpSucOrigen;
 	private static String CuentaDestinoSPEIActualizacionOpSucDestino;
     private static String CuentaDestinoSPEIActualizacionOpModulo;
-    
-    private static String CuentaDestinoSPEIConsultarOp;
     private static String CuentaDestinoSPEIConsultarOpTipConsul;
     private static String CuentaDestinoSPEIConsultarOpTransaccio;
     private static String CuentaDestinoSPEIConsultarOpUsuario;
     private static String CuentaDestinoSPEIConsultarOpSucOrigen;
     private static String CuentaDestinoSPEIConsultarOpSucDestino;
     private static String CuentaDestinoSPEIConsultarOpModulo;
-
-    private static String CatalogoInstitucionesConsultarOp;
     private static String CatalogoInstitucionesConsultarOpTipConsul;
     private static String CatalogoInstitucionesConsultarOpTransaccio;
     private static String CatalogoInstitucionesConsultarOpUsuario;
@@ -45,7 +44,7 @@ public class CuentaDestinoServicio extends BaseService {
 		super();
 
         CuentaDestinoServicio = properties.getProperty("data_service.cuenta_destino_servicio");
-        
+
         CuentaDestinoSPEIActualizacionOp = properties.getProperty("op.cuenta_destino_spei_actualizacion");
         CuentaDestinoSPEIConsultarOp = properties.getProperty("op.cuenta_destino_spei_consultar");
         CatalogoInstitucionesConsultarOp = properties.getProperty("op.catalogo_instituciones_consultar");

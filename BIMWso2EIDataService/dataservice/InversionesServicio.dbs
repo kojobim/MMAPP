@@ -5,7 +5,7 @@
     </config>
     <query id="inversionesObtenerSQL" useConfig="BIMDB">
         <sql>
-        	EXECUTE NBSALCEDCON 
+        	EXEC NBSALCEDCON 
         	@Inv_Client = :invClient, 
         	@Inv_Moneda = :invMoneda, 
         	@NumTransac = :numTransac, 
@@ -56,7 +56,7 @@
     </query>
     <query id="inversionesPagareNumeroUsuarioObtenerSQL" useConfig="BIMDB">
         <sql>
-        	EXECUTE NBINVERSCON
+        	EXEC NBINVERSCON
         	@Inv_Numero = :invNumero,
         	@Inv_Usuari = :invUsuari,
         	@Tip_Consul = :tipConsul,
@@ -100,7 +100,7 @@
     </query>
     <query id="inversionesStatusActualizarSQL" useConfig="BIMDB">
         <sql>
-            EXECUTE INADICIOMOD
+            EXEC INADICIOMOD
         	@Adi_Invers = :adiInvers,
         	@Adi_InsLiq = :adiInsLiq,
         	@Adi_MoReGr = :adiMoReGr,
@@ -127,17 +127,17 @@
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
         </result>
     </query>
-    <query id="inversionesImportesDeInvercionFinalizadaActualizarSQL" useConfig="BIMDB">
+    <query id="inversionesImportesDeInversionFinalizadaActualizarSQL" useConfig="BIMDB">
         <sql>
-            EXECUTE INREINVEALT
+            EXEC INREINVEALT
         	@Inv_Numero	= :invNumero,
             @Inv_Deposi	= :invDeposi,
             @Inv_rFecIn	= :invrFecIn,
             @Inv_rFecVe	= :invrFecVe,
             @Inv_rCanti = :invrCanti,
-            @Inv_rTasa	= :invrTasa,
+            @Inv_rTasa = :invrTasa,
             @Inv_rAutor	= :invrAutor,
-            @Inv_rISR	= :invrISR,
+            @Inv_rISR = :invrISR,
             @Inv_rCuent	= :invrCuent,
             @Inv_rTBrut	= :invrTBrut,
         	@NumTransac = :numTransac,
@@ -165,7 +165,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/inversionesImportesDeInvercionFinalizadaActualizarNE" element="ImportesDeInvercionFinalizada">
+        <result defaultNamespace="http://bem.com/inversionesImportesDeInversionFinalizadaActualizarNE" element="importesDeInversionFinalizada">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
             <element column="Err_Variab" name="Err_Variab" xsdType="xs:string" optional="true"/>
@@ -173,7 +173,7 @@
     </query>
     <query id="inversionesProcesoLiquidacionGenerarSQL" useConfig="BIMDB">
         <sql>
-            EXECUTE INREINVEGEN
+            EXEC INREINVEGEN
             @Inv_Numero = :invNumero,
             @Inv_rFecIn = :invrFecIn,
             @Inv_rFecVe = :invrFecVe,
@@ -213,16 +213,15 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/inversionesProcesoLiquidacionGenerarNE" element="ProcesoLiquidacionGenerar">
+        <result defaultNamespace="http://bem.com/inversionesProcesoLiquidacionGenerarNE" element="procesoLiquidacionGenerar">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
-            <element column="Err_Variab" name="Err_Variab" xsdType="xs:string" optional="true"/>
             <element column="Inv_Nueva" name="Inv_Nueva" xsdType="xs:string" optional="true"/>
         </result>
     </query>
     <query id="inversionesContraEstadoCuentaActualizarSQL" useConfig="BIMDB">
         <sql>
-            EXECUTE NBCUEORIACT
+            EXEC NBCUEORIACT
             @Cor_Usuari	= :corUsuari,
             @Cor_Cuenta	= :corCuenta,
             @Cor_Status	= :corStatus,
@@ -296,8 +295,8 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <operation name="inversionesImportesDeInvercionFinalizadaActualizarOp">
-        <call-query href="inversionesImportesDeInvercionFinalizadaActualizarSQL">
+    <operation name="inversionesImportesDeInversionFinalizadaActualizarOp">
+        <call-query href="inversionesImportesDeInversionFinalizadaActualizarSQL">
             <with-param name="invNumero" query-param="Inv_Numero"/>
             <with-param name="invDeposi" query-param="Inv_Deposi"/>
             <with-param name="invrFecIn" query-param="Inv_rFecIn"/>

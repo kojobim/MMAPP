@@ -132,7 +132,7 @@ public class ConfiguracionServicio extends BaseService {
 	 * <pre>
 	 * {
 	 *	Tip_Consul: String,
-	 * 	NumTransac: String,
+	 *	NumTransac?: String,
 	 *	Transaccio: String, 
 	 *	Usuario: String,
 	 *	FechaSis: String, 
@@ -178,15 +178,91 @@ public class ConfiguracionServicio extends BaseService {
 		return configuracionBancoConsultarDetalleResultado;
 	}//Cierre del método
 	
+	
+	/**
+	 * Método para obtener información de sucursal
+	 * ProcedureName: SOPARAMSCON
+	 * @param datosSucursal
+	 * <pre>
+	 * {
+	 *	Par_Sucurs: String,
+	 *	Tip_Consul?: String,
+	 *	NumTransac?: String,
+	 *	Transaccio: String, 
+	 *	Usuario: String,
+	 *	FechaSis: String, 
+	 *	SucOrigen: String, 
+	 *	SucDestino: String, 
+	 *	Modulo: String 
+	 * } 
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 *     informacionSucursal: {
+	 *         Par_Sucurs: String,
+	 *         Par_CheCaj: Integer,
+	 *         Par_IVA: Double,
+	 *         Par_ISR: Double,
+	 *         Par_DiBaIn: Integer,
+	 *         Par_DiBaCr: Integer,
+	 *         Par_DiBaCh: Integer,
+	 *         Par_ChLey1: String,
+	 *         Par_ChLey2: String,
+	 *         Par_ChLey3: String,
+	 *         Par_CheCer: String,
+	 *         Par_DiaRem: Integer,
+	 *         Par_LimAut: Double,
+	 *         Par_TranBR: String,
+	 *         Par_CliInd: Integer,
+	 *         Par_BanFol: Integer,
+	 *         Par_FecAct: Date,
+	 *         Par_CoCoIn: Double,
+	 *         Par_CoReme: Double,
+	 *         Par_OpeBan: Integer,
+	 *         Par_ConPap: Integer,
+	 *         Par_MonCom: String,
+	 *         Par_LinSob: String,
+	 *         Par_EnvSPE: Integer,
+	 *         Par_Banco: String,
+	 *         Par_ComRem: String,
+	 *         Par_IvaRem: String,
+	 *         Par_RemExt: String,
+	 *         Par_IVAREX: String,
+	 *         Par_GiBaEx: String,
+	 *         Par_GiBaNa: String,
+	 *         Par_IVAGBN: String,
+	 *         Par_IVAGBE: String,
+	 *         Par_ComSPE: String,
+	 *         Par_IVASPE: String,
+	 *         Par_NumTes: String,
+	 *         Par_IncISR: String,
+	 *         Par_InsISR: String,
+	 *         Par_SPEUA: String,
+	 *         Par_SIAC: String,
+	 *         Par_CobInm: String,
+	 *         Par_FecRem: Date,
+	 *         Par_IntBan: String,
+	 *         Par_Compan: String,
+	 *         Tip_Fecha: String,
+	 *         Suc_UltDia: String
+	 *     }
+	 * }
+	 * </pre>
+	 */
 	public JsonObject informacionSucursalObtener(JsonObject datosSucursal) {
-		datosSucursal.addProperty("Tip_Consul", "");
+		logger.info("COMMONS: Comenzando informacionSucursalObtener... ");
+		if(!datosSucursal.has("Tip_Consul"))
+			datosSucursal.addProperty("Tip_Consul", "");
+		if(!datosSucursal.has("NumTransac"))
+			datosSucursal.addProperty("NumTransac", "");
 		datosSucursal.addProperty("Transaccio", InformacionSucursalObtenerOpTransaccio);
 		datosSucursal.addProperty("Usuario", InformacionSucursalObtenerOpUsuari);
 		datosSucursal.addProperty("SucOrigen", InformacionSucursalObtenerOpSucOrigen);
 		datosSucursal.addProperty("SucDestino", InformacionSucursalObtenerOpSucDestino);
 		datosSucursal.addProperty("Modulo", InformacionSucursalObtenerOpModulo);
 		JsonObject informacionSucursalOpResultadoObjecto = Utilerias.performOperacion(ConfiguracionServicio, InformacionSucursalObtenerOp, datosSucursal);
-		logger.info("COMMONS: Finalizando horariosConsultar... ");
+		logger.info("COMMONS: Finalizando informacionSucursalObtener... ");
 		return informacionSucursalOpResultadoObjecto;
-	}
+	}//Cierre del método
 }
