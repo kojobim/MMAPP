@@ -32,8 +32,9 @@
     <com.bim.dataservice_._CuentaServicio>capp/DataServicesServer</com.bim.dataservice_._CuentaServicio>
     <com.bim.dataservice_._TasaServicio>capp/DataServicesServer</com.bim.dataservice_._TasaServicio>
     <com.bim.dataservice_._SaldoServicio>capp/DataServicesServer</com.bim.dataservice_._SaldoServicio>
-    <com.bim.dataservice_._TransaccionServicio>capp/DataServicesServer</com.bim.dataservice_._TransaccionServicio>
+    <com.bim.dataservice_._TransaccionServicio>capp/DataServicesServer</com.bim.dataservice_._TransaccionServicio>   
     <com.bim.dataservice_._MovimientosServicio>capp/DataServicesServer</com.bim.dataservice_._MovimientosServicio>
+    <com.bim.dataservice_._CuentaDestinoServicio>capp/DataServicesServer</com.bim.dataservice_._CuentaDestinoServicio>
     <com.bim.dataservice_._AvisoPrivacidadServicio>capp/DataServicesServer</com.bim.dataservice_._AvisoPrivacidadServicio>
     <com.bim.dataservice_._CuentaDestinoServicio>capp/DataServicesServer</com.bim.dataservice_._CuentaDestinoServicio>
   </properties>
@@ -147,6 +148,20 @@
     <dependency>
       <groupId>com.bim.dataservice</groupId>
       <artifactId>MovimientosServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>CuentaDestinoServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>CuentaDestinoServicio</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
