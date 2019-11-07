@@ -18,15 +18,15 @@ public class CuentaDestinoServicio extends BaseService {
  
     private static String CuentaDestinoServicio;
     
-	private static String CuentaDestinoSPEIActualizacionOp;
+	private static String CuentaDestinoSPEIActivacionOp;
     private static String CuentaDestinoSPEIConsultarOp;
     private static String CatalogoInstitucionesConsultarOp;
 
-	private static String CuentaDestinoSPEIActualizacionOpTransaccio;
-	private static String CuentaDestinoSPEIActualizacionOpUsuario;
-	private static String CuentaDestinoSPEIActualizacionOpSucOrigen;
-	private static String CuentaDestinoSPEIActualizacionOpSucDestino;
-    private static String CuentaDestinoSPEIActualizacionOpModulo;
+	private static String CuentaDestinoSPEIActivacionOpTransaccio;
+	private static String CuentaDestinoSPEIActivacionOpUsuario;
+	private static String CuentaDestinoSPEIActivacionOpSucOrigen;
+	private static String CuentaDestinoSPEIActivacionOpSucDestino;
+    private static String CuentaDestinoSPEIActivacionOpModulo;
     private static String CuentaDestinoSPEIConsultarOpTipConsul;
     private static String CuentaDestinoSPEIConsultarOpTransaccio;
     private static String CuentaDestinoSPEIConsultarOpUsuario;
@@ -45,15 +45,15 @@ public class CuentaDestinoServicio extends BaseService {
 
         CuentaDestinoServicio = properties.getProperty("data_service.cuenta_destino_servicio");
 
-        CuentaDestinoSPEIActualizacionOp = properties.getProperty("op.cuenta_destino_spei_actualizacion");
+        CuentaDestinoSPEIActivacionOp = properties.getProperty("op.cuenta_destino_spei_activacion");
         CuentaDestinoSPEIConsultarOp = properties.getProperty("op.cuenta_destino_spei_consultar");
         CatalogoInstitucionesConsultarOp = properties.getProperty("op.catalogo_instituciones_consultar");
 
-        CuentaDestinoSPEIActualizacionOpTransaccio = properties.getProperty("op.cuenta_destino_spei_actualizacion.transaccio");
-		CuentaDestinoSPEIActualizacionOpUsuario = properties.getProperty("op.cuenta_destino_spei_actualizacion.usuario");
-		CuentaDestinoSPEIActualizacionOpSucOrigen = properties.getProperty("op.cuenta_destino_spei_actualizacion.suc_origen");
-		CuentaDestinoSPEIActualizacionOpSucDestino = properties.getProperty("op.cuenta_destino_spei_actualizacion.suc_destino");
-        CuentaDestinoSPEIActualizacionOpModulo = properties.getProperty("op.cuenta_destino_spei_actualizacion.modulo");
+        CuentaDestinoSPEIActivacionOpTransaccio = properties.getProperty("op.cuenta_destino_spei_activacion.transaccio");
+		CuentaDestinoSPEIActivacionOpUsuario = properties.getProperty("op.cuenta_destino_spei_activacion.usuario");
+		CuentaDestinoSPEIActivacionOpSucOrigen = properties.getProperty("op.cuenta_destino_spei_activacion.suc_origen");
+		CuentaDestinoSPEIActivacionOpSucDestino = properties.getProperty("op.cuenta_destino_spei_activacion.suc_destino");
+        CuentaDestinoSPEIActivacionOpModulo = properties.getProperty("op.cuenta_destino_spei_activacion.modulo");
         
         CuentaDestinoSPEIConsultarOpTipConsul = properties.getProperty("op.cuenta_destino_spei_consultar.tip_consul");
         CuentaDestinoSPEIConsultarOpTransaccio = properties.getProperty("op.cuenta_destino_spei_consultar.transaccio");
@@ -71,7 +71,7 @@ public class CuentaDestinoServicio extends BaseService {
     }
 	
 	/**
-     * Método de actualización de cuentas destino para transferencias SPEI
+     * Método de activación de cuentas destino para transferencias SPEI
      * ProcedureName: NBCUDESPPRO
      * @param datosCuentaDestinoSPEI
      * <pre>
@@ -96,15 +96,15 @@ public class CuentaDestinoServicio extends BaseService {
      * }
      * </pre>
      */
-	public JsonObject cuentaDestinoSPEIActualizacion(JsonObject datosCuentaDestinoSPEI) {
-		logger.info("COMMONS: Comenzando cuentaDestinoSPEIActualizacion...");
-		datosCuentaDestinoSPEI.addProperty("Transaccio", CuentaDestinoSPEIActualizacionOpTransaccio);
-        datosCuentaDestinoSPEI.addProperty("Usuario", CuentaDestinoSPEIActualizacionOpUsuario);
-        datosCuentaDestinoSPEI.addProperty("SucOrigen", CuentaDestinoSPEIActualizacionOpSucOrigen);
-        datosCuentaDestinoSPEI.addProperty("SucDestino", CuentaDestinoSPEIActualizacionOpSucDestino);
-        datosCuentaDestinoSPEI.addProperty("Modulo", CuentaDestinoSPEIActualizacionOpModulo);
-		JsonObject result = Utilerias.performOperacion(CuentaDestinoServicio, CuentaDestinoSPEIActualizacionOp, datosCuentaDestinoSPEI);
-		logger.info("COMMONS: Finalizando cuentaDestinoSPEIActualizacion...");
+	public JsonObject cuentaDestinoSPEIActivacion(JsonObject datosCuentaDestinoSPEI) {
+		logger.info("COMMONS: Comenzando cuentaDestinoSPEIActivacion...");
+		datosCuentaDestinoSPEI.addProperty("Transaccio", CuentaDestinoSPEIActivacionOpTransaccio);
+        datosCuentaDestinoSPEI.addProperty("Usuario", CuentaDestinoSPEIActivacionOpUsuario);
+        datosCuentaDestinoSPEI.addProperty("SucOrigen", CuentaDestinoSPEIActivacionOpSucOrigen);
+        datosCuentaDestinoSPEI.addProperty("SucDestino", CuentaDestinoSPEIActivacionOpSucDestino);
+        datosCuentaDestinoSPEI.addProperty("Modulo", CuentaDestinoSPEIActivacionOpModulo);
+		JsonObject result = Utilerias.performOperacion(CuentaDestinoServicio, CuentaDestinoSPEIActivacionOp, datosCuentaDestinoSPEI);
+		logger.info("COMMONS: Finalizando cuentaDestinoSPEIActivacion...");
 		return result;
 	}//Cierre del método
     

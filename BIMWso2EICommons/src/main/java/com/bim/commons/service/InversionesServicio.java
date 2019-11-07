@@ -150,7 +150,7 @@ public class InversionesServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject inversionesObtener(JsonObject datosInversionesObtener) {
-		logger.info("COMMONS: Comenzando inversionesObtener... ");
+		logger.info("COMMONS: Comenzando inversionesObtener metodo... ");
 		datosInversionesObtener.addProperty("Inv_Moneda", InversionesObtenerOpInvMoneda);
 		if(!datosInversionesObtener.has("NumTransac"))
 			datosInversionesObtener.addProperty("NumTransac", "");
@@ -160,7 +160,7 @@ public class InversionesServicio extends BaseService {
 		datosInversionesObtener.addProperty("SucDestino", InversionesObtenerOpSucDestino);
 		datosInversionesObtener.addProperty("Modulo", InversionesObtenerOpModulo);
 		JsonObject inversionesObtenerOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesObtenerOp, datosInversionesObtener);
-		logger.info("COMMONS: Finalizando inversionesObtener... ");
+		logger.info("COMMONS: Finalizando inversionesObtener metodo... ");
 		return inversionesObtenerOpResultadoObjeto;
 	}//Cierre del método
 	
@@ -213,7 +213,7 @@ public class InversionesServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject inversionesPagareNumeroUsuarioObtener(JsonObject datosInversionesPagareNumeroUsuarioObtener) {
-		logger.info("COMMONS: Comenzando inversionesPagareNumeroUsuarioObtener... ");
+		logger.info("COMMONS: Comenzando inversionesPagareNumeroUsuarioObtener metodo... ");
 		if(!datosInversionesPagareNumeroUsuarioObtener.has("Inv_Numero"))
 			datosInversionesPagareNumeroUsuarioObtener.addProperty("Inv_Numero", "");
 		if(!datosInversionesPagareNumeroUsuarioObtener.has("Inv_Usuari"))
@@ -225,12 +225,13 @@ public class InversionesServicio extends BaseService {
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
 		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = Utilerias.performOperacion(InversionesServicio, InversionesPagareNumeroUsuarioObtenerOp, datosInversionesPagareNumeroUsuarioObtener);
-		logger.info("COMMONS: Finalizando inversionesPagareNumeroUsuarioObtener... ");
+		logger.info("COMMONS: Finalizando inversionesPagareNumeroUsuarioObtener metodo... ");
 		return inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto;
 	}//Cierre del método
 	
+	
 	/**
-	 * Método para actualizar inversiones importantes de inversiones finalizadas
+	 * Método para actualizar los importes de la inversión finalizada
 	 * ProcedureName: INREINVEALT
 	 * @param datosInversionFinalizada
 	 * <pre>
@@ -265,6 +266,7 @@ public class InversionesServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject inversionesImportesDeInversionFinalizadaActualizar(JsonObject datosInversionFinalizada) {
+		logger.info("COMMONS: Comenzando inversionesImportesDeInversionFinalizadaActualizar metodo... ");
 		datosInversionFinalizada.addProperty("Inv_rAutor", InversionesImportesDeInversionFinalizadaActualizarOpInvrAutor);		
 		datosInversionFinalizada.addProperty("Transaccio", InversionesImportesDeInversionFinalizadaActualizarOpTransaccio);
 		datosInversionFinalizada.addProperty("Usuario", InversionesImportesDeInversionFinalizadaActualizarOpUsuari);
@@ -272,11 +274,13 @@ public class InversionesServicio extends BaseService {
 		datosInversionFinalizada.addProperty("SucDestino", InversionesImportesDeInversionFinalizadaActualizarOpSucDestino);
 		datosInversionFinalizada.addProperty("Modulo", InversionesImportesDeInversionFinalizadaActualizarOpModulo);
 		JsonObject inversionesImportesDeInversionFinalizadaActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesImportesDeInversionFinalizadaActualizarOp, datosInversionFinalizada);
+		logger.info("COMMONS: Finalizando inversionesImportesDeInversionFinalizadaActualizar metodo... ");
 		return inversionesImportesDeInversionFinalizadaActualizarOpResultadoObjeto;
 	}//Cierre del método
-	
+
+
 	/**
-	 * Método para actualizar el status de la inversion
+	 * Método para actualizar el status de una inversión
 	 * ProcedureName: INADICIOMOD
 	 * @param datosStatusActualizar
 	 * <pre>
@@ -308,6 +312,7 @@ public class InversionesServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject inversionesStatusActualizar(JsonObject datosStatusActualizar) {
+		logger.info("COMMONS: Comenzando inversionesStatusActualizar metodo... ");
 		datosStatusActualizar.addProperty("Adi_InsLiq", InversionesStatusActualizarOpAdiInsLiq);
 		datosStatusActualizar.addProperty("Adi_MoReGr", Integer.parseInt(InversionesStatusActualizarOpAdiMoReGr));
 		datosStatusActualizar.addProperty("Transaccio", InversionesStatusActualizarOpTransaccio);
@@ -315,13 +320,14 @@ public class InversionesServicio extends BaseService {
 		datosStatusActualizar.addProperty("SucOrigen", InversionesStatusActualizarOpSucOrigen);
 		datosStatusActualizar.addProperty("SucDestino", InversionesStatusActualizarOpSucDestino);
 		datosStatusActualizar.addProperty("Modulo", InversionesStatusActualizarOpModulo);
-
 		JsonObject inversionesStatusActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesStatusActualizarOp, datosStatusActualizar);
+		logger.info("COMMONS: Finalizando inversionesStatusActualizar metodo... ");
 		return inversionesStatusActualizarOpResultadoObjeto;
 	}//Cierre del método
-	
+
+
 	/**
-	 * Método para generar el proceso de liquidacion de inversiones
+	 * Método para generar el proceso de liquidación de inversiones
 	 * ProcedureName: INREINVEGEN
 	 * @param datosProcesoLiquidacion
 	 * <pre>
@@ -359,6 +365,7 @@ public class InversionesServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject inversionesProcesoLiquidacionGenerar(JsonObject datosProcesoLiquidacion) {
+		logger.info("COMMONS: Comenzando inversionesProcesoLiquidacionGenerar metodo... ");
 		datosProcesoLiquidacion.addProperty("Inv_rAutor", InversionesImportesDeInversionFinalizadaActualizarOpUsuari);
 		datosProcesoLiquidacion.addProperty("Inv_MonRef", InversionesProcesoLiquidacionGenerarOpInvMonRef);
 		datosProcesoLiquidacion.addProperty("Transaccio", InversionesProcesoLiquidacionGenerarOpTransaccio);
@@ -367,23 +374,49 @@ public class InversionesServicio extends BaseService {
 		datosProcesoLiquidacion.addProperty("SucDestino", InversionesProcesoLiquidacionGenerarOpSucDestino);
 		datosProcesoLiquidacion.addProperty("Modulo", InversionesProcesoLiquidacionGenerarOpModulo);
 		JsonObject inversionesProcesoLiquidacionGenerarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesProcesoLiquidacionGenerarOp, datosProcesoLiquidacion);
+		logger.info("COMMONS: Finalizando inversionesProcesoLiquidacionGenerar metodo... ");
 		return inversionesProcesoLiquidacionGenerarOpResultadoObjeto;
 	}//Cierre del método
-	
+
+
 	/**
-	 * Método para 
-	 * ProcedureName:
+	 * Método para actualizar el estado de la cuenta contra la inversión realizada 
+	 * ProcedureName: NBCUEORIACT
 	 * @param datosIversionVsEstadoCuenta
 	 * <pre>
+	 * {
+	 *	Cor_Usuari: String,
+	 *	Cor_Cuenta: String,
+	 *	Cor_Status: String,
+	 *	Cor_MoLiDi: Numeric,
+	 *	Cor_MonDia: Numeric,
+	 *	Cor_CliUsu: String,
+	 *	Cor_Alias: String,
+	 *	Tip_Actual: String,
+	 *	NumTransac: String,
+	 *	Transaccio: String,
+	 *	Usuario: String,
+	 *	FechaSis: String,
+	 *	SucOrigen: String,
+	 *	SucDestino: String,
+	 *	Modulo: String
+	 * }
 	 * </pre>
 	 * @return
 	 * <pre>
+	 * { 
+	 * 	REQUEST_STATUS: String
+	 * }
 	 * </pre>
 	 */
-	public JsonObject inversionesContraEstadoCuentaActualizarOp(JsonObject datosIversionVsEstadoCuenta) {
-		datosIversionVsEstadoCuenta.addProperty("Cor_Status", "");
-		datosIversionVsEstadoCuenta.addProperty("Cor_CliUsu", "");
-		datosIversionVsEstadoCuenta.addProperty("Cor_Alias", "");
+	public JsonObject inversionesContraEstadoCuentaActualizar(JsonObject datosIversionVsEstadoCuenta) {
+		logger.info("COMMONS: Comenzando inversionesContraEstadoCuentaActualizar metodo... ");
+		if(!datosIversionVsEstadoCuenta.has("Cor_Status"))
+			datosIversionVsEstadoCuenta.addProperty("Cor_Status", "");
+		if(!datosIversionVsEstadoCuenta.has("Cor_CliUsu"))
+			datosIversionVsEstadoCuenta.addProperty("Cor_CliUsu", "");
+		if(!datosIversionVsEstadoCuenta.has("Cor_Alias"))
+			datosIversionVsEstadoCuenta.addProperty("Cor_Alias", "");
 		datosIversionVsEstadoCuenta.addProperty("Cor_MoLiDi", InversionesContraEstadoCuentaActualizarOpCorMoLiDi);
 		datosIversionVsEstadoCuenta.addProperty("Tip_Actual", InversionesContraEstadoCuentaActualizarOpTipActual);		
 		datosIversionVsEstadoCuenta.addProperty("Transaccio", InversionesContraEstadoCuentaActualizarOpTransaccio);
@@ -392,6 +425,7 @@ public class InversionesServicio extends BaseService {
 		datosIversionVsEstadoCuenta.addProperty("SucDestino", InversionesContraEstadoCuentaActualizarOpSucDestino);
 		datosIversionVsEstadoCuenta.addProperty("Modulo", InversionesContraEstadoCuentaActualizarOpModulo);
 		JsonObject inversionesContraEstadoCuentaActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesContraEstadoCuentaActualizarOp, datosIversionVsEstadoCuenta);
+		logger.info("COMMONS: Finalizando inversionesContraEstadoCuentaActualizar metodo... ");
 		return inversionesContraEstadoCuentaActualizarOpResultadoObjeto;
 	}//Cierre del método
 }

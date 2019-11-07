@@ -136,7 +136,7 @@
             <element column="Cds_FeAlFo" name="Cds_FeAlFo" xsdType="xs:string" optional="true"/>
         </result>
     </query>
-    <query id="cuentaDestinoSPEIActualizacionSQL" useConfig="BIMDB">
+    <query id="cuentaDestinoSPEIActivacionSQL" useConfig="BIMDB">
         <sql>
 			EXECUTE NBCUDESPPRO
 			@Cds_UsuAdm = :cds_UsuAdm,
@@ -156,7 +156,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/cuentaDestinoSPEIActualizacionNE" element="cuentaDestino">
+        <result defaultNamespace="http://bem.com/cuentaDestinoSPEIActivacionNE" element="cuentaDestino">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
         </result>
@@ -242,8 +242,8 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <operation returnRequestStatus="true" name="cuentaDestinoSPEIActualizacionOp">
-        <call-query href="cuentaDestinoSPEIActualizacionSQL">
+    <operation returnRequestStatus="true" name="cuentaDestinoSPEIActivacionOp">
+        <call-query href="cuentaDestinoSPEIActivacionSQL">
             <with-param name="cds_UsuAdm" query-param="Cds_UsuAdm"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>

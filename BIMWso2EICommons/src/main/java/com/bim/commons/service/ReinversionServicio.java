@@ -36,14 +36,16 @@ public class ReinversionServicio extends BaseService {
 
 
 	public JsonObject fechaHabilConsultar(JsonObject datosFechaHabil) {
+		logger.info("COMMONS: Comenzando fechaHabilConsultar metodo...");
 		datosFechaHabil.addProperty("FinSem", FechaHabilConsultarOpFinSem);
 		datosFechaHabil.addProperty("Transaccio", FechaHabilConsultarOpTransaccio);
 		datosFechaHabil.addProperty("Usuario", FechaHabilConsultarOpUsuari);
 		datosFechaHabil.addProperty("SucOrigen", FechaHabilConsultarOpSucOrigen);
 		datosFechaHabil.addProperty("SucDestino", FechaHabilConsultarOpSucDestino);
 		datosFechaHabil.addProperty("Modulo", FechaHabilConsultarOpModulo);
-		logger.info("datosFechaHabil" + datosFechaHabil);
+		logger.info("- datosFechaHabil " + datosFechaHabil);
 		JsonObject fechaHabilConsultarOpResultadoObjeto = Utilerias.performOperacion(ReinversionServicio, FechaHabilConsultarOp, datosFechaHabil);
+		logger.info("COMMONS: Finalizando fechaHabilConsultar metodo...");
 		return fechaHabilConsultarOpResultadoObjeto;
 	}
 }

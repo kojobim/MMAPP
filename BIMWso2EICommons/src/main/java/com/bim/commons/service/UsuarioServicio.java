@@ -145,7 +145,7 @@ public class UsuarioServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject usuarioConsultar(JsonObject datosUsuarioConsultar) {
-		logger.info("COMMONS: Comenzando usuarioConsultar... ");
+		logger.info("COMMONS: Comenzando usuarioConsultar metodo... ");
 		if(!datosUsuarioConsultar.has("Usu_Passwo"))
 			datosUsuarioConsultar.addProperty("Usu_Passwo", "");
 		datosUsuarioConsultar.addProperty("Tip_Consul", UsuarioConsultarOpTipConsul);
@@ -172,7 +172,7 @@ public class UsuarioServicio extends BaseService {
 		if(!datosUsuarioConsultar.has("NumTransac"))
 			datosUsuarioConsultar.addProperty("NumTransac", "");	
 		JsonObject usuarioConsultarOpResultadoObjeto = Utilerias.performOperacion(UsuarioServicio, UsuarioConsultarOp, datosUsuarioConsultar);
-		logger.info("COMMONS: Finalizando usuarioConsultar... ");
+		logger.info("COMMONS: Finalizando usuarioConsultar metodo... ");
 		return usuarioConsultarOpResultadoObjeto;
 	}//Cierre del método
 	
@@ -213,7 +213,7 @@ public class UsuarioServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject usuarioActualizar(JsonObject datosUsuarioActualizar) {
-		logger.info("COMMONS: Comenzando usuarioActualizar... ");
+		logger.info("COMMONS: Comenzando usuarioActualizar metodo... ");
 		if(!datosUsuarioActualizar.has("Usu_Numero"))
 			datosUsuarioActualizar.addProperty("Usu_Numero", "");
 		if(!datosUsuarioActualizar.has("Usu_Passwo"))
@@ -240,11 +240,43 @@ public class UsuarioServicio extends BaseService {
 		datosUsuarioActualizar.addProperty("SucDestino", UsuarioActualizacionOpSucDestion);
 		datosUsuarioActualizar.addProperty("Modulo", UsuarioActualizacionOpModulo);
 		JsonObject usuarioActualizacionOpResultadoObjecto = Utilerias.performOperacion(UsuarioServicio, UsuarioActualizacionOp, datosUsuarioActualizar);
-		logger.info("COMMONS: Finalizando usuarioActualizar... ");
+		logger.info("COMMONS: Finalizando usuarioActualizar metodo... ");
 		return usuarioActualizacionOpResultadoObjecto;
 	}//Cierre del método
 	
+	
+	/**
+	 * Método para consultar el perfil de riesgo del usuario
+	 * ProcedureName: CLAPLCUECON
+	 * @param datosPerfilRiesgo
+	 * <pre>
+	 * {
+	 *	Apl_Client: String,
+	 *	Apl_Cuesti: Integer,
+	 *	Tip_Consul: String,
+	 *	NumTransac: String,
+	 *	Transaccio: String,
+	 *	Usuario: String,
+	 *	FechaSis: String,
+	 *	SucOrigen: String,
+	 *	SucDestino: String,
+	 *	Modulo: String
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 *	perfilRiesgo: {
+	 *		Apl_PerRie: Integer,
+	 *		Apl_ConOpe: Integer,
+	 *		Per_TitCli: String,
+	 *		Par_OpExPe: Integer
+	 *	}
+	 * }
+	 * </pre>
+	 */
 	public JsonObject usuarioPerfilRiesgoConsultar(JsonObject datosPerfilRiesgo) {
+		logger.info("COMMONS: Comenzando usuarioPerfilRiesgoConsultar metodo... ");
 		datosPerfilRiesgo.addProperty("Apl_Cuesti", Integer.parseInt(UsuarioPerfilRiesgoConsultarOpAplClient));
 		datosPerfilRiesgo.addProperty("Tip_Consul", UsuarioPerfilRiesgoConsultarOpTipConsul);
 		datosPerfilRiesgo.addProperty("Transaccio", UsuarioPerfilRiesgoConsultarOpTransaccio);
@@ -253,7 +285,7 @@ public class UsuarioServicio extends BaseService {
 		datosPerfilRiesgo.addProperty("SucDestino", UsuarioPerfilRiesgoConsultarOpSucDestino);
 		datosPerfilRiesgo.addProperty("Modulo", UsuarioPerfilRiesgoConsultarOpModulo);
 		JsonObject usuarioPerfilRiesgoOpResultadoObjecto = Utilerias.performOperacion(UsuarioServicio, UsuarioPerfilRiesgoConsultarOp, datosPerfilRiesgo);
-		logger.info("COMMONS: Finalizando usuarioActualizar... ");
+		logger.info("COMMONS: Finalizando usuarioPerfilRiesgoConsultar metodo... ");
 		return usuarioPerfilRiesgoOpResultadoObjecto;
-	}
+	}//Cierre del método
 }

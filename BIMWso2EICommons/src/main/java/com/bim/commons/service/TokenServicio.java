@@ -18,12 +18,21 @@ public class TokenServicio extends BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(TokenServicio.class);
 
 	private static String TokenServicio;
+	
 	private static String TokenVerificarOp;
+	private static String IntentosActualizacionOp;
+
 	private static String TokenVerificarOpUsuario;
 	private static String TokenVerificarOpTransaccio;
 	private static String TokenVerificarOpSucOrigen;
 	private static String TokenVerificarOpSucDestino;
 	private static String TokenVerificarOpModulo;
+
+	private static String IntentosActualizacionOpTransaccio;
+	private static String IntentosActualizacionOpUsuario;
+	private static String IntentosActualizacionOpSucOrigen;
+	private static String IntentosActualizacionOpSucDestino;
+	private static String IntentosActualizacionOpModulo;
 	
 	public TokenServicio() {
 		super();
@@ -36,6 +45,14 @@ public class TokenServicio extends BaseService {
 		TokenVerificarOpSucOrigen = properties.getProperty("op.token_verificar.suc_origen");
 		TokenVerificarOpSucDestino = properties.getProperty("op.token_verificar.suc_destino");
 		TokenVerificarOpModulo = properties.getProperty("op.token_verificar.modulo");
+		
+		TokenServicio = properties.getProperty("data_service.token_servicio");
+		IntentosActualizacionOp = properties.getProperty("token_servicio.op.intentos_actualizacion");
+		IntentosActualizacionOpTransaccio = properties.getProperty("op.intentos_actualizacion.transaccio");
+		IntentosActualizacionOpUsuario = properties.getProperty("op.intentos_actualizacion.usuario");
+		IntentosActualizacionOpSucOrigen = properties.getProperty("op.intentos_actualizacion.suc_origen");
+		IntentosActualizacionOpSucDestino = properties.getProperty("op.intentos_actualizacion.suc_destino");
+		IntentosActualizacionOpModulo = properties.getProperty("op.intentos_actualizacion.modulo");
 	}
 	
 	/**
@@ -64,7 +81,7 @@ public class TokenServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject tokenVerificar(JsonObject datosTokenVerificar) {
-		logger.info("COMMONS: Comenzando tokenVerificar... ");
+		logger.info("COMMONS: Comenzando tokenVerificar metodo... ");
 		if(!datosTokenVerificar.has("NumTransac"))
 			datosTokenVerificar.addProperty("NumTransac", "");
 		datosTokenVerificar.addProperty("Transaccio", TokenVerificarOpTransaccio);
@@ -73,7 +90,7 @@ public class TokenServicio extends BaseService {
 		datosTokenVerificar.addProperty("SucDestino", TokenVerificarOpSucDestino);
 		datosTokenVerificar.addProperty("Modulo", TokenVerificarOpModulo);
 		JsonObject tokenVerificarOpResultadoObjecto = Utilerias.performOperacion(TokenServicio, TokenVerificarOp, datosTokenVerificar);
-		logger.info("COMMONS: Finalizando tokenVerificar... ");
+		logger.info("COMMONS: Finalizando tokenVerificar metodo... ");
 		return tokenVerificarOpResultadoObjecto;
 	}//Cierre del método
 
@@ -86,16 +103,8 @@ public class TokenServicio extends BaseService {
 	 * String
 	 */
     public String validarTokenOperacion(String tokFolio, String cpRSAToken, String tokUsuari, String numTransac) {
-		logger.info("COMMONS: Iniciando validarTokenTransaccion metodo...");
+		logger.info("COMMONS: Comenzando validarTokenOperacion metodo...");
 		
-		String TokenServicio = properties.getProperty("data_service.token_servicio");
-		String IntentosActualizacionOp = properties.getProperty("token_servicio.op.intentos_actualizacion");
-		String IntentosActualizacionOpTransaccio = properties.getProperty("op.intentos_actualizacion.transaccio");
-		String IntentosActualizacionOpUsuario = properties.getProperty("op.intentos_actualizacion.usuario");
-		String IntentosActualizacionOpSucOrigen = properties.getProperty("op.intentos_actualizacion.suc_origen");
-		String IntentosActualizacionOpSucDestino = properties.getProperty("op.intentos_actualizacion.suc_destino");
-		String IntentosActualizacionOpModulo = properties.getProperty("op.intentos_actualizacion.modulo");
-
 		String fechaSis = Utilerias.obtenerFechaSis();
 		String clave = "0" + tokFolio + cpRSAToken;
 		String validaToken = Racal.validaTokenOpera(clave);
@@ -104,9 +113,11 @@ public class TokenServicio extends BaseService {
 
 		JsonObject datosToken = new JsonObject();
 		datosToken.addProperty("Tok_Folio", tokFolio);
-		datosToken.addProperty("Tok_UsuAdm", "");
+		if(!datosToken.has("Tok_UsuAdm"))
+			datosToken.addProperty("Tok_UsuAdm", "");
 		datosToken.addProperty("Tok_Usuari", tokUsuari);
-		datosToken.addProperty("Tok_ComCan", "");
+		if(!datosToken.has("Tok_ComCan"))
+			datosToken.addProperty("Tok_ComCan", "");
 		datosToken.addProperty("Tip_Actual", tipActual);
 		datosToken.addProperty("NumTransac", numTransac);
 		datosToken.addProperty("Transaccio", IntentosActualizacionOpTransaccio);
@@ -123,7 +134,7 @@ public class TokenServicio extends BaseService {
 		if(intentosActualizacion != null && intentosActualizacion.has("Usu_Status"))
 			usuStatus = intentosActualizacion.get("Usu_Status").getAsString();
 
-		logger.info("COMMONS: Terminando validarTokenTransaccion metodo...");
+		logger.info("COMMONS: Finalizando validarTokenOperacion metodo...");
 		return usuStatus;
 	}//Cierre del método
 }

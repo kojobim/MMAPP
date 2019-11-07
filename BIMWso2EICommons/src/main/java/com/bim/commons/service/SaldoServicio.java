@@ -86,7 +86,7 @@ public class SaldoServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject saldosClienteConsultar(JsonObject datosSaldosClienteConsultar) {
-		logger.info("COMMONS: Comenzando saldosClienteConsultar... ");
+		logger.info("COMMONS: Comenzando saldosClienteConsultar metodo... ");
 		if(!datosSaldosClienteConsultar.has("Cue_Numero"))
 			datosSaldosClienteConsultar.addProperty("Cue_Numero", "");
 		if(!datosSaldosClienteConsultar.has("NumTransac"))
@@ -97,7 +97,7 @@ public class SaldoServicio extends BaseService {
 		datosSaldosClienteConsultar.addProperty("SucDestino", SaldosClienteConsultarOpSucDestino);
 		datosSaldosClienteConsultar.addProperty("Modulo", SaldosClienteConsultarOpModulo);
 		JsonObject saldosClienteConsultarResultadoObjecto = Utilerias.performOperacion(SaldoServicio, SaldosClienteConsultarOp, datosSaldosClienteConsultar);
-		logger.info("COMMONS: Finalizando saldosClienteConsultar... ");
+		logger.info("COMMONS: Finalizando saldosClienteConsultar metodo... ");
 		return saldosClienteConsultarResultadoObjecto;
 	}//Cierre del método
 	

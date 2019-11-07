@@ -41,14 +41,14 @@ public class TransaccionServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject folioTransaccionGenerar() {
-		logger.info("COMMONS: Comenzando folioTransaccionGenerar... ");
+		logger.info("COMMONS: Comenzando folioTransaccionGenerar metodo... ");
 		JsonObject datosFolioTransaccion = new JsonObject();
 		datosFolioTransaccion.addProperty("Num_Transa", "");
 		datosFolioTransaccion.addProperty("SucOrigen", FolioTransaccionGenerarOpSucOrigen);
 		JsonObject folioTransaccionGenerarResultadoObjeto =  Utilerias
 				.performOperacion(TransaccionServicio, FolioTransaccionGenerarOp, 
 						datosFolioTransaccion);
-		logger.info("COMMONS: Finalizando folioTransaccionGenerar... ");
+		logger.info("COMMONS: Finalizando folioTransaccionGenerar metodo... ");
 		return folioTransaccionGenerarResultadoObjeto;
 	}//Cierre del método
 }
