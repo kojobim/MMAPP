@@ -190,6 +190,33 @@
             <element column="Ins_Descri" name="Ins_Descri" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="cuentaDestinoProcesarSQL" useConfig="BIMDB">
+        <sql>
+        	EXEC NBCUEDESPRO
+	        @Cud_UsuAdm = :cudUSuAdm,
+	        @Cud_CLABE = :cudCLABE,
+	        @Cud_Banco = :CudBanco,
+	        @Tip_Proces = :tipProces,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="cudUSuAdm" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cudCLABE" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="CudBanco" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipProces" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
     <query id="cuentaDestinoBIMActualizarSQL" useConfig="BIMDB">
         <sql>
 			EXECUTE NBCUDEBRACT
@@ -212,7 +239,7 @@
         <param name="cdbRandom" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="tipActual" paramType="SCALAR" sqlType="STRING" type="IN"/>
 		<param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+		<param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
@@ -222,7 +249,7 @@
 			<element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
         </result>
-    </query>
+	</query>
     <operation name="cuentaDestinoBIMConsultarOp">
         <call-query href="cuentaDestinoBIMConsultarSQL">
             <with-param name="cdbClient" query-param="Cdb_Client"/>
@@ -301,6 +328,21 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
+    <operation returnRequestStatus="true" name="cuentaDestinoProcesarOp">
+        <call-query href="cuentaDestinoProcesarSQL">
+            <with-param name="cudUSuAdm" query-param="Cud_UsuAdm"/>
+            <with-param name="cudCLABE" query-param="Cud_CLABE"/>
+            <with-param name="CudBanco" query-param="Cud_Banco"/>
+            <with-param name="tipProces" query-param="Tip_Proces"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
     <operation returnRequestStatus="true" name="cuentaDestinoBIMActualizarOp">
         <call-query href="cuentaDestinoBIMActualizarSQL">
             <with-param name="cdbConsec" query-param="Cdb_Consec"/>
@@ -309,7 +351,7 @@
             <with-param name="cdbRandom" query-param="Cdb_Random"/>
             <with-param name="tipActual" query-param="Tip_Actual"/>
 			<with-param name="numTransac" query-param="NumTransac"/>
-            <with-param name="transaccio" query-param="Transaccio"/>
+			<with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
             <with-param name="fechaSis" query-param="FechaSis"/>
             <with-param name="sucOrigen" query-param="SucOrigen"/>
