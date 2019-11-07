@@ -1229,14 +1229,16 @@ public class InversionesCtrl extends BimBaseCtrl {
 		try {
 			rfecIn = simpleDateFormat.parse(fechaSis);	
 		} catch (Exception e) {
-			logger.info("Error en el formato de fecha.");
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.43");
+			throw new InternalServerException(bimMessageDTO.toString());
 		}
 		
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");		
 			rfecVe = sdf.parse(sigFecha);
 		} catch (Exception e) {
-			logger.info("Error en el formato de fecha.");
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.43");
+			throw new InternalServerException(bimMessageDTO.toString());
 		}
 		
 		String invCuenta = Utilerias.getStringProperty(inversion, "Inv_Cuenta");
@@ -1394,14 +1396,16 @@ public class InversionesCtrl extends BimBaseCtrl {
 					 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 					 fecIni = sdf.parse(invFecIni);
 				 } catch (Exception e) {
-					 logger.info("Error en el formato de fecha.");
+					BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.43");
+					throw new InternalServerException(bimMessageDTO.toString());
 				 }
 
 				 try {
 					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 					fecVen = sdf.parse(invFecVen);
 				} catch (Exception e) {
-					logger.info("Error en el formato de fecha.");
+					BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.43");
+					throw new InternalServerException(bimMessageDTO.toString());
 				}
 
 				rInvCuenta = Utilerias.getStringProperty(inversionObj, "Inv_Cuenta");
@@ -1445,16 +1449,24 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		String asunto = Utilerias.obtenerPropiedadPlantilla("mail.reinversion.asunto");
 		String plantilla = Utilerias.obtenerPlantilla("reinversion");
+		String invNuevamen = invNueva.substring(invNueva.length()-7);		
+		String rInvCuentamen = rInvCuenta.substring(rInvCuenta.length()-4);
 
-		String invNuevaOcu = "**************" + invNueva.substring(invNueva.length()-7);
-		String invCuentaOcu = "**************" + rInvCuenta.substring(rInvCuenta.length()-4);
+		StringBuilder invNuevaOcu = new StringBuilder()
+				.append("**************")
+				.append(invNuevamen);		
+		
+		StringBuilder invCuentaOcu = new StringBuilder()
+				.append("**************")
+				.append(rInvCuentamen);
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Date fechaSisRedu = null;
 		try {
 			fechaSisRedu = sdf.parse(fechaSis);
 		} catch (Exception e) {
-			logger.info("Error en el formato de fecha.");
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.43");
+			throw new InternalServerException(bimMessageDTO.toString());
 		}
 
 		String strVerifi = "Origen:" + rInvCuenta + " Destino:" + invNueva + " Cantidad:" + rInvCantid + " Folio:" + numTransac;
@@ -1468,8 +1480,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		DecimalFormat formatter = new DecimalFormat("#,###.00");
 
 		BimEmailTemplateDTO emailTemplateDTO = new BimEmailTemplateDTO(plantilla);
-		emailTemplateDTO.addMergeVariable("Inv_Nueva", invNuevaOcu);
-		emailTemplateDTO.addMergeVariable("Inv_Cuenta", invCuentaOcu);
+		emailTemplateDTO.addMergeVariable("Inv_Nueva", invNuevaOcu.toString());
+		emailTemplateDTO.addMergeVariable("Inv_Cuenta", invCuentaOcu.toString());
 		emailTemplateDTO.addMergeVariable("Inv_Cantid", String.valueOf(formatter.format(rInvCantid)));
 		emailTemplateDTO.addMergeVariable("Inv_Deposi", String.valueOf(formatter.format(invCapita)));
 		emailTemplateDTO.addMergeVariable("Inv_Plazo", String.valueOf(rPlazo));
@@ -1501,8 +1513,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 			correoServicio.enviarCorreo(usuEmail, asunto, cuerpo);
 			logger.info("Terminando envio de comprobante...");
 		} catch (Exception e) {
-			logger.info("Error al realizar el envio de comprobante...");
-			e.printStackTrace();
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.42");
+			throw new InternalServerException(bimMessageDTO.toString());
 		}
 
 		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
