@@ -1,10 +1,10 @@
-<p>Comprobante de la Solicitud de Reinversión de Pagaré realizada a través de tu servicio de Banca Electrónica eBIM.</p>
+<p>Comprobante de la Solicitud de ReinversiÃ³n de PagarÃ© realizada a travÃ©s de tu servicio de Banca ElectrÃ³nica eBIM.</p>
 <table border='0' width='512px'>
 	<tr>
-		<td colSpan='2'>Reinversión de Pagaré</td>
+		<td colSpan='2'>ReinversiÃ³n de PagarÃ©</td>
 	</tr>
 	<tr>
-		<td style='padding-left:10px'><b>Nueva Inversión:</b></td>
+		<td style='padding-left:10px'><b>Nueva InversiÃ³n:</b></td>
 		<td style='padding-left:10px'>{Inv_Nueva}</td>
 	</tr>
 	<tr>
@@ -13,14 +13,14 @@
 	</tr>
 	<tr>
 		<td style='padding-left:10px'><b>Monto:</b></td>
-		<td style='padding-left:10px'>{Inv_Cantid}</td>
+		<td style='padding-left:10px'>${Inv_Cantid}</td>
 	</tr>
 	<tr>
-		<td style='padding-left:10px'><b>Depósito:</b></td>
-		<td style='padding-left:10px'>{Inv_Deposi}</td>
+		<td style='padding-left:10px'><b>DepÃ³sito:</b></td>
+		<td style='padding-left:10px'>${Inv_Deposi}</td>
 	</tr>
 	<tr>
-		<td style='padding-left:10px'><b>Plazo (días):</b></td>
+		<td style='padding-left:10px'><b>Plazo (dÃ­as):</b></td>
 		<td style='padding-left:10px'>{Inv_Plazo}</td>
 	</tr>
 	<tr>
@@ -36,27 +36,27 @@
 		<td style='padding-left:10px'>{Inv_FecVen}</td>
 	</tr>
 	<tr>
-		<td style='padding-left:10px'><b>Instrucciones de liquidación al vencimiento:</b></td>
+		<td style='padding-left:10px'><b>Instrucciones de liquidaciÃ³n al vencimiento:</b></td>
 		<td style='padding-left:10px'>{Str_InsLiq}</td>
 	</tr>
 	<tr>
-		<td style='padding-left:10px'><b>Interés Bruto:</b></td>
-		<td style='padding-left:10px'>{Inv_TBruta}</td>
+		<td style='padding-left:10px'><b>InterÃ©s Bruto:</b></td>
+		<td style='padding-left:10px'>({Inv_TBruta}) {Inv_CanBru}</td>
 	</tr>
 	<tr>
 		<td style='padding-left:10px'><b>I.S.R.:</b></td>
 		<td style='padding-left:10px'>({Inv_ISR}) {Inv_CanISR}</td>
 	</tr>
 	<tr>
-		<td style='padding-left:10px'><b>Interés Neto:</b></td>
+		<td style='padding-left:10px'><b>InterÃ©s Neto:</b></td>
 		<td style='padding-left:10px'>({Inv_Tasa}) {Inv_CanNet}</td>
 	</tr>
 	<tr>
 		<td style='padding-left:10px'><b>Total a recibir al vencimiento: </b></td>
-		<td style='padding-left:10px'>{Inv_CanTot}</td>
+		<td style='padding-left:10px'>${Inv_CanTot}</td>
 	</tr>
 	<tr>
-		<td style='padding-left:10px'><b>Folio de la Transacción:</b></td>
+		<td style='padding-left:10px'><b>Folio de la TransacciÃ³n:</b></td>
 		<td style='padding-left:10px'>{NumTransac}</td>
 	</tr>
 	<tr>
@@ -71,11 +71,11 @@
 		<tr>
 			<td style='text-align:center; padding:10px'>
 				<b>Verificador</b><br>
-				{Str_Verifi}<br>
-				{Str_Verifi}<br>
-				{Str_Verifi}<br>
-				{Str_Verifi}<br>		
-				{Str_Verifi}							
+				{Str_Verifi1}<br>
+				{Str_Verifi2}<br>
+				{Str_Verifi3}<br>
+				{Str_Verifi4}<br>		
+				{Str_Verifi5}							
 			</td>									
 		</tr>	 
 	</table>
