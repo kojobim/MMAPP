@@ -45,9 +45,9 @@ public class CuentaDestinoServicio extends BaseService {
 
         CuentaDestinoServicio = properties.getProperty("data_service.cuenta_destino_servicio");
 
-        CuentaDestinoSPEIActivacionOp = properties.getProperty("op.cuenta_destino_spei_activacion");
-        CuentaDestinoSPEIConsultarOp = properties.getProperty("op.cuenta_destino_spei_consultar");
-        CatalogoInstitucionesConsultarOp = properties.getProperty("op.catalogo_instituciones_consultar");
+        CuentaDestinoSPEIActivacionOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_spei_activacion");
+        CuentaDestinoSPEIConsultarOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_spei_consultar");
+        CatalogoInstitucionesConsultarOp = properties.getProperty("cuenta_destino_servicio.op.catalogo_instituciones_consultar");
 
         CuentaDestinoSPEIActivacionOpTransaccio = properties.getProperty("op.cuenta_destino_spei_activacion.transaccio");
 		CuentaDestinoSPEIActivacionOpUsuario = properties.getProperty("op.cuenta_destino_spei_activacion.usuario");
@@ -112,7 +112,7 @@ public class CuentaDestinoServicio extends BaseService {
     /**
      * Método para consulta de cuentas destino para transferencias SPEI
      * ProcedureName: NBCUDESPCON
-     * @param datoscuentaDestinoTransferenciasSPEI
+     * @param datosCuentaDestinoSPEI
      * <pre>
      * {
      *	Cds_Client?: String,

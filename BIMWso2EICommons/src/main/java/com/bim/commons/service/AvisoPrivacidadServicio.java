@@ -29,7 +29,7 @@ public class AvisoPrivacidadServicio extends BaseService {
 		super();
 
 		AvisoPrivacidadServicio = properties.getProperty("data_service.aviso_privacidad_servicio");
-        AvisoPrivacidadActualizacionOp = properties.getProperty("op.aviso_privacidad_actualizacion");
+        AvisoPrivacidadActualizacionOp = properties.getProperty("aviso_privacidad_servicio.op.aviso_privacidad_actualizacion");
 
         AvisoPrivacidadActualizacionOpTransaccio = properties.getProperty("op.aviso_privacidad_actualizacion.transaccio");
 		AvisoPrivacidadActualizacionOpUsuario = properties.getProperty("op.aviso_privacidad_actualizacion.usuario");
