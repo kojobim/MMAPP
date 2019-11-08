@@ -32,7 +32,6 @@ public class UsuarioServicio extends BaseService {
 	private static String UsuarioActualizacionOpSucDestion;
 	private static String UsuarioActualizacionOpModulo;
 	private static String UsuarioPerfilRiesgoConsultarOp;
-	private static Integer UsuarioPerfilRiesgoConsultarOpAplCuesti;
 	private static String UsuarioPerfilRiesgoConsultarOpTipConsul;
 	private static String UsuarioPerfilRiesgoConsultarOpTransaccio;
 	private static String UsuarioPerfilRiesgoConsultarOpUsuari;
@@ -62,8 +61,7 @@ public class UsuarioServicio extends BaseService {
 		UsuarioActualizacionOpSucOrigen = properties.getProperty("op.usuario_actualizacion.suc_origen");
 		UsuarioActualizacionOpSucDestion = properties.getProperty("op.usuario_actualizacion.suc_destino");
 		UsuarioActualizacionOpModulo = properties.getProperty("op.usuario_actualizacion.modulo");
-	
-		UsuarioPerfilRiesgoConsultarOpAplCuesti = Integer.parseInt(properties.getProperty("op.usuario_perfil_riesgo_consultar.apl_cuesti"));
+
 		UsuarioPerfilRiesgoConsultarOpTipConsul = properties.getProperty("op.usuario_perfil_riesgo_consultar.tip_consul");
 		UsuarioPerfilRiesgoConsultarOpTransaccio = properties.getProperty("op.usuario_perfil_riesgo_consultar.transaccio");
 		UsuarioPerfilRiesgoConsultarOpUsuari = properties.getProperty("op.usuario_perfil_riesgo_consultar.usuario");
@@ -288,7 +286,10 @@ public class UsuarioServicio extends BaseService {
 	 */
 	public JsonObject usuarioPerfilRiesgoConsultar(JsonObject datosPerfilRiesgo) {
 		logger.info("COMMONS: Comenzando usuarioPerfilRiesgoConsultar metodo... ");
-        datosPerfilRiesgo.addProperty("Apl_Cuesti", UsuarioPerfilRiesgoConsultarOpAplCuesti);		
+		
+		logger.info("- datosPerfilRiesgo " + datosPerfilRiesgo);
+		
+		datosPerfilRiesgo.addProperty("Apl_Cuesti", 0);		
         datosPerfilRiesgo.addProperty("Tip_Consul", UsuarioPerfilRiesgoConsultarOpTipConsul);
         if(!datosPerfilRiesgo.has("NumTransac"))
         	datosPerfilRiesgo.addProperty("NumTransac", "");
@@ -297,7 +298,9 @@ public class UsuarioServicio extends BaseService {
 		datosPerfilRiesgo.addProperty("SucOrigen", UsuarioPerfilRiesgoConsultarOpSucOrigen);
 		datosPerfilRiesgo.addProperty("SucDestino", UsuarioPerfilRiesgoConsultarOpSucDestino);
 		datosPerfilRiesgo.addProperty("Modulo", UsuarioPerfilRiesgoConsultarOpModulo);
+
 		JsonObject usuarioPerfilRiesgoOpResultadoObjecto = Utilerias.performOperacion(UsuarioServicio, UsuarioPerfilRiesgoConsultarOp, datosPerfilRiesgo);
+		
 		logger.info("COMMONS: Finalizando usuarioPerfilRiesgoConsultar metodo... ");
 		return usuarioPerfilRiesgoOpResultadoObjecto;
 	}//Cierre del método
