@@ -132,11 +132,8 @@ public class InversionesServicioTest {
 				assertTrue("La propiedad Inv_Numero no se encuentra en inversion", inversionElemento.has("Inv_Numero"));
 				assertTrue("La propiedad Inv_Cantid no se encuentra en inversion", inversionElemento.has("Inv_Cantid"));			
 			}else 
-				inversionElemento = inversiones.get("inversion").getAsJsonObject();
-			
-			assertNotNull("El elemento inversion es nulo", inversionElemento);			
+				assertNotNull("El elemento inversion es nulo", inversionElemento);			
 		}
-
 		logger.info("TEST: Finalizando inversionesPagareNumeroUsuarioObtenerTestDeberiaSerExitoso metodo...");	
 	}
 }

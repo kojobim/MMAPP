@@ -73,10 +73,8 @@ public class ConfiguracionServicioTest {
 			assertTrue("La propiedad EsHorariID no se encuentra en horariosInversion", horariosInversionElemento.has("EsHorariID"));
 			assertTrue("La propiedad Hor_Numero no se encuentra en horariosInversion", horariosInversionElemento.has("Hor_Numero"));
 		}
-		else
-			horariosInversionElemento = resultado.get("horariosInversion").getAsJsonObject();
-		
-		assertNotNull("El elemento horariosInversion es nulo", horariosInversionElemento);
+		else		
+			assertNotNull("El elemento horariosInversion es nulo", horariosInversionElemento);
 
 		logger.info("TEST: Terminando horariosConsultarTestDeberiaSerExitoso metodo");
 	}
@@ -128,11 +126,50 @@ public class ConfiguracionServicioTest {
 			assertTrue("La propiedad Par_Acceso no se encuentra en configuracionBanco", configuracionBancoElemento.has("Par_Acceso"));
 		}
 		else
-			configuracionBancoElemento = configuracionesBanco.get("configuracionBanco").getAsJsonObject();
-		
-		assertNotNull("El elemento configuracionBancoElemento es nulo", configuracionBancoElemento);
+			assertNotNull("El elemento configuracionBancoElemento es nulo", configuracionBancoElemento);
 		
 		
 		logger.info("TEST: Finalizando configuracionBancoConsultarDetalleTestDeberiaSerExitoso metodo");
+	}
+	
+	@Test
+	public void informacionSucursalObtenerTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando informacionSucursalObtenerTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosSucursal = new JsonObject();
+		datosSucursal.addProperty("Par_Sucurs", "001");
+		datosSucursal.addProperty("Tip_Consul", "");
+		datosSucursal.addProperty("NumTransac", "");
+		datosSucursal.addProperty("Transaccio", "CPE");
+		datosSucursal.addProperty("Usuario", "000100");
+		datosSucursal.addProperty("FechaSis", fechaSis);
+		datosSucursal.addProperty("SucOrigen", "001");
+		datosSucursal.addProperty("SucDestino", "001");
+		datosSucursal.addProperty("Modulo", "NB");
+
+		/*
+		 *	Mockup Test
+		 *	String json = "{\"informacionSucursal\":{\"Par_Sucurs\":\"String\",\"Par_CheCaj\":\"Integer\",\"Par_IVA\":\"Double\",\"Par_ISR\":\"Double\",\"Par_DiBaIn\":\"Integer\",\"Par_DiBaCr\":\"Integer\",\"Par_DiBaCh\":\"Integer\",\"Par_ChLey1\":\"String\",\"Par_ChLey2\":\"String\",\"Par_ChLey3\":\"String\",\"Par_CheCer\":\"String\",\"Par_DiaRem\":\"Integer\",\"Par_LimAut\":\"Double\",\"Par_TranBR\":\"String\",\"Par_CliInd\":\"Integer\",\"Par_BanFol\":\"Integer\",\"Par_FecAct\":\"Date\",\"Par_CoCoIn\":\"Double\",\"Par_CoReme\":\"Double\",\"Par_OpeBan\":\"Integer\",\"Par_ConPap\":\"Integer\",\"Par_MonCom\":\"String\",\"Par_LinSob\":\"String\",\"Par_EnvSPE\":\"Integer\",\"Par_Banco\":\"String\",\"Par_ComRem\":\"String\",\"Par_IvaRem\":\"String\",\"Par_RemExt\":\"String\",\"Par_IVAREX\":\"String\",\"Par_GiBaEx\":\"String\",\"Par_GiBaNa\":\"String\",\"Par_IVAGBN\":\"String\",\"Par_IVAGBE\":\"String\",\"Par_ComSPE\":\"String\",\"Par_IVASPE\":\"String\",\"Par_NumTes\":\"String\",\"Par_IncISR\":\"String\",\"Par_InsISR\":\"String\",\"Par_SPEUA\":\"String\",\"Par_SIAC\":\"String\",\"Par_CobInm\":\"String\",\"Par_FecRem\":\"Date\",\"Par_IntBan\":\"String\",\"Par_Compan\":\"String\",\"Tip_Fecha\":\"String\",\"Suc_UltDia\":\"String\"}}";
+		 *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+		
+		/*
+		 *	Test
+		 */
+		JsonObject resultado = configuracionServicio.informacionSucursalObtener(datosSucursal);
+		logger.info("- resultado: "+ resultado);
+		
+		assertTrue("No viene la propiedad informacionSucursal", resultado.has("informacionSucursal"));
+		assertTrue("La propiedad informacionSucursal no es un JsonObject", resultado.get("informacionSucursal").isJsonObject());
+		
+		JsonObject informacionSucursal = Utilerias.obtenerJsonObjectPropiedad(resultado, "informacionSucursal");
+		
+		if(!resultado.get("informacionSucursal").isJsonNull()) {
+			assertTrue("La propiedad Par_Sucurs no se encuentra en informacionSucursal", informacionSucursal.has("Par_Sucurs"));
+			assertTrue("La propiedad Par_ISR no se encuentra en informacionSucursal", informacionSucursal.has("Par_ISR"));
+		}else 
+			assertNotNull("informacionSucursal es nulo", informacionSucursal);
+		
+		logger.info("TEST: Finalizando informacionSucursalObtenerTestDeberiaSerExitoso metodo...");
 	}
 }

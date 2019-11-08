@@ -77,9 +77,8 @@ public class SaldoServicioTest {
 
 			assertTrue("La propiedad Sal_Cuenta no se encuentra en movimientos", saldosElemento.has("Sal_Cuenta"));
 			assertTrue("La propiedad Mon_Descri no se encuentra en movimientos", saldosElemento.has("Mon_Descri"));
-		}
-		
-		assertNotNull("El elemento saldosElemento es nulo", saldosElemento);
+		}else
+			assertNotNull("El elemento saldos es nulo", saldosElemento);
 		
 		logger.info("TEST: Finalizando saldosClienteConsultarTestDeberiaSerExitoso metodo...");
 	}

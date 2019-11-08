@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bim.commons.utils.Utilerias;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 @RunWith(JUnitPlatform.class)
@@ -47,13 +46,13 @@ public class AvisoPrivacidadServicioTest {
 		datosAvisoPrivacidad.addProperty("SucDestino", "001");
 		datosAvisoPrivacidad.addProperty("Modulo", "BM");
 		
-		/*
+		/**
 		 *	Mockup Test
 		 *	String json = "{\"avisoPrivacidad\":{\"Err_Codigo\":\"String\",\"Err_Mensaj\":\"String\"}}";
 		 *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
 		 */
 		
-		/*
+		/**
 		 *	Test
 		 */
 		JsonObject resultado = avisoPrivacidadServicio.avisoPrivacidadActualizacion(datosAvisoPrivacidad);
@@ -68,7 +67,7 @@ public class AvisoPrivacidadServicioTest {
 			assertTrue("La propiedad Err_Codigo no se encuentra en avisoPrivacidad", avisoPrivacidad.has("Err_Codigo"));
 			assertTrue("La propiedad Err_Mensaj no se encuentra en avisoPrivacidad", avisoPrivacidad.has("Err_Mensaj"));
 		}else 
-			assertNotNull("avisoPrivacidad es nulo", avisoPrivacidad);
+			assertNotNull("la propiedad avisoPrivacidad es nula", avisoPrivacidad);
 		
 		logger.info("TEST: Finalizando avisoPrivacidadActualizacionTestDeberiaSerExitoso metodo...");
 	}

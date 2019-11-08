@@ -1,5 +1,6 @@
 package com.bim.commons.service;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
@@ -53,13 +54,15 @@ public class ClienteServicioTest {
 		JsonObject resultado = clienteServicio.clienteConsultar(datosClienteConsultar);
 		logger.info("- resultado " + resultado );
 
-		assertTrue("No viene la propiedad cliente" ,resultado.has("cliente"));
+		assertTrue("No viene la propiedad cliente", resultado.has("cliente"));
 		
-		JsonObject cliente  = Utilerias.obtenerJsonObjectPropiedad(resultado, "cliente");
+		JsonObject cliente = Utilerias.obtenerJsonObjectPropiedad(resultado, "cliente");
 		
-		assertTrue(cliente != null);
+		if(!resultado.get("cliente").isJsonNull()) {
+			assertTrue("La propiedad Cli_Numero no se encuentra en cliente", cliente.has("Cli_Numero"));
+		} else
+			assertNotNull("la propiedad cliente es nula", cliente);
 		
-		assertTrue(cliente.has("Cli_Numero"));
 		logger.info("TEST: Terminando clienteConsultarTestDeberiaSerExitoso metodo");
 	}
 }

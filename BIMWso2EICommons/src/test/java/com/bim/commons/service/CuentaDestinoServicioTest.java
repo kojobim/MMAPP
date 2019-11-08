@@ -56,7 +56,7 @@ public class CuentaDestinoServicioTest {
 		logger.info("- resultado: "+ resultado);
 		
 		assertTrue("No viene la propiedad cuentaDestino", resultado.has("cuentaDestino"));
-		assertTrue("La propiedad cuenta no es un JsonObject", resultado.get("cuentaDestino").isJsonObject());
+		assertTrue("La propiedad cuentaDestino no es un JsonObject", resultado.get("cuentaDestino").isJsonObject());
 		
 		JsonObject cuentaDestino = Utilerias.obtenerJsonObjectPropiedad(resultado, "cuentaDestino");
 		

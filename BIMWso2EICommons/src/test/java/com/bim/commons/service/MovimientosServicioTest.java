@@ -82,9 +82,8 @@ public class MovimientosServicioTest {
 			
 			assertTrue("La propiedad Mov_Cuenta no se encuentra en movimientos", movimientosElemento.has("Mov_Cuenta"));
 			assertTrue("La propiedad Mov_Descri no se encuentra en movimientos", movimientosElemento.has("Mov_Descri"));
-		}
-		
-		assertNotNull("El elemento movimientosElemento es nulo", movimientosElemento);
+		}else
+			assertNotNull("El elemento movimientosElemento es nulo", movimientosElemento);
 		
 		logger.info("TEST: Finalizando movimientosListadoTestDeberiaSerExitoso metodo...");
 	}
