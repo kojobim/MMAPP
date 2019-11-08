@@ -43,7 +43,7 @@ public class TasaServicioTest {
 		
 		/*
 		 *	Mock
-		 *	String json = "{\"cuentaDestino\":{\"Err_Codigo\":\"String\",\"Err_Mensaj\":\"String\"}}";
+		 *	String json = "{\"tasaCliente\":{\"TasInv\":\"4.4000\",\"Inv_GruTas\":\"TG\",\"Inv_NuPoGr\":\"\"}}";
 		 *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
 		 */
 		
@@ -78,7 +78,11 @@ public class TasaServicioTest {
 
 		/*
 		 *	Mockup Test
-		 *	String json = "{\"cuentasDestino\":{\"cuentaDestino\":[{\"Cds_UsuAdm\":\"String\",\"Cds_Consec\":\"String\",\"Cds_CLABE\":\"String\",\"Cds_Banco\":\"String\",\"Ins_Descri\":\"String\",\"Cds_CliUsu\":\"String\",\"Cds_Status\":\"String\",\"Cds_Alias\":\"String\",\"Cds_RFCBen\":\"String\",\"Cds_EmaBen\":\"String\",\"Cds_Inicia\":\"String\",\"Cds_FecAlt\":\"String\",\"Cds_FecCan\":\"String\",\"Cds_DesAdi\":\"String\",\"Cds_DesCue\":\"String\",\"Cds_FeAlFo\":\"String\"}]}}";
+		 *	String json = "{\"tasaMoneda\":{\"Mon_Numero\":\"99\",\"Mon_Descri\":\"UDIS\",\"Mon_Simbol\":\"UDI\",\"Mon_Fecha\":\"2017-05-08T19:00:00.000-05:00\","
+		 *		+ "\"Mon_EfeCom\":5.743398,\"Mon_EfeVen\":5.743398,\"Mon_DocCom\":5.743398,\"Mon_DocVen\":5.743398,\"Mon_FixCom\":5.743398,\"Mon_FixVen\":5.743398,"
+		 *		+ "\"Mon_Abrevi\":\"UDI\",\"Mon_DesCor\":\"UDIS\",\"Mon_CtaEfe\":\"\",\"Mon_CtaBM\":\"\",\"Mon_CtaSBC\":\"\",\"Mon_CtaRem\":\"\",\"Mon_CieCom\":5.743398,"
+		 *		+ "\"Mon_CieVen\":5.743398,\"Mon_SpoCom\":5.743398,\"Mon_SpoVen\":5.743398,\"Mon_EqBaMa\":\" \",\"Mon_OpeCam\":\"N\",\"Mon_CieDia\":0.0,\"Mon_FixVal\":4.682447,"
+		 *		+ "\"Mon_DesLeg\":\"UDI\",\"Mon_Tipo\":\"M\",\"Mon_ForMet\":\"  \"}}";
 		 *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
 		 */
 		
@@ -142,7 +146,7 @@ public class TasaServicioTest {
 		
 		/**
 		 * Mock
-		 * String json = "{\"cuentaDestino\":{\"Err_Codigo\":\"000000\",\"Err_Mensaj\":\"Cuentas Actualizadas\"}}";
+		 * String json = "{\"tasaGAT\":{\"Err_Codigo\":\"000000\",\"Err_Mensaj\":\"GAT Generado\",\"Inv_GAT\":4.76}}";
 		 * JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
 		 */
 		
@@ -180,7 +184,7 @@ public class TasaServicioTest {
 		
 		/**
 		 * Mock
-		 * String json = "{\"cuentaDestino\":{\"Err_Codigo\":\"000000\",\"Err_Mensaj\":\"Cuentas Actualizadas\"}}";
+		 * String json = "{\"tasaGATReal\":{\"Err_Codigo\":\"000000\",\"Err_Mensaj\":\"GAT Real Generado\",\"Inv_GATRea\":1.13}}";
 		 * JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
 		 */
 		
