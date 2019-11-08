@@ -391,6 +391,7 @@ public class Utilerias {
 		operacion.add(operacionNombre, datosOperacion);
 		solicitudOperacion.setBody(operacion);
 		String resultado = HttpClientUtils.postPerform(solicitudOperacion);
+		logger.info("- HttpClientUtils - resultado "  + resultado);
 		JsonObject resultadoObjeto = resultado != null ? new Gson().fromJson(resultado, JsonObject.class) : null;
 		return resultadoObjeto;
 	}
@@ -484,5 +485,13 @@ public class Utilerias {
 		if(!validarDatosPropiedad(datos, nombrePropiedad))
 			return null;
 		return datos.has(nombrePropiedad)  && datos.get(nombrePropiedad).isJsonArray() ? datos.get(nombrePropiedad).getAsJsonArray() : null;
+	}
+	
+	public static String toJson(Object object) {
+		return new Gson().toJson(object);
+	}
+	
+	public static JsonObject fromJsonObject(String data) {
+		return new Gson().fromJson(data, JsonObject.class);
 	}
 }
