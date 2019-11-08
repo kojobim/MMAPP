@@ -55,4 +55,94 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
+    <query id="transaferenciaSPEICreacionSQL" useConfig="BIMDB">
+        <sql>
+			EXECUTE NBTRASPEALT
+			@Trs_Usuari	= :trsUsuari,
+			@Trs_Client	= :trsClient,
+			@Trs_CueOri	= :trsCueOri,
+			@Trs_CueDes	= :trsCueDes,
+			@Trs_Monto = :trsMonto,
+			@Trs_Descri = :trsDescri,
+			@Trs_PriRef	= :trsPriRef,
+			@Trs_SegRef = :trsSegRef,
+			@Trs_RFC = :trsRFC,
+			@Trs_IVA = :trsIVA,
+			@Trs_Email = :trsEmail,
+			@Trs_Tipo = :trsTipo,
+			@Trs_UsuCap = :trsUsuCap,
+			@Trs_TipTra = :trsTipTra,
+			@Trs_Frecue = :trsFrecue,
+			@Trs_FePrEn	= :trsFePrEn,
+			@Trs_TipDur	= :trsTipDur,
+			@Trs_DurFec = :trsDurFec,
+			@Trs_DurTra = :trsDurTra,
+			@Trs_DiAnEm = :trsDiAnEm,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo	= :modulo
+		</sql>
+        <param name="trsUsuari" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsCueOri" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsCueDes" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsMonto" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="trsDescri" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsPriRef" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsSegRef" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsRFC" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsIVA" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="trsEmail" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsTipo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsUsuCap" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsTipTra" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsFrecue" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsFePrEn" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsTipDur" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsDurFec" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsDurTra" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="trsDiAnEm" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+    </query>
+    <operation returnRequestStatus="true" name="transaferenciaSPEICreacionOp">
+        <call-query href="transaferenciaSPEICreacionSQL">
+            <with-param name="trsUsuari" query-param="Trs_Usuari"/>
+            <with-param name="trsClient" query-param="Trs_Client"/>
+            <with-param name="trsCueOri" query-param="Trs_CueOri"/>
+            <with-param name="trsCueDes" query-param="Trs_CueDes"/>
+            <with-param name="trsMonto" query-param="Trs_Monto"/>
+            <with-param name="trsDescri" query-param="Trs_Descri"/>
+            <with-param name="trsPriRef" query-param="Trs_PriRef"/>
+            <with-param name="trsSegRef" query-param="Trs_SegRef"/>
+            <with-param name="trsRFC" query-param="Trs_RFC"/>
+            <with-param name="trsIVA" query-param="Trs_IVA"/>
+            <with-param name="trsEmail" query-param="Trs_Email"/>
+            <with-param name="trsTipo" query-param="Trs_Tipo"/>
+            <with-param name="trsUsuCap" query-param="Trs_UsuCap"/>
+            <with-param name="trsTipTra" query-param="Trs_TipTra"/>
+            <with-param name="trsFrecue" query-param="Trs_Frecue"/>
+            <with-param name="trsFePrEn" query-param="Trs_FePrEn"/>
+            <with-param name="trsTipDur" query-param="Trs_TipDur"/>
+            <with-param name="trsDurFec" query-param="Trs_DurFec"/>
+            <with-param name="trsDurTra" query-param="Trs_DurTra"/>
+            <with-param name="trsDiAnEm" query-param="Trs_DiAnEm"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
 </data>
