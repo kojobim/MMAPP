@@ -325,7 +325,7 @@
             <element column="Cue_MonDep" name="Cue_MonDep" xsdType="xs:decimal" optional="true"/>
         </result>
     </query>
-    <query id="cuentaDestinoSPEICrearSQL" useConfig="BIMDB">
+    <query id="cuentaDestinoSPEICreacionSQL" useConfig="BIMDB">
         <sql>
 			EXECUTE NBCUDESPALT
 			@Cds_UsuAdm = :cdsUsuAdm,
@@ -510,8 +510,8 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <operation returnRequestStatus="true" name="cuentaDestinoSPEICrearOp">
-        <call-query href="cuentaDestinoSPEICrearSQL">
+    <operation returnRequestStatus="true" name="cuentaDestinoSPEICreacionOp">
+        <call-query href="cuentaDestinoSPEICreacionSQL">
             <with-param name="cdsUsuAdm" query-param="Cds_UsuAdm"/>
             <with-param name="cdsCLABE" query-param="Cds_CLABE"/>
             <with-param name="cdsBanco" query-param="Cds_Banco"/>
