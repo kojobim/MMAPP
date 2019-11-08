@@ -38,18 +38,16 @@
             <element column="Cdb_UsuAdm" name="Cdb_UsuAdm" xsdType="xs:string" optional="true"/>
             <element column="Cdb_Cuenta" name="Cdb_Cuenta" xsdType="xs:string" optional="true"/>
             <element column="Cdb_CliUsu" name="Cdb_CliUsu" xsdType="xs:string" optional="true"/>
-            <element column="Cdb_Status" name="Cdb_Status" xsdType="xs:string" optional="true"/>
             <element column="Cdb_Alias" name="Cdb_Alias" xsdType="xs:string" optional="true"/>
             <element column="Cdb_RFCBen" name="Cdb_RFCBen" xsdType="xs:string" optional="true"/>
             <element column="Cdb_EmaBen" name="Cdb_EmaBen" xsdType="xs:string" optional="true"/>
-            <element column="Cdb_FecAlt" name="Cdb_FecAlt" xsdType="xs:dateTime" optional="true"/>
+            <element column="Cdb_FecAlt" name="Cdb_FecAlt" xsdType="xsdateTime" optional="true"/>
             <element column="Cdb_FecCan" name="Cdb_FecCan" xsdType="xs:dateTime" optional="true"/>
             <element column="Cdb_FecAct" name="Cdb_FecAct" xsdType="xs:dateTime" optional="true"/>
             <element column="Cdb_MinRes" name="Cdb_MinRes" xsdType="xs:integer" optional="true"/>
             <element column="Cli_ComOrd" name="Cli_ComOrd" xsdType="xs:string" optional="true"/>
             <element column="Pat_Codigo" name="Pat_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Pat_Consec" name="Pat_Consec" xsdType="xs:integer" optional="true"/>
-            <element column="Cdb_TipCue" name="Cdb_TipCue" xsdType="xs:string" optional="true"/>
         </result>
     </query>
     <query id="cuentaDestinoBIMCreacionSQL" useConfig="BIMDB">
