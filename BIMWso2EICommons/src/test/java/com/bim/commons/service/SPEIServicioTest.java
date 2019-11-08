@@ -51,9 +51,41 @@ public class SPEIServicioTest {
 		
 		assertTrue("No viene la propiedad Hor_HorIni", horarioSPEI.has("Hor_HorIni"));
 		assertTrue("No viene la propiedad Hor_HorFin", horarioSPEI.has("Hor_HorFin"));
-		
+
 		logger.info("TEST: Finalizando horariosSPEIConsultarTestDeberiaSerExitoso metodo...");
+	}
+
+	@Test
+	public void transaferenciaSPEICreacionTestDeberiasSerExitoso() {
+		logger.info("TEST: Comenzando transaferenciaSPEICreacionTestDeberiasSerExitoso metodo...");
+		JsonObject datosTransfarenciaSPEI = new JsonObject();
+		datosTransfarenciaSPEI.addProperty("Trs_Usuari","000149");
+		datosTransfarenciaSPEI.addProperty("Trs_Client","00195171");
+		datosTransfarenciaSPEI.addProperty("Trs_CueOri","001951710012");
+		datosTransfarenciaSPEI.addProperty("Trs_CueDes","012180029483065593");
+		datosTransfarenciaSPEI.addProperty("Trs_Monto", 3);
+		datosTransfarenciaSPEI.addProperty("Trs_Descri","PRUEBA SPEI");
+		datosTransfarenciaSPEI.addProperty("Trs_PriRef","Nombre Usuario BE");
+		datosTransfarenciaSPEI.addProperty("Trs_Tipo","I");
+		datosTransfarenciaSPEI.addProperty("Trs_UsuCap","000149");
+		datosTransfarenciaSPEI.addProperty("Trs_TipTra","I");
+		datosTransfarenciaSPEI.addProperty("Trs_Frecue","U");
+		datosTransfarenciaSPEI.addProperty("Trs_FePrEn","1900-01-01 00:00:00");
+		datosTransfarenciaSPEI.addProperty("Trs_DurFec","1900-01-01 00:00:00");
+		datosTransfarenciaSPEI.addProperty("FechaSis","2019-05-29 17:25:59");
+		datosTransfarenciaSPEI.addProperty("NumTransac","42246953");
 		
+		/**
+		 * String mock = "{\"REQUEST_STATUS\":\"SUCCESSFUL\"}";
+		 * JsonObject resultado = Utilerias.fromJsonObject(mock);
+		 */
+		JsonObject resultado = speiServicio.transaferenciaSPEICreacion(datosTransfarenciaSPEI);
+		logger.info("- resultado " + resultado);
+		
+		assertTrue(resultado.has("REQUEST_STATUS"));
+		assertTrue(resultado.get("REQUEST_STATUS").getAsString().equals("SUCCESSFUL"));
+		
+		logger.info("TEST: Finalizando transaferenciaSPEICreacionTestDeberiasSerExitoso metodo...");
 	}
 	
 }
