@@ -29,8 +29,8 @@ public class UsuarioServicioTest {
 	}
 	
 	@Test
-	public void usuarioConsultarDeberiaSerExitoso() {
-		logger.info("TEST: Comenzando usuarioConsultarDeberiaSerExitoso metodo");
+	public void usuarioConsultarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando usuarioConsultarTestDeberiaSerExitoso metodo");
 		String fechaSis = Utilerias.obtenerFechaSis();
 		JsonObject datosUsuarioConsultar = new JsonObject();
 		datosUsuarioConsultar.addProperty("Usu_Numero", "");
@@ -38,7 +38,7 @@ public class UsuarioServicioTest {
 		datosUsuarioConsultar.addProperty("Usu_Clave", "u0019350001");
 		datosUsuarioConsultar.addProperty("Usu_Passwo", "");
 		datosUsuarioConsultar.addProperty("Usu_Client", "");
-		datosUsuarioConsultar.addProperty("Usu_FolNip", "0");
+		datosUsuarioConsultar.addProperty("Usu_FolNip", 0);
 		datosUsuarioConsultar.addProperty("Usu_FolTok", "");
 		datosUsuarioConsultar.addProperty("Usu_Status", "");
 		datosUsuarioConsultar.addProperty("Usu_CuCaCo", "");
@@ -74,12 +74,12 @@ public class UsuarioServicioTest {
 		assertTrue("La propiedad Usu_Numero no se encuentra en usuario", usuario.has("Usu_Numero"));
 		assertTrue("La propiedad Usu_Clave no se encuentra en usuario", usuario.has("Usu_Clave"));
 
-		logger.info("TEST: Finalizando usuarioConsultarDeberiaSerExitoso metodo");
+		logger.info("TEST: Finalizando usuarioConsultarTestDeberiaSerExitoso metodo");
 	}
 	
 	@Test
-	public void usuarioActualizarDeberiaSerExitoso() {
-		logger.info("TEST: Comenzando usuarioActualizarDeberiaSerExitoso metodo");
+	public void usuarioActualizarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando usuarioActualizarTestDeberiaSerExitoso metodo");
 		String fechaSis = Utilerias.obtenerFechaSis();
 		JsonObject datosUsuarioActualizar = new JsonObject();
 		datosUsuarioActualizar.addProperty("Usu_Numero", "000010");
@@ -120,11 +120,52 @@ public class UsuarioServicioTest {
 		JsonObject usuario = Utilerias.obtenerJsonObjectPropiedad(resultado, "usuario");
 		
 		if(!resultado.get("usuario").isJsonNull()) {
-			logger.info("pasa al if " + !resultado.get("usuario").isJsonNull());
-			assertNotNull("usuario es nulo", usuario);
-		}else
 			assertTrue("La propiedad Usu_CoAcNe no se encuentra en usuario", usuario.has("Usu_CoAcNe"));
+		}else
+			assertNotNull("la propiedad  usuario es nula", usuario);
 
-		logger.info("TEST: Finalizando usuarioActualizarDeberiaSerExitoso metodo");
+		logger.info("TEST: Finalizando usuarioActualizarTestDeberiaSerExitoso metodo");
+	}
+	
+	@Test
+	public void usuarioPerfilRiesgoConsultarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando usuarioPerfilRiesgoConsultarTestDeberiaSerExitoso metodo");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosPerfilRiesgo = new JsonObject();
+		datosPerfilRiesgo.addProperty("Apl_Client", "00193500");
+		datosPerfilRiesgo.addProperty("Apl_Cuesti", 0);
+		datosPerfilRiesgo.addProperty("Tip_Actual", "C2");
+		datosPerfilRiesgo.addProperty("NumTransac", "");
+		datosPerfilRiesgo.addProperty("Transaccio", "JOV");
+		datosPerfilRiesgo.addProperty("Usuario", "000100");
+		datosPerfilRiesgo.addProperty("FechaSis", fechaSis);
+		datosPerfilRiesgo.addProperty("SucOrigen", "001");
+		datosPerfilRiesgo.addProperty("SucDestino", "001");
+		datosPerfilRiesgo.addProperty("Modulo", "NB");
+		
+		/**
+		 *	Mockup Test
+		 *	String json = "{\"perfilRiesgo\":{\"Apl_PerRie\":\"Integer\",\"Apl_ConOpe\":\"Integer\",\"Per_TitCli\":\"String\",\"Par_OpExPe\":\"Integer\"}}";
+		 *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+
+		/**
+		 * Test
+		 */
+		JsonObject resultado = usuarioServicio.usuarioPerfilRiesgoConsultar(datosPerfilRiesgo);
+		logger.info("- resultado " + resultado);
+		
+		assertTrue("No viene la propiedad perfilRiesgo", resultado.has("perfilRiesgo"));
+		assertTrue("La propiedad perfilRiesgo no es un JsonObject", resultado.get("perfilRiesgo").isJsonObject());
+		
+		JsonObject perfilRiesgo = Utilerias.obtenerJsonObjectPropiedad(resultado, "perfilRiesgo");
+		
+		if(!resultado.get("perfilRiesgo").isJsonNull()) {
+			assertTrue("La propiedad Apl_PerRie no se encuentra en perfilRiesgo", perfilRiesgo.has("Apl_PerRie"));
+			assertTrue("La propiedad Apl_ConOpe no se encuentra en perfilRiesgo", perfilRiesgo.has("Apl_ConOpe"));
+		}else
+			assertNotNull("la propiedad perfilRiesgo es nula", perfilRiesgo);
+
+		logger.info("TEST: Finalizando usuarioPerfilRiesgoConsultarTestDeberiaSerExitoso metodo");
 	}
 }

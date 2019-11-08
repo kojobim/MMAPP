@@ -51,13 +51,13 @@ public class BitacoraServicioTest {
 		datosBitacora.addProperty("SucDestino", "001");
 		datosBitacora.addProperty("Modulo", "NB");
 		
-		/*
+		/**
 		 *	Mockup Test
 		 *	String json = "{\"REQUEST_STATUS\":\"SUCCESSFUL\"}";
 		 *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
 		 */
 		
-		/*
+		/**
 		 *	Test
 		 */
 		JsonObject resultado = bitacoraServicio.creacionBitacora(datosBitacora );	

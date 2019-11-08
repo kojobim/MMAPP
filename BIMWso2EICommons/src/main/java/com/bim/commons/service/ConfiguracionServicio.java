@@ -63,7 +63,7 @@ public class ConfiguracionServicio extends BaseService {
 		ConfiguracionBancoDetalleOpSucDestino = properties.getProperty("op.configuracion_banco_detalle.suc_destino");
 		ConfiguracionBancoDetalleOpModulo = properties.getProperty("op.configuracion_banco_detalle.modulo");
 		
-		InformacionSucursalObtenerOpTransaccio  = properties.getProperty("op.informacion_sucursal_obtener.transaccio");
+		InformacionSucursalObtenerOpTransaccio = properties.getProperty("op.informacion_sucursal_obtener.transaccio");
 		InformacionSucursalObtenerOpUsuari = properties.getProperty("op.informacion_sucursal_obtener.usuario");
 		InformacionSucursalObtenerOpSucOrigen = properties.getProperty("op.informacion_sucursal_obtener.suc_origen");
 		InformacionSucursalObtenerOpSucDestino = properties.getProperty("op.informacion_sucursal_obtener.suc_destino");
@@ -251,7 +251,7 @@ public class ConfiguracionServicio extends BaseService {
 	 * </pre>
 	 */
 	public JsonObject informacionSucursalObtener(JsonObject datosSucursal) {
-		logger.info("COMMONS: Comenzando informacionSucursalObtener... ");
+		logger.info("COMMONS: Comenzando informacionSucursalObtener metodo... ");
 		if(!datosSucursal.has("Tip_Consul"))
 			datosSucursal.addProperty("Tip_Consul", "");
 		if(!datosSucursal.has("NumTransac"))
@@ -262,7 +262,7 @@ public class ConfiguracionServicio extends BaseService {
 		datosSucursal.addProperty("SucDestino", InformacionSucursalObtenerOpSucDestino);
 		datosSucursal.addProperty("Modulo", InformacionSucursalObtenerOpModulo);
 		JsonObject informacionSucursalOpResultadoObjecto = Utilerias.performOperacion(ConfiguracionServicio, InformacionSucursalObtenerOp, datosSucursal);
-		logger.info("COMMONS: Finalizando informacionSucursalObtener... ");
+		logger.info("COMMONS: Finalizando informacionSucursalObtener metodo... ");
 		return informacionSucursalOpResultadoObjecto;
 	}//Cierre del método
 }

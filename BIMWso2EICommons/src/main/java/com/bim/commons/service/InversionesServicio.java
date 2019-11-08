@@ -70,7 +70,7 @@ public class InversionesServicio extends BaseService {
 
 		InversionesObtenerOp = properties.getProperty("inversiones_servicio.op.inversiones_obtener");
 		InversionesPagareNumeroUsuarioObtenerOp = properties.getProperty("inversiones_servicio.op.inversiones_pagare_numero_usuario_obtener");
-		InversionesImportesDeInversionFinalizadaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_importes_de_invercion_finalizada_actualizar");
+		InversionesImportesDeInversionFinalizadaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_importes_de_inversion_finalizada_actualizar");
 
 		InversionesObtenerOpInvMoneda = properties.getProperty("op.inversiones_obtener.inv_moneda");
 		InversionesObtenerOpTransaccio = properties.getProperty("op.inversiones_obtener.transaccio");
@@ -86,11 +86,11 @@ public class InversionesServicio extends BaseService {
 		InversionesPagareNumeroUsuarioObtenerOpSucDestino = properties.getProperty("op.inversiones_pagare_numero_usuario_obtener.suc_destino");
 		InversionesPagareNumeroUsuarioObtenerOpModulo = properties.getProperty("op.inversiones_pagare_numero_usuario_obtener.modulo");
 
-		InversionesImportesDeInversionFinalizadaActualizarOpTransaccio  = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.transaccio");
-		InversionesImportesDeInversionFinalizadaActualizarOpUsuari = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.usuario");
-		InversionesImportesDeInversionFinalizadaActualizarOpSucOrigen = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.suc_origen");
-		InversionesImportesDeInversionFinalizadaActualizarOpSucDestino = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.suc_destino");
-		InversionesImportesDeInversionFinalizadaActualizarOpModulo = properties.getProperty("op.inversiones_importes_de_invercion_finalizada_actualizar.modulo");
+		InversionesImportesDeInversionFinalizadaActualizarOpTransaccio  = properties.getProperty("op.inversiones_importes_de_inversion_finalizada_actualizar.transaccio");
+		InversionesImportesDeInversionFinalizadaActualizarOpUsuari = properties.getProperty("op.inversiones_importes_de_inversion_finalizada_actualizar.usuario");
+		InversionesImportesDeInversionFinalizadaActualizarOpSucOrigen = properties.getProperty("op.inversiones_importes_de_inversion_finalizada_actualizar.suc_origen");
+		InversionesImportesDeInversionFinalizadaActualizarOpSucDestino = properties.getProperty("op.inversiones_importes_de_inversion_finalizada_actualizar.suc_destino");
+		InversionesImportesDeInversionFinalizadaActualizarOpModulo = properties.getProperty("op.inversiones_importes_de_inversion_finalizada_actualizar.modulo");
 
 	}
 

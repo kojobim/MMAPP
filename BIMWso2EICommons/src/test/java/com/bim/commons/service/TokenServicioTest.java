@@ -29,8 +29,8 @@ public class TokenServicioTest {
 	}
 	
 	@Test
-	public void tokenVerificarDeberiaSerExitoso() {
-		logger.info("TEST: Comenzando tokenVerificarDeberiaSerExitoso metodo");
+	public void tokenVerificarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando tokenVerificarTestDeberiaSerExitoso metodo");
 		String fechaSis = Utilerias.obtenerFechaSis();
 		JsonObject datosTokenVerificar = new JsonObject();
 		datosTokenVerificar.addProperty("Tov_Serie", "0416218853");
@@ -60,10 +60,10 @@ public class TokenServicioTest {
 		JsonObject tokenVerificar = Utilerias.obtenerJsonObjectPropiedad(resultado, "tokenVerificar");
 		
 		if(!resultado.get("tokenVerificar").isJsonNull()) {
-			assertNotNull("tokenVerificar es nulo", tokenVerificar);
-		}else
 			assertTrue("La propiedad Tov_FecVen no se encuentra en tokenVerificar", tokenVerificar.has("Tov_FecVen"));
-
-		logger.info("TEST: Finalizando tokenVerificarDeberiaSerExitoso metodo");
+		}else
+			assertNotNull("la propiedad tokenVerificar es nula", tokenVerificar);
+		
+		logger.info("TEST: Finalizando tokenVerificarTestDeberiaSerExitoso metodo");
 	}
 }

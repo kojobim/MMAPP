@@ -32,7 +32,6 @@ public class UsuarioServicio extends BaseService {
 	private static String UsuarioActualizacionOpSucDestion;
 	private static String UsuarioActualizacionOpModulo;
 	private static String UsuarioPerfilRiesgoConsultarOp;
-	private static String UsuarioPerfilRiesgoConsultarOpAplClient;
 	private static String UsuarioPerfilRiesgoConsultarOpTipConsul;
 	private static String UsuarioPerfilRiesgoConsultarOpTransaccio;
 	private static String UsuarioPerfilRiesgoConsultarOpUsuari;
@@ -46,19 +45,29 @@ public class UsuarioServicio extends BaseService {
 		UsuarioServicio = properties.getProperty("data_service.usuario_servicio");
 
 		UsuarioConsultarOp = properties.getProperty("usuario_servicio.op.usuario_consultar");
+		UsuarioActualizacionOp = properties.getProperty("usuario_servicio.op.usuario_actualizacion");
+		UsuarioPerfilRiesgoConsultarOp = properties.getProperty("usuario_servicio.op.usuario_perfil_riesgo_consultar");
+		
 		UsuarioConsultarOpTipConsul = properties.getProperty("op.usuario_consultar.tip_consul");
 		UsuarioConsultarOpTransaccio = properties.getProperty("op.usuario_consultar.transaccio");
 		UsuarioConsultarOpUsuario = properties.getProperty("op.usuario_consultar.usuario");
 		UsuarioConsultarOpSucOrigen = properties.getProperty("op.usuario_consultar.suc_origen");
 		UsuarioConsultarOpSucDestino = properties.getProperty("op.usuario_consultar.suc_destino");
 		UsuarioConsultarOpModulo = properties.getProperty("op.usuario_consultar.modulo");
-		UsuarioActualizacionOp = properties.getProperty("usuario_servicio.op.usuario_actualizacion");
+
 		UsuarioActualizacionOpTipActual = properties.getProperty("op.usuario_actualizacion.tip_actual");
 		UsuarioActualizacionOpTransaccio = properties.getProperty("op.usuario_actualizacion.transaccio");
 		UsuarioActualizacionOpUsuario = properties.getProperty("op.usuario_actualizacion.usuario");
 		UsuarioActualizacionOpSucOrigen = properties.getProperty("op.usuario_actualizacion.suc_origen");
 		UsuarioActualizacionOpSucDestion = properties.getProperty("op.usuario_actualizacion.suc_destino");
 		UsuarioActualizacionOpModulo = properties.getProperty("op.usuario_actualizacion.modulo");
+
+		UsuarioPerfilRiesgoConsultarOpTipConsul = properties.getProperty("op.usuario_perfil_riesgo_consultar.tip_consul");
+		UsuarioPerfilRiesgoConsultarOpTransaccio = properties.getProperty("op.usuario_perfil_riesgo_consultar.transaccio");
+		UsuarioPerfilRiesgoConsultarOpUsuari = properties.getProperty("op.usuario_perfil_riesgo_consultar.usuario");
+		UsuarioPerfilRiesgoConsultarOpSucOrigen = properties.getProperty("op.usuario_perfil_riesgo_consultar.suc_origen");
+		UsuarioPerfilRiesgoConsultarOpSucDestino = properties.getProperty("op.usuario_perfil_riesgo_consultar.suc_destino");
+		UsuarioPerfilRiesgoConsultarOpModulo = properties.getProperty("op.usuario_perfil_riesgo_consultar.modulo");
 	}
 	
 	/**
@@ -277,14 +286,21 @@ public class UsuarioServicio extends BaseService {
 	 */
 	public JsonObject usuarioPerfilRiesgoConsultar(JsonObject datosPerfilRiesgo) {
 		logger.info("COMMONS: Comenzando usuarioPerfilRiesgoConsultar metodo... ");
-		datosPerfilRiesgo.addProperty("Apl_Cuesti", Integer.parseInt(UsuarioPerfilRiesgoConsultarOpAplClient));
-		datosPerfilRiesgo.addProperty("Tip_Consul", UsuarioPerfilRiesgoConsultarOpTipConsul);
+		
+		logger.info("- datosPerfilRiesgo " + datosPerfilRiesgo);
+		
+		datosPerfilRiesgo.addProperty("Apl_Cuesti", 0);		
+        datosPerfilRiesgo.addProperty("Tip_Consul", UsuarioPerfilRiesgoConsultarOpTipConsul);
+        if(!datosPerfilRiesgo.has("NumTransac"))
+        	datosPerfilRiesgo.addProperty("NumTransac", "");
 		datosPerfilRiesgo.addProperty("Transaccio", UsuarioPerfilRiesgoConsultarOpTransaccio);
 		datosPerfilRiesgo.addProperty("Usuario", UsuarioPerfilRiesgoConsultarOpUsuari);
 		datosPerfilRiesgo.addProperty("SucOrigen", UsuarioPerfilRiesgoConsultarOpSucOrigen);
 		datosPerfilRiesgo.addProperty("SucDestino", UsuarioPerfilRiesgoConsultarOpSucDestino);
 		datosPerfilRiesgo.addProperty("Modulo", UsuarioPerfilRiesgoConsultarOpModulo);
+
 		JsonObject usuarioPerfilRiesgoOpResultadoObjecto = Utilerias.performOperacion(UsuarioServicio, UsuarioPerfilRiesgoConsultarOp, datosPerfilRiesgo);
+		
 		logger.info("COMMONS: Finalizando usuarioPerfilRiesgoConsultar metodo... ");
 		return usuarioPerfilRiesgoOpResultadoObjecto;
 	}//Cierre del método
