@@ -1,0 +1,58 @@
+<data name="SPEIServicio" serviceGroup="SPEIServicio" serviceNamespace="SPEIServicio">
+    <description>Servicio usado para exponer las funcionalidades del aviso de privacidad</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="horariosSPEIConsultarSQL" useConfig="BIMDB">
+        <sql>
+			EXECUTE SPHORARICON
+			@Tip_Consul = :tipConsul,
+			@Msj_Error = :msjError,
+			@Hor_HorIni = :horHorIni,
+			@Hor_HorFin = :horHorFin,
+			@Hor_MonIni = :horMonIni,
+			@Hor_MonFin = :horMonFin,
+			@NumTransac	= :numTransac,
+			@Transaccio	= :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="msjError" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="horHorIni" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="horHorFin" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="horMonIni" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="horMonFin" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result element="horarioSPEI">
+            <element column="Hor_HorIni" name="Hor_HorIni" xsdType="xs:string" optional="true"/>
+            <element column="Hor_HorFin" name="Hor_HorFin" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation name="horariosSPEIConsultarOp">
+        <call-query href="horariosSPEIConsultarSQL">
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="msjError" query-param="Msj_Error"/>
+            <with-param name="horHorIni" query-param="Hor_HorIni"/>
+            <with-param name="horHorFin" query-param="Hor_HorFin"/>
+            <with-param name="horMonIni" query-param="Hor_MonIni"/>
+            <with-param name="horMonFin" query-param="Hor_MonFin"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>
