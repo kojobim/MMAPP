@@ -53,7 +53,7 @@ public class HttpClientUtils {
 			}
 			if(request.getBody() != null) {
 				StringEntity entity = new StringEntity(request.getBody().toString());
-				System.out.println("- Body: " + new Gson().toJson(request.getMessage()));
+				System.out.println("- Body: " + new Gson().toJson(request.getBody()));
 				post.setEntity(entity);
 			}
 			post.setHeader("Accept", "application/json");
@@ -62,6 +62,7 @@ public class HttpClientUtils {
 			InputStream inputStream = response.getEntity().getContent();
 			String json = IOUtils.toString(inputStream);
 			client.close();
+			System.out.println(json);
 			return json;
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
@@ -171,4 +172,13 @@ public class HttpClientUtils {
                 .setSSLSocketFactory(connectionFactory)
                 .build();
     }
+	
+	public   static   String   inputStream2String(InputStream   is)   throws   IOException{
+        ByteArrayOutputStream   baos   =   new   ByteArrayOutputStream();
+        int   i=-1;
+        while((i=is.read())!=-1){
+        baos.write(i);
+        }
+       return   baos.toString();
+    } 
 }
