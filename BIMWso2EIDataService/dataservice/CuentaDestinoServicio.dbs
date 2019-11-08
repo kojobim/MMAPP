@@ -33,7 +33,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/cuentaDestinoBIMConsultarNE" element="cuentaDestinoBIM">
+        <result defaultNamespace="http://bem.com/cuentaDestinoBIMConsultarNE" element="cuentaDestinoBIM" rowName="cuentasDestinoBIM">
             <element column="Cdb_Consec" name="Cdb_Consec" xsdType="xs:string" optional="true"/>
             <element column="Cdb_UsuAdm" name="Cdb_UsuAdm" xsdType="xs:string" optional="true"/>
             <element column="Cdb_Cuenta" name="Cdb_Cuenta" xsdType="xs:string" optional="true"/>
@@ -118,9 +118,10 @@
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <result defaultNamespace="http://bem.com/cuentaDestinoSPEIConsultarNE" element="cuentasDestino" rowName="cuentaDestino">
-            <element column="Cds_UsuAdm" name="Cds_UsuAdm" xsdType="xs:string" optional="true"/>
-            <element column="Cds_Consec" name="Cds_Consec" xsdType="xs:string" optional="true"/>
-            <element column="Cds_CLABE" name="Cds_CLABE" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_Consec" name="Cdb_Consec" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_UsuAdm" name="Cdb_UsuAdm" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_Cuenta" name="Cdb_Cuenta" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_CliUsu" name="Cdb_CliUsu" xsdType="xs:string" optional="true"/>
             <element column="Cds_Banco" name="Cds_Banco" xsdType="xs:string" optional="true"/>
             <element column="Ins_Descri" name="Ins_Descri" xsdType="xs:string" optional="true"/>
             <element column="Cds_CliUsu" name="Cds_CliUsu" xsdType="xs:string" optional="true"/>
@@ -245,8 +246,8 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-		<result defaultNamespace="http://bem.com/cuentaDestinoBIMActualizacionNE" element="cuentaDestino">
-			<element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+        <result defaultNamespace="http://bem.com/cuentaDestinoBIMActualizacionNE" element="cuentaDestino">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
         </result>
     </query>
@@ -368,7 +369,7 @@
             <element column="Err_Foco" name="Err_Foco" xsdType="xs:string" optional="true"/>
         </result>
     </query>
-    <operation name="cuentaDestinoBIMConsultarOp">
+    <operation returnRequestStatus="true" name="cuentaDestinoBIMConsultarOp">
         <call-query href="cuentaDestinoBIMConsultarSQL">
             <with-param name="cdbClient" query-param="Cdb_Client"/>
             <with-param name="cdbUsuAdm" query-param="Cdb_UsuAdm"/>
