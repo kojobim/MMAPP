@@ -134,14 +134,7 @@ public class UsuarioServicioTest {
 		JsonObject datosPerfilRiesgo = new JsonObject();
 		datosPerfilRiesgo.addProperty("Apl_Client", "00193500");
 		datosPerfilRiesgo.addProperty("Apl_Cuesti", 0);
-		datosPerfilRiesgo.addProperty("Tip_Actual", "C2");
-		datosPerfilRiesgo.addProperty("NumTransac", "");
-		datosPerfilRiesgo.addProperty("Transaccio", "JOV");
-		datosPerfilRiesgo.addProperty("Usuario", "000100");
 		datosPerfilRiesgo.addProperty("FechaSis", fechaSis);
-		datosPerfilRiesgo.addProperty("SucOrigen", "001");
-		datosPerfilRiesgo.addProperty("SucDestino", "001");
-		datosPerfilRiesgo.addProperty("Modulo", "NB");
 		
 		/**
 		 *	Mockup Test
