@@ -18,24 +18,38 @@ public class AvisoPrivacidadServicio extends BaseService {
  
     private static String AvisoPrivacidadServicio;
     
-	private static String AvisoPrivacidadActualizacionOp;
+    private static String AvisoPrivacidadActualizacionOp;
+    private static String AvisoPrivacidadConsultarOp;
+    
 	private static String AvisoPrivacidadActualizacionOpTransaccio;
 	private static String AvisoPrivacidadActualizacionOpUsuario;
 	private static String AvisoPrivacidadActualizacionOpSucOrigen;
 	private static String AvisoPrivacidadActualizacionOpSucDestino;
     private static String AvisoPrivacidadActualizacionOpModulo;
+    private static String AvisoPrivacidadConsultarOpTransaccio;
+	private static String AvisoPrivacidadConsultarOpUsuario;
+	private static String AvisoPrivacidadConsultarOpSucOrigen;
+	private static String AvisoPrivacidadConsultarOpSucDestino;
+    private static String AvisoPrivacidadConsultarOpModulo;
 
 	public AvisoPrivacidadServicio() {
 		super();
 
 		AvisoPrivacidadServicio = properties.getProperty("data_service.aviso_privacidad_servicio");
         AvisoPrivacidadActualizacionOp = properties.getProperty("aviso_privacidad_servicio.op.aviso_privacidad_actualizacion");
+        AvisoPrivacidadConsultarOp = properties.getProperty("aviso_privacidad_servicio.op.aviso_privacidad_consultar");
 
         AvisoPrivacidadActualizacionOpTransaccio = properties.getProperty("op.aviso_privacidad_actualizacion.transaccio");
 		AvisoPrivacidadActualizacionOpUsuario = properties.getProperty("op.aviso_privacidad_actualizacion.usuario");
 		AvisoPrivacidadActualizacionOpSucOrigen = properties.getProperty("op.aviso_privacidad_actualizacion.suc_origen");
 		AvisoPrivacidadActualizacionOpSucDestino = properties.getProperty("op.aviso_privacidad_actualizacion.suc_destino");
         AvisoPrivacidadActualizacionOpModulo = properties.getProperty("op.aviso_privacidad_actualizacion.modulo");
+
+        AvisoPrivacidadConsultarOpTransaccio = properties.getProperty("op.aviso_privacidad_consultar.transaccio");
+		AvisoPrivacidadConsultarOpUsuario = properties.getProperty("op.aviso_privacidad_consultar.usuario");
+		AvisoPrivacidadConsultarOpSucOrigen = properties.getProperty("op.aviso_privacidad_consultar.suc_origen");
+		AvisoPrivacidadConsultarOpSucDestino = properties.getProperty("op.aviso_privacidad_consultar.suc_destino");
+        AvisoPrivacidadConsultarOpModulo = properties.getProperty("op.aviso_privacidad_consultar.modulo");
     }
 
 	
@@ -78,6 +92,43 @@ public class AvisoPrivacidadServicio extends BaseService {
         datosAvisoPrivacidad.addProperty("Modulo", AvisoPrivacidadActualizacionOpModulo);
 		JsonObject result = Utilerias.performOperacion(AvisoPrivacidadServicio, AvisoPrivacidadActualizacionOp, datosAvisoPrivacidad);
 		logger.info("COMMONS: Finalizando avisoPrivacidadActualizacion...");
+		return result;
+    }//Cierre del método
+
+    /**
+     * Método para consultar el de aviso de privacidad
+     * ProcedureName: NBAVISOSCON
+     * @param datosAvisoPrivacidad
+     * <pre>
+     * {
+     *	Con_Aviso: String,
+     *	NumTransac: String,
+     *	Transaccio: String,
+     *	Usuario: String,
+     *	FechaSis: String,
+     *	SucOrigen: String,
+     *	SucDestino: String,
+     *	Modulo: String
+     * }
+     * </pre>
+     * @return
+     * <pre>
+     * {
+     *	avisoPrivacidad: {
+     *		Text_Aviso: String
+     *	}
+     * }
+     * </pre>
+     */
+	public JsonObject avisoPrivacidadConsultar(JsonObject datosAvisoPrivacidad) {
+		logger.info("COMMONS: Comenzando avisoPrivacidadConsultar...");
+		datosAvisoPrivacidad.addProperty("Transaccio", AvisoPrivacidadConsultarOpTransaccio);
+        datosAvisoPrivacidad.addProperty("Usuario", AvisoPrivacidadConsultarOpUsuario);
+        datosAvisoPrivacidad.addProperty("SucOrigen", AvisoPrivacidadConsultarOpSucOrigen);
+        datosAvisoPrivacidad.addProperty("SucDestino", AvisoPrivacidadConsultarOpSucDestino);
+        datosAvisoPrivacidad.addProperty("Modulo", AvisoPrivacidadConsultarOpModulo);
+		JsonObject result = Utilerias.performOperacion(AvisoPrivacidadServicio, AvisoPrivacidadConsultarOp, datosAvisoPrivacidad);
+		logger.info("COMMONS: Finalizando avisoPrivacidadConsultar...");
 		return result;
     }//Cierre del método
     

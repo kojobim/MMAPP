@@ -301,4 +301,47 @@ public class CuentaDestinoServicioTest {
 		logger.info("TEST: Finalizando cuentasEspecialesConsultarTestDeberiaSerExitoso metodo...");
 	}
 
+	@Test
+	public void cuentaDestinoBIMCreacionTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando cuentaDestinoBIMCreacionTestDeberiaSerExitoso método...");
+		
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosCuentaDestinoBIMCreacion = new JsonObject();
+		datosCuentaDestinoBIMCreacion.addProperty("Cdb_UsuAdm", "000149");
+		datosCuentaDestinoBIMCreacion.addProperty("Cdb_Cuenta", "001951620013");
+		datosCuentaDestinoBIMCreacion.addProperty("Cdb_CliUsu", "00195171");
+		datosCuentaDestinoBIMCreacion.addProperty("Cdb_Alias", "ALIAS");
+		datosCuentaDestinoBIMCreacion.addProperty("Cdb_RFCBen", "RFC");
+		datosCuentaDestinoBIMCreacion.addProperty("Cdb_EmaBen", "y.duran@bim.mx");
+		datosCuentaDestinoBIMCreacion.addProperty("Cdb_Random", "F30BCD373A70CCFBB1652941B28B9F96");
+		datosCuentaDestinoBIMCreacion.addProperty("NumTransac", "42551186");
+		datosCuentaDestinoBIMCreacion.addProperty("FechaSis", fechaSis);
+		
+		/**
+		 * Mock
+		 * String json = "{\"cuentaDestinoBIM\":{\"Err_Codigo\":\"000001\",\"Err_Mensaj\":\"El código de Autenticación no pudo ser validado\"}}";
+		 * JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+		
+		/**
+		 * Test
+		 */
+		
+		JsonObject resultado = cuentaDestinoServicio.cuentaDestinoBIMCreacion(datosCuentaDestinoBIMCreacion);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad cuentaDestinoBIM", resultado.has("cuentaDestinoBIM"));
+		assertTrue("La propiedad cuentaDestinoBIM no es un JsonObject", resultado.get("cuentaDestinoBIM").isJsonObject());
+		
+		JsonObject cuentaDestinoBIM = Utilerias.obtenerJsonObjectPropiedad(resultado, "cuentaDestinoBIM");
+		
+		if(!resultado.get("cuentaDestinoBIM").isJsonNull()) {
+			assertTrue("La propiedad Cue_Numero no se encuentra en cuentaDestinoBIM", cuentaDestinoBIM.has("Err_Codigo"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentaDestinoBIM", cuentaDestinoBIM.has("Err_Mensaj"));
+		} else
+			assertNotNull("la propiedad cuentasEspeciales es nula", cuentaDestinoBIM);
+		
+		logger.info("TEST: Finalizando cuentaDestinoBIMCreacionTestDeberiaSerExitoso método...");
+	}
+
 }
