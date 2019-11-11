@@ -1,5 +1,9 @@
 package com.bim.msf4j.ctrl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -224,6 +228,22 @@ public class CuentasCtrl extends BimBaseCtrl {
 			String fechaVal = Utilerias.obtenerStringPropiedad(movimiento, "Fecha_Val");
 			Float movCantid = Utilerias.obtenerFloatPropiedad(movimiento, "Mov_Cantid");
 			Integer movNatura = Utilerias.obtenerIntPropiedad(movimiento, "Mov_Natura");
+			
+			if(fechaVal.isEmpty())
+				fechaVal = "07/11/2019";
+			
+			logger.info("- fechaVal " + fechaVal);
+			
+			if (fechaVal != null && !fechaVal.isEmpty()) {
+				SimpleDateFormat sdfOrigen = new SimpleDateFormat("dd/MM/yyyy");
+				SimpleDateFormat sdfDestino = new SimpleDateFormat("yyyy-MM-dd");
+				try {
+					Date fecha = sdfOrigen.parse(fechaVal);
+					fechaVal = sdfDestino.format(fecha);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
 			
 			Float movCantidValor = (float) Utilerias.redondear(movCantid, 2); 
 			JsonObject movimientoResultado = new JsonObject();
