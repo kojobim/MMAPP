@@ -298,7 +298,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result element="transaccionSPEI">
+        <result defaultNamespace="http://bem.com/transaccionesSPEI" element="transaccionesSPEI" rowName="transaccionSPEI">
             <element column="Trn_Client" name="Trn_Client" xsdType="xs:string" optional="true"/>
             <element column="Trn_Consec" name="Trn_Consec" xsdType="xs:string" optional="true"/>
             <element column="Trn_CueOri" name="Trn_CueOri" xsdType="xs:string" optional="true"/>
