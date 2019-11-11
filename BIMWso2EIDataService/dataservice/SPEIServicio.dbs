@@ -1,5 +1,5 @@
 <data name="SPEIServicio" serviceGroup="SPEIServicio" serviceNamespace="SPEIServicio">
-    <description>Servicio usado para exponer las funcionalidades del aviso de privacidad</description>
+    <description>Servicio usado para exponer las funcionalidades de transferencias SPEI</description>
     <config id="BIMDB">
         <property name="carbon_datasource_name">bim_db</property>
     </config>
@@ -136,6 +136,127 @@
             <with-param name="trsDurFec" query-param="Trs_DurFec"/>
             <with-param name="trsDurTra" query-param="Trs_DurTra"/>
             <with-param name="trsDiAnEm" query-param="Trs_DiAnEm"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <query id="transaferenciaSPEIProcesarSQL" useConfig="BIMDB">
+        <sql>
+			EXECUTE NBTRASPEPRO
+			@Trs_UsuAdm	= :trsUsuAdm,
+			@Trs_Usuari = :trsUsuari,
+			@Trs_UsuCli	= :trsUsuCli,
+			@Trs_Consec	= :trsConsec,
+			@Trs_OrdPag	= :trsOrdPag,	
+			@Trs_CueOri	= :trsCueOri,
+			@Trs_TiCuBe	= :trsTiCuBe,
+			@Trs_CueBen	= :trsCueBen,
+			@Trs_Monto	= :trsMonto,
+			@Trs_RFC = :trsRFC,
+			@Trs_IVA = :trsIVA,
+			@Trs_Comisi	= :trsComisi,
+			@Trs_ConPag	= :trsConPag,
+			@Trs_RFCPro	= :trsRFCPro,
+			@Trs_IVAPro	= :trsIVAPro,
+			@Trs_Banco = :trsBanco,
+			@Trs_SegRef	= :trsSegRef,
+			@Trs_CoCuDe	= :trsCoCuDe,
+			@Trs_TCPDir = :trsTCPDir,
+			@Trs_TipPag	= :trsTipPag,
+			@Trs_CuBeAd	= :trsCuBeAd,				
+			@Trs_TiCuBA = :trsTiCuBA,
+			@Trs_NoBeAd = :trsNoBeAd,
+			@Trs_ConPaU	= :trsConPaU,
+			@Trs_DaBeAd	= :trsDaBeAd,
+			@Trs_DireIP	= :trsDireIP,
+			@Trs_TipTra	= :trsTipTra,
+			@Trs_ValFir	= :trsValFir,
+			@Ban_Descri	= :banDescri,
+			@NumTransac	= :numTransac,
+			@Transaccio	= :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo	 = :modulo
+		</sql>
+        <param name="trsUsuAdm" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsUsuari" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsUsuCli" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsConsec" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsOrdPag" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsCueOri" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsTiCuBe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsCueBen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsMonto" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="trsRFC" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsIVA" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="trsComisi" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="trsConPag" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsRFCPro" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsIVAPro" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="trsBanco" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsSegRef" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsCoCuDe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsTCPDir" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsTipPag" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsCuBeAd" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsTiCuBA" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsNoBeAd" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsConPaU" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsDaBeAd" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsDireIP" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsTipTra" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trsValFir" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="banDescri" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result element="transaccionSPEI">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation name="transaferenciaSPEIProcesarOp">
+        <call-query href="transaferenciaSPEIProcesarSQL">
+            <with-param name="trsUsuAdm" query-param="Trs_UsuAdm"/>
+            <with-param name="trsUsuari" query-param="Trs_Usuari"/>
+            <with-param name="trsUsuCli" query-param="Trs_UsuCli"/>
+            <with-param name="trsConsec" query-param="Trs_Consec"/>
+            <with-param name="trsOrdPag" query-param="Trs_OrdPag"/>
+            <with-param name="trsCueOri" query-param="Trs_CueOri"/>
+            <with-param name="trsTiCuBe" query-param="Trs_TiCuBe"/>
+            <with-param name="trsCueBen" query-param="Trs_CueBen"/>
+            <with-param name="trsMonto" query-param="Trs_Monto"/>
+            <with-param name="trsRFC" query-param="Trs_RFC"/>
+            <with-param name="trsIVA" query-param="Trs_IVA"/>
+            <with-param name="trsComisi" query-param="Trs_Comisi"/>
+            <with-param name="trsConPag" query-param="Trs_ConPag"/>
+            <with-param name="trsRFCPro" query-param="Trs_RFCPro"/>
+            <with-param name="trsIVAPro" query-param="Trs_IVAPro"/>
+            <with-param name="trsBanco" query-param="Trs_Banco"/>
+            <with-param name="trsSegRef" query-param="Trs_SegRef"/>
+            <with-param name="trsCoCuDe" query-param="Trs_CoCuDe"/>
+            <with-param name="trsTCPDir" query-param="Trs_TCPDir"/>
+            <with-param name="trsTipPag" query-param="Trs_TipPag"/>
+            <with-param name="trsCuBeAd" query-param="Trs_CuBeAd"/>
+            <with-param name="trsTiCuBA" query-param="Trs_TiCuBA"/>
+            <with-param name="trsNoBeAd" query-param="Trs_NoBeAd"/>
+            <with-param name="trsConPaU" query-param="Trs_ConPaU"/>
+            <with-param name="trsDaBeAd" query-param="Trs_DaBeAd"/>
+            <with-param name="trsDireIP" query-param="Trs_DireIP"/>
+            <with-param name="trsTipTra" query-param="Trs_TipTra"/>
+            <with-param name="trsValFir" query-param="Trs_ValFir"/>
+            <with-param name="banDescri" query-param="Ban_Descri"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
