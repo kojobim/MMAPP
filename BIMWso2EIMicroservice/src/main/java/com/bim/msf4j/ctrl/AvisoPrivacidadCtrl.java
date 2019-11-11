@@ -1,6 +1,5 @@
 package com.bim.msf4j.ctrl;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -11,7 +10,13 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
+
+import com.bim.commons.dto.BimMessageDTO;
+import com.bim.commons.enums.AvisoPrivacidadFormatosEnum;
+import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.service.AvisoPrivacidadServicio;
+import com.bim.commons.utils.Utilerias;
+import com.google.gson.JsonObject;
 
 @Path("/")
 public class AvisoPrivacidadCtrl extends BimBaseCtrl {
@@ -29,13 +34,34 @@ public class AvisoPrivacidadCtrl extends BimBaseCtrl {
 	
 	@Path("/aviso-privacidad")
 	@GET()
-	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response obtenerAvisoPrivacidad(@QueryParam("formato") String formato, @Context final Request solicitud) {
 		logger.info("CTRL: Comenzando obtenerAvisoPrivacidad metodo...");
 		
+		if(AvisoPrivacidadFormatosEnum.validarFormato(formato) == null) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.44");
+			bimMessageDTO.addMergeVariable("formato", formato);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		String fechaSis = Utilerias.obtenerFechaSis();
+		
+		JsonObject datosAvisoPrivacidad = new JsonObject();
+		datosAvisoPrivacidad.addProperty("FechaSis", fechaSis);
+		
+		JsonObject avisoPrivacidadConsultarResultado = avisoPrivacidadServicio.avisoPrivacidadConsultar(datosAvisoPrivacidad);
+		JsonObject avisoPrivacidadConsultarResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(avisoPrivacidadConsultarResultado, "avisoPrivacidad");
+		String textAviso = Utilerias.obtenerStringPropiedad(avisoPrivacidadConsultarResultadoObjeto, "Text_Aviso");
+		textAviso = textAviso.replace("\r\n", "");
+		
+		JsonObject resultado = new JsonObject();
+		JsonObject avisoPrivacidad = new JsonObject();
+		avisoPrivacidad.addProperty("cpFormato", formato);
+		avisoPrivacidad.addProperty("cpAvisoPrivacidad", textAviso);
+		resultado.add("avisoPrivacidad", avisoPrivacidad);
+		
 		logger.info("CTRL: Terminando obtenerAvisoPrivacidad metodo");
-		return Response.ok(MediaType.APPLICATION_JSON)
+		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
 	}
 	
