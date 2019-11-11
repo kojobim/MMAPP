@@ -88,4 +88,43 @@ public class SPEIServicioTest {
 		logger.info("TEST: Finalizando transaferenciaSPEICreacionTestDeberiasSerExitoso metodo...");
 	}
 	
+	@Test
+	public void transaferenciaSPEIProcesarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando transaferenciaSPEIProcesarTestDeberiaSerExitoso metodo...");
+		JsonObject datosTransferenciaSPEI = new JsonObject();
+		datosTransferenciaSPEI.addProperty("Trs_UsuAdm", "000149");
+		datosTransferenciaSPEI.addProperty("Trs_Usuari", "000149");
+		datosTransferenciaSPEI.addProperty("Trs_UsuCli", "00195171");
+		datosTransferenciaSPEI.addProperty("Trs_Consec", "0000105506");
+		datosTransferenciaSPEI.addProperty("Trs_CueOri", "001951710012");
+		datosTransferenciaSPEI.addProperty("Trs_TiCuBe", "40");
+		datosTransferenciaSPEI.addProperty("Trs_CueBen", "012180029483065593");
+		datosTransferenciaSPEI.addProperty("Trs_Monto", 3.0000);
+		datosTransferenciaSPEI.addProperty("Trs_ConPag", "PRUEBA SPEI");
+		datosTransferenciaSPEI.addProperty("Trs_Banco", "40012");
+		datosTransferenciaSPEI.addProperty("Trs_SegRef", "Nombre Usuario BE");
+		datosTransferenciaSPEI.addProperty("Trs_CoCuDe", "0000001815");
+		datosTransferenciaSPEI.addProperty("Trs_TCPDir", "127.0.0.1");
+		datosTransferenciaSPEI.addProperty("Trs_TipPag", "01");
+		datosTransferenciaSPEI.addProperty("Trs_TipTra", "I");
+		datosTransferenciaSPEI.addProperty("Trs_ValFir", "S");
+		datosTransferenciaSPEI.addProperty("Ban_Descri", "BBVA BANCOMER");
+		datosTransferenciaSPEI.addProperty("NumTransac", "42246958");
+		datosTransferenciaSPEI.addProperty("FechaSis", Utilerias.obtenerFechaSis());
+		JsonObject resultado = speiServicio.transaferenciaSPEIProcesar(datosTransferenciaSPEI);
+		logger.info("- resultado " + resultado);
+		
+		assertTrue("El resultado no tienen la propiedad transaccionSPEI", resultado.has("transaccionSPEI"));
+		assertTrue("La propiedad transaccionSPEI no es un JsonObject", resultado.get("transaccionSPEI").isJsonObject());
+		
+		JsonObject transaccionSPEI = resultado.get("transaccionSPEI").getAsJsonObject();
+		
+		assertTrue("El objeto transaccionSPEI no tiene la propiedad Err_Codigo", transaccionSPEI.has("Err_Codigo"));
+		assertTrue("El objeto transaccionSPEI no tiene la propiedad Err_Mensaj", transaccionSPEI.has("Err_Mensaj"));
+		
+		String errCodigo = transaccionSPEI.get("Err_Codigo").getAsString();
+		
+		assertTrue("La operacion no fue exitosa se obtuvo el error " + errCodigo, errCodigo.equals("000000"));
+		logger.info("TEST: Finalizando transaferenciaSPEIProcesarTestDeberiaSerExitoso metodo...");
+	}
 }

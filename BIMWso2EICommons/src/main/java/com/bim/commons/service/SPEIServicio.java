@@ -24,6 +24,12 @@ public class SPEIServicio extends BaseService {
 	private static String TransaferenciaSPEICreacionOpSucOrigen;
 	private static String TransaferenciaSPEICreacionOpSucDestino;
 	private static String TransaferenciaSPEICreacionOpModulo;
+	private static String TransaferenciaSPEIProcesarOp;
+	private static String TransaferenciaSPEIProcesarOpTransaccio;
+	private static String TransaferenciaSPEIProcesarOpUsuario;
+	private static String TransaferenciaSPEIProcesarOpSucOrigen;
+	private static String TransaferenciaSPEIProcesarOpSucDestino;
+	private static String TransaferenciaSPEIProcesarOpModulo;
 	
 	public SPEIServicio() {
 		super();
@@ -32,6 +38,7 @@ public class SPEIServicio extends BaseService {
 		
 		HorariosSPEIConsultarOp = properties.getProperty("spei_servicio.op.horarios_spei_consultar");
 		TransaferenciaSPEICreacionOp = properties.getProperty("spei_servicio.op.transferencias_spei_creacion");
+		TransaferenciaSPEIProcesarOp = properties.getProperty("spei_servicio.op.transferencias_spei_procesar");
 		
 		HorariosSPEIConsultarOpTipConsul = properties.getProperty("op.horarios_spei_consultar.tip_consul");
 		HorariosSPEIConsultarOpTransaccio = properties.getProperty("op.horarios_spei_consultar.transaccio");
@@ -45,6 +52,12 @@ public class SPEIServicio extends BaseService {
 		TransaferenciaSPEICreacionOpSucOrigen = properties.getProperty("op.transferencias_spei_creacion.suc_origen");
 		TransaferenciaSPEICreacionOpSucDestino = properties.getProperty("op.transferencias_spei_creacion.suc_destino");
 		TransaferenciaSPEICreacionOpModulo = properties.getProperty("op.transferencias_spei_creacion.modulo");
+		
+		TransaferenciaSPEIProcesarOpTransaccio = properties.getProperty("op.transferencias_spei_procesar.transaccio");
+		TransaferenciaSPEIProcesarOpUsuario = properties.getProperty("op.transferencias_spei_procesar.usuario");
+		TransaferenciaSPEIProcesarOpSucOrigen = properties.getProperty("op.transferencias_spei_procesar.suc_origen");
+		TransaferenciaSPEIProcesarOpSucDestino = properties.getProperty("op.transferencias_spei_procesar.suc_destino");
+		TransaferenciaSPEIProcesarOpModulo = properties.getProperty("op.transferencias_spei_procesar.modulo");
 	}
 
 	public JsonObject horariosSPEIConsultar(JsonObject datosHorariosSPEI) {
@@ -84,6 +97,30 @@ public class SPEIServicio extends BaseService {
 		datosTransfarenciaSPEI.addProperty("SucDestino", TransaferenciaSPEICreacionOpSucDestino);
 		datosTransfarenciaSPEI.addProperty("Modulo", TransaferenciaSPEICreacionOpModulo);
 		JsonObject transaferenciaSPEICreacionOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransaferenciaSPEICreacionOp, datosTransfarenciaSPEI);
+		logger.info("transaferenciaSPEICreacionOpResultadoObjeto" + transaferenciaSPEICreacionOpResultadoObjeto);
+		logger.info("COMMONS: Finalizando transaferenciaSPEICreacion metodo... ");
+		return transaferenciaSPEICreacionOpResultadoObjeto;
+	}
+	
+	public JsonObject transaferenciaSPEIProcesar(JsonObject datosTransferenciaSPEI) {
+		datosTransferenciaSPEI.addProperty("Trs_OrdPag", 0.0000);
+		datosTransferenciaSPEI.addProperty("Trs_IVA", 0.0000);
+		datosTransferenciaSPEI.addProperty("Trs_Comisi", 0.0000);
+		datosTransferenciaSPEI.addProperty("Trs_IVAPro", 0.0000);
+		datosTransferenciaSPEI.addProperty("Trs_RFC", "");
+		datosTransferenciaSPEI.addProperty("Trs_RFCPro", "");
+		datosTransferenciaSPEI.addProperty("Trs_CuBeAd", "");
+		datosTransferenciaSPEI.addProperty("Trs_TiCuBA", "");
+		datosTransferenciaSPEI.addProperty("Trs_NoBeAd", "");
+		datosTransferenciaSPEI.addProperty("Trs_ConPaU", "");
+		datosTransferenciaSPEI.addProperty("Trs_DaBeAd", "");
+		datosTransferenciaSPEI.addProperty("Trs_DireIP", "");
+		datosTransferenciaSPEI.addProperty("Transaccio", TransaferenciaSPEIProcesarOpTransaccio);
+		datosTransferenciaSPEI.addProperty("Usuario", TransaferenciaSPEIProcesarOpUsuario);
+		datosTransferenciaSPEI.addProperty("SucOrigen", TransaferenciaSPEIProcesarOpSucOrigen);
+		datosTransferenciaSPEI.addProperty("SucDestino", TransaferenciaSPEIProcesarOpSucDestino);
+		datosTransferenciaSPEI.addProperty("Modulo", TransaferenciaSPEIProcesarOpModulo);
+		JsonObject transaferenciaSPEICreacionOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransaferenciaSPEIProcesarOp, datosTransferenciaSPEI);
 		logger.info("transaferenciaSPEICreacionOpResultadoObjeto" + transaferenciaSPEICreacionOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando transaferenciaSPEICreacion metodo... ");
 		return transaferenciaSPEICreacionOpResultadoObjeto;
