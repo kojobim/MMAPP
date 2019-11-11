@@ -25,7 +25,6 @@ public class AvisoPrivacidadServicio extends BaseService {
 	private static String AvisoPrivacidadActualizacionOpSucOrigen;
 	private static String AvisoPrivacidadActualizacionOpSucDestino;
     private static String AvisoPrivacidadActualizacionOpModulo;
-    
     private static String AvisoPrivacidadConsultarOpConAviso;
     private static String AvisoPrivacidadConsultarOpTransaccio;
 	private static String AvisoPrivacidadConsultarOpUsuario;
