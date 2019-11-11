@@ -229,9 +229,6 @@ public class CuentasCtrl extends BimBaseCtrl {
 			Float movCantid = Utilerias.obtenerFloatPropiedad(movimiento, "Mov_Cantid");
 			Integer movNatura = Utilerias.obtenerIntPropiedad(movimiento, "Mov_Natura");
 			
-			if(fechaVal.isEmpty())
-				fechaVal = "07/11/2019";
-			
 			logger.info("- fechaVal " + fechaVal);
 			
 			if (fechaVal != null && !fechaVal.isEmpty()) {
