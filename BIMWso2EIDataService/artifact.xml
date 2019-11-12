@@ -59,4 +59,7 @@
     <artifact name="SPEIServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/SPEIServicio.dbs</file>
     </artifact>
+    <artifact name="TransferenciasBIMServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/TransferenciasBIMServicio.dbs</file>
+    </artifact>
 </artifacts>
