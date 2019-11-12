@@ -42,6 +42,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		
 		String bearerToken = solicitud.getHeader("Authorization");
 		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
+		logger.info("- principalResultadoObjecto " + principalResultadoObjecto);
 		
 		if(cpCuenta == null || cpCuenta.isEmpty()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.45");
