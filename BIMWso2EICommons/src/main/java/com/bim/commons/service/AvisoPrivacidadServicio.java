@@ -18,14 +18,14 @@ public class AvisoPrivacidadServicio extends BaseService {
  
     private static String AvisoPrivacidadServicio;
     
-    private static String AvisoPrivacidadActualizacionOp;
-    private static String AvisoPrivacidadConsultarOp;
-    
+	private static String AvisoPrivacidadActualizacionOp;
+	private static String AvisoPrivacidadConsultarOp;
 	private static String AvisoPrivacidadActualizacionOpTransaccio;
 	private static String AvisoPrivacidadActualizacionOpUsuario;
 	private static String AvisoPrivacidadActualizacionOpSucOrigen;
 	private static String AvisoPrivacidadActualizacionOpSucDestino;
     private static String AvisoPrivacidadActualizacionOpModulo;
+    private static String AvisoPrivacidadConsultarOpConAviso;
     private static String AvisoPrivacidadConsultarOpTransaccio;
 	private static String AvisoPrivacidadConsultarOpUsuario;
 	private static String AvisoPrivacidadConsultarOpSucOrigen;
@@ -44,7 +44,8 @@ public class AvisoPrivacidadServicio extends BaseService {
 		AvisoPrivacidadActualizacionOpSucOrigen = properties.getProperty("op.aviso_privacidad_actualizacion.suc_origen");
 		AvisoPrivacidadActualizacionOpSucDestino = properties.getProperty("op.aviso_privacidad_actualizacion.suc_destino");
         AvisoPrivacidadActualizacionOpModulo = properties.getProperty("op.aviso_privacidad_actualizacion.modulo");
-
+        
+        AvisoPrivacidadConsultarOpConAviso = properties.getProperty("op.aviso_privacidad_consultar.con_aviso");
         AvisoPrivacidadConsultarOpTransaccio = properties.getProperty("op.aviso_privacidad_consultar.transaccio");
 		AvisoPrivacidadConsultarOpUsuario = properties.getProperty("op.aviso_privacidad_consultar.usuario");
 		AvisoPrivacidadConsultarOpSucOrigen = properties.getProperty("op.aviso_privacidad_consultar.suc_origen");
@@ -94,15 +95,15 @@ public class AvisoPrivacidadServicio extends BaseService {
 		logger.info("COMMONS: Finalizando avisoPrivacidadActualizacion...");
 		return result;
     }//Cierre del método
-
-    /**
+	
+	/**
      * Método para consultar el de aviso de privacidad
      * ProcedureName: NBAVISOSCON
      * @param datosAvisoPrivacidad
      * <pre>
      * {
      *	Con_Aviso: String,
-     *	NumTransac: String,
+     *	NumTransac?: String,
      *	Transaccio: String,
      *	Usuario: String,
      *	FechaSis: String,
@@ -122,6 +123,9 @@ public class AvisoPrivacidadServicio extends BaseService {
      */
 	public JsonObject avisoPrivacidadConsultar(JsonObject datosAvisoPrivacidad) {
 		logger.info("COMMONS: Comenzando avisoPrivacidadConsultar...");
+		datosAvisoPrivacidad.addProperty("Con_Aviso", AvisoPrivacidadConsultarOpConAviso);
+		if(!datosAvisoPrivacidad.has("NumTransac"))
+        datosAvisoPrivacidad.addProperty("NumTransac", "");
 		datosAvisoPrivacidad.addProperty("Transaccio", AvisoPrivacidadConsultarOpTransaccio);
         datosAvisoPrivacidad.addProperty("Usuario", AvisoPrivacidadConsultarOpUsuario);
         datosAvisoPrivacidad.addProperty("SucOrigen", AvisoPrivacidadConsultarOpSucOrigen);
