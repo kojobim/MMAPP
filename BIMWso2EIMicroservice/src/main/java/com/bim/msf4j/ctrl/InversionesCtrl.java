@@ -84,7 +84,10 @@ public class InversionesCtrl extends BimBaseCtrl {
 	@GET()
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response inversionesListado(@QueryParam("page") String page, @QueryParam("per_page") String perPage, @QueryParam("filter_by") String filterBy, @Context final Request solicitud) {
+	public Response inversionesListado(@QueryParam("page") String page,
+			@QueryParam("per_page") String perPage, 
+			@QueryParam("filter_by") String filterBy,
+			@Context final Request solicitud) {
 		logger.info("CTRL: Comenzando inversionesListado metodo");
 		
 		if(page == null || perPage == null) 
