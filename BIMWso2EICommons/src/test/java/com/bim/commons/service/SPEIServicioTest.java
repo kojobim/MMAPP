@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.bim.commons.utils.Utilerias;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 @RunWith(JUnitPlatform.class)
@@ -126,5 +127,41 @@ public class SPEIServicioTest {
 		
 		assertTrue("La operacion no fue exitosa se obtuvo el error " + errCodigo, errCodigo.equals("000000"));
 		logger.info("TEST: Finalizando transaferenciaSPEIProcesarTestDeberiaSerExitoso metodo...");
+	}
+	
+	@Test
+	public void transaferenciaSPEIConsultarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando transaferenciaSPEIConsultarTestDeberiaSerExitoso metodo...");
+		JsonObject datosTransferenciaSPEI = new JsonObject();
+		datosTransferenciaSPEI.addProperty("Trn_UsuAdm", "000014");
+		datosTransferenciaSPEI.addProperty("Trn_Usuari", "000014");
+		datosTransferenciaSPEI.addProperty("Trn_Status", "A");
+		datosTransferenciaSPEI.addProperty("FechaSis", Utilerias.obtenerFechaSis());
+		JsonObject resultado = speiServicio.transaferenciaSPEIConsultar(datosTransferenciaSPEI );
+		logger.info("- resultado " + resultado);
+		
+		assertTrue("El resultado no tiene la propiedad transaccionesSPEI", resultado.has("transaccionesSPEI"));
+		assertTrue("La propiedad transaccionesSPEI no es un JsonObject", resultado.get("transaccionesSPEI").isJsonObject());
+		
+		JsonObject transaccionesSPEI = resultado.get("transaccionesSPEI").getAsJsonObject();
+		
+		assertTrue("El objeto transaccionesSPEI no tiene la propiedad transaccionSPEI", transaccionesSPEI.has("transaccionSPEI"));
+		assertTrue("La propiedad transaccionSPEI no es un JsonArray", transaccionesSPEI.get("transaccionSPEI").isJsonArray());
+		
+		JsonArray transaccionSPEI = transaccionesSPEI.get("transaccionSPEI").getAsJsonArray();
+		
+		assertTrue("El arreglo transaccionSPEI no tiene elementos",transaccionSPEI.size() > 0);
+		assertTrue("El arreglo transaccionSPEI no tiene elementos del tipo JsonObject", transaccionSPEI.get(0).isJsonObject());
+
+		
+		JsonObject transaccionSPEIItem = transaccionSPEI.get(0).getAsJsonObject(); 
+		
+		assertTrue("El elemento no tiene la propiedad Trn_Client", transaccionSPEIItem.has("Trn_Client"));
+		assertTrue("El elemento no tiene la propiedad Trn_CueOri",transaccionSPEIItem.has("Trn_CueOri"));
+		assertTrue("El elemento no tiene la propiedad Trn_CueDes",transaccionSPEIItem.has("Trn_CueDes"));
+		assertTrue("El elemento no tiene la propiedad Trn_Monto",transaccionSPEIItem.has("Trn_Monto"));
+		assertTrue("El elemento no tiene la propiedad Trn_Banco",transaccionSPEIItem.has("Trn_Banco"));
+		
+		logger.info("TEST: Finalizando transaferenciaSPEIConsultarTestDeberiaSerExitoso metodo...");
 	}
 }

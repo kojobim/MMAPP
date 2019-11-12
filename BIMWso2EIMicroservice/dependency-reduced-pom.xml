@@ -34,7 +34,7 @@
     </plugins>
   </build>
   <properties>
-    <microservice.resourceClasses>com.bim.msf4j.ctrl.InversionesCtrl,com.bim.msf4j.ctrl.LoginCtrl,com.bim.msf4j.ctrl.PingCtrl,com.bim.msf4j.ctrl.CuentasCtrl,com.bim.msf4j.ctrl.CuentaDestinoCtrl</microservice.resourceClasses>
+    <microservice.resourceClasses>com.bim.msf4j.ctrl.InversionesCtrl,com.bim.msf4j.ctrl.LoginCtrl,com.bim.msf4j.ctrl.PingCtrl,com.bim.msf4j.ctrl.CuentasCtrl,com.bim.msf4j.ctrl.UsuarioCtrl,com.bim.msf4j.ctrl.CuentaDestinoCtrl</microservice.resourceClasses>
   </properties>
 </project>
 
