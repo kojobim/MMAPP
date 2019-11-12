@@ -59,8 +59,14 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		
 		JsonObject cuentaDestinoObjeto = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoVerificarResultadoObjeto, "cuentasEspeciales");
 		logger.info("- cuentaDestinoObjeto: " + cuentaDestinoObjeto);
-
-		JsonObject cuentaDestinoVerificarObjeto = new JsonObject();
+		
+		if(cuentaDestinoObjeto == null) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.47");
+			bimMessageDTO.addMergeVariable("cuenta", cpCuenta);
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		JsonObject cuentaDestinoVerificarObjeto = new JsonObject();		
 		if(cuentaDestinoObjeto.has("Cue_Status")) {
 			String cueStatus = Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cue_Status");
 			if(!cueStatus.equals("A")) {
