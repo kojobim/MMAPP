@@ -33,7 +33,7 @@ public class AvisoPrivacidadCtrl extends BimBaseCtrl {
 	}
 	
 	@Path("/")
-	@GET()
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response obtenerAvisoPrivacidad(@QueryParam("formato") String formato, @Context final Request solicitud) {
 		logger.info("CTRL: Comenzando obtenerAvisoPrivacidad metodo...");
