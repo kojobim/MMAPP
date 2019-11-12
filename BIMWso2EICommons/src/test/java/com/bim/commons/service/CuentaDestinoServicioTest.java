@@ -2,6 +2,7 @@ package com.bim.commons.service;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -339,9 +340,113 @@ public class CuentaDestinoServicioTest {
 			assertTrue("La propiedad Cue_Numero no se encuentra en cuentaDestinoBIM", cuentaDestinoBIM.has("Err_Codigo"));
 			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentaDestinoBIM", cuentaDestinoBIM.has("Err_Mensaj"));
 		} else
-			assertNotNull("la propiedad cuentasEspeciales es nula", cuentaDestinoBIM);
+			assertNotNull("la propiedad cuentaDestinoBIM es nula", cuentaDestinoBIM);
 		
 		logger.info("TEST: Finalizando cuentaDestinoBIMCreacionTestDeberiaSerExitoso método...");
 	}
+	
+	@Test
+	public void cuentaDestinoProcesarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando cuentaDestinoProcesarTestDeberiaSerExitoso método...");
+		
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosCuentaDestinoProcesar = new JsonObject();
+		datosCuentaDestinoProcesar.addProperty("Cud_UsuAdm", "000149");
+		datosCuentaDestinoProcesar.addProperty("Cud_CLABE", "012180001457899904");
+		datosCuentaDestinoProcesar.addProperty("Cud_Banco", "40012");
+		datosCuentaDestinoProcesar.addProperty("Tip_Proces", "F");
+		datosCuentaDestinoProcesar.addProperty("NumTransac", "42623901");
+		datosCuentaDestinoProcesar.addProperty("FechaSis", fechaSis);
+		
+		/**
+		 *	Mockup Test
+		 *	String json = "{\"REQUEST_STATUS\":\"SUCCESSFUL\"}";
+		 *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
 
+		/**
+		 * Test
+		 */
+		
+		JsonObject resultado = cuentaDestinoServicio.cuentaDestinoProcesar(datosCuentaDestinoProcesar);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad REQUEST_STATUS", resultado.has("REQUEST_STATUS"));
+		
+		String statusSolicitud = Utilerias.obtenerStringPropiedad(resultado, "REQUEST_STATUS");
+		logger.info("- requestStatus " + statusSolicitud);
+		
+		assertNotNull(statusSolicitud);
+		assertEquals("SUCCESSFUL", statusSolicitud.toString());
+		
+		logger.info("TEST: Finalizando cuentaDestinoProcesarTestDeberiaSerExitoso método...");
+	}
+
+	@Test
+	public void cuentaDestinoBIMConsultarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando cuentaDestinoBIMConsultarTestDeberiaSerExitoso método...");
+		
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosCuentaDestinoBIMConsultar = new JsonObject();
+		datosCuentaDestinoBIMConsultar.addProperty("Cdb_Client", "");
+		datosCuentaDestinoBIMConsultar.addProperty("Cdb_UsuAdm", "000014");
+		datosCuentaDestinoBIMConsultar.addProperty("Cdb_Usuari", "");
+		datosCuentaDestinoBIMConsultar.addProperty("Cdb_Cuenta", "");
+		datosCuentaDestinoBIMConsultar.addProperty("Cdb_Status", "");
+		datosCuentaDestinoBIMConsultar.addProperty("Tip_Consul", "L3");
+		datosCuentaDestinoBIMConsultar.addProperty("NumTransac", "");
+		datosCuentaDestinoBIMConsultar.addProperty("FechaSis", fechaSis);
+		
+		/**
+		 *	Mockup Test
+		 *	String json = "{\"cuentaDestinoBIM\":{\"cuentasDestinoBIM\":[{\"Cdb_Consec\":\"000750\",\"Cdb_UsuAdm\":\"001844\",\"Cdb_Cuenta\":\"001000010011\",\"Cdb_CliUsu\":\"00193500\",\"Cdb_Alias\":\"CUENTA PRUEBA MARCOS\",\"Cdb_RFCBen\":\"COCM870323PLN\",\"Cdb_EmaBen\":\"MCONTRERASCRUZ@HOTMAIL.COM\",\"Cdb_FecAlt\":\"2019-11-08T07:08:00.000-06:00\",\"Cdb_FecCan\":\"1899-12-31T17:23:24.000-06:36\",\"Cdb_FecAct\":\"1899-12-31T17:23:24.000-06:36\",\"Cdb_MinRes\":\-63036779\,\"Cli_ComOrd\":\"Nombre Ordenado\",\"Pat_Codigo\":\"   \",\"Pat_Consec\":\0\}
+		 																 {\"Cdb_Consec\":\"000751\",\"Cdb_UsuAdm\":\"001844\",\"Cdb_Cuenta\":\"001000010011\",\"Cdb_CliUsu\":\"00193500\",\"Cdb_Alias\":\"PRUEBA 3\",\"Cdb_RFCBen\":\"ABCDE12345667\",\"Cdb_EmaBen\":\"contrerasc.marcos@gmail.com\",\"Cdb_FecAlt\":\"2019-11-08T07:08:00.000-06:00\",\"Cdb_FecCan\":\"1899-12-31T17:23:24.000-06:36\",\"Cdb_FecAct\":\"1899-12-31T17:23:24.000-06:36\",\"Cdb_MinRes\":\-63036779\,\"Cli_ComOrd\":\"Nombre Ordenado\",\"Pat_Codigo\":\"   \",\"Pat_Consec\":\0\}]}}";
+		 *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+
+		/**
+		 * Test
+		 */
+		
+		JsonObject resultado = cuentaDestinoServicio.cuentaDestinoBIMConsultar(datosCuentaDestinoBIMConsultar);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad cuentaDestinoBIM", resultado.has("cuentaDestinoBIM"));
+		assertTrue("La propiedad cuentaDestinoBIM no es un JsonObject", resultado.get("cuentaDestinoBIM").isJsonObject());
+		
+		JsonObject cuentaDestinoBIM = Utilerias.obtenerJsonObjectPropiedad(resultado, "cuentaDestinoBIM");
+
+		assertTrue("No viene la propiedad cuentasDestinoBIM", cuentaDestinoBIM.has("cuentasDestinoBIM"));
+		assertTrue("La propiedad cuentasDestinoBIM no es un JsonObject", cuentaDestinoBIM.get("cuentasDestinoBIM").isJsonArray());
+		
+		JsonObject cuentasDestinoBIMElemento = null;
+		
+		if(cuentaDestinoBIM.get("cuentasDestinoBIM").isJsonArray()) {
+			JsonArray cuentasDestinoBIM = Utilerias.obtenerJsonArrayPropiedad(cuentaDestinoBIM, "cuentasDestinoBIM");
+
+			assertTrue("La propiedad cuentasDestinoBIM no tiene elementos", cuentasDestinoBIM.size() > 0);
+			assertTrue("El elemento de cuentasDestinoBIM no es un JsonObject", cuentasDestinoBIM.get(0).isJsonObject());
+
+			cuentasDestinoBIMElemento = cuentasDestinoBIM.get(0).getAsJsonObject();
+
+			assertTrue("La propiedad Cue_Numero no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Cdb_Consec"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Cdb_UsuAdm"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Cdb_Cuenta"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Cdb_CliUsu"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Cdb_Alias"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Cdb_RFCBen"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Cdb_EmaBen"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Cdb_FecAlt"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Cdb_FecCan"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Cdb_FecAct"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Cdb_MinRes"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Cli_ComOrd"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Pat_Codigo"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentasDestinoBIM", cuentasDestinoBIMElemento.has("Pat_Consec"));
+		}else
+			assertNotNull("la propiedad cuentasDestinoBIMElemento es nula", cuentasDestinoBIMElemento);
+		
+		
+		logger.info("TEST: Finalizando cuentasDestinoBIMConsultarTestDeberiaSerExitoso método...");
+	}
 }
