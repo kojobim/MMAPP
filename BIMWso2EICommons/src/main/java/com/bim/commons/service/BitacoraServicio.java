@@ -49,20 +49,13 @@ public class BitacoraServicio extends BaseService {
 	 *	Bit_Usuari: String,	 
 	 *	Bit_Fecha:  String,
 	 *	Bit_NumTra?: String,
-	 *	Bit_TipOpe: String,
 	 *	Bit_CueOri?: String,
 	 *	Bit_CueDes?: String,
-	 *	Bit_Monto: Integer,
 	 *	Bit_PriRef: String,
 	 *	Bit_SegRef?: String,
 	 *	Bit_DireIP: String,
 	 *	NumTransac: String,
-	 *	Transaccio: String,
-	 *	Usuario: String,
-	 *	FechaSis: String,
-	 *	SucOrigen: String,
-	 *	SucDestino: String,
-	 *	Modulo: String
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
