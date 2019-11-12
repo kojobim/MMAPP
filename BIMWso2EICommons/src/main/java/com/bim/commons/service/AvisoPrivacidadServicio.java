@@ -20,6 +20,7 @@ public class AvisoPrivacidadServicio extends BaseService {
     
 	private static String AvisoPrivacidadActualizacionOp;
 	private static String AvisoPrivacidadConsultarOp;
+	private static String AvisoPrivacidadActualizacionOpUsuAceAvi;
 	private static String AvisoPrivacidadActualizacionOpTransaccio;
 	private static String AvisoPrivacidadActualizacionOpUsuario;
 	private static String AvisoPrivacidadActualizacionOpSucOrigen;
@@ -39,6 +40,7 @@ public class AvisoPrivacidadServicio extends BaseService {
         AvisoPrivacidadActualizacionOp = properties.getProperty("aviso_privacidad_servicio.op.aviso_privacidad_actualizacion");
         AvisoPrivacidadConsultarOp = properties.getProperty("aviso_privacidad_servicio.op.aviso_privacidad_consultar");
 
+        AvisoPrivacidadActualizacionOpUsuAceAvi = properties.getProperty("op.aviso_privacidad_actualizacion.usu_ace_avi");
         AvisoPrivacidadActualizacionOpTransaccio = properties.getProperty("op.aviso_privacidad_actualizacion.transaccio");
 		AvisoPrivacidadActualizacionOpUsuario = properties.getProperty("op.aviso_privacidad_actualizacion.usuario");
 		AvisoPrivacidadActualizacionOpSucOrigen = properties.getProperty("op.aviso_privacidad_actualizacion.suc_origen");
@@ -86,6 +88,7 @@ public class AvisoPrivacidadServicio extends BaseService {
      */
 	public JsonObject avisoPrivacidadActualizacion(JsonObject datosAvisoPrivacidad) {
 		logger.info("COMMONS: Comenzando avisoPrivacidadActualizacion...");
+		datosAvisoPrivacidad.addProperty("Usu_AceAvi", Integer.parseInt(AvisoPrivacidadActualizacionOpUsuAceAvi));
 		datosAvisoPrivacidad.addProperty("Transaccio", AvisoPrivacidadActualizacionOpTransaccio);
         datosAvisoPrivacidad.addProperty("Usuario", AvisoPrivacidadActualizacionOpUsuario);
         datosAvisoPrivacidad.addProperty("SucOrigen", AvisoPrivacidadActualizacionOpSucOrigen);
