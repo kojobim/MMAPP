@@ -101,14 +101,8 @@ public class InversionesServicio extends BaseService {
 	 * <pre>
 	 * {
 	 * 	Inv_Client: String,
-	 * 	Inv_Moneda: String,
 	 * 	NumTransac?: String,
-	 *	Transaccio: String, 
-	 *	Usuario: String,
-	 *	FechaSis: String, 
-	 *	SucOrigen: String, 
-	 *	SucDestino: String, 
-	 *	Modulo: String 
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
@@ -171,16 +165,10 @@ public class InversionesServicio extends BaseService {
 	 * @param datosInversionesPagareNumeroUsuarioObtener
 	 * <pre>
 	 * {
-	 *	Inv_Numero?: String,
-	 *	Inv_Usuari: String,
-	 *	Tip_Consul: String,
-	 * 	NumTransac: String,
-	 *	Transaccio: String, 
-	 *	Usuario: String,
-	 *	FechaSis: String, 
-	 *	SucOrigen: String, 
-	 *	SucDestino: String, 
-	 *	Modulo: String
+	 *	Inv_Numero: String,
+	 *	Inv_Usuari?: String,
+	 * 	NumTransac?: String,
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
@@ -219,6 +207,8 @@ public class InversionesServicio extends BaseService {
 		if(!datosInversionesPagareNumeroUsuarioObtener.has("Inv_Usuari"))
 			datosInversionesPagareNumeroUsuarioObtener.addProperty("Inv_Usuari", "");
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
+		if(!datosInversionesPagareNumeroUsuarioObtener.has("NumTransac"))
+			datosInversionesPagareNumeroUsuarioObtener.addProperty("NumTransac", "");
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);
 		datosInversionesPagareNumeroUsuarioObtener.addProperty("SucOrigen", InversionesPagareNumeroUsuarioObtenerOpSucOrigen);
@@ -241,18 +231,12 @@ public class InversionesServicio extends BaseService {
 	 *	Inv_rFecIn: String,
 	 *	Inv_rFecVe: String,
 	 *	Inv_rCanti: String,
-	 *	Inv_rTasa: Numeric,
-	 *	Inv_rAutor: String,
+	 *	Inv_rTasa: Numeric
 	 *	Inv_rISR: Numeric,
 	 *	Inv_rCuent: String,
 	 *	Inv_rTBrut: Numeric,
 	 *	NumTransac: String,
-	 *	Transaccio: String,
-	 *	Usuario: String,
-	 *	FechaSis: String,
-	 *	SucOrigen: String,
-	 *	SucDestino: String,
-	 *	Modulo: String
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
@@ -286,15 +270,8 @@ public class InversionesServicio extends BaseService {
 	 * <pre>
 	 * {
 	 *	Adi_Invers: String,
-	 *	Adi_InsLiq: String,
-	 *	Adi_MoReGr: Numeric,
 	 *	NumTransac: String,
-	 *	Transaccio: String,
-	 *	Usuario: String,
-	 *	FechaSis: String,
-	 *	SucOrigen: String,
-	 *	SucDestino: String,
-	 *	Modulo: String
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
@@ -337,20 +314,13 @@ public class InversionesServicio extends BaseService {
 	 *	Inv_rFecVe: String,
 	 *	Inv_rCanti: Numeric,
 	 *	Inv_rTasa: Numeric,
-	 *	Inv_rAutor: String,
 	 *	Inv_rISR: Numeric,
 	 *	Inv_rCuent: String,
 	 *	Dias_Base: Integer,
 	 *	Inv_Fecha: String,
 	 *	Inv_rTBrut: Numeric,
-	 *	Inv_MonRef: Numeric,
 	 *	NumTransac: String,
-	 *	Transaccio: String,
-	 *	Usuario: String,
-	 *	FechaSis: String,
-	 *	SucOrigen: String,
-	 *	SucDestino: String,
-	 *	Modulo: String
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
@@ -388,18 +358,11 @@ public class InversionesServicio extends BaseService {
 	 *	Cor_Usuari: String,
 	 *	Cor_Cuenta: String,
 	 *	Cor_Status: String,
-	 *	Cor_MoLiDi: Numeric,
 	 *	Cor_MonDia: Numeric,
 	 *	Cor_CliUsu: String,
 	 *	Cor_Alias: String,
-	 *	Tip_Actual: String,
 	 *	NumTransac: String,
-	 *	Transaccio: String,
-	 *	Usuario: String,
-	 *	FechaSis: String,
-	 *	SucOrigen: String,
-	 *	SucDestino: String,
-	 *	Modulo: String
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return

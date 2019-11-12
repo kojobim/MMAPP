@@ -98,21 +98,14 @@ public class TasaServicio extends BaseService {
 	 * {
 	 *	Cli_Numero: String,
 	 *	Inv_Cantid: Numeric,
-	 *	Inv_Moneda: String,
 	 *	Cli_Tipo: String,
 	 *	Plazo: Integer,
 	 *	Inv_FecVen: String,
-	 *	Ine_Numero: String,
-	 *	Tasa: Numeric,
-	 *	Inv_GruTas: String,
-	 *	Inv_NuPoGr: String,
-	 *	NumTransac: String,
-	 *	Transaccio: String,
-	 *	Usuario: String,
-	 *	FechaSis: String,
-	 *	SucOrigen: String,
-	 *	SucDestino: String,
-	 *	Modulo: String
+	 *	Ine_Numero?: String,
+	 *	Inv_GruTas?: String,
+	 *	Inv_NuPoGr?: String,
+	 *	NumTransac?: String,
+	 *	FechaSis: String
 	 * } 
 	 * </pre>
 	 * @return
@@ -129,8 +122,6 @@ public class TasaServicio extends BaseService {
 	public JsonObject tasaClienteConsultar(JsonObject datosTasaCliente) {
 		logger.info("COMMONS: Comenzando tasaClienteConsultar metodo...");
 		datosTasaCliente.addProperty("Inv_Moneda", TasaClienteConsultarOpInvMoneda);
-		if(!datosTasaCliente.has("Inv_FecVen"))
-			datosTasaCliente.addProperty("Inv_FecVen", "");
 		if(!datosTasaCliente.has("Ine_Numero"))
 			datosTasaCliente.addProperty("Ine_Numero", "");
 		datosTasaCliente.addProperty("Tasa", Integer.parseInt(TasaClienteConsultarOpTasa));		
@@ -138,6 +129,8 @@ public class TasaServicio extends BaseService {
 			datosTasaCliente.addProperty("Inv_GruTas", "");
 		if(!datosTasaCliente.has("Inv_NuPoGr"))
 			datosTasaCliente.addProperty("Inv_NuPoGr", "");
+		if(!datosTasaCliente.has("NumTransac"))
+			datosTasaCliente.addProperty("NumTransac", "");
 		datosTasaCliente.addProperty("Transaccio", TasaClienteConsultarOpTransaccio);
 		datosTasaCliente.addProperty("Usuario", TasaClienteConsultarOpUsuari);
 		datosTasaCliente.addProperty("SucOrigen", TasaClienteConsultarOpSucOrigen);
@@ -155,17 +148,10 @@ public class TasaServicio extends BaseService {
 	 * @param datosMoneda
 	 * <pre>
 	 * {
-	 *	Mon_Numero: String,
 	 *	Mon_Descri: String,
 	 *	Mon_Fecha: String,
 	 *	Tip_Consul: String,
-	 *	NumTransac: String,
-	 *	Transaccio: String,
-	 *	Usuario: String,
-	 *	FechaSis: String,
-	 *	SucOrigen: String,
-	 *	SucDestino: String,
-	 *	Modulo: String  
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
@@ -231,17 +217,10 @@ public class TasaServicio extends BaseService {
 	 * {
 	 *   Inv_Dias: Integer,
 	 *   Inv_TasInt: Double,
-	 *   Inv_GAT: Double,
 	 *   Cal_Opcion?: String,
 	 *   Cue_MonInv: Numeric,
-	 *   Mon_Comisi: Numeric,
 	 *   NumTransac?: String,
-	 *   Transaccio: String,
-	 *   Usuario: String,
-	 *   FechaSis: String,
-	 *   SucOrigen: String,
-	 *   SucDestino: String,
-	 *   Modulo: String
+	 *   FechaSis: String
 	 * } 
 	 * </pre>
 	 * @return
@@ -261,6 +240,8 @@ public class TasaServicio extends BaseService {
 			datosGAT.addProperty("Cal_Opcion", "");
 		datosGAT.addProperty("Inv_GAT", Integer.parseInt(TasaGATConsultaCalcualrOpInvGAT));
 		datosGAT.addProperty("Mon_Comisi", Integer.parseInt(TasaGATConsultaCalcularOpMonComisi));
+		if(!datosGAT.has("NumTransac"))
+			datosGAT.addProperty("NumTransac", "");
 		datosGAT.addProperty("Transaccio", TasaGATConsultaCalcularOpTransaccio);
 		datosGAT.addProperty("Usuario", TasaGATConsultaCalcularOpUsuari);
 		datosGAT.addProperty("SucOrigen", TasaGATConsultaCalcularOpSucOrigen);
@@ -279,14 +260,8 @@ public class TasaServicio extends BaseService {
 	 * <pre>
 	 * {
 	 *	Inv_GAT: Double,
-	 *	Inv_GATRea: Double,
 	 *	NumTransac?: String,
-	 *	Transaccio: String,
-	 *	Usuario: String,
-	 *	FechaSis: String,
-	 *	SucOrigen: String,
-	 *	SucDestino: String,
-	 *	Modulo: String
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
@@ -303,6 +278,8 @@ public class TasaServicio extends BaseService {
 	public JsonObject tasaGATRealConsultaCalcular(JsonObject datosGATReal) {
 		logger.info("COMMONS: Comenzando tasaGATRealConsultaCalcular metodo...");
 		datosGATReal.addProperty("Inv_GATRea", Integer.parseInt(TasaGATReaConsultaCalcualrOpInvGATRea));
+		if(!datosGATReal.has("NumTransac"))
+			datosGATReal.addProperty("NumTransac", "");
 		datosGATReal.addProperty("Transaccio", TasaGATReaConsultaCalcularOpTransaccio);
 		datosGATReal.addProperty("Usuario", TasaGATReaConsultaCalcularOpUsuari);
 		datosGATReal.addProperty("SucOrigen", TasaGATReaConsultaCalcularOpSucOrigen);
