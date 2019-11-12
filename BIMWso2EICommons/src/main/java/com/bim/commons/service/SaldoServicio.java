@@ -49,12 +49,7 @@ public class SaldoServicio extends BaseService {
 	 *	Bit_DireIP: String,
 	 *	Cue_Numero?: String,
 	 * 	NumTransac?: String,
-	 *	Transaccio: String, 
-	 *	Usuario: String,
-	 *	FechaSis: String, 
-	 *	SucOrigen: String, 
-	 *	SucDestino: String, 
-	 *	Modulo: String 
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return

@@ -76,17 +76,10 @@ public class ConfiguracionServicio extends BaseService {
 	 * @param datosHorario
 	 * <pre>
 	 * {
-	 *	Tip_Consul: String,
-	 *	Tip_Transf: String,
 	 *	Err_Codigo?: String, 
 	 *	Msj_Error?: String, 
 	 *	NumTransac: String,
-	 *	Transaccio: String, 
-	 *	Usuario: String,
-	 *	FechaSis: String, 
-	 *	SucOrigen: String, 
-	 *	SucDestino: String, 
-	 *	Modulo: String 
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
@@ -131,14 +124,8 @@ public class ConfiguracionServicio extends BaseService {
 	 * @param datosConfiguracion
 	 * <pre>
 	 * {
-	 *	Tip_Consul: String,
 	 *	NumTransac?: String,
-	 *	Transaccio: String, 
-	 *	Usuario: String,
-	 *	FechaSis: String, 
-	 *	SucOrigen: String, 
-	 *	SucDestino: String, 
-	 *	Modulo: String 
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
@@ -188,12 +175,7 @@ public class ConfiguracionServicio extends BaseService {
 	 *	Par_Sucurs: String,
 	 *	Tip_Consul?: String,
 	 *	NumTransac?: String,
-	 *	Transaccio: String, 
-	 *	Usuario: String,
-	 *	FechaSis: String, 
-	 *	SucOrigen: String, 
-	 *	SucDestino: String, 
-	 *	Modulo: String 
+	 *	FechaSis: String
 	 * } 
 	 * </pre>
 	 * @return
