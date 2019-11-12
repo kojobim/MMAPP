@@ -81,19 +81,12 @@ public class UsuarioServicio extends BaseService {
 	 * 	Usu_Clave: String,
 	 * 	Usu_Passwo?: String,
 	 * 	Usu_Client?: String,
-	 * 	Usu_FolNip: Integer,
 	 * 	Usu_FolTok?: String,
 	 * 	Usu_Status?: String,
 	 * 	Usu_CuCaCo?: String,
 	 * 	Usu_SucMod?: String,
-	 * 	Tip_Consul: String,
 	 * 	NumTransac?: String,
-	 *	Transaccio: String, 
-	 *	Usuario: String,
-	 *	FechaSis: String, 
-	 *	SucOrigen: String, 
-	 *	SucDestino: String, 
-	 *	Modulo: String 
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
@@ -200,16 +193,9 @@ public class UsuarioServicio extends BaseService {
 	 * 	Usu_FolTok?: String,
 	 *	Usu_Client?: String,
 	 *	Usu_SucMod?: String,
-	 * 	Usu_FolNip: Integer,
 	 * 	Usu_Nombre?: String,
-	 * 	Tip_Actual: String,
-	 * 	NumTransac?: String,
-	 *	Transaccio: String, 
-	 *	Usuario: String,
-	 *	FechaSis: String, 
-	 *	SucOrigen: String, 
-	 *	SucDestino: String, 
-	 *	Modulo: String 
+	 * 	NumTransac: String,
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
@@ -261,15 +247,8 @@ public class UsuarioServicio extends BaseService {
 	 * <pre>
 	 * {
 	 *	Apl_Client: String,
-	 *	Apl_Cuesti: Integer,
-	 *	Tip_Consul: String,
-	 *	NumTransac: String,
-	 *	Transaccio: String,
-	 *	Usuario: String,
-	 *	FechaSis: String,
-	 *	SucOrigen: String,
-	 *	SucDestino: String,
-	 *	Modulo: String
+	 *	NumTransac?: String,
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
