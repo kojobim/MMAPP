@@ -1,10 +1,10 @@
 package com.bim.msf4j.ctrl;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -13,70 +13,79 @@ import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
 
 import com.bim.commons.dto.BimMessageDTO;
-import com.bim.commons.enums.AvisoPrivacidadFormatosEnum;
-import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.service.AvisoPrivacidadServicio;
+import com.bim.commons.service.CuentaDestinoServicio;
 import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.utils.Utilerias;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-@Path("/")
-public class AvisoPrivacidadCtrl extends BimBaseCtrl {
-	
-	private static final Logger logger = Logger.getLogger(AvisoPrivacidadCtrl.class);
+@Path("/usuario")
+public class UsuarioCtrl extends BimBaseCtrl {
 
+	private static Logger logger = Logger.getLogger(UsuarioCtrl.class);
+	private CuentaDestinoServicio cuentaDestinoServicio;
 	private AvisoPrivacidadServicio avisoPrivacidadServicio;
 	private TransaccionServicio transaccionServicio;
 	
-	public AvisoPrivacidadCtrl() {
+	public UsuarioCtrl() {
 		super();
-		logger.info("CTRL: Comenzando metodo init...");
 		
+		this.cuentaDestinoServicio = new CuentaDestinoServicio();
 		this.avisoPrivacidadServicio = new AvisoPrivacidadServicio();
 		this.transaccionServicio = new TransaccionServicio();
-		
-		logger.info("CTRL: Terminando metodo init...");
 	}
-	
-	@Path("/aviso-privacidad")
-	@GET()
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response obtenerAvisoPrivacidad(@QueryParam("formato") String formato, @Context final Request solicitud) {
-		logger.info("CTRL: Comenzando obtenerAvisoPrivacidad metodo...");
 
+	@Path("/cuentas-destino-nacionales")
+	@GET()
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response cuentasDestinoNacionalesListado(@Context final Request solicitud) {
+		logger.info("CTRL: Comenzando cuentasDestinoNacionalesListado metodo");
 		String bearerToken = solicitud.getHeader("Authorization");
-		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
-		logger.info(principalResultadoObjecto);
+		JsonObject principalResultadoObjeto = Utilerias.obtenerPrincipal(bearerToken);
 		
-		if(AvisoPrivacidadFormatosEnum.validarFormato(formato) == null) {
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.44");
-			bimMessageDTO.addMergeVariable("formato", formato);
-			throw new BadRequestException(bimMessageDTO.toString());
-		}
+		String usuAdm = Utilerias.obtenerStringPropiedad(principalResultadoObjeto, "usuUsuAdm");
+		logger.info("- usuAdm " + usuAdm);
+		
+		String usuNumero = Utilerias.obtenerStringPropiedad(principalResultadoObjeto, "usuNumero");
+		logger.info("- usuNumero " + usuNumero);
 		
 		String fechaSis = Utilerias.obtenerFechaSis();
+		logger.info("- fechaSis " + fechaSis);
 		
-		JsonObject datosAvisoPrivacidad = new JsonObject();
-		datosAvisoPrivacidad.addProperty("FechaSis", fechaSis);
+		JsonObject datosCuentaDestinoSPEI = new JsonObject();
+		datosCuentaDestinoSPEI.addProperty("Cds_UsuAdm", usuAdm);
+		datosCuentaDestinoSPEI.addProperty("Cds_Usuari", usuNumero);
+		datosCuentaDestinoSPEI.addProperty("FechaSis", fechaSis);
+		JsonObject cuentasDestinoSPEIRespuesta = this.cuentaDestinoServicio.cuentaDestinoSPEIConsultar(datosCuentaDestinoSPEI );
+		logger.info("- cuentasDestinoSPEIRespuesta " + cuentasDestinoSPEIRespuesta);
 		
-		JsonObject avisoPrivacidadConsultarResultado = avisoPrivacidadServicio.avisoPrivacidadConsultar(datosAvisoPrivacidad);
-		JsonObject avisoPrivacidadConsultarResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(avisoPrivacidadConsultarResultado, "avisoPrivacidad");
-		String textAviso = Utilerias.obtenerStringPropiedad(avisoPrivacidadConsultarResultadoObjeto, "Text_Aviso");
-		textAviso = textAviso.replace("\r\n", "");
+		JsonObject cuentasDestinoObjeto = Utilerias.obtenerJsonObjectPropiedad(cuentasDestinoSPEIRespuesta, "cuentasDestino");
+		JsonArray cuentaDestinoArray = Utilerias.obtenerJsonArrayPropiedad(cuentasDestinoObjeto, "cuentaDestino");
 		
-		JsonObject resultado = new JsonObject();
-		JsonObject avisoPrivacidad = new JsonObject();
-		avisoPrivacidad.addProperty("cpFormato", formato);
-		avisoPrivacidad.addProperty("cpAvisoPrivacidad", textAviso);
-		resultado.add("avisoPrivacidad", avisoPrivacidad);
+		JsonArray cuentasDestinoResultado = new JsonArray();
 		
-		logger.info("CTRL: Terminando obtenerAvisoPrivacidad metodo...");
-		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
+		for(JsonElement cuentaDestinoElemento : cuentaDestinoArray) {
+			JsonObject cuentaDestinoElementoObjeto = (JsonObject) cuentaDestinoElemento;
+			JsonObject cuentaDestinoResultado = new JsonObject();
+			cuentaDestinoResultado.addProperty("cdsCLABE", Utilerias.obtenerStringPropiedad(cuentaDestinoElementoObjeto, "Cds_CLABE"));
+			cuentaDestinoResultado.addProperty("cdsConsec", Utilerias.obtenerStringPropiedad(cuentaDestinoElementoObjeto, "Cds_Consec"));
+			cuentaDestinoResultado.addProperty("cdsDesCue", Utilerias.obtenerStringPropiedad(cuentaDestinoElementoObjeto, "Cds_DesCue"));
+			cuentasDestinoResultado.add(cuentaDestinoResultado);
+		}
+		
+		JsonObject cuentasDestino = new JsonObject();
+		cuentasDestino.add("cuentasDestino", cuentasDestinoResultado);
+		logger.info("- cuentasDestino " + cuentasDestino);
+		logger.info("CTRL: Finalizando cuentasDestinoNacionalesListado metodo");
+		return Response.ok(cuentasDestino.toString(),MediaType.APPLICATION_JSON)
 				.build();
 	}
-	
-	@Path("/usuario/aviso-privacidad")
+
+	@Path("/aviso-privacidad")
 	@POST()
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response aceptarAvisoPrivacidad(@Context final Request solicitud) {
@@ -117,5 +126,5 @@ public class AvisoPrivacidadCtrl extends BimBaseCtrl {
 		return Response.noContent()
 				.build();
 	}
-	
+
 }
