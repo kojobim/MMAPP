@@ -1,6 +1,8 @@
 package com.bim.msf4j;
 
+import com.bim.msf4j.ctrl.AvisoPrivacidadCtrl;
 import com.bim.msf4j.ctrl.CatalogosCtrl;
+import com.bim.msf4j.ctrl.CuentasCtrl;
 import com.bim.msf4j.ctrl.InversionesCtrl;
 import com.bim.msf4j.ctrl.LoginCtrl;
 import com.bim.msf4j.ctrl.PingCtrl;

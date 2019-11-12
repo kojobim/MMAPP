@@ -61,8 +61,8 @@ public class CatalogosCtrl extends BimBaseCtrl {
 				String insClave = Utilerias.obtenerStringPropiedad(institucionObjeto, "Ins_Clave") == null 
 						? null 
 						: Utilerias.obtenerStringPropiedad(institucionObjeto, "Ins_Clave").trim();
-				institucionObjetoResultado.addProperty("Ins_Clave", insClave);
-				institucionObjetoResultado.add("Ins_Descri", institucionObjeto.get("Ins_Descri"));
+				institucionObjetoResultado.addProperty("insClave", Integer.parseInt(insClave));
+				institucionObjetoResultado.add("insDescri", institucionObjeto.get("Ins_Descri"));
 			}
 			catalogoInstitucionArrayResultado.add(institucionObjetoResultado);
 		}
