@@ -11,7 +11,6 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
 
-import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.enums.AvisoPrivacidadFormatosEnum;
 import com.bim.commons.exceptions.BadRequestException;
@@ -25,13 +24,11 @@ public class AvisoPrivacidadCtrl extends BimBaseCtrl {
 	private static final Logger logger = Logger.getLogger(AvisoPrivacidadCtrl.class);
 
 	private AvisoPrivacidadServicio avisoPrivacidadServicio;
-	private TransaccionServicio transaccionServicio;
 	
 	public AvisoPrivacidadCtrl() {
 		super();
 		logger.info("CTRL: Comenzando metodo init...");
 		this.avisoPrivacidadServicio = new AvisoPrivacidadServicio();
-		this.transaccionServicio = new TransaccionServicio();
 		logger.info("CTRL: Terminando metodo init...");
 	}
 	
