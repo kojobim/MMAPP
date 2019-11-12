@@ -18,7 +18,7 @@ import com.bim.commons.service.AvisoPrivacidadServicio;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
-@Path("/")
+@Path("/aviso-privacidad")
 public class AvisoPrivacidadCtrl extends BimBaseCtrl {
 	
 	private static final Logger logger = Logger.getLogger(AvisoPrivacidadCtrl.class);
@@ -32,7 +32,7 @@ public class AvisoPrivacidadCtrl extends BimBaseCtrl {
 		logger.info("CTRL: Terminando metodo init...");
 	}
 	
-	@Path("/aviso-privacidad")
+	@Path("/")
 	@GET()
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response obtenerAvisoPrivacidad(@QueryParam("formato") String formato, @Context final Request solicitud) {
