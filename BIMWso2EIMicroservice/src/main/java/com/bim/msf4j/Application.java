@@ -18,7 +18,6 @@ public class Application {
                 		new LoginCtrl(),
                         new InversionesCtrl(),
                         new CuentasCtrl(),
-                		new CuentaDestinoCtrl(),
                         new CatalogosCtrl(),
                         new AvisoPrivacidadCtrl(),
                         new UsuarioCtrl())
