@@ -179,6 +179,7 @@ public class AvisoPrivacidadServicio extends BaseService {
      *	SucDestino: String,
      *	Modulo: String
      * }
+     * </pre>
      * @return
      * <pre>
      * {
@@ -192,7 +193,7 @@ public class AvisoPrivacidadServicio extends BaseService {
 		logger.info("COMMONS: Comenzando avisoPrivacidadConsultar...");
 		datosAvisoPrivacidad.addProperty("Con_Aviso", AvisoPrivacidadConsultarOpConAviso);
 		if(!datosAvisoPrivacidad.has("NumTransac"))
-			datosAvisoPrivacidad.addProperty("NumTransac", "");
+        datosAvisoPrivacidad.addProperty("NumTransac", "");
 		datosAvisoPrivacidad.addProperty("Transaccio", AvisoPrivacidadConsultarOpTransaccio);
         datosAvisoPrivacidad.addProperty("Usuario", AvisoPrivacidadConsultarOpUsuario);
         datosAvisoPrivacidad.addProperty("SucOrigen", AvisoPrivacidadConsultarOpSucOrigen);
