@@ -117,6 +117,8 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		JsonObject avisoPrivacidadVerificarObjeto = this.avisoPrivacidadServicio.avisoPrivacidadVerificar(datosAvisoPrivacidad);
 		logger.info("- avisoPrivacidadVerificarObjeto " + avisoPrivacidadVerificarObjeto);
 		
+		Utilerias.verificarError(avisoPrivacidadVerificarObjeto);
+		
 		JsonObject avisoPrivacidad = Utilerias.obtenerJsonObjectPropiedad(avisoPrivacidadVerificarObjeto, "avisoPrivacidad");
 		
 		Boolean usuAceAvi = Boolean.parseBoolean(Utilerias.obtenerStringPropiedad(avisoPrivacidad,"Usu_AceAvi"));
@@ -128,8 +130,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		JsonObject avisoPrivacidadAceptado = new JsonObject();
 		avisoPrivacidadAceptado.add("avisoPrivacidadAceptado", avisoPrivacidadResultadoObjeto);
 		logger.info("CTRL: Finalizando verificarAvisoPrivacidad metodo");
-		return Response
-				.ok(avisoPrivacidadAceptado.toString(), MediaType.APPLICATION_JSON)
+		return Response.ok(avisoPrivacidadAceptado.toString(), MediaType.APPLICATION_JSON)
 				.build();	
 	}
 	

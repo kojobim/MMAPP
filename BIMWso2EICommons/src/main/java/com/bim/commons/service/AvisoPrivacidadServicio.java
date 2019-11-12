@@ -72,19 +72,14 @@ public class AvisoPrivacidadServicio extends BaseService {
     }
 
     /**
-     * Método para verificar el aviso de privacidad
+     * Método para verificar el status del aviso de privacidad
      * ProcedureName: NBENRMOVCON
      * @param datosAvisoPrivacidad
      * <pre>
      * {
      *	Usu_Numero: String,
      *	NumTransac: String,
-     *	Transaccio: String,
-     *	Usuario: String,
-     *	FechaSis: String,
-     *	SucOrigen: String,
-     *	SucDestino: String,
-     *	Modulo: String
+     *	FechaSis: String
      * }
      * </pre>
      * @return
@@ -129,16 +124,10 @@ public class AvisoPrivacidadServicio extends BaseService {
      * {
      *	Usu_Numero: String,
      *	Usu_Client: String,
-     *	Usu_AceAvi: String,
      *	Usu_FecAce: String,
      *	Usu_FecAct: String,
      *	NumTransac: String,
-     *	Transaccio: String,
-     *	Usuario: String,
-     *	FechaSis: String,
-     *	SucOrigen: String,
-     *	SucDestino: String,
-     *	Modulo: String
+     *	FechaSis: String
      * }
      * </pre>
      * @return
@@ -170,14 +159,8 @@ public class AvisoPrivacidadServicio extends BaseService {
      * @param datosAvisoPrivacidad
      * <pre>
      * {
-     *	Con_Aviso: String,
-     *	NumTransac?: String,
-     *	Transaccio: String,
-     *	Usuario: String,
-     *	FechaSis: String,
-     *	SucOrigen: String,
-     *	SucDestino: String,
-     *	Modulo: String
+     *	NumTransac: String,
+     *	FechaSis: String
      * }
      * </pre>
      * @return
@@ -193,7 +176,7 @@ public class AvisoPrivacidadServicio extends BaseService {
 		logger.info("COMMONS: Comenzando avisoPrivacidadConsultar...");
 		datosAvisoPrivacidad.addProperty("Con_Aviso", AvisoPrivacidadConsultarOpConAviso);
 		if(!datosAvisoPrivacidad.has("NumTransac"))
-        datosAvisoPrivacidad.addProperty("NumTransac", "");
+			datosAvisoPrivacidad.addProperty("NumTransac", "");
 		datosAvisoPrivacidad.addProperty("Transaccio", AvisoPrivacidadConsultarOpTransaccio);
         datosAvisoPrivacidad.addProperty("Usuario", AvisoPrivacidadConsultarOpUsuario);
         datosAvisoPrivacidad.addProperty("SucOrigen", AvisoPrivacidadConsultarOpSucOrigen);

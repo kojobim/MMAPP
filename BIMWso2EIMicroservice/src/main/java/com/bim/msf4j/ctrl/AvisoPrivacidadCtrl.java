@@ -15,6 +15,7 @@ import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.enums.AvisoPrivacidadFormatosEnum;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.service.AvisoPrivacidadServicio;
+import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
@@ -24,11 +25,13 @@ public class AvisoPrivacidadCtrl extends BimBaseCtrl {
 	private static final Logger logger = Logger.getLogger(AvisoPrivacidadCtrl.class);
 
 	private AvisoPrivacidadServicio avisoPrivacidadServicio;
+	private TransaccionServicio transaccionServicio;
 	
 	public AvisoPrivacidadCtrl() {
 		super();
 		logger.info("CTRL: Comenzando metodo init...");
 		this.avisoPrivacidadServicio = new AvisoPrivacidadServicio();
+		this.transaccionServicio = new TransaccionServicio();
 		logger.info("CTRL: Terminando metodo init...");
 	}
 	
@@ -48,10 +51,17 @@ public class AvisoPrivacidadCtrl extends BimBaseCtrl {
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 		
+		JsonObject folioTransaccionGenerarResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
+		
+		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarResultadoObjeto,"transaccion");
+		String folTransa = Utilerias.obtenerStringPropiedad(transaccion,"Fol_Transa");
+		logger.info("- folTransa " + folTransa);
+		
 		String fechaSis = Utilerias.obtenerFechaSis();
 		
 		JsonObject datosAvisoPrivacidad = new JsonObject();
 		datosAvisoPrivacidad.addProperty("FechaSis", fechaSis);
+		datosAvisoPrivacidad.addProperty("NumTransac", folTransa);
 		
 		JsonObject avisoPrivacidadConsultarResultado = avisoPrivacidadServicio.avisoPrivacidadConsultar(datosAvisoPrivacidad);
 		JsonObject avisoPrivacidadConsultarResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(avisoPrivacidadConsultarResultado, "avisoPrivacidad");

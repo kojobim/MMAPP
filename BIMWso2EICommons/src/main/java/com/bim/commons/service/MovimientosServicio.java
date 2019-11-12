@@ -51,17 +51,9 @@ public class MovimientosServicio extends BaseService {
 	 *	Fec_Final: String,
 	 *	Mov_Natura?: String,
 	 *	Mov_PalCla?: String,
-	 *	Mov_MonIni: Integer,
-	 *	Mov_MonFin: Integer,
 	 *	Mov_Clasif?: String,
-	 *	Tip_Consul: String,
 	 * 	NumTransac?: String,
-	 *	Transaccio: String, 
-	 *	Usuario: String,
-	 *	FechaSis: String, 
-	 *	SucOrigen: String, 
-	 *	SucDestino: String, 
-	 *	Modulo: String 
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
