@@ -11,7 +11,9 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
 
+import com.bim.commons.service.AvisoPrivacidadServicio;
 import com.bim.commons.service.CuentaDestinoServicio;
+import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -21,12 +23,17 @@ import com.google.gson.JsonObject;
 public class UsuarioCtrl extends BimBaseCtrl {
 
 	private static Logger logger = Logger.getLogger(UsuarioCtrl.class);
+	
 	private CuentaDestinoServicio cuentaDestinoServicio;
+	private TransaccionServicio transaccionServicio;
+	private AvisoPrivacidadServicio avisoPrivacidadServicio;
 	
 	public UsuarioCtrl() {
 		super();
-		
+	
 		this.cuentaDestinoServicio = new CuentaDestinoServicio();
+		this.transaccionServicio = new TransaccionServicio();
+		this.avisoPrivacidadServicio = new AvisoPrivacidadServicio();
 	}
 
 	@Path("/cuentas-destino-nacionales")
@@ -76,4 +83,51 @@ public class UsuarioCtrl extends BimBaseCtrl {
 				.build();
 	}
 
+	@Path("/aviso-privacidad")
+	@GET()
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response verificarAvisoPrivacidad(@Context Request solicitud) {
+		logger.info("CTRL: Comenzando verificarAvisoPrivacidad metodo...");
+		
+		logger.info("Authorization " + solicitud.getHeader("Authorization"));
+
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjeto = Utilerias.obtenerPrincipal(bearerToken);
+		logger.info("- principal " + principalResultadoObjeto);
+
+		JsonObject folioTransaccionGenerarResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
+		
+		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarResultadoObjeto,"transaccion");
+		String folTransa = Utilerias.obtenerStringPropiedad(transaccion,"Fol_Transa");
+		logger.info("- folTransa " + folTransa);
+
+		String fechaSis = Utilerias.obtenerFechaSis();
+		
+		String usuNumero = principalResultadoObjeto.get("usuNumero").getAsString();
+		
+		JsonObject datosAvisoPrivacidad = new JsonObject();
+		datosAvisoPrivacidad.addProperty("Usu_Numero", usuNumero);
+		datosAvisoPrivacidad.addProperty("NumTransac", folTransa);
+		datosAvisoPrivacidad.addProperty("FechaSis", fechaSis);
+		
+		JsonObject avisoPrivacidadVerificarObjeto = this.avisoPrivacidadServicio.avisoPrivacidadVerificar(datosAvisoPrivacidad);
+		logger.info("- avisoPrivacidadVerificarObjeto " + avisoPrivacidadVerificarObjeto);
+		
+		JsonObject avisoPrivacidad = Utilerias.obtenerJsonObjectPropiedad(avisoPrivacidadVerificarObjeto, "avisoPrivacidad");
+		
+		Boolean usuAceAvi = Boolean.parseBoolean(Utilerias.obtenerStringPropiedad(avisoPrivacidad,"Usu_AceAvi"));
+		logger.info("- usuAceAvi " + usuAceAvi);
+
+		JsonObject avisoPrivacidadResultadoObjeto = new JsonObject();
+		avisoPrivacidadResultadoObjeto.addProperty("cpAvisoAceptado", usuAceAvi);
+		
+		JsonObject avisoPrivacidadAceptado = new JsonObject();
+		avisoPrivacidadAceptado.add("avisoPrivacidadAceptado", avisoPrivacidadResultadoObjeto);
+		logger.info("CTRL: Finalizando verificarAvisoPrivacidad metodo");
+		return Response
+				.ok(avisoPrivacidadAceptado.toString(), MediaType.APPLICATION_JSON)
+				.build();	
+	}
+	
 }
