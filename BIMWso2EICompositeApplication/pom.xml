@@ -36,7 +36,6 @@
     <com.bim.dataservice_._MovimientosServicio>capp/DataServicesServer</com.bim.dataservice_._MovimientosServicio>
     <com.bim.dataservice_._CuentaDestinoServicio>capp/DataServicesServer</com.bim.dataservice_._CuentaDestinoServicio>
     <com.bim.dataservice_._AvisoPrivacidadServicio>capp/DataServicesServer</com.bim.dataservice_._AvisoPrivacidadServicio>
-    <com.bim.dataservice_._CuentaDestinoServicio>capp/DataServicesServer</com.bim.dataservice_._CuentaDestinoServicio>
     <com.bim.dataservice_._SPEIServicio>capp/DataServicesServer</com.bim.dataservice_._SPEIServicio>
   </properties>
   <dependencies>
@@ -159,24 +158,10 @@
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
-
-    <dependency>
-      <groupId>com.bim.dataservice</groupId>
-      <artifactId>CuentaDestinoServicio</artifactId>
-      <version>1.0.0</version>
-      <type>dbs</type>
-    </dependency>
     
     <dependency>
       <groupId>com.bim.dataservice</groupId>
       <artifactId>AvisoPrivacidadServicio</artifactId>
-      <version>1.0.0</version>
-      <type>dbs</type>
-    </dependency>
-
-    <dependency>
-      <groupId>com.bim.dataservice</groupId>
-      <artifactId>CuentaDestinoServicio</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
