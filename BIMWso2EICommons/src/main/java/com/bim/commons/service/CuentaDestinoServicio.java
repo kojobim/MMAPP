@@ -167,11 +167,7 @@ public class CuentaDestinoServicio extends BaseService {
      *	Cds_UsuAdm: String,
      *	NumTransac: String,
      *	Transaccio: String,
-     *	Usuario: String,
-     *	FechaSis: String,
-     *	SucOrigen: String,
-     *	SucDestino: String,
-     *	Modulo: String
+     *	FechaSis: String
      * }
      * </pre>
      * @return
@@ -211,11 +207,7 @@ public class CuentaDestinoServicio extends BaseService {
      *	Tip_Consul: String,
      *	NumTransac?: String,
      *	Transaccio: String,
-     *	Usuario: String,
-     *	FechaSis: String,
-     *	SucOrigen: String,
-     *	SucDestino: String,
-     *	Modulo: String
+     *	FechaSis: String
      * }
      * </pre>
      * @return
