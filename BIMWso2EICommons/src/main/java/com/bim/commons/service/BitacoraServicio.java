@@ -35,7 +35,7 @@ public class BitacoraServicio extends BaseService {
 		BitacoraCreacionOpModulo = properties.getProperty("op.bitacora_creacion.transaccio");
 		BitacoraCreacionOpSucDestino = properties.getProperty("op.bitacora_creacion.usuario");
 		BitacoraCreacionOpSucOrigen = properties.getProperty("op.bitacora_creacion.suc_origen");
-		BitacoraCreacionOpTransaccio = properties.getProperty("op.bitacora_creacion.suc_destino");
+		BitacoraCreacionOpTransaccio = properties.getProperty("op.bitacora_creacion.transaccio");
 		BitacoraCreacionOpUsuario = properties.getProperty("op.bitacora_creacion.modulo");
 	}
 	
@@ -84,7 +84,8 @@ public class BitacoraServicio extends BaseService {
 		datosBitacora.addProperty("Bit_Monto", 0);
 		if(!datosBitacora.has("Bit_SegRef"))
 			datosBitacora.addProperty("Bit_SegRef", "");
-		datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
+		if(!datosBitacora.has("Transaccio"))
+			datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
 		datosBitacora.addProperty("Usuario", BitacoraCreacionOpUsuario);
 		datosBitacora.addProperty("SucOrigen", BitacoraCreacionOpSucOrigen);
 		datosBitacora.addProperty("SucDestino", BitacoraCreacionOpSucDestino);
