@@ -56,12 +56,11 @@ public class AvisoPrivacidadCtrl extends BimBaseCtrl {
 		JsonObject avisoPrivacidadConsultarResultado = avisoPrivacidadServicio.avisoPrivacidadConsultar(datosAvisoPrivacidad);
 		JsonObject avisoPrivacidadConsultarResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(avisoPrivacidadConsultarResultado, "avisoPrivacidad");
 		String textAviso = Utilerias.obtenerStringPropiedad(avisoPrivacidadConsultarResultadoObjeto, "Text_Aviso");
-		textAviso = textAviso.replace("\r\n", "");
 		
 		JsonObject resultado = new JsonObject();
 		JsonObject avisoPrivacidad = new JsonObject();
 		avisoPrivacidad.addProperty("cpFormato", formato);
-		avisoPrivacidad.addProperty("cpAvisoPrivacidad", textAviso);
+		avisoPrivacidad.addProperty("cpAvisoPrivacidad", textAviso.replace("\r\n", ""));
 		resultado.add("avisoPrivacidad", avisoPrivacidad);
 		
 		logger.info("CTRL: Terminando obtenerAvisoPrivacidad metodo...");
