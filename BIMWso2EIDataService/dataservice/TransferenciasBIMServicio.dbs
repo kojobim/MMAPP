@@ -64,4 +64,42 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
+    <query id="cuentaDestinoTransferenciaBIMActivacionSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE NBCUDEBRPRO
+    		@Cdb_UsuAdm	= :cdbUsuAdm,
+			@NumTransac	= :numTransac,
+			@Transaccio	= :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo	= :modulo
+
+    	</sql>
+        <param name="cdbUsuAdm" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/cuentaDestinoTransferenciaBIMActivacionNE" element="cuentaDestinoTransferenciaBIM">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation name="cuentaDestinoTransferenciaBIMActivacionOp">
+        <call-query href="cuentaDestinoTransferenciaBIMActivacionSQL">
+            <with-param name="cdbUsuAdm" query-param="Cdb_UsuAdm"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
 </data>
