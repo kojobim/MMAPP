@@ -1,5 +1,8 @@
 package com.bim.msf4j;
 
+import com.bim.msf4j.ctrl.AvisoPrivacidadCtrl;
+import com.bim.msf4j.ctrl.CuentaDestinoCtrl;
+import com.bim.msf4j.ctrl.CuentasCtrl;
 import com.bim.msf4j.ctrl.InversionesCtrl;
 import com.bim.msf4j.ctrl.LoginCtrl;
 import com.bim.msf4j.ctrl.PingCtrl;
@@ -15,7 +18,10 @@ public class Application {
                 .deploy(new PingCtrl(), 
                 		new LoginCtrl(),
                         new InversionesCtrl(),
-                        new UsuarioCtrl())
+                        new CuentaDestinoCtrl(),
+                        new UsuarioCtrl(),
+                        new CuentasCtrl(),
+                        new AvisoPrivacidadCtrl())
                 .start();
     }
 }
