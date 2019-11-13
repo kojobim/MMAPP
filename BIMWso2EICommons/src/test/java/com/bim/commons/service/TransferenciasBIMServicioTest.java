@@ -172,8 +172,40 @@ public class TransferenciasBIMServicioTest {
 		String errCodigo = transferenciaBIM.get("Err_Codigo").getAsString();
 		
 		assertTrue("000000".equals(errCodigo));
-		logger.info("TEST: Terminando transferenciaBIMCreacionTestDeberiaSerExitoso metodo");
+		logger.info("TEST: Terminando transferenciaBIMCreacionTestDeberiaSerExitoso metodo");	
+	}
+	
+	@Test
+	public void transferenciasBIMConsultarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando transferenciasBIMConsultarTestDeberiaSerExitoso metodo");
+		JsonObject datosTransferenciaBIMConsultar = new JsonObject();
+		datosTransferenciaBIMConsultar.addProperty("Trb_UsuAdm", "000149");
+		datosTransferenciaBIMConsultar.addProperty("Trb_Usuari", "000149");
+		datosTransferenciaBIMConsultar.addProperty("FechaSis", Utilerias.obtenerFechaSis());
+		JsonObject resultado = transferenciasBIMServicio.transferenciasBIMConsultar(datosTransferenciaBIMConsultar );
+		logger.info("- resultado " + resultado);
 		
+		assertTrue(resultado.has("transferenciasBIM"));
+		assertTrue(resultado.get("transferenciasBIM").isJsonObject());
+		
+		JsonObject transferenciasBIM = resultado.get("transferenciasBIM").getAsJsonObject();
+		
+		assertTrue(transferenciasBIM.has("transferenciaBIM"));
+		assertTrue(transferenciasBIM.get("transferenciaBIM").isJsonArray());
+		
+		JsonArray transferenciaBIM = transferenciasBIM.get("transferenciaBIM").getAsJsonArray();
+		
+		assertTrue(transferenciaBIM.size() > 0);
+		assertTrue(transferenciaBIM.get(0).isJsonObject());
+		
+		JsonObject transferenciaBIMItem = transferenciaBIM.get(0).getAsJsonObject();
+		
+		assertTrue(transferenciaBIMItem.has("Trb_Client"));
+		assertTrue(transferenciaBIMItem.has("Trb_CueOri"));
+		assertTrue(transferenciaBIMItem.has("Trb_CueDes"));
+		assertTrue(transferenciaBIMItem.has("Trb_Monto"));
+		
+		logger.info("TEST: Terminando transferenciasBIMConsultarTestDeberiaSerExitoso metodo");
 	}
 	
 }
