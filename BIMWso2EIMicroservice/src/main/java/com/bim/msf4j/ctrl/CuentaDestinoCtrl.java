@@ -25,11 +25,14 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 	private static final Logger logger = Logger.getLogger(CuentaDestinoCtrl.class);
 
 	private CuentaDestinoServicio cuentaDestinoServicio;
+	private static Integer CuentaDestinoNumeroDigitos;
 	
 	public CuentaDestinoCtrl() {
 		super();
 		logger.info("CTRL: Comenzando metodo init...");
 		this.cuentaDestinoServicio = new CuentaDestinoServicio();
+		
+		CuentaDestinoNumeroDigitos = Integer.parseInt(properties.getProperty("cuenta_destino_servicio.numero_digitos"));
 		logger.info("CTRL: Finalizando metodo init...");		
 	}
 	
@@ -46,6 +49,12 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		
 		if(cpCuenta == null || cpCuenta.isEmpty()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.45");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		if(cpCuenta.length() > CuentaDestinoNumeroDigitos || cpCuenta.length() < CuentaDestinoNumeroDigitos) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.50");
+			bimMessageDTO.addMergeVariable("digitos", CuentaDestinoNumeroDigitos.toString());
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 		
