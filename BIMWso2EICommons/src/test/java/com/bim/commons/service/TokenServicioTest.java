@@ -70,15 +70,16 @@ public class TokenServicioTest {
 	@Test
 	public void validarTokenOperacionTestDeberiaSerExitoso() {
 		logger.info("TEST: Comenzando validarTokenOperacionTestDeberiaSerExitoso metodo");
-		String tokFolio = "416218850";
+		String tokFolio = "0416218850";
 		String cpRSAToken = "130865";
 		String tokUsuari = "964889";
 		String numTransac = "";
+		String scriptName = TokenServicioTest.class.getName() + ".validarTokenOperacionTestDeberiaSerExitoso";
 		
 		/*
 		 *	Test
 		 */
-		String resultado = tokenServicio.validarTokenOperacion(tokFolio, cpRSAToken, tokUsuari, numTransac);
+		String resultado = tokenServicio.validarTokenOperacion(tokFolio, cpRSAToken, tokUsuari, numTransac, scriptName);
 		logger.info("- resultado " + resultado);
 		
 		assertTrue("El token no es válido", "A".equals(resultado));

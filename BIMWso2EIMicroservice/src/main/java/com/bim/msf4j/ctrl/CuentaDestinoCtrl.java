@@ -13,17 +13,21 @@ import javax.ws.rs.core.Response;
 
 import org.apache.log4j.Logger;
 
+import com.bim.commons.dto.BimEmailTemplateDTO;
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.exceptions.ForbiddenException;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.exceptions.UnauthorizedException;
 import com.bim.commons.service.BitacoraServicio;
+import com.bim.commons.service.ConfiguracionServicio;
+import com.bim.commons.service.CorreoServicio;
 import com.bim.commons.service.CuentaDestinoServicio;
 import com.bim.commons.service.TokenServicio;
 import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.utils.Racal;
 import com.bim.commons.utils.Utilerias;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 @Path("/cuentas-destino")
@@ -35,6 +39,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 	private TransaccionServicio transaccionServicio;
 	private TokenServicio tokenServicio;
 	private BitacoraServicio bitacoraServicio;
+	private ConfiguracionServicio configuracionServicio;
+	private CorreoServicio correoServicio;
 	
 	public CuentaDestinoCtrl() {
 		super();
@@ -44,6 +50,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		this.transaccionServicio = new TransaccionServicio();
 		this.tokenServicio = new TokenServicio();
 		this.bitacoraServicio = new BitacoraServicio();
+		this.configuracionServicio = new ConfiguracionServicio();
+		this.correoServicio = new CorreoServicio();
 		
 		logger.info("CTRL: Finalizando metodo init...");		
 	}
@@ -75,7 +83,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		/**
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
 		 */
-		String usuFolTok = "416218850";
+		String usuFolTok = "0416218850";
 		
 		JsonObject altaCuentaDestinoBim = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoObjeto, "altaCuentaDestinoBim");
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cpRSAToken");
@@ -85,8 +93,9 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 
 		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarOpResultadoObjeto, "transaccion");
 		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
+		String scriptName = CuentaDestinoCtrl.class.getName() + ".altaCuentaDestinoBIM";
 		
-		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac);
+		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac, scriptName);
 
 		if ("B".equals(validarToken)) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
@@ -99,17 +108,15 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		}
 		
 		String uuid = java.util.UUID.randomUUID().toString();
-		uuid = uuid.substring(uuid.length()-6).toUpperCase();
-		String uuidCif = Racal.cifraPassword_HSM(uuid);
-		logger.info("UUID: " + uuid);
-		logger.info("UUID Cifrada: " + uuidCif);
+		String cdsEncript = Racal.cifraPassword_HSM(uuid.substring(uuid.length()-6).toUpperCase());
+		logger.info("Cds_Encript: " + cdsEncript);
 		
-		if(uuidCif.length() == 7 && uuidCif.equals("autoriz")) {
+		if(cdsEncript.length() == 7 && cdsEncript.equals("autoriz")) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.7");
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
 
-		if(uuidCif.isEmpty()) {
+		if(cdsEncript.isEmpty()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.8");
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
@@ -143,16 +150,16 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosCuentaDestinoBIM.addProperty("Cdb_Alias", cdbAlias);
 		datosCuentaDestinoBIM.addProperty("Cdb_RFCBen", cdbRFCBen);
 		datosCuentaDestinoBIM.addProperty("Cdb_EmaBen", cdbEmaBen);
-		datosCuentaDestinoBIM.addProperty("Cdb_Random", uuid); // Validar
+		datosCuentaDestinoBIM.addProperty("Cdb_Random", cdsEncript);
 		datosCuentaDestinoBIM.addProperty("NumTransac", numTransac);
-		datosCuentaDestinoBIM.addProperty("fechaSis", fechaSis);
+		datosCuentaDestinoBIM.addProperty("FechaSis", fechaSis);
 		
 		JsonObject cuentaDestinoBIMCreacionResultado = this.cuentaDestinoServicio.cuentaDestinoBIMCreacion(datosCuentaDestinoBIM);
 		JsonObject cuentaDestinoBIM = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoBIMCreacionResultado, "cuentaDestinoBIM");
 		String errCodigo = Utilerias.obtenerStringPropiedad(cuentaDestinoBIM, "Err_Codigo");
 		
 		if(!"000000".equals(errCodigo)) {
-			String errMensaj = Utilerias.obtenerStringPropiedad(cuentaDestinoBIM, "errMensaj");
+			String errMensaj = Utilerias.obtenerStringPropiedad(cuentaDestinoBIM, "Err_Mensaj");
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.31");
 			bimMessageDTO.addMergeVariable("errMensaj", errMensaj);
 			throw new InternalServerException(bimMessageDTO.toString());
@@ -172,8 +179,46 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		JsonObject creacionBitacoraResultado = this.bitacoraServicio.creacionBitacora(datosBitacora);
 		logger.info(creacionBitacoraResultado);
 		
+		JsonObject datosConfiguracion = new JsonObject();
+		datosConfiguracion.addProperty("FechaSis", fechaSis);
+		
+		JsonObject configuracionBancoConsultarDetalleResultado = this.configuracionServicio.configuracionBancoConsultarDetalle(datosConfiguracion);
+		JsonObject configuracionesBanco = Utilerias.obtenerJsonObjectPropiedad(configuracionBancoConsultarDetalleResultado, "configuracionesBanco");
+		JsonArray configuracionBanco = Utilerias.obtenerJsonArrayPropiedad(configuracionesBanco, "configuracionBanco");
+		String parMiCuDe = Utilerias.obtenerStringPropiedad(configuracionBanco.get(0).getAsJsonObject(), "Par_MiCuDe");
+		
+		String asunto = Utilerias.obtenerPropiedadPlantilla("mail.alta_cuenta_destino_bim.asunto");
+		String plantilla = Utilerias.obtenerPlantilla("alta-cuenta-destino-bim");
+		String destinatario = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuEmail");
+		String cliComOrd = Utilerias.obtenerStringPropiedad(cuentasEspeciales, "Cli_ComOrd");
+		String usuNombre = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuNombre");
+
+		if(usuUsuAdm.equals(usuNumero)) destinatario += "," + cdbEmaBen;
+		
+		StringBuilder cdbCuentaOcu = new StringBuilder()
+				.append("**************")
+				.append(cdbCuenta.substring(cdbCuenta.length()-4));
+		
+		BimEmailTemplateDTO emailTemplateDTO = new BimEmailTemplateDTO(plantilla);
+		emailTemplateDTO.addMergeVariable("Str_Client", cliComOrd);
+		emailTemplateDTO.addMergeVariable("Usu_Nombre", usuNombre);
+		emailTemplateDTO.addMergeVariable("Cdb_Cuenta", cdbCuentaOcu.toString());
+		emailTemplateDTO.addMergeVariable("Cdb_Alias", cdbAlias);
+		emailTemplateDTO.addMergeVariable("Str_Random", cdsEncript);
+		emailTemplateDTO.addMergeVariable("TiempoEspera", parMiCuDe);
+		String cuerpo = Utilerias.obtenerMensajePlantilla(emailTemplateDTO);
+		
+		try {
+			logger.info("Iniciando envio de mensaje...");
+			correoServicio.enviarCorreo(destinatario, asunto, cuerpo);
+			logger.info("Terminando envio de mensaje...");
+		} catch (Exception e) {
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.48");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+		
 		logger.info("CTRL: Finalizando altaCuentaDestinoBIM metodo...");
-		return Response.ok(cuentaDestinoBIMCreacionResultado.toString(), MediaType.APPLICATION_JSON)
+		return Response.created(null)
 				.build();
 	}
 	

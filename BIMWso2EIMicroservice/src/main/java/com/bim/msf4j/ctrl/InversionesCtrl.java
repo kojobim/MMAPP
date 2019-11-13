@@ -483,7 +483,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		/**
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
 		 */
-		String usuFolTok = "416218850";
+		String usuFolTok = "0416218850";
 		
 		String bitPriRef = solicitud.getHeader("User-Agent");
 		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
@@ -673,7 +673,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		 */
 
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(renovarInversion, "cpRSAToken");
-		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac);
+		String scriptName = InversionesCtrl.class.getName() + ".reinversion";
+		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac, scriptName);
 
 		if ("B".equals(validarToken)) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
