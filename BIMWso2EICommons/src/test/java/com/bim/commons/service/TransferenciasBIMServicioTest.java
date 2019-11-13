@@ -99,4 +99,45 @@ public class TransferenciasBIMServicioTest {
 		
 		logger.info("TEST:  Terminando cuentaDestinoTransferenciaBIMActivacionTestDeberiaSerExitoso metodo");
 	}
+	
+	@Test
+	public void transferenciaBIMCreacionTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando transferenciaBIMCreacionTestDeberiaSerExitoso metodo");
+		JsonObject datosTransferenciaBIMCreacion = new JsonObject();
+		datosTransferenciaBIMCreacion.addProperty("Trb_Client", "00195171");
+		datosTransferenciaBIMCreacion.addProperty("Trb_CueOri", "001951710012");
+		datosTransferenciaBIMCreacion.addProperty("Trb_CueDes", "001944160015");
+		datosTransferenciaBIMCreacion.addProperty("Trb_Monto", 1);
+		datosTransferenciaBIMCreacion.addProperty("Trb_MonOri", "01");
+		datosTransferenciaBIMCreacion.addProperty("Trb_MonDes", "01");
+		datosTransferenciaBIMCreacion.addProperty("Trb_Descri", "PRUEBA");
+		datosTransferenciaBIMCreacion.addProperty("Trb_UsuCap", "000149");
+		datosTransferenciaBIMCreacion.addProperty("Trb_FecAut", "1900-01-01 00:00:00");
+		datosTransferenciaBIMCreacion.addProperty("Trb_FePrEn", "1900-01-01 00:00:00");
+		datosTransferenciaBIMCreacion.addProperty("Trb_TipTra", "I");
+		datosTransferenciaBIMCreacion.addProperty("Trb_Frecue", "U");
+		datosTransferenciaBIMCreacion.addProperty("Trb_DurFec", "1900-01-01 00:00:00");
+		datosTransferenciaBIMCreacion.addProperty("Trb_EmaBen", "Email_@dominio.com");
+		datosTransferenciaBIMCreacion.addProperty("NumTransac", "42246896");
+		datosTransferenciaBIMCreacion.addProperty("FechaSis", "2019-05-29 14:24:46");
+		
+		JsonObject resultado = transferenciasBIMServicio.transferenciaBIMCreacion(datosTransferenciaBIMCreacion );
+		logger.info("- resultado " + resultado );
+		
+		assertTrue(resultado.has("transferenciaBIM"));
+		assertTrue(resultado.get("transferenciaBIM").isJsonObject());
+		
+		JsonObject transferenciaBIM = Utilerias.obtenerJsonObjectPropiedad(resultado, "transferenciaBIM");
+		logger.info("- transferenciaBIM " + transferenciaBIM);
+		
+		assertTrue(transferenciaBIM.has("Err_Codigo"));
+		assertTrue(transferenciaBIM.get("Err_Codigo").isJsonPrimitive());
+		
+		String errCodigo = transferenciaBIM.get("Err_Codigo").getAsString();
+		
+		assertTrue("000000".equals(errCodigo));
+		
+		
+		logger.info("TEST: Terminando transferenciaBIMCreacionTestDeberiaSerExitoso metodo");
+	}
 }
