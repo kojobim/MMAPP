@@ -255,7 +255,10 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		StringBuilder destinatario = new StringBuilder()
 				.append(usuEmail);
 
-		if(usuUsuAdm.equals(usuNumero)) destinatario.append(",").append(cdbEmaBen);
+		if(usuUsuAdm.equals(usuNumero)) 
+			destinatario
+				.append(",")
+				.append(cdbEmaBen);		
 		
 		StringBuilder cdbCuentaOcu = new StringBuilder()
 				.append("**************")
@@ -270,14 +273,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		emailTemplateDTO.addMergeVariable("TiempoEspera", parMiCuDe);
 		String cuerpo = Utilerias.obtenerMensajePlantilla(emailTemplateDTO);
 		
-		try {
-			logger.info("Iniciando envio de mensaje...");
-			correoServicio.enviarCorreo(destinatario, asunto, cuerpo);
-			logger.info("Terminando envio de mensaje...");
-		} catch (Exception e) {
-            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.48");
-			throw new InternalServerException(bimMessageDTO.toString());
-		}
+		correoServicio.enviarCorreo(destinatario.toString(), asunto, cuerpo);
 		
 		logger.info("CTRL: Finalizando altaCuentaDestinoBIM metodo...");
 		return Response.created(null)
