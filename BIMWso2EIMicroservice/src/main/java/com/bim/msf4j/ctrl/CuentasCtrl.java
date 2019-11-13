@@ -309,9 +309,12 @@ public class CuentasCtrl extends BimBaseCtrl {
 		logger.info("- bitUsuari " + bitUsuari);
 
 		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
-		String scriptName = CuentasCtrl.class.getName() + ".movimientosRegistro";
+
+		StringBuilder scriptName = new StringBuilder()
+				.append(CuentasCtrl.class.getName())
+				.append(".movimientosRegistro");
 		
-		this.tokenServicio.validarTokenOperacion(folTok, cpRSAToken, bitUsuari, numTransac, scriptName);
+		this.tokenServicio.validarTokenOperacion(folTok, cpRSAToken, bitUsuari, numTransac, scriptName.toString());
 
 		String fechaSis = Utilerias.obtenerFechaSis();
 		String bitPriRef = Utilerias.obtenerStringPropiedad(principal, "usuClient");

@@ -149,9 +149,12 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 
 		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarOpResultadoObjeto, "transaccion");
 		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
-		String scriptName = CuentaDestinoCtrl.class.getName() + ".altaCuentaDestinoBIM";
+
+		StringBuilder scriptName = new StringBuilder()
+				.append(CuentaDestinoCtrl.class.getName())
+				.append(".altaCuentaDestinoBIM");
 		
-		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac, scriptName);
+		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac, scriptName.toString());
 
 		if ("B".equals(validarToken)) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
@@ -245,11 +248,14 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		
 		String asunto = Utilerias.obtenerPropiedadPlantilla("mail.alta_cuenta_destino_bim.asunto");
 		String plantilla = Utilerias.obtenerPlantilla("alta-cuenta-destino-bim");
-		String destinatario = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuEmail");
+		String usuEmail = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuEmail");
 		String cliComOrd = Utilerias.obtenerStringPropiedad(cuentasEspeciales, "Cli_ComOrd");
 		String usuNombre = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuNombre");
 
-		if(usuUsuAdm.equals(usuNumero)) destinatario += "," + cdbEmaBen;
+		StringBuilder destinatario = new StringBuilder()
+				.append(usuEmail);
+
+		if(usuUsuAdm.equals(usuNumero)) destinatario.append(",").append(cdbEmaBen);
 		
 		StringBuilder cdbCuentaOcu = new StringBuilder()
 				.append("**************")
