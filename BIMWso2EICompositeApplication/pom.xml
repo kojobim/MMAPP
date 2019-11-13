@@ -37,6 +37,7 @@
     <com.bim.dataservice_._CuentaDestinoServicio>capp/DataServicesServer</com.bim.dataservice_._CuentaDestinoServicio>
     <com.bim.dataservice_._AvisoPrivacidadServicio>capp/DataServicesServer</com.bim.dataservice_._AvisoPrivacidadServicio>
     <com.bim.dataservice_._SPEIServicio>capp/DataServicesServer</com.bim.dataservice_._SPEIServicio>
+    <com.bim.dataservice_._TransferenciasBIMServicio>capp/DataServicesServer</com.bim.dataservice_._TransferenciasBIMServicio>
   </properties>
   <dependencies>
     <dependency>
@@ -173,6 +174,13 @@
       <type>dbs</type>
     </dependency>
         
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>TransferenciasBIMServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
+    
     <!--  proxy services -->
     <dependency>
       <groupId>com.bim.proxy-service</groupId>
