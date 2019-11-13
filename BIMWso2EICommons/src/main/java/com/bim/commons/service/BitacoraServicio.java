@@ -69,7 +69,8 @@ public class BitacoraServicio extends BaseService {
 		logger.info("COMMONS: Comenzando creacionBitacora...");
 		if(!datosBitacora.has("Bit_NumTra"))
 			datosBitacora.addProperty("Bit_NumTra", "");
-		datosBitacora.addProperty("Bit_TipOpe", BitacoraCreacionOpBitTipOpe);
+		if(!datosBitacora.has("Bit_TipOpe"))
+			datosBitacora.addProperty("Bit_TipOpe", BitacoraCreacionOpBitTipOpe);
 		if(!datosBitacora.has("Bit_CueOri"))
 			datosBitacora.addProperty("Bit_CueOri", "");
 		if(!datosBitacora.has("Bit_CueDes"))
