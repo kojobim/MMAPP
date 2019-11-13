@@ -102,4 +102,102 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
+    <query id="transferenciaBIMCreacionSQL" useConfig="BIMDB">
+        <sql>
+	    	EXECUTE NBTRABANALT
+	        @Trb_Client = :trbClient,
+	        @Trb_CueOri = :trbCueOri,
+	        @Trb_CueDes = :trbCueDes,
+	        @Trb_Monto = :trbMonto,
+	        @Trb_MonOri = :trbMonOri,
+	        @Trb_MonDes = :trbMonDes,
+	        @Trb_Descri = :trbDescri,
+	        @Trb_RFC = :trbRFC,
+	        @Trb_IVA = :trbIVA,
+	        @Trb_UsuCap = :trbUsuCap,
+	        @Trb_UsuAut = :trbUsuAut,
+	        @Trb_FecAut = :trbFecAut,
+	        @Trb_TipTra = :trbTipTra,
+	        @Trb_Frecue = :trbFrecue,
+	        @Trb_FePrEn = :trbFePrEn,
+	        @Trb_TipDur = :trbTipDur,
+	        @Trb_DurFec = :trbDurFec,
+	        @Trb_DurTra = :trbDurTra,
+	        @Trb_DiAnEm = :trbDiAnEm,
+	        @Trb_CLABE = :trbCLABE,
+	        @Trb_EmaBen = :trbEmaBen,
+	        @NumTransac = :numTransac,
+	        @Transaccio = :transaccio,
+	        @Usuario = :usuario,
+	        @FechaSis = :fechaSis,
+	        @SucOrigen = :sucOrigen,
+	        @SucDestino = :sucDestino,
+	        @Modulo = :modulo
+    	</sql>
+        <param name="trbClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbCueOri" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbCueDes" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbMonto" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="trbMonOri" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbMonDes" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbDescri" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbRFC" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbIVA" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="trbUsuCap" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbUsuAut" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbFecAut" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbTipTra" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbFrecue" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbFePrEn" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbTipDur" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbDurFec" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbDurTra" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="trbDiAnEm" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="trbCLABE" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbEmaBen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/transferenciaBIMCreacionNE" element="transferenciaBIM">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+            <element column="Trb_Consec" name="Trb_Consec" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation name="transferenciaBIMCreacionOp">
+        <call-query href="transferenciaBIMCreacionSQL">
+            <with-param name="trbClient" query-param="Trb_Client"/>
+            <with-param name="trbCueOri" query-param="Trb_CueOri"/>
+            <with-param name="trbCueDes" query-param="Trb_CueDes"/>
+            <with-param name="trbMonto" query-param="Trb_Monto"/>
+            <with-param name="trbMonOri" query-param="Trb_MonOri"/>
+            <with-param name="trbMonDes" query-param="Trb_MonDes"/>
+            <with-param name="trbDescri" query-param="Trb_Descri"/>
+            <with-param name="trbRFC" query-param="Trb_RFC"/>
+            <with-param name="trbIVA" query-param="Trb_IVA"/>
+            <with-param name="trbUsuCap" query-param="Trb_UsuCap"/>
+            <with-param name="trbUsuAut" query-param="Trb_UsuAut"/>
+            <with-param name="trbFecAut" query-param="Trb_FecAut"/>
+            <with-param name="trbTipTra" query-param="Trb_TipTra"/>
+            <with-param name="trbFrecue" query-param="Trb_Frecue"/>
+            <with-param name="trbFePrEn" query-param="Trb_FePrEn"/>
+            <with-param name="trbTipDur" query-param="Trb_TipDur"/>
+            <with-param name="trbDurFec" query-param="Trb_DurFec"/>
+            <with-param name="trbDurTra" query-param="Trb_DurTra"/>
+            <with-param name="trbDiAnEm" query-param="Trb_DiAnEm"/>
+            <with-param name="trbCLABE" query-param="Trb_CLABE"/>
+            <with-param name="trbEmaBen" query-param="Trb_EmaBen"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
 </data>
