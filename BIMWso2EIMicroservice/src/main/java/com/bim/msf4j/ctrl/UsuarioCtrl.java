@@ -82,6 +82,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		cuentasDestino.add("cuentasDestino", cuentasDestinoResultado);
 		logger.info("- cuentasDestino " + cuentasDestino);
 		logger.info("CTRL: Finalizando cuentasDestinoNacionalesListado metodo");
+		
 		return Response.ok(cuentasDestino.toString(),MediaType.APPLICATION_JSON)
 				.build();
 	}

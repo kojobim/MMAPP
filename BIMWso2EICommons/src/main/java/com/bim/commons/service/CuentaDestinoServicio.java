@@ -574,7 +574,8 @@ public class CuentaDestinoServicio extends BaseService {
             datosCuentaDestinoBIMConsultar.addProperty("Tip_Consul", CuentaDestinoBIMConsultarOpTipConsul);
         if(!datosCuentaDestinoBIMConsultar.has("NumTransac"))
             datosCuentaDestinoBIMConsultar.addProperty("NumTransac", "");
-        datosCuentaDestinoBIMConsultar.addProperty("Transaccio", CuentaDestinoBIMConsultarOpTransaccio);
+        if(!datosCuentaDestinoBIMConsultar.has("Transaccio"))
+        	datosCuentaDestinoBIMConsultar.addProperty("Transaccio", CuentaDestinoBIMConsultarOpTransaccio);
         datosCuentaDestinoBIMConsultar.addProperty("Usuario", CuentaDestinoBIMConsultarOpUsuario);
     	datosCuentaDestinoBIMConsultar.addProperty("SucOrigen", CuentaDestinoBIMConsultarOpSucOrigen);
     	datosCuentaDestinoBIMConsultar.addProperty("SucDestino", CuentaDestinoBIMConsultarOpSucDestino);
