@@ -12,6 +12,8 @@ public class SPEIServicio extends BaseService {
 	
 	private static String SPEIServicio;
 	private static String HorariosSPEIConsultarOp;
+	private static String HorariosSPEIConsultarOpHorHorIni;
+	private static String HorariosSPEIConsultarOpHorHorFin;
 	private static String HorariosSPEIConsultarOpTipConsul;
 	private static String HorariosSPEIConsultarOpTransaccio;
 	private static String HorariosSPEIConsultarOpUsuario;
@@ -25,12 +27,17 @@ public class SPEIServicio extends BaseService {
 	private static String TransaferenciaSPEICreacionOpSucDestino;
 	private static String TransaferenciaSPEICreacionOpModulo;
 	private static String TransaferenciaSPEIProcesarOp;
+	private static String TransaferenciaSPEIProcesarOpTrsCuBe;
+	private static String TransaferenciaSPEIProcesarOpTrsTipPag;
+	private static String TransaferenciaSPEIProcesarOpTrsTipTra;
+	private static String TransaferenciaSPEIProcesarOpTrsValFir;
 	private static String TransaferenciaSPEIProcesarOpTransaccio;
 	private static String TransaferenciaSPEIProcesarOpUsuario;
 	private static String TransaferenciaSPEIProcesarOpSucOrigen;
 	private static String TransaferenciaSPEIProcesarOpSucDestino;
 	private static String TransaferenciaSPEIProcesarOpModulo;
 	private static String TransaferenciaSPEIConsultarOp;
+	private static String TransaferenciaSPEIConsultarOpTrnStatus;
 	private static String TransaferenciaSPEIConsultarOpTipConsul;
 	private static String TransaferenciaSPEIConsultarOpTransaccio;
 	private static String TransaferenciaSPEIConsultarOpUsuario;
@@ -54,6 +61,9 @@ public class SPEIServicio extends BaseService {
 		HorariosSPEIConsultarOpSucOrigen = properties.getProperty("op.horarios_spei_consultar.suc_origen");
 		HorariosSPEIConsultarOpSucDestino = properties.getProperty("op.horarios_spei_consultar.suc_destino");
 		HorariosSPEIConsultarOpModulo = properties.getProperty("op.horarios_spei_consultar.modulo");
+		HorariosSPEIConsultarOpHorHorIni = properties.getProperty("op.horarios_spei_consultar.hor_hor_ini");
+		HorariosSPEIConsultarOpHorHorFin = properties.getProperty("op.horarios_spei_consultar.hor_hor_fin");
+		
 				 
 		TransaferenciaSPEICreacionOpTransaccio = properties.getProperty("op.transferencias_spei_creacion.transaccio");
 		TransaferenciaSPEICreacionOpUsuario = properties.getProperty("op.transferencias_spei_creacion.usuario");
@@ -61,12 +71,17 @@ public class SPEIServicio extends BaseService {
 		TransaferenciaSPEICreacionOpSucDestino = properties.getProperty("op.transferencias_spei_creacion.suc_destino");
 		TransaferenciaSPEICreacionOpModulo = properties.getProperty("op.transferencias_spei_creacion.modulo");
 		
+		TransaferenciaSPEIProcesarOpTrsCuBe = properties.getProperty("op.transferencias_spei_procesar.transaccio");
+		TransaferenciaSPEIProcesarOpTrsTipPag = properties.getProperty("op.transferencias_spei_procesar.transaccio");
+		TransaferenciaSPEIProcesarOpTrsTipTra = properties.getProperty("op.transferencias_spei_procesar.transaccio");
+		TransaferenciaSPEIProcesarOpTrsValFir = properties.getProperty("op.transferencias_spei_procesar.transaccio");
 		TransaferenciaSPEIProcesarOpTransaccio = properties.getProperty("op.transferencias_spei_procesar.transaccio");
 		TransaferenciaSPEIProcesarOpUsuario = properties.getProperty("op.transferencias_spei_procesar.usuario");
 		TransaferenciaSPEIProcesarOpSucOrigen = properties.getProperty("op.transferencias_spei_procesar.suc_origen");
 		TransaferenciaSPEIProcesarOpSucDestino = properties.getProperty("op.transferencias_spei_procesar.suc_destino");
 		TransaferenciaSPEIProcesarOpModulo = properties.getProperty("op.transferencias_spei_procesar.modulo");
-
+		
+		TransaferenciaSPEIConsultarOpTrnStatus = properties.getProperty("op.transferencias_spei_consultar.trn_status");
 		TransaferenciaSPEIConsultarOpTipConsul = properties.getProperty("op.transferencias_spei_consultar.tip_consul");
 		TransaferenciaSPEIConsultarOpTransaccio = properties.getProperty("op.transferencias_spei_consultar.transaccio");
 		TransaferenciaSPEIConsultarOpUsuario = properties.getProperty("op.transferencias_spei_consultar.usuario");
@@ -85,6 +100,9 @@ public class SPEIServicio extends BaseService {
 			datosHorariosSPEI.addProperty("Hor_MonFin", 0);
 		if(!datosHorariosSPEI.has("NumTransac"))
 			datosHorariosSPEI.addProperty("NumTransac", "");
+
+		datosHorariosSPEI.addProperty("Hor_HorIni", HorariosSPEIConsultarOpHorHorIni);
+		datosHorariosSPEI.addProperty("Hor_HorFin", HorariosSPEIConsultarOpHorHorFin);
 		datosHorariosSPEI.addProperty("Tip_Consul", HorariosSPEIConsultarOpTipConsul);
 		datosHorariosSPEI.addProperty("Transaccio", HorariosSPEIConsultarOpTransaccio);
 		datosHorariosSPEI.addProperty("Usuario", HorariosSPEIConsultarOpUsuario);
@@ -118,6 +136,7 @@ public class SPEIServicio extends BaseService {
 	}
 	
 	public JsonObject transaferenciaSPEIProcesar(JsonObject datosTransferenciaSPEI) {
+		logger.info("COMMONS: Comenzando transaferenciaSPEIProcesar metodo... ");
 		datosTransferenciaSPEI.addProperty("Trs_OrdPag", 0.0000);
 		datosTransferenciaSPEI.addProperty("Trs_IVA", 0.0000);
 		datosTransferenciaSPEI.addProperty("Trs_Comisi", 0.0000);
@@ -130,6 +149,10 @@ public class SPEIServicio extends BaseService {
 		datosTransferenciaSPEI.addProperty("Trs_ConPaU", "");
 		datosTransferenciaSPEI.addProperty("Trs_DaBeAd", "");
 		datosTransferenciaSPEI.addProperty("Trs_DireIP", "");
+		datosTransferenciaSPEI.addProperty("Trs_TiCuBe", TransaferenciaSPEIProcesarOpTrsCuBe);
+		datosTransferenciaSPEI.addProperty("Trs_TipPag", TransaferenciaSPEIProcesarOpTrsTipPag);
+		datosTransferenciaSPEI.addProperty("Trs_TipTra", TransaferenciaSPEIProcesarOpTrsTipTra);
+		datosTransferenciaSPEI.addProperty("Trs_ValFir", TransaferenciaSPEIProcesarOpTrsValFir);
 		datosTransferenciaSPEI.addProperty("Transaccio", TransaferenciaSPEIProcesarOpTransaccio);
 		datosTransferenciaSPEI.addProperty("Usuario", TransaferenciaSPEIProcesarOpUsuario);
 		datosTransferenciaSPEI.addProperty("SucOrigen", TransaferenciaSPEIProcesarOpSucOrigen);
@@ -137,15 +160,17 @@ public class SPEIServicio extends BaseService {
 		datosTransferenciaSPEI.addProperty("Modulo", TransaferenciaSPEIProcesarOpModulo);
 		JsonObject transaferenciaSPEIProcesarOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransaferenciaSPEIProcesarOp, datosTransferenciaSPEI);
 		logger.info("transaferenciaSPEIProcesarOpResultadoObjeto" + transaferenciaSPEIProcesarOpResultadoObjeto);
-		logger.info("COMMONS: Finalizando transaferenciaSPEICreacion metodo... ");
+		logger.info("COMMONS: Finalizando transaferenciaSPEIProcesar metodo... ");
 		return transaferenciaSPEIProcesarOpResultadoObjeto;
 	}
 	
 	public JsonObject transaferenciaSPEIConsultar(JsonObject datosTransferenciaSPEI) {
+		logger.info("COMMONS: Comenzando transaferenciaSPEIConsultar metodo... ");
 		datosTransferenciaSPEI.addProperty("Trn_Client", "");
 		datosTransferenciaSPEI.addProperty("Trn_Consec", "");
 		datosTransferenciaSPEI.addProperty("Trn_Transf", "");
 		datosTransferenciaSPEI.addProperty("NumTransac", "");
+		datosTransferenciaSPEI.addProperty("Trn_Status", TransaferenciaSPEIConsultarOpTrnStatus);
 		datosTransferenciaSPEI.addProperty("Tip_Consul", TransaferenciaSPEIConsultarOpTipConsul);
 		datosTransferenciaSPEI.addProperty("Transaccio", TransaferenciaSPEIConsultarOpTransaccio);
 		datosTransferenciaSPEI.addProperty("Usuario", TransaferenciaSPEIConsultarOpUsuario);
@@ -154,7 +179,7 @@ public class SPEIServicio extends BaseService {
 		datosTransferenciaSPEI.addProperty("Modulo", TransaferenciaSPEIConsultarOpModulo);
 		JsonObject transaferenciaSPEIConsultarOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransaferenciaSPEIConsultarOp, datosTransferenciaSPEI);
 		logger.info("transaferenciaSPEIConsultarOpResultadoObjeto" + transaferenciaSPEIConsultarOpResultadoObjeto);
-		logger.info("COMMONS: Finalizando transaferenciaSPEICreacion metodo... ");
+		logger.info("COMMONS: Finalizando transaferenciaSPEIConsultar metodo... ");
 		return transaferenciaSPEIConsultarOpResultadoObjeto;
 	}
 

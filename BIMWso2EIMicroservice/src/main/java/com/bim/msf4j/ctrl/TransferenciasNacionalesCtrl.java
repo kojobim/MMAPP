@@ -40,6 +40,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		this.speiServicio = new SPEIServicio();
 		this.bitacoraServicio = new BitacoraServicio();
 		this.cuentaDestinoServicio = new CuentaDestinoServicio();
+		
 	}
 
 	@Path("/")
@@ -58,8 +59,10 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		String usuUsuAdm = Utilerias.obtenerStringPropiedad(principalResultado, "usuUsuAdm");
 		String usuClient = Utilerias.obtenerStringPropiedad(principalResultado, "usuClient");
 		String usuNumero = Utilerias.obtenerStringPropiedad(principalResultado, "usuNumero");
+		String usuNombre = Utilerias.obtenerStringPropiedad(principalResultado, "usuNombre");
 		
-		JsonObject datosTransferencia = Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaSolicitud, "transferencia");
+		JsonObject datosTransferencia = Utilerias
+				.obtenerJsonObjectPropiedad(datosTransferenciaSolicitud, "transferencia");
 		logger.info("- datosTransferencia " + datosTransferencia);
 		
 		String trsCueOri = Utilerias.obtenerStringPropiedad(datosTransferencia, "trsCueOri");
@@ -70,7 +73,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		JsonObject folioTransaccionResultado = this.transaccionServicio.folioTransaccionGenerar();
 		logger.info("- folioTransaccionResultado " + folioTransaccionResultado);
 		
-		JsonObject folioTransaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionResultado, "transaccion"); 
+		JsonObject folioTransaccion = Utilerias
+				.obtenerJsonObjectPropiedad(folioTransaccionResultado, "transaccion"); 
 		String folTransa = Utilerias.obtenerStringPropiedad(folioTransaccion, "Fol_Transa");
 		
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(datosTransferencia, "cpRSAToken");
@@ -78,7 +82,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
 		 */
 		String usuFolTok = "416218850";
-		String validarTokenResultado = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, folTransa);
+		String validarTokenResultado = this.tokenServicio
+				.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, folTransa);
 		
 		if ("B".equals(validarTokenResultado)) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
@@ -94,10 +99,6 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		
 		JsonObject datosHorariosSPEI = new JsonObject();
 		datosHorariosSPEI.addProperty("FechaSis", fechaSis);
-		//Hor_HorIni es un dato de prueba
-		datosHorariosSPEI.addProperty("Hor_HorIni", "1900-01-01 00:00:00");
-		//Hor_HorFin es un dato de prueba
-		datosHorariosSPEI.addProperty("Hor_HorFin", "1900-01-01 00:00:00");
 		
 		JsonObject horariosSPEIResultado = speiServicio.horariosSPEIConsultar(datosHorariosSPEI);
 		logger.info("- horariosSPEIResultado " + horariosSPEIResultado );
@@ -114,10 +115,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosTransfarenciaSPEI.addProperty("Trs_CueDes", trsCueDes);
 		datosTransfarenciaSPEI.addProperty("Trs_Monto", Double.parseDouble(trsMonto));
 		datosTransfarenciaSPEI.addProperty("Trs_Descri", trsDescri);
-		//Trs_PriRef es un dato de prueba
-		datosTransfarenciaSPEI.addProperty("Trs_PriRef", "Nombre Usuario BE");
-		//Trs_UsuCap es un dato de prueba
-		datosTransfarenciaSPEI.addProperty("Trs_UsuCap", "000149");
+		datosTransfarenciaSPEI.addProperty("Trs_PriRef", usuNombre);
+		datosTransfarenciaSPEI.addProperty("Trs_UsuCap", usuNumero);
 		//Trs_FePrEn es un dato de prueba
 		datosTransfarenciaSPEI.addProperty("Trs_FePrEn", "1900-01-01 00:00:00");
 		//Trs_DurFec es un dato de prueba
@@ -128,7 +127,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosTransfarenciaSPEI.addProperty("FechaSis", fechaSis);
 		datosTransfarenciaSPEI.addProperty("NumTransac", folTransa);
 		
-		JsonObject transferenciaSPEICreacionResultado = this.speiServicio.transaferenciaSPEICreacion(datosTransfarenciaSPEI );
+		JsonObject transferenciaSPEICreacionResultado = this.speiServicio
+				.transaferenciaSPEICreacion(datosTransfarenciaSPEI );
 		logger.info("- transferenciaSPEICreacionResultado " + transferenciaSPEICreacionResultado);
 		
 		String bitDireIP = solicitud.getHeader("X_Forwarded_For");
@@ -138,10 +138,19 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_CueOri", trsCueOri);
 		datosBitacora.addProperty("Bit_CueDes", trsCueDes);
 		datosBitacora.addProperty("Bit_Monto",  trsMonto);
-		//Bit_PriRef es un dato de prueba
-		datosBitacora.addProperty("Bit_PriRef", "Cuenta: 012180029483065593 ");
-		//Bit_SegRef es un dato de prueba
-		datosBitacora.addProperty("Bit_SegRef", "$3 pesos");
+		//Bit_PriRef es un dato propuesto
+		String bitPriRef = new StringBuilder()
+				.append("Cuenta: ")
+				.append(trsCueDes)
+				.toString();
+		datosBitacora.addProperty("Bit_PriRef", bitPriRef);
+		//Bit_SegRef es un dato propuesto
+		String bitSegRef = new StringBuilder()
+				.append("$")
+				.append(trsMonto)
+				.append(" pesos")
+				.toString();
+		datosBitacora.addProperty("Bit_SegRef", bitSegRef);
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP);
 		datosBitacora.addProperty("NumTransac", folTransa);
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
@@ -155,8 +164,18 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosCuentaDestinoSPEI.addProperty("NumTransac", folTransa);
 		datosCuentaDestinoSPEI.addProperty("FechaSis", fechaSis);
 		
-		JsonObject cuentaDestinoSPEIActivacionResultado = this.cuentaDestinoServicio.cuentaDestinoSPEIActivacion(datosCuentaDestinoSPEI );
+		JsonObject cuentaDestinoSPEIActivacionResultado = this.cuentaDestinoServicio
+				.cuentaDestinoSPEIActivacion(datosCuentaDestinoSPEI );
 		logger.info("- cuentaDestinoSPEIActivacionResultado " + cuentaDestinoSPEIActivacionResultado);
+		
+		JsonObject datosTransferenciaSPEIConsultar = new JsonObject();
+		datosTransferenciaSPEIConsultar.addProperty("Trn_UsuAdm", usuUsuAdm);
+		datosTransferenciaSPEIConsultar.addProperty("Trn_Usuari", usuNumero);
+		datosTransferenciaSPEIConsultar.addProperty("FechaSis", fechaSis);
+		
+		JsonObject  datosTransferenciaSPEIConsultarResultado = this.speiServicio
+				.transaferenciaSPEIConsultar(datosTransferenciaSPEIConsultar);
+		logger.info("- datosTransferenciaSPEIConsultarResultado " + datosTransferenciaSPEIConsultarResultado);
 		
 		JsonObject datosTransferenciaSPEI = new JsonObject();
 		datosTransferenciaSPEI.addProperty("Trs_UsuAdm", usuUsuAdm);
@@ -165,8 +184,6 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		//Trs_Consec es un dato de prueba
 		datosTransferenciaSPEI.addProperty("Trs_Consec", "0000105506");
 		datosTransferenciaSPEI.addProperty("Trs_CueOri", trsCueOri);
-		//Trs_TiCuBe es un dato de prueba
-		datosTransferenciaSPEI.addProperty("Trs_TiCuBe", "40");
 		datosTransferenciaSPEI.addProperty("Trs_CueBen", trsCueDes);
 		datosTransferenciaSPEI.addProperty("Trs_Monto", Double.parseDouble(trsMonto));
 		//Trs_ConPag es un dato de prueba
@@ -178,29 +195,14 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		//Trs_CoCuDe es un dato de prueba
 		datosTransferenciaSPEI.addProperty("Trs_CoCuDe", "0000001815");
 		datosTransferenciaSPEI.addProperty("Trs_TCPDir", bitDireIP);
-		//Trs_TipPag es un dato de prueba
-		datosTransferenciaSPEI.addProperty("Trs_TipPag", "01");
-		//Trs_TipTra es un dato de prueba
-		datosTransferenciaSPEI.addProperty("Trs_TipTra", "I");
-		//Trs_ValFir es un dato de prueba
-		datosTransferenciaSPEI.addProperty("Trs_ValFir", "S");
 		//Ban_Descri es un dato de prueba
 		datosTransferenciaSPEI.addProperty("Ban_Descri", "BBVA BANCOMER");
 		datosTransferenciaSPEI.addProperty("NumTransac", folTransa);
 		datosTransferenciaSPEI.addProperty("FechaSis", fechaSis);
 		
-		JsonObject transferenciaSPEIProcearResultado = this.speiServicio.transaferenciaSPEIProcesar(datosTransferenciaSPEI);
-		logger.info("- transferenciaSPEIProcearResultado " + transferenciaSPEIProcearResultado);
-		
-		JsonObject datosTransferenciaSPEIConsultar = new JsonObject();
-		datosTransferenciaSPEIConsultar.addProperty("Trn_UsuAdm", usuUsuAdm);
-		datosTransferenciaSPEIConsultar.addProperty("Trn_Usuari", usuNumero);
-		//Trn_Status es un dato de prueba
-		datosTransferenciaSPEIConsultar.addProperty("Trn_Status", "A");
-		datosTransferenciaSPEIConsultar.addProperty("FechaSis", fechaSis);
-		
-		JsonObject  datosTransferenciaSPEIConsultarResultado = this.speiServicio.transaferenciaSPEIConsultar(datosTransferenciaSPEIConsultar);
-		logger.info("- datosTransferenciaSPEIConsultarResultado " + datosTransferenciaSPEIConsultarResultado);
+		JsonObject transferenciaSPEIProcesarResultado = this.speiServicio
+				.transaferenciaSPEIProcesar(datosTransferenciaSPEI);
+		logger.info("- transferenciaSPEIProcearResultado " + transferenciaSPEIProcesarResultado);
 		
 		JsonObject datosTransferenciaExitosa = new JsonObject();
 		datosTransferenciaExitosa.addProperty("trnCueOri", trsCueOri);
