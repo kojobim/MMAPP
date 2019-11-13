@@ -23,6 +23,12 @@ public class TransferenciasBIMServicio extends BaseService {
 	private static String CuentaDestinoTransferenciaBIMActivacionOpSucOrigen;
 	private static String CuentaDestinoTransferenciaBIMActivacionOpSucDestino;
 	private static String CuentaDestinoTransferenciaBIMActivacionOpModulo;
+	private static String TransferenciaBIMProcesarOp;
+	private static String TransferenciaBIMProcesarOpTransaccio;
+	private static String TransferenciaBIMProcesarOpUsuario;
+	private static String TransferenciaBIMProcesarOpSucOrigen;
+	private static String TransferenciaBIMProcesarOpSucDestino;
+	private static String TransferenciaBIMProcesarOpModulo;
 	
 	public TransferenciasBIMServicio() {
 		super();
@@ -31,6 +37,7 @@ public class TransferenciasBIMServicio extends BaseService {
 		
 		CuentasOrigenConsultarOp = properties.getProperty("transferencias_bim_servicio.op.cuentas_origen_consultar");
 		CuentaDestinoTransferenciaBIMActivacionOp = properties.getProperty("transferencias_bim_servicio.op.cuentas_destino_transferencia_bim_activacion");
+		TransferenciaBIMProcesarOp = properties.getProperty("transferencias_bim_servicio.op.transferencia_bim_procesar");
 		
 		CuentasOrigenConsultarOpTipConsul = properties.getProperty("op.cuentas_origen_consultar.tip_consul");
 		CuentasOrigenConsultarOpTransaccio = properties.getProperty("op.cuentas_origen_consultar.transaccio");
@@ -44,6 +51,12 @@ public class TransferenciasBIMServicio extends BaseService {
 		CuentaDestinoTransferenciaBIMActivacionOpSucOrigen = properties.getProperty("op.cuentas_origen_consultar.suc_origen");
 		CuentaDestinoTransferenciaBIMActivacionOpSucDestino = properties.getProperty("op.cuentas_origen_consultar.suc_destino");
 		CuentaDestinoTransferenciaBIMActivacionOpModulo = properties.getProperty("op.cuentas_origen_consultar.modulo");
+		
+		TransferenciaBIMProcesarOpTransaccio = properties.getProperty("op.transferencia_bim_procesar.transaccio");
+		TransferenciaBIMProcesarOpUsuario = properties.getProperty("op.transferencia_bim_procesar.usuario");
+		TransferenciaBIMProcesarOpSucOrigen = properties.getProperty("op.transferencia_bim_procesar.suc_origen");
+		TransferenciaBIMProcesarOpSucDestino = properties.getProperty("op.transferencia_bim_procesar.suc_destino");
+		TransferenciaBIMProcesarOpModulo = properties.getProperty("op.transferencia_bim_procesar.modulo");
 	}
 	
 	public JsonObject cuentasOrigenConsultar(JsonObject datosCuentasOrigenConsultar) {
@@ -74,5 +87,21 @@ public class TransferenciasBIMServicio extends BaseService {
 		logger.info("datosCuentasOrigenConsultarOpResultadoObjeto" + datosCuentaDestinoTransferenciaBIMActivacionOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando datosCuentasOrigenConsultar metodo... ");
 		return datosCuentaDestinoTransferenciaBIMActivacionOpResultadoObjeto;
+	}
+	
+	public JsonObject transferenciaBIMProcesar(JsonObject datosTransferenciaBIMProcesar) {
+		logger.info("COMMONS: Comenzando transferenciaBIMProcesar metodo... ");
+		datosTransferenciaBIMProcesar.addProperty("Trb_RFC", "");
+		datosTransferenciaBIMProcesar.addProperty("Trb_IVA", 0.000);
+		datosTransferenciaBIMProcesar.addProperty("Trb_DireIP", "");
+		datosTransferenciaBIMProcesar.addProperty("Transaccio", TransferenciaBIMProcesarOpTransaccio);
+		datosTransferenciaBIMProcesar.addProperty("Usuario", TransferenciaBIMProcesarOpUsuario);
+		datosTransferenciaBIMProcesar.addProperty("SucOrigen", TransferenciaBIMProcesarOpSucOrigen);
+		datosTransferenciaBIMProcesar.addProperty("SucDestino", TransferenciaBIMProcesarOpSucDestino);
+		datosTransferenciaBIMProcesar.addProperty("Modulo", TransferenciaBIMProcesarOpModulo);
+		JsonObject datosTransferenciaBIMProcesarOpResultadoObjeto = Utilerias.performOperacion(TransferenciasBIMServicio, TransferenciaBIMProcesarOp, datosTransferenciaBIMProcesar);
+		logger.info("datosTransferenciaBIMProcesarOpResultadoObjeto" + datosTransferenciaBIMProcesarOpResultadoObjeto);
+		logger.info("COMMONS: Finalizando transferenciaBIMProcesar metodo... ");
+		return datosTransferenciaBIMProcesarOpResultadoObjeto;
 	}
 }

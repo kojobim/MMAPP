@@ -99,4 +99,40 @@ public class TransferenciasBIMServicioTest {
 		
 		logger.info("TEST:  Terminando cuentaDestinoTransferenciaBIMActivacionTestDeberiaSerExitoso metodo");
 	}
+	
+	@Test
+	public void transferenciaBIMProcesarTestDeberiaSerExitoso() {
+		logger.info("TEST:  Comenzando transferenciaBIMProcesarTestDeberiaSerExitoso metodo");
+		
+		JsonObject datosTransferenciaBIMProcesar = new JsonObject();
+		datosTransferenciaBIMProcesar.addProperty("Trb_UsuAdm", "000149");
+		datosTransferenciaBIMProcesar.addProperty("Trb_Usuari", "000149");
+		datosTransferenciaBIMProcesar.addProperty("Trb_Client", "00195171");
+		datosTransferenciaBIMProcesar.addProperty("Trb_Consec", "0000005359");
+		datosTransferenciaBIMProcesar.addProperty("Trb_CueOri", "001951710012");
+		datosTransferenciaBIMProcesar.addProperty("Trb_CueDes", "001944160015");
+		datosTransferenciaBIMProcesar.addProperty("Trb_Monto", 3.0000);
+		datosTransferenciaBIMProcesar.addProperty("Trb_SegRef", "PRUEBA3");
+		datosTransferenciaBIMProcesar.addProperty("Trb_TipTra", "I");
+		datosTransferenciaBIMProcesar.addProperty("Trb_ValFir", "S");
+		datosTransferenciaBIMProcesar.addProperty("NumTransac", "42246927");
+		datosTransferenciaBIMProcesar.addProperty("FechaSis", "2019-05-29 16:55:20");
+		JsonObject resultado = transferenciasBIMServicio.transferenciaBIMProcesar(datosTransferenciaBIMProcesar );
+		logger.info("- resultado " + resultado);
+		
+		assertTrue(resultado.has("transferenciaBIM"));
+		assertTrue(resultado.get("transferenciaBIM").isJsonObject());
+		
+		JsonObject transferenciaBIM = Utilerias.obtenerJsonObjectPropiedad(resultado, "transferenciaBIM");
+		logger.info("- transferenciaBIM " + transferenciaBIM);
+		
+		assertTrue(transferenciaBIM.has("Err_Codigo"));
+		assertTrue(transferenciaBIM.get("Err_Codigo").isJsonPrimitive());
+		
+		String errCodigo = transferenciaBIM.get("Err_Codigo").getAsString();
+		
+		assertTrue("000000".equals(errCodigo));
+		logger.info("TEST:  Terminando transferenciaBIMProcesarTestDeberiaSerExitoso metodo");
+	}
+	
 }
