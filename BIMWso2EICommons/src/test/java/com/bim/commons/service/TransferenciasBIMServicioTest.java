@@ -71,4 +71,32 @@ public class TransferenciasBIMServicioTest {
 		
 		logger.info("TEST:  Terminando cuentasOrigenConsultarTestDeberiaSerExitoso metodo");
 	}
+	
+	@Test
+	public void cuentaDestinoTransferenciaBIMActivacionTestDeberiaSerExitoso() {
+		logger.info("TEST:  Empezando cuentaDestinoTransferenciaBIMActivacionTestDeberiaSerExitoso metodo");
+		
+		JsonObject datosCuentaDestinoTransferenciaBIMActivacion = new JsonObject();
+		datosCuentaDestinoTransferenciaBIMActivacion.addProperty("Cdb_UsuAdm", "000149");
+		datosCuentaDestinoTransferenciaBIMActivacion.addProperty("NumTransac", "42246895");
+		datosCuentaDestinoTransferenciaBIMActivacion.addProperty("FechaSis", "2019-05-29 14:23:41");
+		
+		JsonObject resultado = transferenciasBIMServicio.cuentaDestinoTransferenciaBIMActivacion(datosCuentaDestinoTransferenciaBIMActivacion );
+		logger.info("- resultado " + resultado);
+		
+		assertTrue(resultado.has("cuentaDestinoTransferenciaBIM"));
+		assertTrue(resultado.get("cuentaDestinoTransferenciaBIM").isJsonObject());
+		
+		JsonObject cuentaDestinoTransferenciaBIM = Utilerias.obtenerJsonObjectPropiedad(resultado, "cuentaDestinoTransferenciaBIM");
+		
+		assertTrue(cuentaDestinoTransferenciaBIM.has("Err_Codigo"));
+		assertTrue(cuentaDestinoTransferenciaBIM.get("Err_Codigo").isJsonPrimitive());
+		
+		String errCodigo = Utilerias.obtenerStringPropiedad(cuentaDestinoTransferenciaBIM, "Err_Codigo");
+		
+		assertTrue("000000".equals(errCodigo));
+		
+		
+		logger.info("TEST:  Terminando cuentaDestinoTransferenciaBIMActivacionTestDeberiaSerExitoso metodo");
+	}
 }
