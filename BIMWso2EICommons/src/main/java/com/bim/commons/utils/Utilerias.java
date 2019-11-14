@@ -505,6 +505,8 @@ public class Utilerias {
 	
 	public static JsonArray obtenerJsonArrayResultante(JsonObject resultado, String propiedad) {
 		JsonArray arrayResultante = null;
+		if(!resultado.has(propiedad))
+			return arrayResultante;
 		if(resultado.get(propiedad).isJsonObject()) {
 			JsonObject resultadoObjecto = Utilerias.obtenerJsonObjectPropiedad(resultado, propiedad);
 			arrayResultante = new JsonArray();
