@@ -16,6 +16,7 @@ import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.service.AvisoPrivacidadServicio;
 import com.bim.commons.service.CuentaDestinoServicio;
+import com.bim.commons.service.CuentaServicio;
 import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
@@ -30,6 +31,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 	private CuentaDestinoServicio cuentaDestinoServicio;
 	private TransaccionServicio transaccionServicio;
 	private AvisoPrivacidadServicio avisoPrivacidadServicio;
+	private CuentaServicio cuentaServicio;
 	
 	public UsuarioCtrl() {
 		super();
@@ -37,6 +39,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		this.cuentaDestinoServicio = new CuentaDestinoServicio();
 		this.transaccionServicio = new TransaccionServicio();
 		this.avisoPrivacidadServicio = new AvisoPrivacidadServicio();
+		this.cuentaServicio = new CuentaServicio();
 	}
 
 	@Path("/cuentas-destino-nacionales")
@@ -177,4 +180,47 @@ public class UsuarioCtrl extends BimBaseCtrl {
 				.build();
 	}
 
+	@Path("/cuentas-origen")
+	@GET()
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response cuentasOrigenListado(@Context final Request solicitud) {
+		logger.info("CTRL: Empezando cuentasOrigenListado metodo...");
+
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
+		
+		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
+		String fechaSis = Utilerias.obtenerFechaSis();
+		
+		JsonObject datosCuentasOrigenConsultar = new JsonObject();
+		datosCuentasOrigenConsultar.addProperty("Cor_Usuari", usuNumero);
+		datosCuentasOrigenConsultar.addProperty("FechaSis", fechaSis);
+		
+		JsonObject cuentasOrigenRespuesta = this.cuentaServicio
+				.cuentaOrigenConsultar(datosCuentasOrigenConsultar);
+		logger.info("- cuentasOrigenRespuesta " + cuentasOrigenRespuesta);
+		
+		JsonObject cuentas = Utilerias.obtenerJsonObjectPropiedad(cuentasOrigenRespuesta, "cuentas");
+		
+		JsonArray cuentasOrigen = Utilerias.obtenerJsonArrayResultante(cuentas, "cuenta"); 
+			
+		JsonArray cuentasOrigenArray = new JsonArray();
+		
+		for(JsonElement cuentaOrigenElemento : cuentasOrigen) {
+			JsonObject cuentaOrigenItem = (JsonObject) cuentaOrigenElemento;
+			JsonObject cuentaOrigen = new JsonObject();
+			cuentaOrigen.addProperty("corCuenta", Utilerias.obtenerStringPropiedad(cuentaOrigenItem, "Cor_Cuenta"));
+			cuentaOrigen.addProperty("corCueFor", Utilerias.obtenerStringPropiedad(cuentaOrigenItem, "Cor_CueFor"));
+			cuentaOrigen.addProperty("cueDispon", Utilerias.obtenerDoublePropiedad(cuentaOrigenItem, "Cue_Dispon"));
+			cuentasOrigenArray.add(cuentaOrigen);
+		}
+		
+		JsonObject cuentasOrigenResultado = new JsonObject();
+		cuentasOrigenResultado.add("cuentasOrigen", cuentasOrigenArray);
+
+		logger.info("CTRL: Terminando cuentasOrigenListado metodo...");
+		return Response.ok(cuentasOrigenResultado, MediaType.APPLICATION_JSON)
+				.build();
+	}
 }
