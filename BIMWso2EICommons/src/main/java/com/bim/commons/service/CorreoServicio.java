@@ -65,7 +65,8 @@ public class CorreoServicio {
 	    try {			 
 			MimeMessage mensaje = new MimeMessage(session);
 			mensaje.setFrom(new InternetAddress(Remitente));
-			mensaje.setRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
+			InternetAddress[] address = InternetAddress.parse(destinatario);
+			mensaje.setRecipients(Message.RecipientType.TO, address);
 			mensaje.setSubject(asunto, Charset);
 			mensaje.setContent(cuerpo, ContentType);
         
