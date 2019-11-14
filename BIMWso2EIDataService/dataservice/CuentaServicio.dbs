@@ -33,7 +33,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/cuentaOrigenConsultarNE" element="cuenta">
+        <result defaultNamespace="http://bem.com/cuentaOrigenConsultarNE" element="cuentas" rowName="cuenta">
             <element column="Cor_Cuenta" name="Cor_Cuenta" xsdType="xs:string" optional="true"/>
             <element column="Cor_Produc" name="Cor_Produc" xsdType="xs:string" optional="true"/>
             <element column="Cor_DeCuOr" name="Cor_DeCuOr" xsdType="xs:string" optional="true"/>
