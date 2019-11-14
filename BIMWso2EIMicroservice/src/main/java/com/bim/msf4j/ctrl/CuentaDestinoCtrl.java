@@ -1,5 +1,8 @@
 package com.bim.msf4j.ctrl;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -21,7 +24,6 @@ import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.exceptions.ForbiddenException;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.exceptions.UnauthorizedException;
-import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.service.BitacoraServicio;
 import com.bim.commons.service.ConfiguracionServicio;
 import com.bim.commons.service.CorreoServicio;
@@ -358,6 +360,81 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		
 		logger.info("CTRL: Finalizando altaCuentaDestinoBIM metodo...");
 		return Response.created(null)
+				.build();
+	}
+
+	@Path("/nacionales")
+	@GET
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response obtenerCuentasDestinoNacional(@QueryParam("status") String status, @Context final Request solicitud) {
+		logger.info("CTRL: Comenzando obtenerCuentasDestinoNacional metodo...");
+		
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjeto = Utilerias.obtenerPrincipal(bearerToken);
+		logger.info("principalResultadoObjeto: " + principalResultadoObjeto);
+		
+		if(status == null || status.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.49");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		if(CuentaDestinoEstadosEnum.validarEstado(status) == null) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.52");
+			bimMessageDTO.addMergeVariable("status", status);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		String usuUsuAdm = Utilerias.obtenerStringPropiedad(principalResultadoObjeto, "usuUsuAdm");
+		String usuNumero = Utilerias.obtenerStringPropiedad(principalResultadoObjeto, "usuNumero");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		
+		JsonObject datosCuentaDestinoSPEI = new JsonObject();
+		datosCuentaDestinoSPEI.addProperty("Cds_UsuAdm", usuUsuAdm);
+		datosCuentaDestinoSPEI.addProperty("Cds_Usuari", usuNumero);
+		datosCuentaDestinoSPEI.addProperty("FechaSis", fechaSis);
+		JsonObject cuentaDestinoSPEIConsultarResultado = cuentaDestinoServicio.cuentaDestinoSPEIConsultar(datosCuentaDestinoSPEI);
+		
+		Utilerias.verificarError(cuentaDestinoSPEIConsultarResultado);
+		
+		JsonObject cuentaDestinoSPEIConsultarResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoSPEIConsultarResultado, "cuentasDestino");
+		JsonArray cuentasDestinoArreglo = Utilerias.obtenerJsonArrayPropiedad(cuentaDestinoSPEIConsultarResultadoObjeto, "cuentaDestino");
+		
+		JsonObject resultado = new JsonObject();
+		JsonArray cuentasDestinoNacional = new JsonArray();
+		String cuentaDestinoEstado = CuentaDestinoEstadosEnum.validarEstado(status).toString();
+		
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");	
+		
+		for(JsonElement cuentaDestinoElemento : cuentasDestinoArreglo) {
+			JsonObject cuentaDestinoObjeto = cuentaDestinoElemento.getAsJsonObject();
+			String cdsStatus = Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_Status");
+			String cdsFecAlt = Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_FecAlt");
+			
+			Date fecAlt = null;
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");		
+				fecAlt = sdf.parse(cdsFecAlt);
+			} catch (Exception e) {
+	            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.43");
+				throw new InternalServerException(bimMessageDTO.toString());
+			}
+			
+			if(cdsStatus != null && cdsStatus.equals(cuentaDestinoEstado)) {
+				JsonObject cuentaDestino = new JsonObject();
+				cuentaDestino.addProperty("cpCLABE", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_CLABE"));
+				cuentaDestino.addProperty("cpAlias", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_Alias"));
+				cuentaDestino.addProperty("cpBanco", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_Banco").trim());
+				cuentaDestino.addProperty("cpFecAlt", fecAlt != null ? simpleDateFormat.format(fecAlt) : "");
+				cuentaDestino.addProperty("cpRFCBen", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_RFCBen"));
+				cuentaDestino.addProperty("cpEmaBen", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_EmaBen"));
+				cuentasDestinoNacional.add(cuentaDestino);
+			}
+		}		
+		resultado.add("cuentasDestinoNacional", cuentasDestinoNacional);
+		
+		logger.info("CTRL: Terminando obtenerCuentasDestinoNacional metodo...");
+		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
 	}
 	
