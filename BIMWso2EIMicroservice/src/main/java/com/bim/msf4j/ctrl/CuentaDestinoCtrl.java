@@ -19,11 +19,11 @@ import org.wso2.msf4j.Request;
 import com.bim.commons.dto.BimEmailTemplateDTO;
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.enums.CuentaDestinoEstadosEnum;
+import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.exceptions.ForbiddenException;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.exceptions.UnauthorizedException;
-import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.service.BitacoraServicio;
 import com.bim.commons.service.ConfiguracionServicio;
 import com.bim.commons.service.CorreoServicio;
@@ -47,6 +47,12 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 	private BitacoraServicio bitacoraServicio;
 	private ConfiguracionServicio configuracionServicio;
 	private CorreoServicio correoServicio;
+	
+	private static Integer CuentaDestinoBIMNumeroDigitos;
+	private static String CuentaDestinoBIMStatusActivo;
+	private static String CuentaDestinoBIMStatusPendiente;
+	private static String CuentaDestinoBIMTipConsul;
+	
 	private static Integer CuentaDestinoNumeroDigitos;
 	
 	public CuentaDestinoCtrl() {
@@ -61,7 +67,11 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		this.correoServicio = new CorreoServicio();
 		
 		
-		CuentaDestinoNumeroDigitos = Integer.parseInt(properties.getProperty("cuenta_destino_servicio.numero_digitos"));
+		CuentaDestinoBIMNumeroDigitos = Integer.parseInt(properties.getProperty("cuenta_destino_servicio.numero_digitos"));
+		CuentaDestinoBIMStatusActivo = properties.getProperty("cuenta_destino_servicio.status_activo");
+		CuentaDestinoBIMStatusPendiente = properties.getProperty("cuenta_destino_servicio.status_pendiente");
+		CuentaDestinoBIMTipConsul = properties.getProperty("op.cuenta_destino_bim_consultar.tip_consul.l1");
+		
 		logger.info("CTRL: Finalizando metodo init...");		
 	}
 	
@@ -81,9 +91,9 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 		
-		if(cpCuenta.length() > CuentaDestinoNumeroDigitos || cpCuenta.length() < CuentaDestinoNumeroDigitos) {
+		if(cpCuenta.length() > CuentaDestinoBIMNumeroDigitos || cpCuenta.length() < CuentaDestinoBIMNumeroDigitos) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.50");
-			bimMessageDTO.addMergeVariable("digitos", CuentaDestinoNumeroDigitos.toString());
+			bimMessageDTO.addMergeVariable("digitos", CuentaDestinoBIMNumeroDigitos.toString());
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 		
@@ -129,8 +139,76 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 				.build();
 	}
 	
+	@Path("/BIM")
+	@GET()
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listadoCuentasDestinoBIM(@QueryParam("status") String status, @Context final Request solicitud) {
+		logger.info("CTRL: Comenzando listadoCuentasDestinoBIM metodo...");
+		
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
+		logger.info("- principalResultadoObjecto: " + principalResultadoObjecto);
+		
+		String usuAdm = principalResultadoObjecto.get("usuUsuAdm").getAsString();
+
+		if(status == null || status.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.49");
+            throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		if(CuentaDestinoEstadosEnum.validarEstado(status) == null) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.52");
+			bimMessageDTO.addMergeVariable("status", status);
+            throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		String fechaSis = Utilerias.obtenerFechaSis();
+        
+		JsonObject datosCuentaDestinoBIMConsultar = new JsonObject();
+		datosCuentaDestinoBIMConsultar.addProperty("Cdb_UsuAdm", usuAdm);
+		datosCuentaDestinoBIMConsultar.addProperty("FechaSis", fechaSis);
+		datosCuentaDestinoBIMConsultar.addProperty("Tip_Consul", CuentaDestinoBIMTipConsul);
+		
+		if(status.equals(CuentaDestinoBIMStatusActivo))
+			datosCuentaDestinoBIMConsultar.addProperty("Cdb_Status", "A");
+		
+		if(status.equals(CuentaDestinoBIMStatusPendiente))
+			datosCuentaDestinoBIMConsultar.addProperty("Cdb_Status", "I");
+
+		JsonObject cuentaDestinoBIMConsultarRestultado = this.cuentaDestinoServicio.cuentaDestinoBIMConsultar(datosCuentaDestinoBIMConsultar);
+		
+		Utilerias.verificarError(cuentaDestinoBIMConsultarRestultado);
+		
+		JsonObject cuentaDestinoBIM = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoBIMConsultarRestultado, "cuentaDestinoBIM");
+		logger.info("- cuentaDestinoBIM: " + cuentaDestinoBIM);
+
+		JsonArray cuentasDestinoBIM = Utilerias.obtenerJsonArrayPropiedad(cuentaDestinoBIM, "cuentasDestinoBIM");
+
+		JsonArray cuentasDestinoBIMArray = new JsonArray();
+		JsonObject cuentasDestinoBIMObjeto = new JsonObject();
+		
+		if(cuentaDestinoBIM.has("cuentasDestinoBIM")) {
+			for(JsonElement cuenta : cuentasDestinoBIM) {
+				JsonObject cuentaObjeto = (JsonObject)cuenta;
+				cuentasDestinoBIMObjeto.add("cdbCuenta", cuentaObjeto.get("Cdb_Cuenta"));
+				cuentasDestinoBIMObjeto.add("cdbAlias", cuentaObjeto.get("Cdb_Alias"));
+				cuentasDestinoBIMObjeto.add("cdbFecAlt", cuentaObjeto.get("Cdb_FecAlt"));
+				cuentasDestinoBIMObjeto.add("cdbRFCBen", cuentaObjeto.get("Cdb_RFCBen"));
+				cuentasDestinoBIMObjeto.add("cdbEmaBen", cuentaObjeto.get("Cdb_EmaBen"));
+				cuentasDestinoBIMArray.add(cuentasDestinoBIMObjeto);
+			}
+		}
+		
+		JsonObject resultado = new JsonObject();
+		resultado.add("cuentasDestinoBIM", cuentasDestinoBIMArray);
+		
+		logger.info("CTRL: Terminando listadoCuentasDestinoBIM metodo...");
+		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
+                .build();
+	}
+
 	@Path("/alta-bim")
-	@POST
+	@POST()
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response altaCuentaDestinoBIM(@Context final Request solicitud, JsonObject cuentaDestinoObjeto) {
