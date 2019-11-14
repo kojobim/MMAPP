@@ -302,15 +302,19 @@ public class CuentasCtrl extends BimBaseCtrl {
 		 * normalemente se extraeria del principal con la utileria
 		 * Utilerias.getStringProperty(principal, "usuFolTok");
 		 */
-		String folTok = "416218850";
+		String folTok = "0416218850";
 		logger.info("- folTok " + folTok);
 
 		String bitUsuari = Utilerias.obtenerStringPropiedad(principal, "usuNumero");
 		logger.info("- bitUsuari " + bitUsuari);
 
 		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
+
+		StringBuilder scriptName = new StringBuilder()
+				.append(CuentasCtrl.class.getName())
+				.append(".movimientosRegistro");
 		
-		this.tokenServicio.validarTokenOperacion(folTok, cpRSAToken, bitUsuari, numTransac);
+		this.tokenServicio.validarTokenOperacion(folTok, cpRSAToken, bitUsuari, numTransac, scriptName.toString());
 
 		String fechaSis = Utilerias.obtenerFechaSis();
 		String bitPriRef = Utilerias.obtenerStringPropiedad(principal, "usuClient");

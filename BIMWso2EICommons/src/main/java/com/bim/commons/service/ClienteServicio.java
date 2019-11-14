@@ -49,14 +49,8 @@ public class ClienteServicio extends BaseService {
 	 *	Cli_Numero: String,
 	 *	Cli_Sucurs?: String,
 	 *	Cli_Nombre?: String,
-	 *	Tip_Consul: String,
 	 *	NumTransac?: String,
-	 *	Transaccio: String,
-	 *	Usuario: String,
-	 *	FechaSis: String,
-	 *	SucOrigen: String,
-	 *	SucDestino: String,
-	 *	Modulo: String
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return

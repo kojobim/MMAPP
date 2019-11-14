@@ -48,14 +48,8 @@ public class ReinversionServicio extends BaseService {
 	 * {
 	 *	Fecha: String,
 	 *	NumDia: Integer,
-	 *	FinSem: String,
-	 *	NumTransac: String,
-	 *	Transaccio: String,
-	 *	Usuario: String,
-	 *	FechaSis: String,
-	 *	SucOrigen: String,
-	 *	SucDestino: String,
-	 *	Modulo: String
+	 *	NumTransac?: String,
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return
@@ -71,6 +65,8 @@ public class ReinversionServicio extends BaseService {
 	public JsonObject fechaHabilConsultar(JsonObject datosFechaHabil) {
 		logger.info("COMMONS: Comenzando fechaHabilConsultar metodo...");
 		datosFechaHabil.addProperty("FinSem", FechaHabilConsultarOpFinSem);
+		if(!datosFechaHabil.has("NumTransac"))
+			datosFechaHabil.addProperty("NumTransac", "");
 		datosFechaHabil.addProperty("Transaccio", FechaHabilConsultarOpTransaccio);
 		datosFechaHabil.addProperty("Usuario", FechaHabilConsultarOpUsuari);
 		datosFechaHabil.addProperty("SucOrigen", FechaHabilConsultarOpSucOrigen);

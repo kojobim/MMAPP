@@ -85,7 +85,6 @@ public class CuentaDestinoServicio extends BaseService {
     private static String CuentaDestinoSPEICreacionOpSucOrigen;
     private static String CuentaDestinoSPEICreacionOpSucDestino;
     private static String CuentaDestinoSPEICreacionOpModulo;
-
 	public CuentaDestinoServicio() {
 		super();
 
@@ -97,8 +96,8 @@ public class CuentaDestinoServicio extends BaseService {
         CuentaDestinoBIMActualizacionOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_bim_actualizacion");
         CuentaDestinoSPEIActualizacionOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_spei_actualizacion");
         CuentasEspecialesConsultarOp = properties.getProperty("cuenta_destino_servicio.op.cuentas_especiales_consultar");
-        CuentaDestinoBIMCreacionOp = properties.getProperty("cuenta_destino_servicio.op.cuentas_destino_bim_creacion");
-        CuentaDestinoProcesarOp = properties.getProperty("cuenta_destino_servicio.op.cuentas_destino_procesar");
+        CuentaDestinoBIMCreacionOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_bim_creacion");
+        CuentaDestinoProcesarOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_procesar");
         CuentaDestinoBIMConsultarOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_bim_consultar");
         CuentaDestinoSPEICreacionOp = properties.getProperty("cuenta_destino_servicio.op.cuentas_destino_spei_creacion");
 
@@ -183,7 +182,6 @@ public class CuentaDestinoServicio extends BaseService {
      * {
      *	Cds_UsuAdm: String,
      *	NumTransac: String,
-     *	Transaccio: String,
      *	FechaSis: String
      * }
      * </pre>
@@ -221,9 +219,7 @@ public class CuentaDestinoServicio extends BaseService {
      *	Cds_Usuari: String,
      *	Cds_Consec?: String,
      *	Cds_CLABE?: String,
-     *	Tip_Consul: String,
      *	NumTransac?: String,
-     *	Transaccio: String,
      *	FechaSis: String
      * }
      * </pre>
@@ -285,14 +281,8 @@ public class CuentaDestinoServicio extends BaseService {
      * {
      *	Ins_Clave?: String,
      *	Ins_Descri?: String,
-     *	Tip_Consul: String,
      *	NumTransac?: String,
-     *	Transaccio: String,
-     *	Usuario: String,
-     *	FechaSis: String,
-     *	SucOrigen: String,
-     *	SucDestino: String,
-     *	Modulo: String
+     *	FechaSis: String
      * }
      * </pre>
      * @return
@@ -338,14 +328,8 @@ public class CuentaDestinoServicio extends BaseService {
      *  Cdb_UsuAdm: String,
      *  Cdb_Cuenta: String,
      *  Cdb_Random: String,
-     *  Tip_Actual: String,
      *  NumTransac?: String,
-     *	Transaccio: String,
-     *	Usuario: String,
-     *	FechaSis: String,
-     *	SucOrigen: String,
-     *	SucDestino: String,
-     *	Modulo: String
+     *	FechaSis: String
      * }
      * </pre>
      * @return
@@ -390,12 +374,7 @@ public class CuentaDestinoServicio extends BaseService {
      * 	Cds_Randoms: String,
      *  Tip_Actual: String,
      *  NumTransac?: String,
-     *	Transaccio: String,
-     *	Usuario: String,
-     *	FechaSis: String,
-     *	SucOrigen: String,
-     *	SucDestino: String,
-     *	Modulo: String
+     *	FechaSis: String
      * }
      * </pre>
      * @return
@@ -436,14 +415,8 @@ public class CuentaDestinoServicio extends BaseService {
      * 	Ces_Tarjet?: String,
      * 	Ces_Usuari?: String,
      *  Ser_Numero?: String,
-     *  Tip_Consul: String,
      *  NumTransac?: String,
-     *	Transaccio: String,
-     *	Usuario: String,
-     *	FechaSis: String,
-     *	SucOrigen: String,
-     *	SucDestino: String,
-     *	Modulo: String
+     *	FechaSis: String
      * }
      * </pre>
      * @return
@@ -499,12 +472,7 @@ public class CuentaDestinoServicio extends BaseService {
      *  Cdb_RFCBen: String,
      *  Cdb_EmaBen: String,
      *  NumTransac?: String,
-     *	Transaccio: String,
-     *	Usuario: String,
-     *	FechaSis: String,
-     *	SucOrigen: String,
-     *	SucDestino: String,
-     *	Modulo: String
+     *	FechaSis: String
      * }
      * </pre>
      * @return
@@ -556,17 +524,16 @@ public class CuentaDestinoServicio extends BaseService {
      * 	Cud_Banco: String,
      * 	Tip_Proces: String,
      *  NumTransac?: String,
-     *	Transaccio: String,
-     *	Usuario: String,
-     *	FechaSis: String,
-     *	SucOrigen: String,
-     *	SucDestino: String,
-     *	Modulo: String
+     *	FechaSis: String
      * }
      * </pre>
      * @return
-     * 
-     */
+	 * <pre>
+	 * { 
+	 * 	REQUEST_STATUS: String
+	 * }
+	 * </pre>
+	 */
     public JsonObject cuentaDestinoProcesar(JsonObject datosCuentaDestinoProcesar) {
     	logger.info("COMMONS: Comenzando cuentaDestinoBIMCreacion...");
     	if(!datosCuentaDestinoProcesar.has("Cud_UsuAdm"))
@@ -600,14 +567,8 @@ public class CuentaDestinoServicio extends BaseService {
      * 	Cdb_Usuari: String,
      * 	Cdb_Cuenta: String,
      * 	Cdb_Status: String,
-     * 	Tip_Consul: String,
      *  NumTransac?: String,
-     *	Transaccio: String,
-     *	Usuario: String,
-     *	FechaSis: String,
-     *	SucOrigen: String,
-     *	SucDestino: String,
-     *	Modulo: String
+     *	FechaSis: String
      * }
      * </pre>
      * @return
@@ -626,10 +587,11 @@ public class CuentaDestinoServicio extends BaseService {
         if(!datosCuentaDestinoBIMConsultar.has("Cdb_Status"))
             datosCuentaDestinoBIMConsultar.addProperty("Cdb_Status", "");
         if(!datosCuentaDestinoBIMConsultar.has("Tip_Consul"))
-            datosCuentaDestinoBIMConsultar.addProperty("Tip_Consul", "");
+            datosCuentaDestinoBIMConsultar.addProperty("Tip_Consul", CuentaDestinoBIMConsultarOpTipConsul);
         if(!datosCuentaDestinoBIMConsultar.has("NumTransac"))
             datosCuentaDestinoBIMConsultar.addProperty("NumTransac", "");
-        datosCuentaDestinoBIMConsultar.addProperty("Transaccio", CuentaDestinoBIMConsultarOpTransaccio);
+        if(!datosCuentaDestinoBIMConsultar.has("Transaccio"))
+        	datosCuentaDestinoBIMConsultar.addProperty("Transaccio", CuentaDestinoBIMConsultarOpTransaccio);
         datosCuentaDestinoBIMConsultar.addProperty("Usuario", CuentaDestinoBIMConsultarOpUsuario);
     	datosCuentaDestinoBIMConsultar.addProperty("SucOrigen", CuentaDestinoBIMConsultarOpSucOrigen);
     	datosCuentaDestinoBIMConsultar.addProperty("SucDestino", CuentaDestinoBIMConsultarOpSucDestino);

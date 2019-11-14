@@ -21,6 +21,7 @@ import org.stringtemplate.v4.ST;
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.dto.BimEmailTemplateDTO;
 import com.bim.commons.dto.RequestDTO;
+import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.exceptions.UnauthorizedException;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -493,5 +494,12 @@ public class Utilerias {
 	
 	public static JsonObject fromJsonObject(String data) {
 		return new Gson().fromJson(data, JsonObject.class);
+	}
+	
+	public static void verificarError(JsonObject resultado) {
+		if(resultado.has("Fault") ) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("COMMONS.500");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
 	}
 }

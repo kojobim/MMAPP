@@ -63,12 +63,7 @@ public class TokenServicio extends BaseService {
 	 * {
 	 * 	Tov_Serie: String,
 	 * 	NumTransac?: String,
-	 *	Transaccio: String, 
-	 *	Usuario: String,
-	 *	FechaSis: String, 
-	 *	SucOrigen: String, 
-	 *	SucDestino: String, 
-	 *	Modulo: String 
+	 *	FechaSis: String
 	 * }
 	 * </pre>
 	 * @return 
@@ -102,12 +97,12 @@ public class TokenServicio extends BaseService {
 	 * @return
 	 * String
 	 */
-    public String validarTokenOperacion(String tokFolio, String cpRSAToken, String tokUsuari, String numTransac) {
+    public String validarTokenOperacion(String tokFolio, String cpRSAToken, String tokUsuari, String numTransac, String scriptName) {
 		logger.info("COMMONS: Comenzando validarTokenOperacion metodo...");
 		
 		String fechaSis = Utilerias.obtenerFechaSis();
-		String clave = "0" + tokFolio + cpRSAToken;
-		String validaToken = Racal.validaTokenOpera(clave);
+		String clave = tokFolio + cpRSAToken;
+		String validaToken = Racal.validaTokenOpera(clave, scriptName);
 		String tipActual = !"00".equals(validaToken) ? "2" : "1";
 		String usuStatus = !"00".equals(validaToken) ? "C" : "A";
 
