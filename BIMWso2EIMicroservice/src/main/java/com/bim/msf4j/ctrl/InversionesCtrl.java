@@ -506,7 +506,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		if ("PAGARE".equals(categoria)) {
 			datosInversion.addProperty("Inv_Usuari", usuNumero);
 			datosInversion.addProperty("NumTransac", numTransac);
-			this.inversionesServicio.inversionesPagareNumeroUsuarioObtener(datosInversion);
+			inversionConsultarOpResultadoObjeto = this.inversionesServicio.inversionesPagareNumeroUsuarioObtener(datosInversion);
 		} else {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.27");
 			throw new BadRequestException(bimMessageDTO.toString());
