@@ -57,6 +57,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 	private UsuarioServicio usuarioServicio;
 	private ReinversionServicio reinversionServicio;
 	private TasaServicio tasaServicio;
+	private CorreoServicio correoServicio;
 
 	private static String InversionesFilterBy;
 	private static Integer InversionesMaximoPagina;
@@ -72,6 +73,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		this.usuarioServicio = new UsuarioServicio();
 		this.reinversionServicio = new ReinversionServicio();
 		this.tasaServicio = new TasaServicio();
+		this.correoServicio = new CorreoServicio();
 		
 		
 		InversionesFilterBy = properties.getProperty("inversiones_servicio.filter_by");
@@ -483,7 +485,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		/**
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
 		 */
-		String usuFolTok = "416218850";
+		String usuFolTok = "0416218850";
 		
 		String bitPriRef = solicitud.getHeader("User-Agent");
 		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
@@ -673,7 +675,12 @@ public class InversionesCtrl extends BimBaseCtrl {
 		 */
 
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(renovarInversion, "cpRSAToken");
-		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac);
+
+		StringBuilder scriptName = new StringBuilder()
+				.append(InversionesCtrl.class.getName())
+				.append(".reinversion");
+
+		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac, scriptName.toString());
 
 		if ("B".equals(validarToken)) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
@@ -949,16 +956,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		emailTemplateDTO.addMergeVariable("Str_Verifi5", strVerifi5);
 		String cuerpo = Utilerias.obtenerMensajePlantilla(emailTemplateDTO);
 
-		CorreoServicio correoServicio;
-		try {
-			logger.info("Iniciando envio de comprobante...");
-			correoServicio = new CorreoServicio();
-			correoServicio.enviarCorreo(usuEmail, asunto, cuerpo);
-			logger.info("Terminando envio de comprobante...");
-		} catch (Exception e) {
-            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.42");
-			throw new InternalServerException(bimMessageDTO.toString());
-		}
+		correoServicio.enviarCorreo(usuEmail, asunto, cuerpo);
 
 		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 				.build();

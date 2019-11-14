@@ -79,7 +79,6 @@ public class CuentaDestinoServicio extends BaseService {
     private static String CuentasEspecialesConsultarOpSucOrigen;
     private static String CuentasEspecialesConsultarOpSucDestino;
     private static String CuentasEspecialesConsultarOpModulo;
-
 	public CuentaDestinoServicio() {
 		super();
 
@@ -91,8 +90,8 @@ public class CuentaDestinoServicio extends BaseService {
         CuentaDestinoBIMActualizacionOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_bim_actualizacion");
         CuentaDestinoSPEIActualizacionOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_spei_actualizacion");
         CuentasEspecialesConsultarOp = properties.getProperty("cuenta_destino_servicio.op.cuentas_especiales_consultar");
-        CuentaDestinoBIMCreacionOp = properties.getProperty("cuenta_destino_servicio.op.cuentas_destino_bim_creacion");
-        CuentaDestinoProcesarOp = properties.getProperty("cuenta_destino_servicio.op.cuentas_destino_procesar");
+        CuentaDestinoBIMCreacionOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_bim_creacion");
+        CuentaDestinoProcesarOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_procesar");
         CuentaDestinoBIMConsultarOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_bim_consultar");
         CuentaDestinoBIMConsultarL1Op = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_bim_consultar_l1");
         		
@@ -155,8 +154,13 @@ public class CuentaDestinoServicio extends BaseService {
         CuentasEspecialesConsultarOpSucOrigen = properties.getProperty("op.cuentas_especiales_consultar.suc_origen");
         CuentasEspecialesConsultarOpSucDestino = properties.getProperty("op.cuentas_especiales_consultar.suc_destino");
         CuentasEspecialesConsultarOpModulo = properties.getProperty("op.cuentas_especiales_consultar.modulo");
-
-	}
+        
+        CuentaDestinoBIMCreacionOpTransaccio = properties.getProperty("op.cuenta_destino_bim_creacion.transaccio");
+        CuentaDestinoBIMCreacionOpUsuario = properties.getProperty("op.cuenta_destino_bim_creacion.usuario");
+        CuentaDestinoBIMCreacionOpSucOrigen = properties.getProperty("op.cuenta_destino_bim_creacion.suc_origen");
+        CuentaDestinoBIMCreacionOpSucDestino = properties.getProperty("op.cuenta_destino_bim_creacion.suc_destino");
+        CuentaDestinoBIMCreacionOpModulo = properties.getProperty("op.cuenta_destino_bim_creacion.modulo");
+    }
 	
 	/**
      * Método de activación de cuentas destino para transferencias SPEI

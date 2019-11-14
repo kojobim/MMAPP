@@ -267,7 +267,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
 		 * String usuFolTok = principalResultadoObjecto.get("usuFolTok").getAsString();
 		 */
-		String usuFolTok = "416218850";
+		String usuFolTok = "0416218850";
 		
 		JsonObject usuarioResultado = new JsonObject();
 		usuarioResultado.addProperty("usuClave", usuClave);
