@@ -139,7 +139,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 				.build();
 	}
 	
-	@Path("/BIM")
+	@Path("/bim")
 	@GET()
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listadoCuentasDestinoBIM(@QueryParam("status") String status, @Context final Request solicitud) {
