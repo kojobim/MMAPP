@@ -48,6 +48,7 @@
             <element column="Cli_ComOrd" name="Cli_ComOrd" xsdType="xs:string" optional="true"/>
             <element column="Pat_Codigo" name="Pat_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Pat_Consec" name="Pat_Consec" xsdType="xs:integer" optional="true"/>
+            <element column="Cdb_CueFor" name="Cdb_CueFor" xsdType="xs:string" optional="true"/>
         </result>
     </query>
     <query id="cuentaDestinoBIMCreacionSQL" useConfig="BIMDB">
