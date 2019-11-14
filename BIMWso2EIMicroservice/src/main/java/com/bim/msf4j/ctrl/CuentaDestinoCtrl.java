@@ -520,7 +520,6 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
 
-		String tipProces = "F";		
 		JsonObject datosCuentaDestinoSPEI = new JsonObject();
 		datosCuentaDestinoSPEI.addProperty("Cds_UsuAdm", usuUsuAdm);
 		datosCuentaDestinoSPEI.addProperty("Cds_CLABE", cdsCLABE);
@@ -538,6 +537,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		logger.info("cuentaDestinoSPEICreacionResultado  " + cuentaDestinoSPEICreacionResultado);
 		
 		//tipProces = "f" dato en duro, pendiende de validar
+		String tipProces = "F";
 		JsonObject datosCuentaDestinoProcesar = new JsonObject();
 		datosCuentaDestinoProcesar.addProperty("Cud_UsuAdm", usuUsuAdm);
 		datosCuentaDestinoProcesar.addProperty("Cud_CLABE", cdsCLABE);
