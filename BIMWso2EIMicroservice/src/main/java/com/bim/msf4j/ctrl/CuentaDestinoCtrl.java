@@ -525,7 +525,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosCuentaDestinoSPEI.addProperty("Cds_UsuAdm", usuUsuAdm);
 		datosCuentaDestinoSPEI.addProperty("Cds_CLABE", cdsCLABE);
 		datosCuentaDestinoSPEI.addProperty("Cds_Banco", cdsBanco);
-		datosCuentaDestinoSPEI.addProperty("Cds_CliUsu",usuClient);//pendiente validar
+		datosCuentaDestinoSPEI.addProperty("Cds_CliUsu",usuClient);
 		datosCuentaDestinoSPEI.addProperty("Cds_Alias", cdsAlias);
 		datosCuentaDestinoSPEI.addProperty("Cds_RFCBen", cdsRFCBen);
 		datosCuentaDestinoSPEI.addProperty("Cds_EmaBen", cdsEmaBen);
@@ -537,6 +537,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		JsonObject cuentaDestinoSPEICreacionResultado = this.cuentaDestinoServicio.cuentaDestinoSPEICreacion(datosCuentaDestinoSPEI);
 		logger.info("cuentaDestinoSPEICreacionResultado  " + cuentaDestinoSPEICreacionResultado);
 		
+		//tipProces = "f" dato en duro, pendiende de validar
 		JsonObject datosCuentaDestinoProcesar = new JsonObject();
 		datosCuentaDestinoProcesar.addProperty("Cud_UsuAdm", usuUsuAdm);
 		datosCuentaDestinoProcesar.addProperty("Cud_CLABE", cdsCLABE);
