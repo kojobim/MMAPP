@@ -2,15 +2,15 @@ package com.bim.commons.enums;
 
 public enum CuentaDestinoEstadosEnum {
     
-    ACTIVO, PENDIENTE;
+    A, I;
 
     public static CuentaDestinoEstadosEnum validarEstado(String estado) {
         switch(estado) {
             case "ACTIVO":
-                return CuentaDestinoEstadosEnum.ACTIVO;
+                return CuentaDestinoEstadosEnum.A;
 
             case "PENDIENTE":
-                return CuentaDestinoEstadosEnum.PENDIENTE;
+                return CuentaDestinoEstadosEnum.I;
 
             default:
                 return null;
