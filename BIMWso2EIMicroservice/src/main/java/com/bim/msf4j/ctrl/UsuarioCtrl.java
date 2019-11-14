@@ -193,7 +193,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		String bearerToken = solicitud.getHeader("Authorization");
 		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
 		
-		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
+		String usuNumero = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuNumero");
 		String fechaSis = Utilerias.obtenerFechaSis();
 		
 		JsonObject datosCuentasOrigenConsultar = new JsonObject();
@@ -242,12 +242,8 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		String fechaSis = Utilerias.obtenerFechaSis();
 		
 		JsonObject datosCuentaDestinoBIMConsultar = new JsonObject();
-//		datosCuentaDestinoBIMConsultar.addProperty("Cdb_UsuAdm", usuUseAdm);
-		//Cdb_UsuAdm es un dato de prueba
-		datosCuentaDestinoBIMConsultar.addProperty("Cdb_UsuAdm", "000149");
-//		datosCuentaDestinoBIMConsultar.addProperty("Cdb_Usuari", usuNumero);
-		//Cdb_Usuari es un dato de prueba
-		datosCuentaDestinoBIMConsultar.addProperty("Cdb_Usuari", "000149");
+		datosCuentaDestinoBIMConsultar.addProperty("Cdb_UsuAdm", usuUseAdm);
+		datosCuentaDestinoBIMConsultar.addProperty("Cdb_Usuari", usuNumero);
 		datosCuentaDestinoBIMConsultar.addProperty("FechaSis", fechaSis);
 		datosCuentaDestinoBIMConsultar.addProperty("Tip_Consul", CuentaDestinoBIMConsultarTipConsulL2);
 		JsonObject  datosCuentaDestinoBIMConsultarResultado = this.cuentaDestinoServicio.cuentaDestinoBIMConsultar(datosCuentaDestinoBIMConsultar );
