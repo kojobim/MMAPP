@@ -354,7 +354,6 @@ public class CuentaDestinoServicioTest {
 		datosCuentaDestinoProcesar.addProperty("Cud_UsuAdm", "000149");
 		datosCuentaDestinoProcesar.addProperty("Cud_CLABE", "012180001457899904");
 		datosCuentaDestinoProcesar.addProperty("Cud_Banco", "40012");
-		datosCuentaDestinoProcesar.addProperty("Tip_Proces", "F");
 		datosCuentaDestinoProcesar.addProperty("NumTransac", "42623901");
 		datosCuentaDestinoProcesar.addProperty("FechaSis", fechaSis);
 		

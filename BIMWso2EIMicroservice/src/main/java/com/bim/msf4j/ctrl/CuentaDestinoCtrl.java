@@ -478,6 +478,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 				.append(".altaCuentaDestinoNacional");
 		
 		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
+		Utilerias.verificarError(folioTransaccionGenerarOpResultadoObjeto);
 		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
 
 		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarOpResultadoObjeto, "transaccion");
@@ -504,6 +505,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("FechaSis", fechaSis);
 
 		JsonObject bitacoraCreacionOpResultadoObjeto = this.bitacoraServicio.creacionBitacora(datosBitacora);
+		Utilerias.verificarError(folioTransaccionGenerarOpResultadoObjeto);
 		logger.info("bitacoraCreacionOpResultadoObjeto" + bitacoraCreacionOpResultadoObjeto);
 		
 		String uuid = java.util.UUID.randomUUID().toString();
@@ -534,19 +536,18 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosCuentaDestinoSPEI.addProperty("FechaSis", fechaSis);
 		
 		JsonObject cuentaDestinoSPEICreacionResultado = this.cuentaDestinoServicio.cuentaDestinoSPEICreacion(datosCuentaDestinoSPEI);
+		Utilerias.verificarError(folioTransaccionGenerarOpResultadoObjeto);
 		logger.info("cuentaDestinoSPEICreacionResultado  " + cuentaDestinoSPEICreacionResultado);
 		
-		//tipProces = "f" dato en duro, pendiende de validar
-		String tipProces = "F";
 		JsonObject datosCuentaDestinoProcesar = new JsonObject();
 		datosCuentaDestinoProcesar.addProperty("Cud_UsuAdm", usuUsuAdm);
 		datosCuentaDestinoProcesar.addProperty("Cud_CLABE", cdsCLABE);
 		datosCuentaDestinoProcesar.addProperty("Cud_Banco", cdsBanco);
-		datosCuentaDestinoProcesar.addProperty("Tip_Proces",tipProces);//pendiente validar
 		datosCuentaDestinoProcesar.addProperty("NumTransac", numTransac);
 		datosCuentaDestinoProcesar.addProperty("FechaSis", fechaSis);
 		
 		JsonObject cuentaDestinoProcesarResultado = this.cuentaDestinoServicio.cuentaDestinoProcesar(datosCuentaDestinoProcesar);
+		logger.info("cuentaDestinoSPEICreacionResultado  " + cuentaDestinoSPEICreacionResultado);
 		logger.info("cuentaDestinoProcesarResultado  " + cuentaDestinoProcesarResultado);
 		
 		JsonObject datosCuentaDestinoSPEIAct = new JsonObject();
@@ -555,12 +556,14 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosCuentaDestinoSPEIAct.addProperty("FechaSis", fechaSis);
 		
 		JsonObject cuentaDestinoSPEIActivacionResultado = this.cuentaDestinoServicio.cuentaDestinoSPEIActivacion(datosCuentaDestinoSPEIAct);
+		logger.info("cuentaDestinoProcesarResultado  " + cuentaDestinoSPEIActivacionResultado);
 		logger.info("cuentaDestinoSPEIActivacionResultado  " + cuentaDestinoSPEIActivacionResultado);
 
 		JsonObject datosConfiguracion = new JsonObject();
 		datosConfiguracion.addProperty("FechaSis", fechaSis);
 
 		JsonObject configuracionBancoConsultarDetalleResultado = this.configuracionServicio.configuracionBancoConsultarDetalle(datosConfiguracion);
+		logger.info("cuentaDestinoProcesarResultado  " + configuracionBancoConsultarDetalleResultado);
 		JsonObject configuracionesBanco = Utilerias.obtenerJsonObjectPropiedad(configuracionBancoConsultarDetalleResultado, "configuracionesBanco");
 		JsonArray configuracionBanco = Utilerias.obtenerJsonArrayPropiedad(configuracionesBanco, "configuracionBanco");
 		String parMiCuDe = Utilerias.obtenerStringPropiedad(configuracionBanco.get(0).getAsJsonObject(), "Par_MiCuDe");

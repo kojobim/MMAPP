@@ -70,6 +70,7 @@ public class CuentaDestinoServicio extends BaseService {
     private static String CuentaDestinoBIMConsultarOpSucOrigen;
     private static String CuentaDestinoBIMConsultarOpSucDestino;
     private static String CuentaDestinoBIMConsultarOpModulo;
+    private static String CuentaDestinoProcesarOpTipProces;
     private static String CuentaDestinoProcesarOpTransaccio;
     private static String CuentaDestinoProcesarOpUsuario;
     private static String CuentaDestinoProcesarOpSucOrigen;
@@ -143,7 +144,8 @@ public class CuentaDestinoServicio extends BaseService {
         CuentaDestinoBIMConsultarOpSucOrigen = properties.getProperty("op.cuenta_destino_bim_consultar.suc_origen");
         CuentaDestinoBIMConsultarOpSucDestino = properties.getProperty("op.cuenta_destino_bim_consultar.suc_destino");
         CuentaDestinoBIMConsultarOpModulo = properties.getProperty("op.cuenta_destino_bim_consultar.modulo");
-        
+
+        CuentaDestinoProcesarOpTipProces = properties.getProperty("op.cuenta_destino_procesar.tip_proces");
         CuentaDestinoProcesarOpTransaccio = properties.getProperty("op.cuenta_destino_procesar.transaccio");
         CuentaDestinoProcesarOpUsuario = properties.getProperty("op.cuenta_destino_procesar.usuario");
         CuentaDestinoProcesarOpSucOrigen = properties.getProperty("op.cuenta_destino_procesar.suc_origen");
@@ -543,6 +545,7 @@ public class CuentaDestinoServicio extends BaseService {
     		datosCuentaDestinoProcesar.addProperty("Tip_Proces", "");
         if(!datosCuentaDestinoProcesar.has("NumTransac"))
             datosCuentaDestinoProcesar.addProperty("NumTransac", "");
+        datosCuentaDestinoProcesar.addProperty("Transaccio", CuentaDestinoProcesarOpTipProces);
         datosCuentaDestinoProcesar.addProperty("Transaccio", CuentaDestinoProcesarOpTransaccio);
         datosCuentaDestinoProcesar.addProperty("Usuario", CuentaDestinoProcesarOpUsuario);
     	datosCuentaDestinoProcesar.addProperty("SucOrigen", CuentaDestinoProcesarOpSucOrigen);
