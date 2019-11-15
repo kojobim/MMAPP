@@ -222,7 +222,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		/**
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
 		 */
-		String usuFolTok = "0416218850";
+		String usuFolTok = "0416218854";
 		
 		JsonObject altaCuentaDestinoBim = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoObjeto, "altaCuentaDestinoBim");
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cpRSAToken");
@@ -457,7 +457,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		/**
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
 		 */
-		String usuFolTok = "0416218850";
+		String usuFolTok = "0416218854";
 		
 		JsonObject altaCuentaDestinoBim = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoObjeto, "altaCuentaDestinoNacional");
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cpRSAToken");
