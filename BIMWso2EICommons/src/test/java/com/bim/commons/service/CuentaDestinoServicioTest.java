@@ -354,7 +354,6 @@ public class CuentaDestinoServicioTest {
 		datosCuentaDestinoProcesar.addProperty("Cud_UsuAdm", "000149");
 		datosCuentaDestinoProcesar.addProperty("Cud_CLABE", "012180001457899904");
 		datosCuentaDestinoProcesar.addProperty("Cud_Banco", "40012");
-		datosCuentaDestinoProcesar.addProperty("Tip_Proces", "F");
 		datosCuentaDestinoProcesar.addProperty("NumTransac", "42623901");
 		datosCuentaDestinoProcesar.addProperty("FechaSis", fechaSis);
 		
@@ -459,5 +458,59 @@ public class CuentaDestinoServicioTest {
 		
 		
 		logger.info("TEST: Finalizando cuentasDestinoBIMConsultarTestDeberiaSerExitoso método...");
+	}
+
+	@Test
+	public void cuentaDestinoSPEICreacionTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando cuentaDestinoSPEICreacionTestDeberiaSerExitoso método...");
+		
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosCuentaDestinoSPEI = new JsonObject();
+		datosCuentaDestinoSPEI.addProperty("Cds_UsuAdm", "000149");
+		datosCuentaDestinoSPEI.addProperty("Cds_CLABE", "012180001457899904");
+		datosCuentaDestinoSPEI.addProperty("Cds_Banco", "40012");
+		datosCuentaDestinoSPEI.addProperty("Cds_CliUsu", "00195171");
+		datosCuentaDestinoSPEI.addProperty("Cds_Alias", "ALIAS");
+		datosCuentaDestinoSPEI.addProperty("Cds_RFCBen", "RFC");
+		datosCuentaDestinoSPEI.addProperty("Cds_EmaBen", "y.duran@bim.mx");
+		datosCuentaDestinoSPEI.addProperty("Cds_DesAdi", "REFERENCIA");
+		datosCuentaDestinoSPEI.addProperty("Cds_Random", "0308C7D06B148A94B1652941B28B9F96");
+		datosCuentaDestinoSPEI.addProperty("NumTransac", "42623901");
+		datosCuentaDestinoSPEI.addProperty("FechaSis", fechaSis);
+		
+		/**
+		 * Mock
+		 * 
+		 * String json = "{\"cuentaDestino\":{\"Err_Codigo\":\"000002\",\"Err_Mensaj\":\"La cuenta SPEI ya existe para este usuario\"}}";
+		 * JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 * 
+		 * cuando cambias Cds_CLABE por 012180001457899994
+		 * String json = "{\"cuentaDestino\":{\"Err_Codigo\":\"000004\",\"Err_Mensaj\":\"Error en el dígito verificador de la cuenta destino\",\"Err_Variab\":\"Cdp_Usuari\"}}";
+		 * JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 * 
+		 * cuando cambias Cds_CLABE por 012180001457899994 y Cds_Banco por 40092
+		 * String json = "{\"cuentaDestino\":{\"Err_Codigo\":\"000003\",\"Err_Mensaj\":\"La Cuenta no coincide con el banco receptor\",\"Err_Foco\":\"Cds_UsuAdm\"}}";
+		 * JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+		
+		/**
+		 * Test
+		 */
+		
+		JsonObject resultado = cuentaDestinoServicio.cuentaDestinoSPEICreacion(datosCuentaDestinoSPEI);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad cuentaDestino", resultado.has("cuentaDestino"));
+		assertTrue("La propiedad cuentaDestino no es un JsonObject", resultado.get("cuentaDestino").isJsonObject());
+		
+		JsonObject cuentaDestino = Utilerias.obtenerJsonObjectPropiedad(resultado, "cuentaDestino");
+		
+		if(!resultado.get("cuentaDestino").isJsonNull()) {
+			assertTrue("La propiedad Cue_Numero no se encuentra en cuentaDestino", cuentaDestino.has("Err_Codigo"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentaDestino", cuentaDestino.has("Err_Mensaj"));
+		} else
+			assertNotNull("la propiedad cuentaDestino es nula", cuentaDestino);
+		
+		logger.info("TEST: Finalizando cuentaDestinoSPEICreacionTestDeberiaSerExitoso método...");
 	}
 }

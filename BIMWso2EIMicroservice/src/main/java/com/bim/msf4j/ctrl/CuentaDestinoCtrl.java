@@ -139,7 +139,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 				.build();
 	}
 	
-	@Path("/BIM")
+	@Path("/bim")
 	@GET()
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listadoCuentasDestinoBIM(@QueryParam("status") String status, @Context final Request solicitud) {
@@ -437,7 +437,170 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
 	}
-	
+
+	@Path("/alta-nacionales")
+	@POST()
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response altaCuentaDestinoNacional(@Context final Request solicitud, JsonObject cuentaDestinoObjeto) {
+		logger.info("CTRL: Comenzando altaCuentaDestinoNacional metodo...");
+		
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
+		
+		String usuNumero = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuNumero");
+		String usuUsuAdm = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuUsuAdm");
+		String usuClient = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuClient");
+		String usuNombre = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuNombre");
+		String usuEmail = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuEmail");
+		// String usuFolTok = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuFolTok");
+		/**
+		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
+		 */
+		String usuFolTok = "0416218850";
+		
+		JsonObject altaCuentaDestinoBim = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoObjeto, "altaCuentaDestinoNacional");
+		String cpRSAToken = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cpRSAToken");
+		String cdsCLABE = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cdsCLABE");
+		String cdsBanco = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cdsBanco");
+		String cdsAlias = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cdsAlias");
+		String cdsRFCBen = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cdsRFCBen");
+		String cdsEmaBen = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cdsEmaBen");
+		String cdsDesAdi = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cdsDesAdi");		
+
+		String fechaSis = Utilerias.obtenerFechaSis();
+		
+		String bitPriRef = solicitud.getHeader("User-Agent");
+		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
+
+		StringBuilder scriptName = new StringBuilder()
+				.append(CuentaDestinoCtrl.class.getName())
+				.append(".altaCuentaDestinoNacional");
+		
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
+		Utilerias.verificarError(folioTransaccionGenerarOpResultadoObjeto);
+		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
+
+		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarOpResultadoObjeto, "transaccion");
+		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
+		
+		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac, scriptName.toString());
+
+		if ("B".equals(validarToken)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
+			throw new UnauthorizedException(bimMessageDTO.toString());
+		}
+
+		if ("C".equals(validarToken)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.28");
+			throw new ForbiddenException(bimMessageDTO.toString());
+		}
+				
+		JsonObject datosBitacora = new JsonObject();
+		datosBitacora.addProperty("Bit_Usuari", usuNumero);
+		datosBitacora.addProperty("Bit_Fecha", fechaSis);
+		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
+		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
+		datosBitacora.addProperty("NumTransac", numTransac);
+		datosBitacora.addProperty("FechaSis", fechaSis);
+
+		JsonObject bitacoraCreacionOpResultadoObjeto = this.bitacoraServicio.creacionBitacora(datosBitacora);
+		Utilerias.verificarError(folioTransaccionGenerarOpResultadoObjeto);
+		logger.info("bitacoraCreacionOpResultadoObjeto" + bitacoraCreacionOpResultadoObjeto);
+		
+		String uuid = java.util.UUID.randomUUID().toString();
+		String cdsEncript = Racal.cifraPassword_HSM(uuid.substring(uuid.length()-6).toUpperCase());
+		logger.info("Cds_Encript: " + cdsEncript);
+		
+		if(cdsEncript.length() == 7 && cdsEncript.equals("autoriz")) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.7");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+
+		if(cdsEncript.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.8");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+
+		JsonObject datosCuentaDestinoSPEI = new JsonObject();
+		datosCuentaDestinoSPEI.addProperty("Cds_UsuAdm", usuUsuAdm);
+		datosCuentaDestinoSPEI.addProperty("Cds_CLABE", cdsCLABE);
+		datosCuentaDestinoSPEI.addProperty("Cds_Banco", cdsBanco);
+		datosCuentaDestinoSPEI.addProperty("Cds_CliUsu",usuClient);
+		datosCuentaDestinoSPEI.addProperty("Cds_Alias", cdsAlias);
+		datosCuentaDestinoSPEI.addProperty("Cds_RFCBen", cdsRFCBen);
+		datosCuentaDestinoSPEI.addProperty("Cds_EmaBen", cdsEmaBen);
+		datosCuentaDestinoSPEI.addProperty("Cds_DesAdi", cdsDesAdi);
+		datosCuentaDestinoSPEI.addProperty("Cds_Random", cdsEncript);
+		datosCuentaDestinoSPEI.addProperty("NumTransac", numTransac);
+		datosCuentaDestinoSPEI.addProperty("FechaSis", fechaSis);
+		
+		JsonObject cuentaDestinoSPEICreacionResultado = this.cuentaDestinoServicio.cuentaDestinoSPEICreacion(datosCuentaDestinoSPEI);
+		Utilerias.verificarError(folioTransaccionGenerarOpResultadoObjeto);
+		logger.info("cuentaDestinoSPEICreacionResultado  " + cuentaDestinoSPEICreacionResultado);
+		
+		JsonObject datosCuentaDestinoProcesar = new JsonObject();
+		datosCuentaDestinoProcesar.addProperty("Cud_UsuAdm", usuUsuAdm);
+		datosCuentaDestinoProcesar.addProperty("Cud_CLABE", cdsCLABE);
+		datosCuentaDestinoProcesar.addProperty("Cud_Banco", cdsBanco);
+		datosCuentaDestinoProcesar.addProperty("NumTransac", numTransac);
+		datosCuentaDestinoProcesar.addProperty("FechaSis", fechaSis);
+		
+		JsonObject cuentaDestinoProcesarResultado = this.cuentaDestinoServicio.cuentaDestinoProcesar(datosCuentaDestinoProcesar);
+		logger.info("cuentaDestinoSPEICreacionResultado  " + cuentaDestinoSPEICreacionResultado);
+		logger.info("cuentaDestinoProcesarResultado  " + cuentaDestinoProcesarResultado);
+		
+		JsonObject datosCuentaDestinoSPEIAct = new JsonObject();
+		datosCuentaDestinoSPEIAct.addProperty("Cds_UsuAdm", usuUsuAdm);
+		datosCuentaDestinoSPEIAct.addProperty("NumTransac", numTransac);
+		datosCuentaDestinoSPEIAct.addProperty("FechaSis", fechaSis);
+		
+		JsonObject cuentaDestinoSPEIActivacionResultado = this.cuentaDestinoServicio.cuentaDestinoSPEIActivacion(datosCuentaDestinoSPEIAct);
+		logger.info("cuentaDestinoProcesarResultado  " + cuentaDestinoSPEIActivacionResultado);
+		logger.info("cuentaDestinoSPEIActivacionResultado  " + cuentaDestinoSPEIActivacionResultado);
+
+		JsonObject datosConfiguracion = new JsonObject();
+		datosConfiguracion.addProperty("FechaSis", fechaSis);
+
+		JsonObject configuracionBancoConsultarDetalleResultado = this.configuracionServicio.configuracionBancoConsultarDetalle(datosConfiguracion);
+		logger.info("cuentaDestinoProcesarResultado  " + configuracionBancoConsultarDetalleResultado);
+		JsonObject configuracionesBanco = Utilerias.obtenerJsonObjectPropiedad(configuracionBancoConsultarDetalleResultado, "configuracionesBanco");
+		JsonArray configuracionBanco = Utilerias.obtenerJsonArrayPropiedad(configuracionesBanco, "configuracionBanco");
+		String parMiCuDe = Utilerias.obtenerStringPropiedad(configuracionBanco.get(0).getAsJsonObject(), "Par_MiCuDe");
+
+		String asunto = Utilerias.obtenerPropiedadPlantilla("mail.alta_cuenta_destino_nacional.asunto");
+		String plantilla = Utilerias.obtenerPlantilla("alta-cuenta-destino-nacional");
+		
+		StringBuilder destinatario = new StringBuilder()
+				.append(usuEmail);
+
+		if(!usuUsuAdm.equals(usuNumero)) 
+			destinatario
+				.append(",")
+				.append(cdsEmaBen);
+		
+		StringBuilder cdbCuentaOcu = new StringBuilder()
+				.append("**************")
+				.append(bitPriRef.substring(bitPriRef.length()-4));
+		
+		BimEmailTemplateDTO emailTemplateDTO = new BimEmailTemplateDTO(plantilla);
+		emailTemplateDTO.addMergeVariable("Str_Client", usuClient);
+		emailTemplateDTO.addMergeVariable("Usu_Nombre", usuNombre);
+		emailTemplateDTO.addMergeVariable("Cud_Cuenta", cdbCuentaOcu.toString());
+		emailTemplateDTO.addMergeVariable("Cud_Alias", cdsAlias);
+		emailTemplateDTO.addMergeVariable("Nom_Banco", cdsBanco);
+		emailTemplateDTO.addMergeVariable("Cds_Random", cdsEncript);
+		emailTemplateDTO.addMergeVariable("TiempoEspera", parMiCuDe);
+		String cuerpo = Utilerias.obtenerMensajePlantilla(emailTemplateDTO);
+		
+		correoServicio.enviarCorreo(destinatario.toString(), asunto, cuerpo);
+
+		
+		logger.info("CTRL: Finalizando altaCuentaDestinoNacional método...");
+		return Response.created(null)
+				.build();
+	}
+
 	@Path("/activar")
 	@PUT()
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -486,8 +649,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 				.append(".activarCuentasDestino");
 		
 		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac, scriptName.toString());
-		
-		if ("B".equals(validarToken)) {
+
+        if ("B".equals(validarToken)) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
 			throw new UnauthorizedException(bimMessageDTO.toString());
 		}
@@ -496,8 +659,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.28");
 			throw new ForbiddenException(bimMessageDTO.toString());
 		}
-		
-		if(CuentaDestinoTipoEnum.validarTipoDestino(tipo) == null) {
+
+        if(CuentaDestinoTipoEnum.validarTipoDestino(tipo) == null) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.55");
 			bimMessageDTO.addMergeVariable("tipo", tipo);
             throw new BadRequestException(bimMessageDTO.toString());
@@ -523,7 +686,6 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 				bimMessageDTO.addMergeVariable("errMensaj", errMensaj);
 				throw new ConflictException(bimMessageDTO.toString());
 			}
-			
 		}
 
 		if("NACIONAL".equals(tipo)) {
@@ -548,13 +710,13 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 			}
 		}
 
-		JsonObject datosBitacora = new JsonObject();
+        JsonObject datosBitacora = new JsonObject();
 		datosBitacora.addProperty("Bit_Usuari", usuNumero);
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
 		datosBitacora.addProperty("NumTransac", numTransac);
-		datosBitacora.addProperty("Bit_NumTra", numTransac);
+        datosBitacora.addProperty("Bit_NumTra", numTransac);
 		datosBitacora.addProperty("FechaSis", fechaSis);
 		
 		JsonObject bitacoraResultado= this.bitacoraServicio.creacionBitacora(datosBitacora);
