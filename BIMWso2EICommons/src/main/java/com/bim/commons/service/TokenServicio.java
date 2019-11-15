@@ -91,9 +91,12 @@ public class TokenServicio extends BaseService {
 
 	/**
 	 * Método que se encarga de validar el token de operación
+	 * ProcedureName: NBTOKENACT
 	 * @param tokFolio String
 	 * @param cpRSAToken String
 	 * @param tokUsuari String
+	 * @param numTransac
+	 * @param scriptName
 	 * @return
 	 * String
 	 */

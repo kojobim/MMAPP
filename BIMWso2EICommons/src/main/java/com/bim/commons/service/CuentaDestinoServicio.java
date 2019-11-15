@@ -370,8 +370,7 @@ public class CuentaDestinoServicio extends BaseService {
      * 	Cds_UsuAdm: String,
      * 	Cds_Consec?: String,
      * 	Cds_CLABE: String,
-     * 	Cds_Randoms: String,
-     *  Tip_Actual: String,
+     * 	Cds_Random: String,
      *  NumTransac?: String,
      *	FechaSis: String
      * }
