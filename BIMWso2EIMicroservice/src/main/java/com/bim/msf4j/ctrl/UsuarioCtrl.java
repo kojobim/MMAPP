@@ -16,8 +16,8 @@ import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.service.AvisoPrivacidadServicio;
 import com.bim.commons.service.CuentaDestinoServicio;
-import com.bim.commons.service.CuentaServicio;
 import com.bim.commons.service.TransaccionServicio;
+import com.bim.commons.service.TransferenciasBIMServicio;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -32,7 +32,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 	private CuentaDestinoServicio cuentaDestinoServicio;
 	private TransaccionServicio transaccionServicio;
 	private AvisoPrivacidadServicio avisoPrivacidadServicio;
-	private CuentaServicio cuentaServicio;
+	private TransferenciasBIMServicio transferenciasBIMServicio;
 	
 	public UsuarioCtrl() {
 		super();
@@ -40,7 +40,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		this.cuentaDestinoServicio = new CuentaDestinoServicio();
 		this.transaccionServicio = new TransaccionServicio();
 		this.avisoPrivacidadServicio = new AvisoPrivacidadServicio();
-		this.cuentaServicio = new CuentaServicio();
+		this.transferenciasBIMServicio = new TransferenciasBIMServicio();
 		
 		CuentaDestinoBIMConsultarTipConsulL2 = properties.getProperty("op.cuenta_destino_bim_consultar.tip_consul.l2");
 	}
@@ -200,13 +200,13 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		datosCuentasOrigenConsultar.addProperty("Cor_Usuari", usuNumero);
 		datosCuentasOrigenConsultar.addProperty("FechaSis", fechaSis);
 		
-		JsonObject cuentasOrigenRespuesta = this.cuentaServicio
-				.cuentaOrigenConsultar(datosCuentasOrigenConsultar);
+		JsonObject cuentasOrigenRespuesta = this.transferenciasBIMServicio
+				.cuentasOrigenConsultar(datosCuentasOrigenConsultar);
 		logger.info("- cuentasOrigenRespuesta " + cuentasOrigenRespuesta);
 		
-		JsonObject cuentas = Utilerias.obtenerJsonObjectPropiedad(cuentasOrigenRespuesta, "cuentas");
+		JsonObject cuentas = Utilerias.obtenerJsonObjectPropiedad(cuentasOrigenRespuesta, "cuentasOrigen");
 		
-		JsonArray cuentasOrigen = Utilerias.obtenerJsonArrayResultante(cuentas, "cuenta"); 
+		JsonArray cuentasOrigen = Utilerias.obtenerJsonArrayResultante(cuentas, "cuentaOrigen"); 
 			
 		JsonArray cuentasOrigenArray = new JsonArray();
 		
@@ -262,7 +262,6 @@ public class UsuarioCtrl extends BimBaseCtrl {
 			cuentaDestinoBIMResultado.addProperty("cdbCueFor", Utilerias.obtenerStringPropiedad(cuentaDestinoBIMItem, "Cdb_CueFor"));
 			cuentasDestinoBIMResultado.add(cuentaDestinoBIMResultado);
 		}
-		
 		
 		JsonObject cuentasDestinoRespuesta = new JsonObject();
 		cuentasDestinoRespuesta.add("cuentasDestino", cuentasDestinoBIMResultado);
