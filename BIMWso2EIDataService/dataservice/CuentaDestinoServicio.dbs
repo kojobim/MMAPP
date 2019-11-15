@@ -547,7 +547,7 @@
             <with-param name="cdsUsuAdm" query-param="Cds_UsuAdm"/>
             <with-param name="cdsConsec" query-param="Cds_Consec"/>
             <with-param name="cdsCLABE" query-param="Cds_CLABE"/>
-            <with-param name="cdsRandom" query-param="Cds_Randoms"/>
+            <with-param name="cdsRandom" query-param="Cds_Random"/>
             <with-param name="tipActual" query-param="Tip_Actual"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
