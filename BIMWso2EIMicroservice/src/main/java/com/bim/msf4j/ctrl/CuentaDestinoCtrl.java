@@ -338,7 +338,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		StringBuilder destinatario = new StringBuilder()
 				.append(usuEmail);
 
-		if(usuUsuAdm.equals(usuNumero)) 
+		if(!usuUsuAdm.equals(usuNumero)) 
 			destinatario
 				.append(",")
 				.append(cdbEmaBen);		
