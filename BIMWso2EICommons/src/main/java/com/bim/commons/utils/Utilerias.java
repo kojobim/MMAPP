@@ -502,4 +502,19 @@ public class Utilerias {
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
 	}
+	
+	public static JsonArray obtenerJsonArrayResultante(JsonObject resultado, String propiedad) {
+		JsonArray arrayResultante = null;
+		if(!resultado.has(propiedad))
+			return arrayResultante;
+		if(resultado.get(propiedad).isJsonObject()) {
+			JsonObject resultadoObjecto = Utilerias.obtenerJsonObjectPropiedad(resultado, propiedad);
+			arrayResultante = new JsonArray();
+			arrayResultante.add(resultadoObjecto);
+		}
+		if(resultado.get(propiedad).isJsonArray())
+			arrayResultante = Utilerias.obtenerJsonArrayPropiedad(resultado, propiedad);
+		
+		return arrayResultante;
+	}
 }

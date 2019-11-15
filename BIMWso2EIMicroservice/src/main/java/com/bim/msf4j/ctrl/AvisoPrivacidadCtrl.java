@@ -41,9 +41,10 @@ public class AvisoPrivacidadCtrl extends BimBaseCtrl {
 	public Response obtenerAvisoPrivacidad(@QueryParam("formato") String formato, @Context final Request solicitud) {
 		logger.info("CTRL: Comenzando obtenerAvisoPrivacidad metodo...");
 
-		String bearerToken = solicitud.getHeader("Authorization");
-		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
-		logger.info(principalResultadoObjecto);
+		if(formato == null || formato.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.53");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
 		
 		if(AvisoPrivacidadFormatosEnum.validarFormato(formato) == null) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.44");
