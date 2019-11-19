@@ -1,0 +1,125 @@
+<p class='encabezado'>
+    Comprobante de la Solicitud de Transferencia realizada a través de tu servicio de Banca Electrónica eBIM.
+</p>
+<table border='0' width='512px'>
+    <tr>
+        <td class='firmtitulo' colspan='2'>La autorización se ha realizado con éxito, " &
+            "actualmente esta transferencia tiene las siguientes firmas: #str_Firmas#</td>
+    </tr>
+    <tr>
+        <td class='tbltitulo' colSpan='2'>Transferencia Nacional SPEI #Trn_ProDes#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Cuenta Origen:</b></td>
+        <td class='linsup2' style='padding-left:10px'>#rereplace(RepeatString('*',10) & mid(sctCampos.Trn_DeCuOr,11,
+            len(sctCampos.Trn_DeCuOr)), '"', '', 'ALL')#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Cuenta Destino:</b></td>
+        <td class='linsup2' style='padding-left:10px'>#rereplace(RepeatString('*',len(sctCampos.Trn_CueDes)-4) &
+            mid(sctCampos.Trn_DeCuDe,(len(sctCampos.Trn_CueDes)-4) + 1, len(sctCampos.Trn_DeCuDe)), '"', '', 'ALL')#
+        </td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Banco:</b></td>
+        <td class='linsup2' style='padding-left:10px'>#sctCampos.Trn_BanDes#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Monto:</b></td>
+        <td class='linsup2' style='padding-left:10px'>#DollarFormat(sctCampos.Trn_Monto)#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Descripción:</b></td>
+        <td class='linsup2' style='padding-left:10px'>#rereplace(sctCampos.Trn_Descri, '"', '', 'ALL')#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>RFC:</b></td>
+        <td class='linsup2' style='padding-left:10px'>#sctCampos.Trn_RFC#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>IVA:</b></td>
+        <td class='linsup2' style='padding-left:10px'>#DollarFormat(sctCampos.Trn_IVA)#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Folio de la transacción:</b></td>
+        <td class='linsup2' style='padding-left:10px'>#NumTransac#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Folio del Banco de México: </b></td>
+        <td class='linsup2' style='padding-left:10px'>#Trn_ClaRas#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Referencia del Beneficiario:</b></td>
+        <td class='linsup2' style='padding-left:10px'>#sctCampos.Trn_DesAdi#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Usuario solicita:</b></td>
+        <td class='linsup2' style='padding-left:10px'>#sctCampos.Trn_UsCaNo#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Fecha solicita: </b></td>
+        <td class='linsup2' style='padding-left:10px'>#DateFormat(sctCampos.Trn_FecCap,'dd-mm-yyyy')#
+            #TimeFormat(sctCampos.Trn_FecCap,'HH:mm')#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Usuario autoriza: </b></td>
+        <td class='linsup2' style='padding-left:10px'>#str_Autori#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Fecha autoriza: </b></td>
+        <td class='linsup2' style='padding-left:10px'>#DateFormat(Trn_FecAut,'dd-mm-yyyy')#
+            #TimeFormat(Trn_FecAut,'HH:mm')#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Fecha cargo: </b></td>
+        <td class='linsup2' style='padding-left:10px'>#DateFormat(sctCampos.Trn_FecCar,'dd-mm-yyyy')#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Fecha aplicación: </b></td>
+        <td class='linsup2' style='padding-left:10px'>#DateFormat(Trn_FecApl,'dd-mm-yyyy')#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Fecha Inicio: </b></td>
+        <td class='linsup2' style='padding-left:10px'>#DateFormat(sctCampos.Trn_FePrEn,"dd-mm-yyyy")#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Frecuencia: </b></td>
+        <td class='linsup2' style='padding-left:10px'>#strFrecuencia#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Duraci&oacute;n: </b></td>
+        <td class='linsup2' style='padding-left:10px'>#strDuracion#</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Recordatorio: </b></td>
+        <td class='linsup2' style='padding-left:10px'>#strRecordatorio#</td>
+    </tr>
+    <tr>
+        <td colspan='2'>
+            <table border='0' width='510px'>
+                <tr>
+                    <td class='linsup2' style='text-align:center; padding:10px'>
+                        <b>Verificador</b><br>
+                        #Mid(verificador,1,70)#<br>
+                        #Mid(verificador,71,70)#<br>
+                        #Mid(verificador,141,70)#<br>
+                        #Mid(verificador,211,70)#<br>
+                        #Mid(verificador,281,70)#
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<br><br>
+<table border='0' width='510px'>
+    <tr>
+        <td class='linsup2' style='text-align:left;'><b>Aviso:</b></td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='text-align:center;'>
+            Las Solicitudes de Pago Electrónico Interbancario (SPEI) están programadas para el día " & Trn_FecOpe & " a
+            partir de las " & She_HorIni &" .
+        </td>
+    </tr>
+</table>

@@ -20,30 +20,30 @@ public class SPEIServicio extends BaseService {
 	private static String HorariosSPEIConsultarOpSucOrigen;
 	private static String HorariosSPEIConsultarOpSucDestino;
 	private static String HorariosSPEIConsultarOpModulo;
-	private static String TransaferenciaSPEICreacionOp;
-	private static String TransaferenciaSPEICreacionOpTransaccio;
-	private static String TransaferenciaSPEICreacionOpUsuario;
-	private static String TransaferenciaSPEICreacionOpSucOrigen;
-	private static String TransaferenciaSPEICreacionOpSucDestino;
-	private static String TransaferenciaSPEICreacionOpModulo;
-	private static String TransaferenciaSPEIProcesarOp;
-	private static String TransaferenciaSPEIProcesarOpTrsCuBe;
-	private static String TransaferenciaSPEIProcesarOpTrsTipPag;
-	private static String TransaferenciaSPEIProcesarOpTrsTipTra;
-	private static String TransaferenciaSPEIProcesarOpTrsValFir;
-	private static String TransaferenciaSPEIProcesarOpTransaccio;
-	private static String TransaferenciaSPEIProcesarOpUsuario;
-	private static String TransaferenciaSPEIProcesarOpSucOrigen;
-	private static String TransaferenciaSPEIProcesarOpSucDestino;
-	private static String TransaferenciaSPEIProcesarOpModulo;
-	private static String TransaferenciaSPEIConsultarOp;
-	private static String TransaferenciaSPEIConsultarOpTrnStatus;
-	private static String TransaferenciaSPEIConsultarOpTipConsul;
-	private static String TransaferenciaSPEIConsultarOpTransaccio;
-	private static String TransaferenciaSPEIConsultarOpUsuario;
-	private static String TransaferenciaSPEIConsultarOpSucOrigen;
-	private static String TransaferenciaSPEIConsultarOpSucDestino;
-	private static String TransaferenciaSPEIConsultarOpModulo;
+	private static String TransferenciaSPEICreacionOp;
+	private static String TransferenciaSPEICreacionOpTransaccio;
+	private static String TransferenciaSPEICreacionOpUsuario;
+	private static String TransferenciaSPEICreacionOpSucOrigen;
+	private static String TransferenciaSPEICreacionOpSucDestino;
+	private static String TransferenciaSPEICreacionOpModulo;
+	private static String TransferenciaSPEIProcesarOp;
+	private static String TransferenciaSPEIProcesarOpTrsCuBe;
+	private static String TransferenciaSPEIProcesarOpTrsTipPag;
+	private static String TransferenciaSPEIProcesarOpTrsTipTra;
+	private static String TransferenciaSPEIProcesarOpTrsValFir;
+	private static String TransferenciaSPEIProcesarOpTransaccio;
+	private static String TransferenciaSPEIProcesarOpUsuario;
+	private static String TransferenciaSPEIProcesarOpSucOrigen;
+	private static String TransferenciaSPEIProcesarOpSucDestino;
+	private static String TransferenciaSPEIProcesarOpModulo;
+	private static String TransferenciaSPEIConsultarOp;
+	private static String TransferenciaSPEIConsultarOpTrnStatus;
+	private static String TransferenciaSPEIConsultarOpTipConsul;
+	private static String TransferenciaSPEIConsultarOpTransaccio;
+	private static String TransferenciaSPEIConsultarOpUsuario;
+	private static String TransferenciaSPEIConsultarOpSucOrigen;
+	private static String TransferenciaSPEIConsultarOpSucDestino;
+	private static String TransferenciaSPEIConsultarOpModulo;
 	
 	public SPEIServicio() {
 		super();
@@ -51,9 +51,9 @@ public class SPEIServicio extends BaseService {
 		SPEIServicio = properties.getProperty("data_service.spei_servicio");
 		
 		HorariosSPEIConsultarOp = properties.getProperty("spei_servicio.op.horarios_spei_consultar");
-		TransaferenciaSPEICreacionOp = properties.getProperty("spei_servicio.op.transferencias_spei_creacion");
-		TransaferenciaSPEIProcesarOp = properties.getProperty("spei_servicio.op.transferencias_spei_procesar");
-		TransaferenciaSPEIConsultarOp = properties.getProperty("spei_servicio.op.transferencias_spei_consultar");
+		TransferenciaSPEICreacionOp = properties.getProperty("spei_servicio.op.transferencias_spei_creacion");
+		TransferenciaSPEIProcesarOp = properties.getProperty("spei_servicio.op.transferencias_spei_procesar");
+		TransferenciaSPEIConsultarOp = properties.getProperty("spei_servicio.op.transferencias_spei_consultar");
 		
 		HorariosSPEIConsultarOpTipConsul = properties.getProperty("op.horarios_spei_consultar.tip_consul");
 		HorariosSPEIConsultarOpTransaccio = properties.getProperty("op.horarios_spei_consultar.transaccio");
@@ -65,31 +65,37 @@ public class SPEIServicio extends BaseService {
 		HorariosSPEIConsultarOpHorHorFin = properties.getProperty("op.horarios_spei_consultar.hor_hor_fin");
 		
 				 
-		TransaferenciaSPEICreacionOpTransaccio = properties.getProperty("op.transferencias_spei_creacion.transaccio");
-		TransaferenciaSPEICreacionOpUsuario = properties.getProperty("op.transferencias_spei_creacion.usuario");
-		TransaferenciaSPEICreacionOpSucOrigen = properties.getProperty("op.transferencias_spei_creacion.suc_origen");
-		TransaferenciaSPEICreacionOpSucDestino = properties.getProperty("op.transferencias_spei_creacion.suc_destino");
-		TransaferenciaSPEICreacionOpModulo = properties.getProperty("op.transferencias_spei_creacion.modulo");
+		TransferenciaSPEICreacionOpTransaccio = properties.getProperty("op.transferencias_spei_creacion.transaccio");
+		TransferenciaSPEICreacionOpUsuario = properties.getProperty("op.transferencias_spei_creacion.usuario");
+		TransferenciaSPEICreacionOpSucOrigen = properties.getProperty("op.transferencias_spei_creacion.suc_origen");
+		TransferenciaSPEICreacionOpSucDestino = properties.getProperty("op.transferencias_spei_creacion.suc_destino");
+		TransferenciaSPEICreacionOpModulo = properties.getProperty("op.transferencias_spei_creacion.modulo");
 		
-		TransaferenciaSPEIProcesarOpTrsCuBe = properties.getProperty("op.transferencias_spei_procesar.transaccio");
-		TransaferenciaSPEIProcesarOpTrsTipPag = properties.getProperty("op.transferencias_spei_procesar.transaccio");
-		TransaferenciaSPEIProcesarOpTrsTipTra = properties.getProperty("op.transferencias_spei_procesar.transaccio");
-		TransaferenciaSPEIProcesarOpTrsValFir = properties.getProperty("op.transferencias_spei_procesar.transaccio");
-		TransaferenciaSPEIProcesarOpTransaccio = properties.getProperty("op.transferencias_spei_procesar.transaccio");
-		TransaferenciaSPEIProcesarOpUsuario = properties.getProperty("op.transferencias_spei_procesar.usuario");
-		TransaferenciaSPEIProcesarOpSucOrigen = properties.getProperty("op.transferencias_spei_procesar.suc_origen");
-		TransaferenciaSPEIProcesarOpSucDestino = properties.getProperty("op.transferencias_spei_procesar.suc_destino");
-		TransaferenciaSPEIProcesarOpModulo = properties.getProperty("op.transferencias_spei_procesar.modulo");
+		TransferenciaSPEIProcesarOpTrsCuBe = properties.getProperty("op.transferencias_spei_procesar.transaccio");
+		TransferenciaSPEIProcesarOpTrsTipPag = properties.getProperty("op.transferencias_spei_procesar.transaccio");
+		TransferenciaSPEIProcesarOpTrsTipTra = properties.getProperty("op.transferencias_spei_procesar.transaccio");
+		TransferenciaSPEIProcesarOpTrsValFir = properties.getProperty("op.transferencias_spei_procesar.transaccio");
+		TransferenciaSPEIProcesarOpTransaccio = properties.getProperty("op.transferencias_spei_procesar.transaccio");
+		TransferenciaSPEIProcesarOpUsuario = properties.getProperty("op.transferencias_spei_procesar.usuario");
+		TransferenciaSPEIProcesarOpSucOrigen = properties.getProperty("op.transferencias_spei_procesar.suc_origen");
+		TransferenciaSPEIProcesarOpSucDestino = properties.getProperty("op.transferencias_spei_procesar.suc_destino");
+		TransferenciaSPEIProcesarOpModulo = properties.getProperty("op.transferencias_spei_procesar.modulo");
 		
-		TransaferenciaSPEIConsultarOpTrnStatus = properties.getProperty("op.transferencias_spei_consultar.trn_status");
-		TransaferenciaSPEIConsultarOpTipConsul = properties.getProperty("op.transferencias_spei_consultar.tip_consul");
-		TransaferenciaSPEIConsultarOpTransaccio = properties.getProperty("op.transferencias_spei_consultar.transaccio");
-		TransaferenciaSPEIConsultarOpUsuario = properties.getProperty("op.transferencias_spei_consultar.usuario");
-		TransaferenciaSPEIConsultarOpSucOrigen = properties.getProperty("op.transferencias_spei_consultar.suc_origen");
-		TransaferenciaSPEIConsultarOpSucDestino = properties.getProperty("op.transferencias_spei_consultar.suc_destino");
-		TransaferenciaSPEIConsultarOpModulo = properties.getProperty("op.transferencias_spei_consultar.modulo");
+		TransferenciaSPEIConsultarOpTrnStatus = properties.getProperty("op.transferencias_spei_consultar.trn_status");
+		TransferenciaSPEIConsultarOpTipConsul = properties.getProperty("op.transferencias_spei_consultar.tip_consul");
+		TransferenciaSPEIConsultarOpTransaccio = properties.getProperty("op.transferencias_spei_consultar.transaccio");
+		TransferenciaSPEIConsultarOpUsuario = properties.getProperty("op.transferencias_spei_consultar.usuario");
+		TransferenciaSPEIConsultarOpSucOrigen = properties.getProperty("op.transferencias_spei_consultar.suc_origen");
+		TransferenciaSPEIConsultarOpSucDestino = properties.getProperty("op.transferencias_spei_consultar.suc_destino");
+		TransferenciaSPEIConsultarOpModulo = properties.getProperty("op.transferencias_spei_consultar.modulo");
 	}
 
+	/**
+	 * Método para consultar los horarios de disponibilidad para transferencias SPEI
+	 * ProcedureName: SPHORARICON
+	 * @param datosHorariosSPEI
+	 * @return
+	 */
 	public JsonObject horariosSPEIConsultar(JsonObject datosHorariosSPEI) {
 		logger.info("COMMONS: Empezando horariosSPEIConsultar metodo... ");
 		if(!datosHorariosSPEI.has("Msj_Error"))
@@ -115,72 +121,123 @@ public class SPEIServicio extends BaseService {
 		return horariosSPEIConsultarOpResultadoObjeto;
 	}
 
-	public JsonObject transaferenciaSPEICreacion(JsonObject datosTransfarenciaSPEI) {
-		logger.info("COMMONS: Comenzando transaferenciaSPEICreacion metodo... ");
-		datosTransfarenciaSPEI.addProperty("Trs_SegRef", "");
-		datosTransfarenciaSPEI.addProperty("Trs_RFC", "");
-		datosTransfarenciaSPEI.addProperty("Trs_Email", "");
-		datosTransfarenciaSPEI.addProperty("Trs_TipDur", "");
-		datosTransfarenciaSPEI.addProperty("Trs_IVA", 0);
+	/**
+	 * Método para crear transferencias SPEI
+	 * ProcedureName: NBTRASPEALT
+	 * @param datosTransfarenciaSPEI
+	 * <pre>
+	 * {
+	 *  Trs_Usuari: String,
+	 *  Trs_Client: String,
+	 *  Trs_CueOri: String,
+	 *  Trs_CueDes: String,
+	 *  Trs_Monto: Double,
+	 *  Trs_Descri: String,
+	 *  Trs_PriRef: String,
+	 *  Trs_SegRef: String,
+	 *  Trs_RFC: String,
+	 *  Trs_IVA: Double,
+	 *  Trs_Email: String,
+	 *  Trs_Tipo: String,
+	 *  Trs_UsuCap: String,
+	 *  Trs_TipTra: String,
+	 *  Trs_Frecue: String,
+	 *  Trs_FePrEn: String,
+	 *  Trs_TipDur: String,
+	 *  Trs_DurFec: String,
+	 *  Trs_DurTra: Numeric,
+	 *  Trs_DiAnEm: Numeric,
+	 *  NumTransac: String,
+	 *  FechaSis: String
+	 * }
+	 * </pre>
+	 * @return
+	 */
+	public JsonObject transferenciaSPEICreacion(JsonObject datosTransfarenciaSPEI) {
+		logger.info("COMMONS: Comenzando transferenciaSPEICreacion metodo... ");
+		if(!datosTransfarenciaSPEI.has("Trs_SegRef"))
+			datosTransfarenciaSPEI.addProperty("Trs_SegRef", "");
+		if(!datosTransfarenciaSPEI.has("Trs_RFC"))
+			datosTransfarenciaSPEI.addProperty("Trs_RFC", "");
+		if(!datosTransfarenciaSPEI.has("Trs_Email"))
+			datosTransfarenciaSPEI.addProperty("Trs_Email", "");
+		if(!datosTransfarenciaSPEI.has("Trs_TipDur"))
+			datosTransfarenciaSPEI.addProperty("Trs_TipDur", "");
+		if(!datosTransfarenciaSPEI.has("Trs_IVA"))
+			datosTransfarenciaSPEI.addProperty("Trs_IVA", 0);
 		datosTransfarenciaSPEI.addProperty("Trs_DurTra", 0);
 		datosTransfarenciaSPEI.addProperty("Trs_DiAnEm", 0);
-		datosTransfarenciaSPEI.addProperty("Transaccio", TransaferenciaSPEICreacionOpTransaccio);
-		datosTransfarenciaSPEI.addProperty("Usuario", TransaferenciaSPEICreacionOpUsuario);
-		datosTransfarenciaSPEI.addProperty("SucOrigen", TransaferenciaSPEICreacionOpSucOrigen);
-		datosTransfarenciaSPEI.addProperty("SucDestino", TransaferenciaSPEICreacionOpSucDestino);
-		datosTransfarenciaSPEI.addProperty("Modulo", TransaferenciaSPEICreacionOpModulo);
-		JsonObject transaferenciaSPEICreacionOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransaferenciaSPEICreacionOp, datosTransfarenciaSPEI);
-		logger.info("transaferenciaSPEICreacionOpResultadoObjeto" + transaferenciaSPEICreacionOpResultadoObjeto);
-		logger.info("COMMONS: Finalizando transaferenciaSPEICreacion metodo... ");
-		return transaferenciaSPEICreacionOpResultadoObjeto;
+		datosTransfarenciaSPEI.addProperty("Transaccio", TransferenciaSPEICreacionOpTransaccio);
+		datosTransfarenciaSPEI.addProperty("Usuario", TransferenciaSPEICreacionOpUsuario);
+		datosTransfarenciaSPEI.addProperty("SucOrigen", TransferenciaSPEICreacionOpSucOrigen);
+		datosTransfarenciaSPEI.addProperty("SucDestino", TransferenciaSPEICreacionOpSucDestino);
+		datosTransfarenciaSPEI.addProperty("Modulo", TransferenciaSPEICreacionOpModulo);
+		JsonObject transferenciaSPEICreacionOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransferenciaSPEICreacionOp, datosTransfarenciaSPEI);
+		logger.info("transferenciaSPEICreacionOpResultadoObjeto" + transferenciaSPEICreacionOpResultadoObjeto);
+		logger.info("COMMONS: Finalizando transferenciaSPEICreacion metodo... ");
+		return transferenciaSPEICreacionOpResultadoObjeto;
 	}
 	
-	public JsonObject transaferenciaSPEIProcesar(JsonObject datosTransferenciaSPEI) {
-		logger.info("COMMONS: Comenzando transaferenciaSPEIProcesar metodo... ");
+	/**
+	 * Método para procesar la transferencia SPEI
+	 * ProcedureName: NBTRASPEPRO
+	 * @param datosTransferenciaSPEI
+	 * @return
+	 */
+	public JsonObject transferenciaSPEIProcesar(JsonObject datosTransferenciaSPEI) {
+		logger.info("COMMONS: Comenzando transferenciaSPEIProcesar metodo... ");
 		datosTransferenciaSPEI.addProperty("Trs_OrdPag", 0.0000);
 		datosTransferenciaSPEI.addProperty("Trs_IVA", 0.0000);
 		datosTransferenciaSPEI.addProperty("Trs_Comisi", 0.0000);
 		datosTransferenciaSPEI.addProperty("Trs_IVAPro", 0.0000);
-		datosTransferenciaSPEI.addProperty("Trs_RFC", "");
+		if(!datosTransferenciaSPEI.has("Trs_RFC"))
+			datosTransferenciaSPEI.addProperty("Trs_RFC", "");
 		datosTransferenciaSPEI.addProperty("Trs_RFCPro", "");
 		datosTransferenciaSPEI.addProperty("Trs_CuBeAd", "");
 		datosTransferenciaSPEI.addProperty("Trs_TiCuBA", "");
 		datosTransferenciaSPEI.addProperty("Trs_NoBeAd", "");
 		datosTransferenciaSPEI.addProperty("Trs_ConPaU", "");
-		datosTransferenciaSPEI.addProperty("Trs_DaBeAd", "");
+		if(!datosTransferenciaSPEI.has("Trs_DaBeAd"))
+			datosTransferenciaSPEI.addProperty("Trs_DaBeAd", "");
 		datosTransferenciaSPEI.addProperty("Trs_DireIP", "");
-		datosTransferenciaSPEI.addProperty("Trs_TiCuBe", TransaferenciaSPEIProcesarOpTrsCuBe);
-		datosTransferenciaSPEI.addProperty("Trs_TipPag", TransaferenciaSPEIProcesarOpTrsTipPag);
-		datosTransferenciaSPEI.addProperty("Trs_TipTra", TransaferenciaSPEIProcesarOpTrsTipTra);
-		datosTransferenciaSPEI.addProperty("Trs_ValFir", TransaferenciaSPEIProcesarOpTrsValFir);
-		datosTransferenciaSPEI.addProperty("Transaccio", TransaferenciaSPEIProcesarOpTransaccio);
-		datosTransferenciaSPEI.addProperty("Usuario", TransaferenciaSPEIProcesarOpUsuario);
-		datosTransferenciaSPEI.addProperty("SucOrigen", TransaferenciaSPEIProcesarOpSucOrigen);
-		datosTransferenciaSPEI.addProperty("SucDestino", TransaferenciaSPEIProcesarOpSucDestino);
-		datosTransferenciaSPEI.addProperty("Modulo", TransaferenciaSPEIProcesarOpModulo);
-		JsonObject transaferenciaSPEIProcesarOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransaferenciaSPEIProcesarOp, datosTransferenciaSPEI);
-		logger.info("transaferenciaSPEIProcesarOpResultadoObjeto" + transaferenciaSPEIProcesarOpResultadoObjeto);
-		logger.info("COMMONS: Finalizando transaferenciaSPEIProcesar metodo... ");
-		return transaferenciaSPEIProcesarOpResultadoObjeto;
+		datosTransferenciaSPEI.addProperty("Trs_TiCuBe", TransferenciaSPEIProcesarOpTrsCuBe);
+		datosTransferenciaSPEI.addProperty("Trs_TipPag", TransferenciaSPEIProcesarOpTrsTipPag);
+		datosTransferenciaSPEI.addProperty("Trs_TipTra", TransferenciaSPEIProcesarOpTrsTipTra);
+		datosTransferenciaSPEI.addProperty("Trs_ValFir", TransferenciaSPEIProcesarOpTrsValFir);
+		datosTransferenciaSPEI.addProperty("Transaccio", TransferenciaSPEIProcesarOpTransaccio);
+		datosTransferenciaSPEI.addProperty("Usuario", TransferenciaSPEIProcesarOpUsuario);
+		datosTransferenciaSPEI.addProperty("SucOrigen", TransferenciaSPEIProcesarOpSucOrigen);
+		datosTransferenciaSPEI.addProperty("SucDestino", TransferenciaSPEIProcesarOpSucDestino);
+		datosTransferenciaSPEI.addProperty("Modulo", TransferenciaSPEIProcesarOpModulo);
+		JsonObject transferenciaSPEIProcesarOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransferenciaSPEIProcesarOp, datosTransferenciaSPEI);
+		logger.info("transferenciaSPEIProcesarOpResultadoObjeto" + transferenciaSPEIProcesarOpResultadoObjeto);
+		logger.info("COMMONS: Finalizando transferenciaSPEIProcesar metodo... ");
+		return transferenciaSPEIProcesarOpResultadoObjeto;
 	}
 	
-	public JsonObject transaferenciaSPEIConsultar(JsonObject datosTransferenciaSPEI) {
-		logger.info("COMMONS: Comenzando transaferenciaSPEIConsultar metodo... ");
+	/**
+	 * Método para consultar transferencias SPEI
+	 * ProcedureName: NBTRANACCON
+	 * @param datosTransferenciaSPEI
+	 * @return
+	 */
+	public JsonObject transferenciaSPEIConsultar(JsonObject datosTransferenciaSPEI) {
+		logger.info("COMMONS: Comenzando transferenciaSPEIConsultar metodo... ");
 		datosTransferenciaSPEI.addProperty("Trn_Client", "");
 		datosTransferenciaSPEI.addProperty("Trn_Consec", "");
 		datosTransferenciaSPEI.addProperty("Trn_Transf", "");
 		datosTransferenciaSPEI.addProperty("NumTransac", "");
-		datosTransferenciaSPEI.addProperty("Trn_Status", TransaferenciaSPEIConsultarOpTrnStatus);
-		datosTransferenciaSPEI.addProperty("Tip_Consul", TransaferenciaSPEIConsultarOpTipConsul);
-		datosTransferenciaSPEI.addProperty("Transaccio", TransaferenciaSPEIConsultarOpTransaccio);
-		datosTransferenciaSPEI.addProperty("Usuario", TransaferenciaSPEIConsultarOpUsuario);
-		datosTransferenciaSPEI.addProperty("SucOrigen", TransaferenciaSPEIConsultarOpSucOrigen);
-		datosTransferenciaSPEI.addProperty("SucDestino", TransaferenciaSPEIConsultarOpSucDestino);
-		datosTransferenciaSPEI.addProperty("Modulo", TransaferenciaSPEIConsultarOpModulo);
-		JsonObject transaferenciaSPEIConsultarOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransaferenciaSPEIConsultarOp, datosTransferenciaSPEI);
-		logger.info("transaferenciaSPEIConsultarOpResultadoObjeto" + transaferenciaSPEIConsultarOpResultadoObjeto);
-		logger.info("COMMONS: Finalizando transaferenciaSPEIConsultar metodo... ");
-		return transaferenciaSPEIConsultarOpResultadoObjeto;
+		datosTransferenciaSPEI.addProperty("Trn_Status", TransferenciaSPEIConsultarOpTrnStatus);
+		datosTransferenciaSPEI.addProperty("Tip_Consul", TransferenciaSPEIConsultarOpTipConsul);
+		datosTransferenciaSPEI.addProperty("Transaccio", TransferenciaSPEIConsultarOpTransaccio);
+		datosTransferenciaSPEI.addProperty("Usuario", TransferenciaSPEIConsultarOpUsuario);
+		datosTransferenciaSPEI.addProperty("SucOrigen", TransferenciaSPEIConsultarOpSucOrigen);
+		datosTransferenciaSPEI.addProperty("SucDestino", TransferenciaSPEIConsultarOpSucDestino);
+		datosTransferenciaSPEI.addProperty("Modulo", TransferenciaSPEIConsultarOpModulo);
+		JsonObject transferenciaSPEIConsultarOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransferenciaSPEIConsultarOp, datosTransferenciaSPEI);
+		logger.info("transferenciaSPEIConsultarOpResultadoObjeto" + transferenciaSPEIConsultarOpResultadoObjeto);
+		logger.info("COMMONS: Finalizando transferenciaSPEIConsultar metodo... ");
+		return transferenciaSPEIConsultarOpResultadoObjeto;
 	}
 
 }
