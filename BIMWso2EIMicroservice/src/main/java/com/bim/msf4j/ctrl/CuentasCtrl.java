@@ -302,7 +302,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		 * normalemente se extraeria del principal con la utileria
 		 * Utilerias.getStringProperty(principal, "usuFolTok");
 		 */
-		String folTok = "0416218850";
+		String folTok = "0416218854";
 		logger.info("- folTok " + folTok);
 
 		String bitUsuari = Utilerias.obtenerStringPropiedad(principal, "usuNumero");
