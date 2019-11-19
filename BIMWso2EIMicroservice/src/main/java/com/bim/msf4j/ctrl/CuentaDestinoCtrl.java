@@ -32,6 +32,7 @@ import com.bim.commons.service.CorreoServicio;
 import com.bim.commons.service.CuentaDestinoServicio;
 import com.bim.commons.service.TokenServicio;
 import com.bim.commons.service.TransaccionServicio;
+import com.bim.commons.service.TransferenciasBIMServicio;
 import com.bim.commons.utils.Racal;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
@@ -49,6 +50,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 	private BitacoraServicio bitacoraServicio;
 	private ConfiguracionServicio configuracionServicio;
 	private CorreoServicio correoServicio;
+	private TransferenciasBIMServicio transferenciasBIMServicio;
 	
 	private static Integer CuentaDestinoBIMNumeroDigitos;
 	private static String CuentaDestinoBIMStatusActivo;
@@ -65,6 +67,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		this.bitacoraServicio = new BitacoraServicio();
 		this.configuracionServicio = new ConfiguracionServicio();
 		this.correoServicio = new CorreoServicio();
+		this.transferenciasBIMServicio = new TransferenciasBIMServicio();
 		
 		
 		CuentaDestinoBIMNumeroDigitos = Integer.parseInt(properties.getProperty("cuenta_destino_servicio.numero_digitos"));
@@ -161,8 +164,23 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 			bimMessageDTO.addMergeVariable("status", status);
             throw new BadRequestException(bimMessageDTO.toString());
 		}
+
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
+		logger.info("- folioTransaccionGenerarOpResultadoObjeto: " + folioTransaccionGenerarOpResultadoObjeto);
+
+		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarOpResultadoObjeto, "transaccion");
+		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
 		
 		String fechaSis = Utilerias.obtenerFechaSis();
+
+		JsonObject datosCuentaDestinoTransferenciaBIMActivacion = new JsonObject();
+		datosCuentaDestinoTransferenciaBIMActivacion.addProperty("Cdb_UsuAdm", usuAdm);
+		datosCuentaDestinoTransferenciaBIMActivacion.addProperty("NumTransac", numTransac);
+		datosCuentaDestinoTransferenciaBIMActivacion.addProperty("FechaSis", fechaSis);
+
+		JsonObject cuentaDestinoTransferenciaBIMActivacionResultado = this.transferenciasBIMServicio.cuentaDestinoTransferenciaBIMActivacion(datosCuentaDestinoTransferenciaBIMActivacion);
+		logger.info("- cuentaDestinoTransferenciaBIMActivacionResultado: " + cuentaDestinoTransferenciaBIMActivacionResultado);
+		Utilerias.verificarError(cuentaDestinoTransferenciaBIMActivacionResultado);
         
 		JsonObject datosCuentaDestinoBIMConsultar = new JsonObject();
 		datosCuentaDestinoBIMConsultar.addProperty("Cdb_UsuAdm", usuAdm);
@@ -183,18 +201,30 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		logger.info("- cuentaDestinoBIM: " + cuentaDestinoBIM);
 
 		JsonArray cuentasDestinoBIM = Utilerias.obtenerJsonArrayPropiedad(cuentaDestinoBIM, "cuentasDestinoBIM");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 		JsonArray cuentasDestinoBIMArray = new JsonArray();
-		JsonObject cuentasDestinoBIMObjeto = new JsonObject();
 		
 		if(cuentaDestinoBIM.has("cuentasDestinoBIM")) {
 			for(JsonElement cuenta : cuentasDestinoBIM) {
-				JsonObject cuentaObjeto = (JsonObject)cuenta;
-				cuentasDestinoBIMObjeto.add("cdbCuenta", cuentaObjeto.get("Cdb_Cuenta"));
-				cuentasDestinoBIMObjeto.add("cdbAlias", cuentaObjeto.get("Cdb_Alias"));
-				cuentasDestinoBIMObjeto.add("cdbFecAlt", cuentaObjeto.get("Cdb_FecAlt"));
-				cuentasDestinoBIMObjeto.add("cdbRFCBen", cuentaObjeto.get("Cdb_RFCBen"));
-				cuentasDestinoBIMObjeto.add("cdbEmaBen", cuentaObjeto.get("Cdb_EmaBen"));
+				JsonObject cuentaObjeto = cuenta.getAsJsonObject();
+				String cdbFecAlt = Utilerias.obtenerStringPropiedad(cuentaObjeto, "Cdb_FecAlt");
+
+				Date fecAlt = null;
+				try {
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");		
+					fecAlt = sdf.parse(cdbFecAlt);
+				} catch (Exception e) {
+					BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.43");
+					throw new InternalServerException(bimMessageDTO.toString());
+				}
+
+				JsonObject cuentasDestinoBIMObjeto = new JsonObject();
+				cuentasDestinoBIMObjeto.addProperty("cdbCuenta", Utilerias.obtenerStringPropiedad(cuentaObjeto, "Cdb_Cuenta"));
+				cuentasDestinoBIMObjeto.addProperty("cdbAlias", Utilerias.obtenerStringPropiedad(cuentaObjeto, "Cdb_Alias"));
+				cuentasDestinoBIMObjeto.addProperty("cdbFecAlt", fecAlt != null ? simpleDateFormat.format(fecAlt) : "");
+				cuentasDestinoBIMObjeto.addProperty("cdbRFCBen", Utilerias.obtenerStringPropiedad(cuentaObjeto, "Cdb_RFCBen"));
+				cuentasDestinoBIMObjeto.addProperty("cdbEmaBen", Utilerias.obtenerStringPropiedad(cuentaObjeto, "Cdb_EmaBen"));
 				cuentasDestinoBIMArray.add(cuentasDestinoBIMObjeto);
 			}
 		}
@@ -222,7 +252,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		/**
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
 		 */
-		String usuFolTok = "0416218850";
+		String usuFolTok = "0416218854";
 		
 		JsonObject altaCuentaDestinoBim = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoObjeto, "altaCuentaDestinoBim");
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cpRSAToken");
@@ -384,10 +414,25 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 			bimMessageDTO.addMergeVariable("status", status);
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
+
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
+		logger.info("- folioTransaccionGenerarOpResultadoObjeto: " + folioTransaccionGenerarOpResultadoObjeto);
+
+		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarOpResultadoObjeto, "transaccion");
+		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
 		
 		String usuUsuAdm = Utilerias.obtenerStringPropiedad(principalResultadoObjeto, "usuUsuAdm");
 		String usuNumero = Utilerias.obtenerStringPropiedad(principalResultadoObjeto, "usuNumero");
 		String fechaSis = Utilerias.obtenerFechaSis();
+
+		JsonObject datosCuentaDestinoSPEIActivacion = new JsonObject();
+		datosCuentaDestinoSPEIActivacion.addProperty("Cds_UsuAdm", usuUsuAdm);
+		datosCuentaDestinoSPEIActivacion.addProperty("NumTransac", numTransac);
+		datosCuentaDestinoSPEIActivacion.addProperty("FechaSis", fechaSis);
+		JsonObject cuentaDestinoSPEIActivacion = this.cuentaDestinoServicio.cuentaDestinoSPEIActivacion(datosCuentaDestinoSPEIActivacion);
+		logger.info("- cuentaDestinoSPEIActivacion: " + cuentaDestinoSPEIActivacion);
+
+		Utilerias.verificarError(cuentaDestinoSPEIActivacion);
 		
 		JsonObject datosCuentaDestinoSPEI = new JsonObject();
 		datosCuentaDestinoSPEI.addProperty("Cds_UsuAdm", usuUsuAdm);
@@ -404,7 +449,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		JsonArray cuentasDestinoNacional = new JsonArray();
 		String cuentaDestinoEstado = CuentaDestinoEstadosEnum.validarEstado(status).toString();
 		
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");	
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
 		for(JsonElement cuentaDestinoElemento : cuentasDestinoArreglo) {
 			JsonObject cuentaDestinoObjeto = cuentaDestinoElemento.getAsJsonObject();
@@ -457,7 +502,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		/**
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
 		 */
-		String usuFolTok = "0416218850";
+		String usuFolTok = "0416218854";
 		
 		JsonObject altaCuentaDestinoBim = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoObjeto, "altaCuentaDestinoNacional");
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cpRSAToken");
