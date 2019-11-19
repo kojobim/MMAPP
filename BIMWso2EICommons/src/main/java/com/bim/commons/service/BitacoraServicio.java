@@ -18,7 +18,7 @@ public class BitacoraServicio extends BaseService {
  
 	private static String BitacoraServicio;
 	private static String BitacoraCreacionOp;
-	private static String BitacoraCreacionOpBitTipOpe;
+	private static int BitacoraCreacionOpBitMonto;
 	private static String BitacoraCreacionOpTransaccio;
 	private static String BitacoraCreacionOpUsuario;
 	private static String BitacoraCreacionOpSucOrigen;
@@ -31,7 +31,7 @@ public class BitacoraServicio extends BaseService {
 		BitacoraServicio = properties.getProperty("data_service.bitacora_servicio");
 		
 		BitacoraCreacionOp = properties.getProperty("bitacora_servicio.op.bitacora_creacion");
-		BitacoraCreacionOpBitTipOpe = properties.getProperty("op.bitacora_creacion.bit_tipope");
+		BitacoraCreacionOpBitMonto = Integer.parseInt(properties.getProperty("op.bitacora_creacion.bit_monto"));
 		BitacoraCreacionOpModulo = properties.getProperty("op.bitacora_creacion.transaccio");
 		BitacoraCreacionOpSucDestino = properties.getProperty("op.bitacora_creacion.usuario");
 		BitacoraCreacionOpSucOrigen = properties.getProperty("op.bitacora_creacion.suc_origen");
@@ -48,6 +48,7 @@ public class BitacoraServicio extends BaseService {
 	 * { 
 	 *	Bit_Usuari: String,	 
 	 *	Bit_Fecha:  String,
+	 *	Bit_TipOpe: String,
 	 *	Bit_NumTra?: String,
 	 *	Bit_CueOri?: String,
 	 *	Bit_CueDes?: String,
@@ -69,15 +70,13 @@ public class BitacoraServicio extends BaseService {
 		logger.info("COMMONS: Comenzando creacionBitacora...");
 		if(!datosBitacora.has("Bit_NumTra"))
 			datosBitacora.addProperty("Bit_NumTra", "");
-		if(!datosBitacora.has("Bit_TipOpe"))
-			datosBitacora.addProperty("Bit_TipOpe", BitacoraCreacionOpBitTipOpe);
 		if(!datosBitacora.has("Bit_CueOri"))
 			datosBitacora.addProperty("Bit_CueOri", "");
 		if(!datosBitacora.has("Bit_CueDes"))
 			datosBitacora.addProperty("Bit_CueDes", "");
-		datosBitacora.addProperty("Bit_Monto", 0);
 		if(!datosBitacora.has("Bit_SegRef"))
 			datosBitacora.addProperty("Bit_SegRef", "");
+		datosBitacora.addProperty("Bit_Monto", BitacoraCreacionOpBitMonto);
 		datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
 		datosBitacora.addProperty("Usuario", BitacoraCreacionOpUsuario);
 		datosBitacora.addProperty("SucOrigen", BitacoraCreacionOpSucOrigen);

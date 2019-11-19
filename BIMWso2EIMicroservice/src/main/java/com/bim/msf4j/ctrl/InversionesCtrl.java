@@ -61,7 +61,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 	private static String InversionesFilterBy;
 	private static Integer InversionesMaximoPagina;
-	
+	private static String ConsultaInversionBitacoraCreacionOpBitTipOpe;
+	private static String ReinversionBitacoraCreacionOpBitTipOpe;
+		
 	public InversionesCtrl() {
 		super();
 		logger.info("CTRL: Comenzando metodo init...");
@@ -74,10 +76,13 @@ public class InversionesCtrl extends BimBaseCtrl {
 		this.reinversionServicio = new ReinversionServicio();
 		this.tasaServicio = new TasaServicio();
 		this.correoServicio = new CorreoServicio();
+		this.configuracionServicio = new ConfiguracionServicio();
 		
 		
 		InversionesFilterBy = properties.getProperty("inversiones_servicio.filter_by");
 		InversionesMaximoPagina = Integer.parseInt(properties.getProperty("inversiones_servicio.maximo_pagina"));
+		ConsultaInversionBitacoraCreacionOpBitTipOpe = properties.getProperty("op.consulta_inversion.bitacora_creacion.bit_tip_ope");
+		ReinversionBitacoraCreacionOpBitTipOpe = properties.getProperty("op.reinversion.bitacora_creacion.bit_tip_ope");
 		
 		logger.info("CTRL: Terminando metodo init...");
 	}
@@ -150,6 +155,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_PriRef", bit_PriRef);
 		datosBitacora.addProperty("Bit_DireIP", bit_DireIP);
+		datosBitacora.addProperty("Bit_TipOpe", ConsultaInversionBitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("NumTransac", numTransac);
 		datosBitacora.addProperty("FechaSis", fechaSis);
 
@@ -299,6 +305,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
+		datosBitacora.addProperty("Bit_TipOpe", ConsultaInversionBitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
 		datosBitacora.addProperty("FechaSis", fechaSis);
 
@@ -544,8 +551,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("clienteConsultarOpResultadoObjeto" + clienteConsultarOpResultadoObjeto);
 
 		JsonObject cliente = Utilerias.obtenerJsonObjectPropiedad(clienteConsultarOpResultadoObjeto, "cliente");
-		String cliSucurs = Utilerias.obtenerStringPropiedad(cliente, "Cli_Sucurs");
+		// String cliSucurs = Utilerias.obtenerStringPropiedad(cliente, "Cli_Sucurs");
 		String cliComple = Utilerias.obtenerStringPropiedad(cliente, "Cli_Comple");
+		String cliSucurs = "001";
 
 		JsonObject datosSucursal = new JsonObject();
 		datosSucursal.addProperty("Par_Sucurs", cliSucurs);
@@ -578,12 +586,25 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		String cliTipo = Utilerias.obtenerStringPropiedad(cliente, "Cli_Tipo");
 		Double invCantid = Utilerias.obtenerDoublePropiedad(inversion, "Inv_Cantid");
+		String fecVenInv = Utilerias.obtenerStringPropiedad(inversion, "Inv_FecVen");
+
+		SimpleDateFormat sdfOut = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		Date fecVenI = null;
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+			fecVenI = sdf.parse(fecVenInv);
+		} catch (Exception e) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.43");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
 
 		JsonObject datosTasaCliente = new JsonObject();
 		datosTasaCliente.addProperty("Cli_Numero", usuClient);
 		datosTasaCliente.addProperty("Inv_Cantid", invCantid);
 		datosTasaCliente.addProperty("Cli_Tipo", cliTipo);
 		datosTasaCliente.addProperty("Plazo", plazo);
+		datosTasaCliente.addProperty("Inv_FecVen", fecVenI != null ? sdfOut.format(fecVenI) : "");
 		datosTasaCliente.addProperty("NumTransac", numTransac);
 		datosTasaCliente.addProperty("FechaSis", fechaSis);
 
@@ -603,13 +624,13 @@ public class InversionesCtrl extends BimBaseCtrl {
 		 * REGLA DE NEGOCIO: verifica que la cantidad de inversión en UDIS sea menor a 400,000.00 para calcular GAT y GATReal
 		 */
 
-		JsonObject monedaConsultar = Utilerias.obtenerJsonObjectPropiedad(tasaMonedaConsultarOpResultadoObjeto, "monedaConsultar");
+		JsonObject monedaConsultar = Utilerias.obtenerJsonObjectPropiedad(tasaMonedaConsultarOpResultadoObjeto, "tasaMoneda");
 		Double monFixCom = Utilerias.obtenerDoublePropiedad(monedaConsultar, "Mon_FixCom");
 		Double MonTotUDI = 400000.00;
 		Double invGAT = 0.00;
 		Double invGATRea = 0.00;
 
-		JsonObject clienteConsultar = Utilerias.obtenerJsonObjectPropiedad(tasaClienteConsultarOpResultadoObjeto, "clienteConsultar");
+		JsonObject clienteConsultar = Utilerias.obtenerJsonObjectPropiedad(tasaClienteConsultarOpResultadoObjeto, "tasaCliente");
 		Double invTasInt = Utilerias.obtenerDoublePropiedad(clienteConsultar, "TasInv");
 
 		if((invCantid / monFixCom) < MonTotUDI) {
@@ -625,7 +646,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			JsonObject tasaGATConsultaCalcularOpResultadoObjeto = this.tasaServicio.tasaGATConsultaCalcular(datosGAT);
 			logger.info("tasaGATConsultaCalcularOpResultadoObjeto" + tasaGATConsultaCalcularOpResultadoObjeto);
 
-			JsonObject GATConsultaCalcular = Utilerias.obtenerJsonObjectPropiedad(tasaGATConsultaCalcularOpResultadoObjeto, "GATConsultaCalcular");
+			JsonObject GATConsultaCalcular = Utilerias.obtenerJsonObjectPropiedad(tasaGATConsultaCalcularOpResultadoObjeto, "tasaGAT");
 			invGAT = Utilerias.obtenerDoublePropiedad(GATConsultaCalcular, "Inv_GAT");	
 
 			JsonObject datosGATRea = new JsonObject();
@@ -785,6 +806,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
+		datosBitacora.addProperty("Bit_TipOpe", ReinversionBitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("NumTransac", numTransac);
 		datosBitacora.addProperty("FechaSis", fechaSis);
 

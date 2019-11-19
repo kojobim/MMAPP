@@ -42,6 +42,8 @@ public class CuentasCtrl extends BimBaseCtrl {
 	private SoapServicio soapService;
 	private TokenServicio tokenServicio;
 	
+	private static String ClienteConsultarOpTipConsul;
+	
 	public CuentasCtrl() {
 		super();
 		
@@ -52,6 +54,9 @@ public class CuentasCtrl extends BimBaseCtrl {
 		this.saldoServicio = new SaldoServicio();
 		this.soapService = new SoapServicio();
 		this.tokenServicio = new TokenServicio();
+
+				
+		ClienteConsultarOpTipConsul = properties.getProperty("op.cliente_consultar.tip_consul.c9");
 
 	}
 	
@@ -125,6 +130,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		JsonObject datosClienteConsultar = new JsonObject();
 		datosClienteConsultar.addProperty("Cli_Numero", cliNumero);
 		datosClienteConsultar.addProperty("FechaSis", fechaSis);
+		datosClienteConsultar.addProperty("Tip_Consul", ClienteConsultarOpTipConsul);
 		
 		JsonObject clienteConsultarResultadoObjecto = this.clienteServicio.clienteConsultar(datosClienteConsultar);
 		

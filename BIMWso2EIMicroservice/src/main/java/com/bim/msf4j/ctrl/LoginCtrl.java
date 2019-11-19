@@ -35,6 +35,8 @@ public class LoginCtrl extends BimBaseCtrl {
 	private TokenServicio tokenServicio;
 	private UsuarioServicio usuarioServicio;
 	
+	private static String LoginBitacoraCreacionOpBitTipOpe;
+	
 	public LoginCtrl() {
 		super();
 		
@@ -42,6 +44,8 @@ public class LoginCtrl extends BimBaseCtrl {
 		this.transaccionServicio = new TransaccionServicio();
 		this.tokenServicio = new TokenServicio();
 		this.usuarioServicio = new UsuarioServicio();
+		
+		LoginBitacoraCreacionOpBitTipOpe = properties.getProperty("op.login.bitacora_creacion.bit_tip_ope");
 		
 	}
 	
@@ -253,7 +257,9 @@ public class LoginCtrl extends BimBaseCtrl {
 		datosBitacoraCreacion.addProperty("Bit_Fecha", fechaSis);
 		datosBitacoraCreacion.addProperty("Bit_PriRef", bitPriRef);
 		datosBitacoraCreacion.addProperty("Bit_DireIP", bitDireIP);
-		datosBitacoraCreacion.addProperty("NumTransac", folTransa);		
+		datosBitacoraCreacion.addProperty("Bit_TipOpe", LoginBitacoraCreacionOpBitTipOpe);
+		datosBitacoraCreacion.addProperty("NumTransac", folTransa);
+		datosBitacoraCreacion.addProperty("FechaSis", fechaSis);
 		
 
 		this.bitacoraServicio.creacionBitacora(datosBitacoraCreacion);
