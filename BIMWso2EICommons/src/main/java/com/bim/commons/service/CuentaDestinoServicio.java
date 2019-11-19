@@ -26,7 +26,9 @@ public class CuentaDestinoServicio extends BaseService {
     private static String CuentasEspecialesConsultarOp;
     private static String CuentaDestinoBIMCreacionOp;
     private static String CuentaDestinoProcesarOp;
-    private static String CuentaDestinoBIMConsultarOp;    
+    private static String CuentaDestinoBIMConsultarOp;
+    private static String CuentaDestinoSPEICreacionOp;   
+    private static String CuentaDestinoBIMConsultarL1Op;
 
 	private static String CuentaDestinoSPEIActivacionOpTransaccio;
 	private static String CuentaDestinoSPEIActivacionOpUsuario;
@@ -67,7 +69,8 @@ public class CuentaDestinoServicio extends BaseService {
     private static String CuentaDestinoBIMConsultarOpUsuario;
     private static String CuentaDestinoBIMConsultarOpSucOrigen;
     private static String CuentaDestinoBIMConsultarOpSucDestino;
-    private static String CuentaDestinoBIMConsultarOpModulo;  
+    private static String CuentaDestinoBIMConsultarOpModulo;
+    private static String CuentaDestinoProcesarOpTipProces;
     private static String CuentaDestinoProcesarOpTransaccio;
     private static String CuentaDestinoProcesarOpUsuario;
     private static String CuentaDestinoProcesarOpSucOrigen;
@@ -78,7 +81,12 @@ public class CuentaDestinoServicio extends BaseService {
     private static String CuentasEspecialesConsultarOpUsuario;
     private static String CuentasEspecialesConsultarOpSucOrigen;
     private static String CuentasEspecialesConsultarOpSucDestino;
-    private static String CuentasEspecialesConsultarOpModulo;
+    private static String CuentasEspecialesConsultarOpModulo;    
+    private static String CuentaDestinoSPEICreacionOpTransaccio;
+    private static String CuentaDestinoSPEICreacionOpUsuario;
+    private static String CuentaDestinoSPEICreacionOpSucOrigen;
+    private static String CuentaDestinoSPEICreacionOpSucDestino;
+    private static String CuentaDestinoSPEICreacionOpModulo;
 	public CuentaDestinoServicio() {
 		super();
 
@@ -93,7 +101,10 @@ public class CuentaDestinoServicio extends BaseService {
         CuentaDestinoBIMCreacionOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_bim_creacion");
         CuentaDestinoProcesarOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_procesar");
         CuentaDestinoBIMConsultarOp = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_bim_consultar");
+        CuentaDestinoSPEICreacionOp = properties.getProperty("cuenta_destino_servicio.op.cuentas_destino_spei_creacion");
 
+        CuentaDestinoBIMConsultarL1Op = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_bim_consultar_l1");
+        		
         CuentaDestinoSPEIActivacionOpTransaccio = properties.getProperty("op.cuenta_destino_spei_activacion.transaccio");
 		CuentaDestinoSPEIActivacionOpUsuario = properties.getProperty("op.cuenta_destino_spei_activacion.usuario");
 		CuentaDestinoSPEIActivacionOpSucOrigen = properties.getProperty("op.cuenta_destino_spei_activacion.suc_origen");
@@ -114,7 +125,6 @@ public class CuentaDestinoServicio extends BaseService {
         CatalogoInstitucionesConsultarOpSucDestino = properties.getProperty("op.catalogo_instituciones_consultar.suc_destino");
         CatalogoInstitucionesConsultarOpModulo = properties.getProperty("op.catalogo_instituciones_consultar.modulo");
 
-
         CuentaDestinoBIMActualizacionOpTipActual = properties.getProperty("op.cuenta_destino_bim_actualizacion.tip_actual");
         CuentaDestinoBIMActualizacionOpTransaccio = properties.getProperty("op.cuenta_destino_bim_actualizacion.transaccio");
         CuentaDestinoBIMActualizacionOpUsuario = properties.getProperty("op.cuenta_destino_bim_actualizacion.usuario");
@@ -126,8 +136,7 @@ public class CuentaDestinoServicio extends BaseService {
         CuentaDestinoBIMCreacionOpUsuario = properties.getProperty("op.cuenta_destino_bim_creacion.usuario");
         CuentaDestinoBIMCreacionOpSucOrigen = properties.getProperty("op.cuenta_destino_bim_creacion.suc_origen");
         CuentaDestinoBIMCreacionOpSucDestino = properties.getProperty("op.cuenta_destino_bim_creacion.suc_destino");
-        CuentaDestinoBIMCreacionOpModulo = properties.getProperty("op.cuenta_destino_bim_creacion.modulo");
-        
+        CuentaDestinoBIMCreacionOpModulo = properties.getProperty("op.cuenta_destino_bim_creacion.modulo");        
 
         CuentaDestinoBIMConsultarOpTipConsul = properties.getProperty("op.cuenta_destino_bim_consultar.tip_consul");
         CuentaDestinoBIMConsultarOpTransaccio = properties.getProperty("op.cuenta_destino_bim_consultar.transaccio");
@@ -135,7 +144,8 @@ public class CuentaDestinoServicio extends BaseService {
         CuentaDestinoBIMConsultarOpSucOrigen = properties.getProperty("op.cuenta_destino_bim_consultar.suc_origen");
         CuentaDestinoBIMConsultarOpSucDestino = properties.getProperty("op.cuenta_destino_bim_consultar.suc_destino");
         CuentaDestinoBIMConsultarOpModulo = properties.getProperty("op.cuenta_destino_bim_consultar.modulo");
-        
+
+        CuentaDestinoProcesarOpTipProces = properties.getProperty("op.cuenta_destino_procesar.tip_proces");
         CuentaDestinoProcesarOpTransaccio = properties.getProperty("op.cuenta_destino_procesar.transaccio");
         CuentaDestinoProcesarOpUsuario = properties.getProperty("op.cuenta_destino_procesar.usuario");
         CuentaDestinoProcesarOpSucOrigen = properties.getProperty("op.cuenta_destino_procesar.suc_origen");
@@ -156,11 +166,11 @@ public class CuentaDestinoServicio extends BaseService {
         CuentasEspecialesConsultarOpSucDestino = properties.getProperty("op.cuentas_especiales_consultar.suc_destino");
         CuentasEspecialesConsultarOpModulo = properties.getProperty("op.cuentas_especiales_consultar.modulo");
         
-        CuentaDestinoBIMCreacionOpTransaccio = properties.getProperty("op.cuenta_destino_bim_creacion.transaccio");
-        CuentaDestinoBIMCreacionOpUsuario = properties.getProperty("op.cuenta_destino_bim_creacion.usuario");
-        CuentaDestinoBIMCreacionOpSucOrigen = properties.getProperty("op.cuenta_destino_bim_creacion.suc_origen");
-        CuentaDestinoBIMCreacionOpSucDestino = properties.getProperty("op.cuenta_destino_bim_creacion.suc_destino");
-        CuentaDestinoBIMCreacionOpModulo = properties.getProperty("op.cuenta_destino_bim_creacion.modulo");
+        CuentaDestinoSPEICreacionOpTransaccio = properties.getProperty("op.cuentas_destino_spei_creacion.transaccio");
+        CuentaDestinoSPEICreacionOpUsuario = properties.getProperty("op.cuentas_destino_spei_creacion.usuario");
+        CuentaDestinoSPEICreacionOpSucOrigen = properties.getProperty("op.cuentas_destino_spei_creacion.suc_origen");
+        CuentaDestinoSPEICreacionOpSucDestino = properties.getProperty("op.cuentas_destino_spei_creacion.suc_destino");
+        CuentaDestinoSPEICreacionOpModulo = properties.getProperty("op.cuentas_destino_spei_creacion.modulo");
     }
 	
 	/**
@@ -361,8 +371,7 @@ public class CuentaDestinoServicio extends BaseService {
      * 	Cds_UsuAdm: String,
      * 	Cds_Consec?: String,
      * 	Cds_CLABE: String,
-     * 	Cds_Randoms: String,
-     *  Tip_Actual: String,
+     * 	Cds_Random: String,
      *  NumTransac?: String,
      *	FechaSis: String
      * }
@@ -536,6 +545,7 @@ public class CuentaDestinoServicio extends BaseService {
     		datosCuentaDestinoProcesar.addProperty("Tip_Proces", "");
         if(!datosCuentaDestinoProcesar.has("NumTransac"))
             datosCuentaDestinoProcesar.addProperty("NumTransac", "");
+        datosCuentaDestinoProcesar.addProperty("Transaccio", CuentaDestinoProcesarOpTipProces);
         datosCuentaDestinoProcesar.addProperty("Transaccio", CuentaDestinoProcesarOpTransaccio);
         datosCuentaDestinoProcesar.addProperty("Usuario", CuentaDestinoProcesarOpUsuario);
     	datosCuentaDestinoProcesar.addProperty("SucOrigen", CuentaDestinoProcesarOpSucOrigen);
@@ -565,7 +575,7 @@ public class CuentaDestinoServicio extends BaseService {
      * 
      */
     public JsonObject cuentaDestinoBIMConsultar(JsonObject datosCuentaDestinoBIMConsultar) {
-    	logger.info("COMMONS: Comenzando cuentaDestinoBIMCreacion...");
+    	logger.info("COMMONS: Comenzando cuentaDestinoBIMConsultar metodo...");
     	if(!datosCuentaDestinoBIMConsultar.has("Cdb_Client"))
             datosCuentaDestinoBIMConsultar.addProperty("Cdb_Client", "");
         if(!datosCuentaDestinoBIMConsultar.has("Cdb_UsuAdm"))
@@ -577,7 +587,7 @@ public class CuentaDestinoServicio extends BaseService {
         if(!datosCuentaDestinoBIMConsultar.has("Cdb_Status"))
             datosCuentaDestinoBIMConsultar.addProperty("Cdb_Status", "");
         if(!datosCuentaDestinoBIMConsultar.has("Tip_Consul"))
-            datosCuentaDestinoBIMConsultar.addProperty("Tip_Consul", CuentaDestinoBIMConsultarOpTipConsul);
+            datosCuentaDestinoBIMConsultar.addProperty("Tip_Consul", "");
         if(!datosCuentaDestinoBIMConsultar.has("NumTransac"))
             datosCuentaDestinoBIMConsultar.addProperty("NumTransac", "");
         if(!datosCuentaDestinoBIMConsultar.has("Transaccio"))
@@ -586,8 +596,83 @@ public class CuentaDestinoServicio extends BaseService {
     	datosCuentaDestinoBIMConsultar.addProperty("SucOrigen", CuentaDestinoBIMConsultarOpSucOrigen);
     	datosCuentaDestinoBIMConsultar.addProperty("SucDestino", CuentaDestinoBIMConsultarOpSucDestino);
     	datosCuentaDestinoBIMConsultar.addProperty("Modulo", CuentaDestinoBIMConsultarOpModulo);
+
+    	logger.info("- datosCuentaDestinoBIMConsultar: " + datosCuentaDestinoBIMConsultar);
+    	
+    	if(datosCuentaDestinoBIMConsultar.get("Tip_Consul").getAsString().equals("L1"))
+    		CuentaDestinoBIMConsultarOp = CuentaDestinoBIMConsultarL1Op;
+    		
     	JsonObject result = Utilerias.performOperacion(CuentaDestinoServicio, CuentaDestinoBIMConsultarOp, datosCuentaDestinoBIMConsultar);
-    	logger.info("COMMONS: Finalizando cuentaDestinoBIMCreacion...");
+    	logger.info("COMMONS: Finalizando cuentaDestinoBIMConsultar metodo...");
+    	return result;
+    }//Cierre del método
+
+    /**
+     * Método para creación de cuentas destino SPI
+     * ProcedureName: NBCUDESPALT
+     * @param datosCuentaDestinoSPEI
+     * <pre>
+     * {
+     * 	Cds_UsuAdm: String,
+     * 	Cds_CLABE: String,
+     * 	Cds_Banco: String,
+     * 	Cds_CliUsu: String,
+     * 	Cds_Alias: String,
+     *  Cds_RFCBen: String,
+     *  Cds_EmaBen: String,
+     *  Cds_DesAdi?: String,
+     *  Cds_Random: String,
+     *  NumTransac?: String,
+     *	Transaccio: String,
+     *	Usuario: String,
+     *	FechaSis: String,
+     *	SucOrigen: String,
+     *	SucDestino: String,
+     *	Modulo: String
+     * }
+     * </pre>
+     * @return
+     * <pre>
+     * {
+     *  cuentaDestino: {
+     *      Err_Codigo: String,
+     *      Err_Mensaj: String,
+     *      Err_Variab: String,
+     *      Err_Foco: String
+     *  }
+     * }
+     * </pre>
+     */
+    public JsonObject cuentaDestinoSPEICreacion(JsonObject datosCuentaDestinoSPEI) {
+    	logger.info("COMMONS: Comenzando cuentaDestinoSPEICreacion...");
+    	if(!datosCuentaDestinoSPEI.has("Cds_UsuAdm"))
+            datosCuentaDestinoSPEI.addProperty("Cds_UsuAdm", "");
+        if(!datosCuentaDestinoSPEI.has("Cds_CLABE"))
+            datosCuentaDestinoSPEI.addProperty("Cds_CLABE", "");
+        if(!datosCuentaDestinoSPEI.has("Cds_Banco"))
+            datosCuentaDestinoSPEI.addProperty("Cds_Banco", "");
+        if(!datosCuentaDestinoSPEI.has("Cds_CliUsu"))
+    		datosCuentaDestinoSPEI.addProperty("Cds_CliUsu", "");
+    	if(!datosCuentaDestinoSPEI.has("Cds_Alias"))
+    		datosCuentaDestinoSPEI.addProperty("Cds_Alias", "");
+        if(!datosCuentaDestinoSPEI.has("Cds_RFCBen"))
+            datosCuentaDestinoSPEI.addProperty("Cds_RFCBen", "");
+        if(!datosCuentaDestinoSPEI.has("Cds_EmaBen"))
+            datosCuentaDestinoSPEI.addProperty("Cds_EmaBen", "");
+        if(!datosCuentaDestinoSPEI.has("Cds_DesAdi"))
+            datosCuentaDestinoSPEI.addProperty("Cds_DesAdi", "");
+        if(!datosCuentaDestinoSPEI.has("Cds_Random"))
+            datosCuentaDestinoSPEI.addProperty("Cds_Random", "");
+        if(!datosCuentaDestinoSPEI.has("NumTransac"))    
+            datosCuentaDestinoSPEI.addProperty("NumTransac", "");
+        datosCuentaDestinoSPEI.addProperty("Transaccio", CuentaDestinoSPEICreacionOpTransaccio);
+    	datosCuentaDestinoSPEI.addProperty("Usuario", CuentaDestinoSPEICreacionOpUsuario);
+    	datosCuentaDestinoSPEI.addProperty("SucOrigen", CuentaDestinoSPEICreacionOpSucOrigen);
+    	datosCuentaDestinoSPEI.addProperty("SucDestino", CuentaDestinoSPEICreacionOpSucDestino);
+        datosCuentaDestinoSPEI.addProperty("Modulo", CuentaDestinoSPEICreacionOpModulo);
+        logger.info("terminando de crear el objeto");
+    	JsonObject result = Utilerias.performOperacion(CuentaDestinoServicio, CuentaDestinoSPEICreacionOp, datosCuentaDestinoSPEI);
+    	logger.info("COMMONS: Finalizando cuentaDestinoSPEICreacion...");
     	return result;
     }//Cierre del método
 }
