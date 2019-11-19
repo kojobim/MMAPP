@@ -61,6 +61,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 	private static String InversionesFilterBy;
 	private static Integer InversionesMaximoPagina;
+	private static String ClienteConsultarOpTipConsul;
 	private static String ConsultaInversionBitacoraCreacionOpBitTipOpe;
 	private static String ReinversionBitacoraCreacionOpBitTipOpe;
 		
@@ -81,6 +82,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		
 		InversionesFilterBy = properties.getProperty("inversiones_servicio.filter_by");
 		InversionesMaximoPagina = Integer.parseInt(properties.getProperty("inversiones_servicio.maximo_pagina"));
+		ClienteConsultarOpTipConsul = properties.getProperty("op.cliente_consultar.tip_consul");
 		ConsultaInversionBitacoraCreacionOpBitTipOpe = properties.getProperty("op.consulta_inversion.bitacora_creacion.bit_tip_ope");
 		ReinversionBitacoraCreacionOpBitTipOpe = properties.getProperty("op.reinversion.bitacora_creacion.bit_tip_ope");
 		
@@ -543,6 +545,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		
 		JsonObject datosCliente = new JsonObject();
 		datosCliente.addProperty("Cli_Numero", usuClient);
+		datosCliente.addProperty("Tip_Consul", ClienteConsultarOpTipConsul);
 		datosCliente.addProperty("NumTransac", numTransac);
 		datosCliente.addProperty("FechaSis", fechaSis);
 		
@@ -551,9 +554,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("clienteConsultarOpResultadoObjeto" + clienteConsultarOpResultadoObjeto);
 
 		JsonObject cliente = Utilerias.obtenerJsonObjectPropiedad(clienteConsultarOpResultadoObjeto, "cliente");
-		// String cliSucurs = Utilerias.obtenerStringPropiedad(cliente, "Cli_Sucurs");
+		String cliSucurs = Utilerias.obtenerStringPropiedad(cliente, "Cli_Sucurs");
 		String cliComple = Utilerias.obtenerStringPropiedad(cliente, "Cli_Comple");
-		String cliSucurs = "001";
+		// String cliSucurs = "001";
 
 		JsonObject datosSucursal = new JsonObject();
 		datosSucursal.addProperty("Par_Sucurs", cliSucurs);
@@ -658,7 +661,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			JsonObject tasaGATRealConsultaCalcularOpResultadoObjeto = this.tasaServicio.tasaGATRealConsultaCalcular(datosGATRea);
 			logger.info("tasaGATRealConsultaCalcularOpResultadoObjeto" + tasaGATRealConsultaCalcularOpResultadoObjeto);
 
-			JsonObject GATRealConsultaCalcular = Utilerias.obtenerJsonObjectPropiedad(tasaGATRealConsultaCalcularOpResultadoObjeto, "GATRealConsultaCalcular");
+			JsonObject GATRealConsultaCalcular = Utilerias.obtenerJsonObjectPropiedad(tasaGATRealConsultaCalcularOpResultadoObjeto, "tasaGATReal");
 			invGATRea = Utilerias.obtenerDoublePropiedad(GATRealConsultaCalcular, "Inv_GATRea");
 		}	
 
@@ -671,7 +674,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		String cliCobISR = Utilerias.obtenerStringPropiedad(cliente, "Cli_CobISR");
 
 		/**
-		 * REGLA DE NEGOCIO: verifica que la cantidad de inversiÃ³n sea mayor a 5000 y el plazo sea mayor a cero 
+		 * REGLA DE NEGOCIO: verifica que la cantidad de inversión sea mayor a 5000 y el plazo sea mayor a cero 
 		 */
 
 		if(invCantid < 5000 || invPlazo <= 0){
@@ -692,7 +695,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("resultadoCalculaTasa" + resultadoCalculaTasa);
 
 		/**
-		 * REGLA DE NEGOCIO: valida token de transacciÃ³n y bloquea al usuario en caso de 5 intentos fallidos
+		 * REGLA DE NEGOCIO: valida token de transacción y bloquea al usuario en caso de 5 intentos fallidos
 		 */
 
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(renovarInversion, "cpRSAToken");
@@ -790,7 +793,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject inversionesProcesoLiquidacionGenerarOpResultadoObjeto = this.inversionesServicio.inversionesProcesoLiquidacionGenerar(datosProcesoLiquidacion);
 		logger.info("inversionesProcesoLiquidacionGenerarOpResultadoObjeto" + inversionesProcesoLiquidacionGenerarOpResultadoObjeto);
 		
-		JsonObject ProcesoLiquidacionGenerar = Utilerias.obtenerJsonObjectPropiedad(inversionesProcesoLiquidacionGenerarOpResultadoObjeto, "ProcesoLiquidacionGenerar");
+		JsonObject ProcesoLiquidacionGenerar = Utilerias.obtenerJsonObjectPropiedad(inversionesProcesoLiquidacionGenerarOpResultadoObjeto, "procesoLiquidacionGenerar");
 		String errCodigo = Utilerias.obtenerStringPropiedad(ProcesoLiquidacionGenerar, "Err_Codigo");
 		String errMensaj = Utilerias.obtenerStringPropiedad(ProcesoLiquidacionGenerar, "Err_Mensaj");
 		String invNueva = Utilerias.obtenerStringPropiedad(ProcesoLiquidacionGenerar, "Inv_Nueva");
