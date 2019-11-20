@@ -29,6 +29,7 @@ public class CuentaDestinoServicio extends BaseService {
     private static String CuentaDestinoBIMConsultarOp;
     private static String CuentaDestinoSPEICreacionOp;   
     private static String CuentaDestinoBIMConsultarL1Op;
+    private static String CuentaDestinoBIMConsultarL2Op;
 
 	private static String CuentaDestinoSPEIActivacionOpTransaccio;
 	private static String CuentaDestinoSPEIActivacionOpUsuario;
@@ -104,6 +105,7 @@ public class CuentaDestinoServicio extends BaseService {
         CuentaDestinoSPEICreacionOp = properties.getProperty("cuenta_destino_servicio.op.cuentas_destino_spei_creacion");
 
         CuentaDestinoBIMConsultarL1Op = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_bim_consultar_l1");
+        CuentaDestinoBIMConsultarL2Op = properties.getProperty("cuenta_destino_servicio.op.cuenta_destino_bim_consultar_l2");
         		
         CuentaDestinoSPEIActivacionOpTransaccio = properties.getProperty("op.cuenta_destino_spei_activacion.transaccio");
 		CuentaDestinoSPEIActivacionOpUsuario = properties.getProperty("op.cuenta_destino_spei_activacion.usuario");
@@ -600,6 +602,9 @@ public class CuentaDestinoServicio extends BaseService {
     	
     	if(datosCuentaDestinoBIMConsultar.get("Tip_Consul").getAsString().equals("L1"))
     		CuentaDestinoBIMConsultarOp = CuentaDestinoBIMConsultarL1Op;
+    	
+    	if(datosCuentaDestinoBIMConsultar.get("Tip_Consul").getAsString().equals("L2"))
+    		CuentaDestinoBIMConsultarOp = CuentaDestinoBIMConsultarL2Op;
     		
     	JsonObject result = Utilerias.performOperacion(CuentaDestinoServicio, CuentaDestinoBIMConsultarOp, datosCuentaDestinoBIMConsultar);
     	logger.info("COMMONS: Finalizando cuentaDestinoBIMConsultar metodo...");

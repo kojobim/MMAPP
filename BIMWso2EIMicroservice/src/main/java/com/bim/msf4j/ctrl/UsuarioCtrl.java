@@ -240,6 +240,21 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
 		String usuUseAdm = principalResultadoObjecto.get("usuUsuAdm").getAsString();
 		String fechaSis = Utilerias.obtenerFechaSis();
+
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
+		logger.info("- folioTransaccionGenerarOpResultadoObjeto: " + folioTransaccionGenerarOpResultadoObjeto);
+
+		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarOpResultadoObjeto, "transaccion");
+		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
+
+		JsonObject datosCuentaDestinoTransferenciaBIMActivacion = new JsonObject();
+		datosCuentaDestinoTransferenciaBIMActivacion.addProperty("Cdb_UsuAdm", usuUseAdm);
+		datosCuentaDestinoTransferenciaBIMActivacion.addProperty("NumTransac", numTransac);
+		datosCuentaDestinoTransferenciaBIMActivacion.addProperty("FechaSis", fechaSis);
+
+		JsonObject cuentaDestinoTransferenciaBIMActivacionResultado = this.transferenciasBIMServicio.cuentaDestinoTransferenciaBIMActivacion(datosCuentaDestinoTransferenciaBIMActivacion);
+		logger.info("- cuentaDestinoTransferenciaBIMActivacionResultado: " + cuentaDestinoTransferenciaBIMActivacionResultado);
+		Utilerias.verificarError(cuentaDestinoTransferenciaBIMActivacionResultado);
 		
 		JsonObject datosCuentaDestinoBIMConsultar = new JsonObject();
 		datosCuentaDestinoBIMConsultar.addProperty("Cdb_UsuAdm", usuUseAdm);
