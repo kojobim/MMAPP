@@ -24,6 +24,8 @@ public class TransferenciasBIMServicio extends BaseService {
 	private static String CuentaDestinoTransferenciaBIMActivacionOpSucDestino;
 	private static String CuentaDestinoTransferenciaBIMActivacionOpModulo;
 	private static String TransferenciaBIMProcesarOp;
+	private static String TransferenciaBIMProcesarOpTrbTipTra;
+	private static String TransferenciaBIMProcesarOpTrbValFir;
 	private static String TransferenciaBIMProcesarOpTransaccio;
 	private static String TransferenciaBIMProcesarOpUsuario;
 	private static String TransferenciaBIMProcesarOpSucOrigen;
@@ -66,7 +68,9 @@ public class TransferenciasBIMServicio extends BaseService {
 		CuentaDestinoTransferenciaBIMActivacionOpSucOrigen = properties.getProperty("op.cuentas_origen_consultar.suc_origen");
 		CuentaDestinoTransferenciaBIMActivacionOpSucDestino = properties.getProperty("op.cuentas_origen_consultar.suc_destino");
 		CuentaDestinoTransferenciaBIMActivacionOpModulo = properties.getProperty("op.cuentas_origen_consultar.modulo");
-		
+
+		TransferenciaBIMProcesarOpTrbTipTra = properties.getProperty("op.transferencia_bim_procesar.trb_tip_tra");
+		TransferenciaBIMProcesarOpTrbValFir = properties.getProperty("op.transferencia_bim_procesar.trb_val_fir");
 		TransferenciaBIMProcesarOpTransaccio = properties.getProperty("op.transferencia_bim_procesar.transaccio");
 		TransferenciaBIMProcesarOpUsuario = properties.getProperty("op.transferencia_bim_procesar.usuario");
 		TransferenciaBIMProcesarOpSucOrigen = properties.getProperty("op.transferencia_bim_procesar.suc_origen");
@@ -123,6 +127,8 @@ public class TransferenciasBIMServicio extends BaseService {
 		datosTransferenciaBIMProcesar.addProperty("Trb_RFC", "");
 		datosTransferenciaBIMProcesar.addProperty("Trb_IVA", 0.000);
 		datosTransferenciaBIMProcesar.addProperty("Trb_DireIP", "");
+		datosTransferenciaBIMProcesar.addProperty("Trb_TipTra", TransferenciaBIMProcesarOpTrbTipTra);
+		datosTransferenciaBIMProcesar.addProperty("Trb_ValFir", TransferenciaBIMProcesarOpTrbValFir);
 		datosTransferenciaBIMProcesar.addProperty("Transaccio", TransferenciaBIMProcesarOpTransaccio);
 		datosTransferenciaBIMProcesar.addProperty("Usuario", TransferenciaBIMProcesarOpUsuario);
 		datosTransferenciaBIMProcesar.addProperty("SucOrigen", TransferenciaBIMProcesarOpSucOrigen);
@@ -156,7 +162,6 @@ public class TransferenciasBIMServicio extends BaseService {
 	
 	public JsonObject transferenciasBIMConsultar(JsonObject datosTransferenciaBIMConsultar) {
 		datosTransferenciaBIMConsultar.addProperty("Trb_Client", "");
-		datosTransferenciaBIMConsultar.addProperty("Trb_Consec", "");
 		datosTransferenciaBIMConsultar.addProperty("Trb_Status", "");
 		datosTransferenciaBIMConsultar.addProperty("Trb_TipTra", "");
 		datosTransferenciaBIMConsultar.addProperty("NumTransac", "");

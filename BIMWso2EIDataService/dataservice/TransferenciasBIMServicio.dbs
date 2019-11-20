@@ -297,4 +297,77 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
+    <query id="transferenciaBIMProcesarSQL" useConfig="BIMDB">
+        <sql>
+	    	EXECUTE NBTRABANPRO
+	        @Trb_UsuAdm = :trbUsuAdm,
+		    @Trb_Usuari = :trbUsuari,
+		    @Trb_Client = :trbClient,
+		    @Trb_Consec = :trbConsec,
+		    @Trb_CueOri = :trbCueOri,
+		    @Trb_CueDes = :trbCueDes,
+		    @Trb_Monto = :trbMonto,
+		    @Trb_RFC = :trbRFC,
+		    @Trb_IVA = :trbIVA,
+		    @Trb_SegRef = :trbSegRef,
+		    @Trb_DireIP = :trbDireIP,
+		    @Trb_TipTra = :trbTipTra,
+		    @Trb_ValFir = :trbValFir,
+		    @NumTransac = :numTransac,
+		    @Transaccio = :transaccio,
+		    @Usuario = :usuario,
+		    @FechaSis = :fechaSis,
+		    @SucOrigen = :sucOrigen,
+		    @SucDestino = :sucDestino,
+		    @Modulo = :modulo
+    	</sql>
+        <param name="trbUsuAdm" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbUsuari" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbConsec" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbCueOri" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbCueDes" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbMonto" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="trbRFC" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbIVA" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="trbSegRef" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbDireIP" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbTipTra" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="trbValFir" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/transferenciaBIMCreacionNE" element="transferenciaBIM">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation name="transferenciaBIMProcesarOp">
+        <call-query href="transferenciaBIMProcesarSQL">
+            <with-param name="trbUsuAdm" query-param="Trb_UsuAdm"/>
+            <with-param name="trbUsuari" query-param="Trb_Usuari"/>
+            <with-param name="trbClient" query-param="Trb_Client"/>
+            <with-param name="trbConsec" query-param="Trb_Consec"/>
+            <with-param name="trbCueOri" query-param="Trb_CueOri"/>
+            <with-param name="trbCueDes" query-param="Trb_CueDes"/>
+            <with-param name="trbMonto" query-param="Trb_Monto"/>
+            <with-param name="trbRFC" query-param="Trb_RFC"/>
+            <with-param name="trbIVA" query-param="Trb_IVA"/>
+            <with-param name="trbSegRef" query-param="Trb_SegRef"/>
+            <with-param name="trbDireIP" query-param="Trb_DireIP"/>
+            <with-param name="trbTipTra" query-param="Trb_TipTra"/>
+            <with-param name="trbValFir" query-param="Trb_ValFir"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
 </data>
