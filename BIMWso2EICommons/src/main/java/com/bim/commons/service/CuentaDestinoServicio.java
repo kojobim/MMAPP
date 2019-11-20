@@ -65,7 +65,6 @@ public class CuentaDestinoServicio extends BaseService {
     private static String CuentaDestinoBIMCreacionOpSucOrigen;
     private static String CuentaDestinoBIMCreacionOpSucDestino;
     private static String CuentaDestinoBIMCreacionOpModulo;
-    private static String CuentaDestinoBIMConsultarOpTipConsul;
     private static String CuentaDestinoBIMConsultarOpTransaccio;
     private static String CuentaDestinoBIMConsultarOpUsuario;
     private static String CuentaDestinoBIMConsultarOpSucOrigen;
@@ -140,7 +139,6 @@ public class CuentaDestinoServicio extends BaseService {
         CuentaDestinoBIMCreacionOpSucDestino = properties.getProperty("op.cuenta_destino_bim_creacion.suc_destino");
         CuentaDestinoBIMCreacionOpModulo = properties.getProperty("op.cuenta_destino_bim_creacion.modulo");        
 
-        CuentaDestinoBIMConsultarOpTipConsul = properties.getProperty("op.cuenta_destino_bim_consultar.tip_consul");
         CuentaDestinoBIMConsultarOpTransaccio = properties.getProperty("op.cuenta_destino_bim_consultar.transaccio");
         CuentaDestinoBIMConsultarOpUsuario = properties.getProperty("op.cuenta_destino_bim_consultar.usuario");
         CuentaDestinoBIMConsultarOpSucOrigen = properties.getProperty("op.cuenta_destino_bim_consultar.suc_origen");
