@@ -133,6 +133,8 @@ public class Racal {
 		logger.info("datosToken" + datosToken);
 		JsonObject logCreacionOpResultadoObjeto = Utilerias.performOperacion(TokenServicio, LogCreacionOp, datosToken);
 		logger.info("logCreacionOpResultadoObjeto" + logCreacionOpResultadoObjeto);
+		
+		Utilerias.verificarError(logCreacionOpResultadoObjeto);
 	}
 
 	public static String validaTokenOpera(String clave, String scriptName) {
