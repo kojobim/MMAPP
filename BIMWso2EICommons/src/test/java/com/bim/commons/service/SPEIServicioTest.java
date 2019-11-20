@@ -80,7 +80,7 @@ public class SPEIServicioTest {
 		 * String mock = "{\"transaccionSPEI\":{\"Err_Codigo\":\"000001\",\"Err_Mensaj\":\"La cuenta no se encuentra en su catalogo de cuentas origen\"}}";
 		 * JsonObject resultado = Utilerias.fromJsonObject(mock);
 		 */
-		JsonObject resultado = speiServicio.transaferenciaSPEICreacion(datosTransfarenciaSPEI);
+		JsonObject resultado = speiServicio.transferenciaSPEICreacion(datosTransfarenciaSPEI);
 		logger.info("- resultado " + resultado);
 		
 		assertTrue(resultado.has("transaccionSPEI"));
@@ -120,7 +120,7 @@ public class SPEIServicioTest {
 		datosTransferenciaSPEI.addProperty("Ban_Descri", "BBVA BANCOMER");
 		datosTransferenciaSPEI.addProperty("NumTransac", "42246958");
 		datosTransferenciaSPEI.addProperty("FechaSis", Utilerias.obtenerFechaSis());
-		JsonObject resultado = speiServicio.transaferenciaSPEIProcesar(datosTransferenciaSPEI);
+		JsonObject resultado = speiServicio.transferenciaSPEIProcesar(datosTransferenciaSPEI);
 		logger.info("- resultado " + resultado);
 		
 		assertTrue("El resultado no tienen la propiedad transaccionSPEI", resultado.has("transaccionSPEI"));
@@ -145,7 +145,7 @@ public class SPEIServicioTest {
 		datosTransferenciaSPEI.addProperty("Trn_Usuari", "000014");
 		datosTransferenciaSPEI.addProperty("Trn_Status", "A");
 		datosTransferenciaSPEI.addProperty("FechaSis", Utilerias.obtenerFechaSis());
-		JsonObject resultado = speiServicio.transaferenciaSPEIConsultar(datosTransferenciaSPEI );
+		JsonObject resultado = speiServicio.transferenciaSPEIConsultar(datosTransferenciaSPEI );
 		logger.info("- resultado " + resultado);
 		
 		assertTrue("El resultado no tiene la propiedad transaccionesSPEI", resultado.has("transaccionesSPEI"));

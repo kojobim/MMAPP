@@ -228,6 +228,16 @@
         <result element="transaccionSPEI">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+            <element column="NumTransac" name="NumTransac" xsdType="xs:string" optional="true"/>
+            <element column="Numero" name="Numero" xsdType="xs:string" optional="true"/>
+            <element column="Trs_FecAut" name="Trs_FecAut" xsdType="xs:string" optional="true"/>
+            <element column="Trs_FecCar" name="Trs_FecCar" xsdType="xs:string" optional="true"/>
+            <element column="Trs_FecApl" name="Trs_FecApl" xsdType="xs:string" optional="true"/>
+            <element column="Trs_Proces" name="Trs_Proces" xsdType="xs:string" optional="true"/>
+            <element column="Trs_ClaRas" name="Trs_ClaRas" xsdType="xs:string" optional="true"/>
+            <element column="Trs_Firma" name="Trs_Firma" xsdType="xs:string" optional="true"/>
+            <element column="Trs_Progra" name="Trs_Progra" xsdType="xs:string" optional="true"/>
+            <element column="Trs_TipSPE" name="Trs_TipSPE" xsdType="xs:string" optional="true"/>
         </result>
     </query>
     <operation name="transferenciaSPEIProcesarOp">

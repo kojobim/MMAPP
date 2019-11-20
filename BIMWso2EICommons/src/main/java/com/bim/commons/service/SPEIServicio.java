@@ -71,10 +71,10 @@ public class SPEIServicio extends BaseService {
 		TransferenciaSPEICreacionOpSucDestino = properties.getProperty("op.transferencias_spei_creacion.suc_destino");
 		TransferenciaSPEICreacionOpModulo = properties.getProperty("op.transferencias_spei_creacion.modulo");
 		
-		TransferenciaSPEIProcesarOpTrsCuBe = properties.getProperty("op.transferencias_spei_procesar.transaccio");
-		TransferenciaSPEIProcesarOpTrsTipPag = properties.getProperty("op.transferencias_spei_procesar.transaccio");
-		TransferenciaSPEIProcesarOpTrsTipTra = properties.getProperty("op.transferencias_spei_procesar.transaccio");
-		TransferenciaSPEIProcesarOpTrsValFir = properties.getProperty("op.transferencias_spei_procesar.transaccio");
+		TransferenciaSPEIProcesarOpTrsCuBe = properties.getProperty("op.transferencias_spei_procesar.trs_ti_cu_be");
+		TransferenciaSPEIProcesarOpTrsTipPag = properties.getProperty("op.transferencias_spei_procesar.trs_tip_pag");
+		TransferenciaSPEIProcesarOpTrsTipTra = properties.getProperty("op.transferencias_spei_procesar.trs_tip_tra");
+		TransferenciaSPEIProcesarOpTrsValFir = properties.getProperty("op.transferencias_spei_procesar.trs_val_fir");
 		TransferenciaSPEIProcesarOpTransaccio = properties.getProperty("op.transferencias_spei_procesar.transaccio");
 		TransferenciaSPEIProcesarOpUsuario = properties.getProperty("op.transferencias_spei_procesar.usuario");
 		TransferenciaSPEIProcesarOpSucOrigen = properties.getProperty("op.transferencias_spei_procesar.suc_origen");
@@ -94,7 +94,23 @@ public class SPEIServicio extends BaseService {
 	 * Método para consultar los horarios de disponibilidad para transferencias SPEI
 	 * ProcedureName: SPHORARICON
 	 * @param datosHorariosSPEI
+	 * <pre>
+	 * {
+	 *	Msj_Error?: String,
+	 *	NumTransac?: String,
+	 *	FechaSis: : String
+	 * }
+	 * </pre>
 	 * @return
+	 * <pre>
+	 * {
+	 *  horarioSPEI:
+	 *  	{
+	 *  	Hor_HorIni: String,
+	 *  	Hor_HorFin: String
+	 *  }
+	 * }
+	 * </pre>
 	 */
 	public JsonObject horariosSPEIConsultar(JsonObject datosHorariosSPEI) {
 		logger.info("COMMONS: Empezando horariosSPEIConsultar metodo... ");
@@ -106,7 +122,6 @@ public class SPEIServicio extends BaseService {
 			datosHorariosSPEI.addProperty("Hor_MonFin", 0);
 		if(!datosHorariosSPEI.has("NumTransac"))
 			datosHorariosSPEI.addProperty("NumTransac", "");
-
 		datosHorariosSPEI.addProperty("Hor_HorIni", HorariosSPEIConsultarOpHorHorIni);
 		datosHorariosSPEI.addProperty("Hor_HorFin", HorariosSPEIConsultarOpHorHorFin);
 		datosHorariosSPEI.addProperty("Tip_Consul", HorariosSPEIConsultarOpTipConsul);
@@ -152,6 +167,14 @@ public class SPEIServicio extends BaseService {
 	 * }
 	 * </pre>
 	 * @return
+	 * <pre>
+	 * {
+	 * 	transaccionSPEI: {
+	 *		Err_Codigo: String,
+	 *		Err_Mensaj: String
+	 *	}
+	 * }
+	 * </pre>
 	 */
 	public JsonObject transferenciaSPEICreacion(JsonObject datosTransfarenciaSPEI) {
 		logger.info("COMMONS: Comenzando transferenciaSPEICreacion metodo... ");
@@ -181,25 +204,86 @@ public class SPEIServicio extends BaseService {
 	/**
 	 * Método para procesar la transferencia SPEI
 	 * ProcedureName: NBTRASPEPRO
+	 * <pre>
+	 * {
+	 * 	Trs_UsuAdm: String,
+	 * 	Trs_Usuari: String,
+	 * 	Trs_UsuCli: String,
+	 * 	Trs_Consec: String,
+	 * 	Trs_OrdPag: String,
+	 * 	Trs_CueOri: String,
+	 * 	Trs_TiCuBe: String,
+	 * 	Trs_CueBen: String,
+	 * 	Trs_Monto: Double,
+	 * 	Trs_RFC: String,
+	 * 	Trs_IVA: Double,
+	 * 	Trs_Comisi: Double,
+	 * 	Trs_ConPag: String,
+	 * 	Trs_RFCPro: String,
+	 * 	Trs_IVAPro: Double,
+	 * 	Trs_Banco: String,
+	 * 	Trs_SegRef: String,
+	 * 	Trs_CoCuDe: String,
+	 * 	Trs_TCPDir: String,
+	 * 	Trs_TipPag: String,
+	 * 	Trs_CuBeAd: String,				
+	 * 	Trs_TiCuBA: String,
+	 * 	Trs_NoBeAd: String,
+	 * 	Trs_ConPaU: String,
+	 * 	Trs_DaBeAd: String,
+	 * 	Trs_DireIP: String,
+	 * 	Trs_TipTra: String,
+	 * 	Trs_ValFir: String,
+	 * 	Ban_Descri: String,
+	 * 	NumTransac: String,
+	 * 	FechaSis: String
+	 * }
+	 * </pre>
 	 * @param datosTransferenciaSPEI
-	 * @return
+ 	 * @return
+	 * <pre>
+	 * {
+	 * 	transaccionSPEI: {
+	 *		Err_Codigo: String,
+	 *		Err_Mensaj: String,
+	 *		NumTransac: String,
+	 *		Numero: String,
+	 *		Trs_FecAut: String,
+	 *		Trs_FecCar: String,
+	 *		Trs_FecApl: String,
+	 *		Trs_Proces: String,
+	 *		Trs_ClaRas: String,
+	 *		Trs_Firma: String,
+	 *		Trs_Progra: String,
+	 *		Trs_TipSPE: String
+	 *	}
+	 * }
+	 * </pre>
 	 */
 	public JsonObject transferenciaSPEIProcesar(JsonObject datosTransferenciaSPEI) {
 		logger.info("COMMONS: Comenzando transferenciaSPEIProcesar metodo... ");
-		datosTransferenciaSPEI.addProperty("Trs_OrdPag", 0.0000);
-		datosTransferenciaSPEI.addProperty("Trs_IVA", 0.0000);
+		if(!datosTransferenciaSPEI.has("Trs_OrdPag"))
+			datosTransferenciaSPEI.addProperty("Trs_OrdPag", "");
+		if(!datosTransferenciaSPEI.has("Trs_IVA"))
+			datosTransferenciaSPEI.addProperty("Trs_IVA", 0.0000);
 		datosTransferenciaSPEI.addProperty("Trs_Comisi", 0.0000);
 		datosTransferenciaSPEI.addProperty("Trs_IVAPro", 0.0000);
 		if(!datosTransferenciaSPEI.has("Trs_RFC"))
 			datosTransferenciaSPEI.addProperty("Trs_RFC", "");
-		datosTransferenciaSPEI.addProperty("Trs_RFCPro", "");
-		datosTransferenciaSPEI.addProperty("Trs_CuBeAd", "");
-		datosTransferenciaSPEI.addProperty("Trs_TiCuBA", "");
-		datosTransferenciaSPEI.addProperty("Trs_NoBeAd", "");
-		datosTransferenciaSPEI.addProperty("Trs_ConPaU", "");
+		if(!datosTransferenciaSPEI.has("Trs_RFCPro"))
+			datosTransferenciaSPEI.addProperty("Trs_RFCPro", "");
+		if(!datosTransferenciaSPEI.has("Trs_CuBeAd"))
+			datosTransferenciaSPEI.addProperty("Trs_CuBeAd", "");
+		if(!datosTransferenciaSPEI.has("Trs_TiCuBA"))
+			datosTransferenciaSPEI.addProperty("Trs_TiCuBA", "");
+		if(!datosTransferenciaSPEI.has("Trs_NoBeAd"))
+			datosTransferenciaSPEI.addProperty("Trs_NoBeAd", "");
+		if(!datosTransferenciaSPEI.has("Trs_ConPaU"))
+			datosTransferenciaSPEI.addProperty("Trs_ConPaU", "");
 		if(!datosTransferenciaSPEI.has("Trs_DaBeAd"))
 			datosTransferenciaSPEI.addProperty("Trs_DaBeAd", "");
-		datosTransferenciaSPEI.addProperty("Trs_DireIP", "");
+		if(!datosTransferenciaSPEI.has("Trs_DireIP"))
+			datosTransferenciaSPEI.addProperty("Trs_DireIP", "");
 		datosTransferenciaSPEI.addProperty("Trs_TiCuBe", TransferenciaSPEIProcesarOpTrsCuBe);
 		datosTransferenciaSPEI.addProperty("Trs_TipPag", TransferenciaSPEIProcesarOpTrsTipPag);
 		datosTransferenciaSPEI.addProperty("Trs_TipTra", TransferenciaSPEIProcesarOpTrsTipTra);
@@ -219,14 +303,71 @@ public class SPEIServicio extends BaseService {
 	 * Método para consultar transferencias SPEI
 	 * ProcedureName: NBTRANACCON
 	 * @param datosTransferenciaSPEI
+	 * <pre>
+	 * {
+	 *	Trn_UsuAdm: String,
+	 *	Trn_Usuari: String,
+	 *	Trn_Client: String,
+	 *	Trn_Consec: String,
+	 *	Trn_Transf: String,
+	 *	NumTransac: String,
+	 *	FechaSis: String
+	 * }
+	 * </pre>
 	 * @return
+	 * <pre>
+	 * {
+	 * 	transaccionesSPEI: {
+	 * 		Trn_Client: String,
+	 * 		Trn_Consec: String,
+	 * 		Trn_CueOri: String,
+	 * 		Trn_CueDes: String,
+	 * 		Trn_Monto: Duble,
+	 * 		Trn_Banco: String,
+	 * 		Trn_Status: String,
+	 * 		Trn_Descri: String,
+	 * 		Trn_RFC: String,
+	 * 		Trn_IVA: Duble,
+	 * 		Trn_Tipo: String,
+	 * 		Trn_UsuCap: String,
+	 * 		Trn_TipTra: String,
+	 * 		Trn_Frecue: String,
+	 * 		Trn_FePrEn: String,
+	 * 		Trn_TipDur: String,
+	 * 		Trn_DurFec: String,
+	 * 		Trn_DurTra: Integer,
+	 * 		Trn_DiAnEm: Integer,
+	 * 		Trn_FecCap: String,
+	 * 		Cor_Alias: String,
+	 * 		Cde_Alias: String,
+	 * 		Cde_Consec: String,
+	 * 		Cde_EmaBen: String,
+	 * 		Cli_ComOrd: String,
+	 * 		Trn_Transf: String,
+	 * 		Trn_SigSec: Integer,
+	 * 		Trn_Secuen: Integer,
+	 * 		Trn_UsCaNo: String,
+	 * 		Trn_UsAuNo: String,
+	 * 		Trn_BanDes: String,
+	 * 		Trn_MonTot: Duble,
+	 * 		Trn_EmaBen: String,
+	 * 		Trn_DeCuOr: String,
+	 * 		Trn_DeCuDe: String,
+	 * 		Trn_DesAdi: String
+	 * 	}
+	 * }
+	 * </pre>
 	 */
 	public JsonObject transferenciaSPEIConsultar(JsonObject datosTransferenciaSPEI) {
 		logger.info("COMMONS: Comenzando transferenciaSPEIConsultar metodo... ");
-		datosTransferenciaSPEI.addProperty("Trn_Client", "");
-		datosTransferenciaSPEI.addProperty("Trn_Consec", "");
-		datosTransferenciaSPEI.addProperty("Trn_Transf", "");
-		datosTransferenciaSPEI.addProperty("NumTransac", "");
+		if(!datosTransferenciaSPEI.has("Trn_Client"))
+			datosTransferenciaSPEI.addProperty("Trn_Client", "");
+		if(!datosTransferenciaSPEI.has("Trn_Consec"))
+			datosTransferenciaSPEI.addProperty("Trn_Consec", "");
+		if(!datosTransferenciaSPEI.has("Trn_Transf"))
+			datosTransferenciaSPEI.addProperty("Trn_Transf", "");
+		if(!datosTransferenciaSPEI.has("NumTransac"))
+			datosTransferenciaSPEI.addProperty("NumTransac", "");
 		datosTransferenciaSPEI.addProperty("Trn_Status", TransferenciaSPEIConsultarOpTrnStatus);
 		datosTransferenciaSPEI.addProperty("Tip_Consul", TransferenciaSPEIConsultarOpTipConsul);
 		datosTransferenciaSPEI.addProperty("Transaccio", TransferenciaSPEIConsultarOpTransaccio);

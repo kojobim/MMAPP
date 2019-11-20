@@ -32,11 +32,11 @@ public class BitacoraServicio extends BaseService {
 		
 		BitacoraCreacionOp = properties.getProperty("bitacora_servicio.op.bitacora_creacion");
 		BitacoraCreacionOpBitTipOpe = properties.getProperty("op.bitacora_creacion.bit_tipope");
-		BitacoraCreacionOpModulo = properties.getProperty("op.bitacora_creacion.transaccio");
-		BitacoraCreacionOpSucDestino = properties.getProperty("op.bitacora_creacion.usuario");
+		BitacoraCreacionOpModulo = properties.getProperty("op.bitacora_creacion.modulo");
+		BitacoraCreacionOpSucDestino = properties.getProperty("op.bitacora_creacion.suc_destino");
 		BitacoraCreacionOpSucOrigen = properties.getProperty("op.bitacora_creacion.suc_origen");
 		BitacoraCreacionOpTransaccio = properties.getProperty("op.bitacora_creacion.transaccio");
-		BitacoraCreacionOpUsuario = properties.getProperty("op.bitacora_creacion.modulo");
+		BitacoraCreacionOpUsuario = properties.getProperty("op.bitacora_creacion.usuario");
 	}
 	
 	
