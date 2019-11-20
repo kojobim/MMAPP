@@ -61,7 +61,10 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 	private static String InversionesFilterBy;
 	private static Integer InversionesMaximoPagina;
-	
+	private static String ClienteConsultarOpTipConsul;
+	private static String ConsultaInversionBitacoraCreacionOpBitTipOpe;
+	private static String ReinversionBitacoraCreacionOpBitTipOpe;
+		
 	public InversionesCtrl() {
 		super();
 		logger.info("CTRL: Comenzando metodo init...");
@@ -74,10 +77,14 @@ public class InversionesCtrl extends BimBaseCtrl {
 		this.reinversionServicio = new ReinversionServicio();
 		this.tasaServicio = new TasaServicio();
 		this.correoServicio = new CorreoServicio();
+		this.configuracionServicio = new ConfiguracionServicio();
 		
 		
 		InversionesFilterBy = properties.getProperty("inversiones_servicio.filter_by");
 		InversionesMaximoPagina = Integer.parseInt(properties.getProperty("inversiones_servicio.maximo_pagina"));
+		ClienteConsultarOpTipConsul = properties.getProperty("op.cliente_consultar.tip_consul");
+		ConsultaInversionBitacoraCreacionOpBitTipOpe = properties.getProperty("op.consulta_inversion.bitacora_creacion.bit_tip_ope");
+		ReinversionBitacoraCreacionOpBitTipOpe = properties.getProperty("op.reinversion.bitacora_creacion.bit_tip_ope");
 		
 		logger.info("CTRL: Terminando metodo init...");
 	}
@@ -150,6 +157,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_PriRef", bit_PriRef);
 		datosBitacora.addProperty("Bit_DireIP", bit_DireIP);
+		datosBitacora.addProperty("Bit_TipOpe", ConsultaInversionBitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("NumTransac", numTransac);
 		datosBitacora.addProperty("FechaSis", fechaSis);
 
@@ -299,6 +307,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
+		datosBitacora.addProperty("Bit_TipOpe", ConsultaInversionBitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
 		datosBitacora.addProperty("FechaSis", fechaSis);
 
@@ -496,6 +505,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
 		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
+		
+		Utilerias.verificarError(folioTransaccionGenerarOpResultadoObjeto);
 
 		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarOpResultadoObjeto, "transaccion");
 		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
@@ -514,8 +525,16 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		logger.info("datosInversion" + datosInversion);
 		logger.info("inversionConsultarOpResultadoObjeto" + inversionConsultarOpResultadoObjeto);
+		
+		Utilerias.verificarError(inversionConsultarOpResultadoObjeto);
 
 		JsonObject inversionesObjecto = Utilerias.obtenerJsonObjectPropiedad(inversionConsultarOpResultadoObjeto, "inversiones");
+		
+		if(inversionesObjecto.entrySet().isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.57");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
 		JsonArray inversionesArreglo = Utilerias.obtenerJsonArrayPropiedad(inversionesObjecto, "inversion");
 		
 		JsonObject inversion = null;
@@ -536,13 +555,16 @@ public class InversionesCtrl extends BimBaseCtrl {
 		
 		JsonObject datosCliente = new JsonObject();
 		datosCliente.addProperty("Cli_Numero", usuClient);
+		datosCliente.addProperty("Tip_Consul", ClienteConsultarOpTipConsul);
 		datosCliente.addProperty("NumTransac", numTransac);
 		datosCliente.addProperty("FechaSis", fechaSis);
 		
 		logger.info("datosCliente" + datosCliente);
 		JsonObject clienteConsultarOpResultadoObjeto = this.clienteServicio.clienteConsultar(datosCliente);
 		logger.info("clienteConsultarOpResultadoObjeto" + clienteConsultarOpResultadoObjeto);
-
+		
+		Utilerias.verificarError(clienteConsultarOpResultadoObjeto);
+		
 		JsonObject cliente = Utilerias.obtenerJsonObjectPropiedad(clienteConsultarOpResultadoObjeto, "cliente");
 		String cliSucurs = Utilerias.obtenerStringPropiedad(cliente, "Cli_Sucurs");
 		String cliComple = Utilerias.obtenerStringPropiedad(cliente, "Cli_Comple");
@@ -554,7 +576,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		logger.info("datosSucursal" + datosSucursal);
 		JsonObject informacionSucursalObtenerOpResultadoObjeto = this.configuracionServicio.informacionSucursalObtener(datosSucursal);
-		logger.info("informacionSucursalObtenerOpResultadoObjeto" + informacionSucursalObtenerOpResultadoObjeto);		
+		logger.info("informacionSucursalObtenerOpResultadoObjeto" + informacionSucursalObtenerOpResultadoObjeto);
+		
+		Utilerias.verificarError(informacionSucursalObtenerOpResultadoObjeto);
 
 		JsonObject datosPerfilRiesgo = new JsonObject();
 		datosPerfilRiesgo.addProperty("Apl_Client", usuClient);
@@ -574,22 +598,30 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		logger.info("datosFechaHabil" + datosFechaHabil);
 		JsonObject fechaHabilConsultarOpResultadoObjeto = this.reinversionServicio.fechaHabilConsultar(datosFechaHabil);
-		logger.info("fechaHabilConsultarOpResultadoObjeto" + fechaHabilConsultarOpResultadoObjeto);		
+		logger.info("fechaHabilConsultarOpResultadoObjeto" + fechaHabilConsultarOpResultadoObjeto);
+		
+		Utilerias.verificarError(fechaHabilConsultarOpResultadoObjeto);
 
 		String cliTipo = Utilerias.obtenerStringPropiedad(cliente, "Cli_Tipo");
 		Double invCantid = Utilerias.obtenerDoublePropiedad(inversion, "Inv_Cantid");
+		String fecVenInv = Utilerias.obtenerStringPropiedad(inversion, "Inv_FecVen");
+
+		String fecVenI = Utilerias.convertirFecha(fecVenInv, "yyyy-MM-dd HH:mm:ss");
 
 		JsonObject datosTasaCliente = new JsonObject();
 		datosTasaCliente.addProperty("Cli_Numero", usuClient);
 		datosTasaCliente.addProperty("Inv_Cantid", invCantid);
 		datosTasaCliente.addProperty("Cli_Tipo", cliTipo);
 		datosTasaCliente.addProperty("Plazo", plazo);
+		datosTasaCliente.addProperty("Inv_FecVen", fecVenI != null ? fecVenI : "");
 		datosTasaCliente.addProperty("NumTransac", numTransac);
 		datosTasaCliente.addProperty("FechaSis", fechaSis);
 
 		logger.info("datosTasaCliente" + datosTasaCliente);
 		JsonObject tasaClienteConsultarOpResultadoObjeto = this.tasaServicio.tasaClienteConsultar(datosTasaCliente);
 		logger.info("tasaClienteConsultarOpResultadoObjeto" + tasaClienteConsultarOpResultadoObjeto);
+		
+		Utilerias.verificarError(tasaClienteConsultarOpResultadoObjeto);
 
 		JsonObject datosMoneda = new JsonObject();
 		datosMoneda.addProperty("NumTransac", numTransac);
@@ -598,18 +630,20 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("datosMoneda" + datosMoneda);
 		JsonObject tasaMonedaConsultarOpResultadoObjeto = this.tasaServicio.tasaMonedaConsultar(datosMoneda);
 		logger.info("tasaMonedaConsultarOpResultadoObjeto" + tasaMonedaConsultarOpResultadoObjeto);
+		
+		Utilerias.verificarError(tasaMonedaConsultarOpResultadoObjeto);
 
 		/**
 		 * REGLA DE NEGOCIO: verifica que la cantidad de inversi√≥n en UDIS sea menor a 400,000.00 para calcular GAT y GATReal
 		 */
 
-		JsonObject monedaConsultar = Utilerias.obtenerJsonObjectPropiedad(tasaMonedaConsultarOpResultadoObjeto, "monedaConsultar");
+		JsonObject monedaConsultar = Utilerias.obtenerJsonObjectPropiedad(tasaMonedaConsultarOpResultadoObjeto, "tasaMoneda");
 		Double monFixCom = Utilerias.obtenerDoublePropiedad(monedaConsultar, "Mon_FixCom");
 		Double MonTotUDI = 400000.00;
 		Double invGAT = 0.00;
 		Double invGATRea = 0.00;
 
-		JsonObject clienteConsultar = Utilerias.obtenerJsonObjectPropiedad(tasaClienteConsultarOpResultadoObjeto, "clienteConsultar");
+		JsonObject clienteConsultar = Utilerias.obtenerJsonObjectPropiedad(tasaClienteConsultarOpResultadoObjeto, "tasaCliente");
 		Double invTasInt = Utilerias.obtenerDoublePropiedad(clienteConsultar, "TasInv");
 
 		if((invCantid / monFixCom) < MonTotUDI) {
@@ -625,7 +659,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			JsonObject tasaGATConsultaCalcularOpResultadoObjeto = this.tasaServicio.tasaGATConsultaCalcular(datosGAT);
 			logger.info("tasaGATConsultaCalcularOpResultadoObjeto" + tasaGATConsultaCalcularOpResultadoObjeto);
 
-			JsonObject GATConsultaCalcular = Utilerias.obtenerJsonObjectPropiedad(tasaGATConsultaCalcularOpResultadoObjeto, "GATConsultaCalcular");
+			JsonObject GATConsultaCalcular = Utilerias.obtenerJsonObjectPropiedad(tasaGATConsultaCalcularOpResultadoObjeto, "tasaGAT");
 			invGAT = Utilerias.obtenerDoublePropiedad(GATConsultaCalcular, "Inv_GAT");	
 
 			JsonObject datosGATRea = new JsonObject();
@@ -637,7 +671,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 			JsonObject tasaGATRealConsultaCalcularOpResultadoObjeto = this.tasaServicio.tasaGATRealConsultaCalcular(datosGATRea);
 			logger.info("tasaGATRealConsultaCalcularOpResultadoObjeto" + tasaGATRealConsultaCalcularOpResultadoObjeto);
 
-			JsonObject GATRealConsultaCalcular = Utilerias.obtenerJsonObjectPropiedad(tasaGATRealConsultaCalcularOpResultadoObjeto, "GATRealConsultaCalcular");
+			JsonObject GATRealConsultaCalcular = Utilerias.obtenerJsonObjectPropiedad(tasaGATRealConsultaCalcularOpResultadoObjeto, "tasaGATReal");
 			invGATRea = Utilerias.obtenerDoublePropiedad(GATRealConsultaCalcular, "Inv_GATRea");
 		}	
 
@@ -650,7 +684,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		String cliCobISR = Utilerias.obtenerStringPropiedad(cliente, "Cli_CobISR");
 
 		/**
-		 * REGLA DE NEGOCIO: verifica que la cantidad de inversi√≥n sea mayor a 5000 y el plazo sea mayor a cero 
+		 * REGLA DE NEGOCIO: verifica que la cantidad de inversiÛn sea mayor a 5000 y el plazo sea mayor a cero 
 		 */
 
 		if(invCantid < 5000 || invPlazo <= 0){
@@ -671,7 +705,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("resultadoCalculaTasa" + resultadoCalculaTasa);
 
 		/**
-		 * REGLA DE NEGOCIO: valida token de transacci√≥n y bloquea al usuario en caso de 5 intentos fallidos
+		 * REGLA DE NEGOCIO: valida token de transacciÛn y bloquea al usuario en caso de 5 intentos fallidos
 		 */
 
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(renovarInversion, "cpRSAToken");
@@ -701,6 +735,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("datosStatusActualizar" + datosStatusActualizar);
 		JsonObject inversionesStatusActualizarOpResultadoObjeto = this.inversionesServicio.inversionesStatusActualizar(datosStatusActualizar);
 		logger.info("inversionesStatusActualizarOpResultadoObjeto" + inversionesStatusActualizarOpResultadoObjeto);
+		
+		Utilerias.verificarError(inversionesStatusActualizarOpResultadoObjeto);
 
 		JsonObject fechaHabil = Utilerias.obtenerJsonObjectPropiedad(fechaHabilConsultarOpResultadoObjeto, "fechaHabil");
 		
@@ -710,35 +746,18 @@ public class InversionesCtrl extends BimBaseCtrl {
 		Double invISR = Utilerias.obtenerDoublePropiedad(resultadoCalculaTasa, "Inv_ISR");
 		Double invCapita = Utilerias.obtenerDoublePropiedad(resultadoCalculaTasa, "Inv_Capita");
 		Double invCanNet = Utilerias.obtenerDoublePropiedad(resultadoCalculaTasa, "Inv_CanNet");
-		
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		TimeZone tz = TimeZone.getTimeZone("UTC");
-		simpleDateFormat.setTimeZone(tz);
 
-		Date rfecIn = null;
-		Date rfecVe = null;
-		try {
-			rfecIn = simpleDateFormat.parse(fechaSis);	
-		} catch (Exception e) {
-            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.43");
-			throw new InternalServerException(bimMessageDTO.toString());
-		}
-		
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");		
-			rfecVe = sdf.parse(sigFecha);
-		} catch (Exception e) {
-            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.43");
-			throw new InternalServerException(bimMessageDTO.toString());
-		}
+		String formato = "yyyy-MM-dd";
+		String rfecIn = Utilerias.convertirFecha(fechaSis, formato);
+		String rfecVe = Utilerias.convertirFecha(sigFecha, formato);
 		
 		String invCuenta = Utilerias.obtenerStringPropiedad(inversion, "Inv_Cuenta");
 
 		JsonObject datosInversionFinalizada = new JsonObject();
 		datosInversionFinalizada.addProperty("Inv_Numero", inverNumero);
 		datosInversionFinalizada.addProperty("Inv_Deposi", invCapita);
-		datosInversionFinalizada.addProperty("Inv_rFecIn", rfecIn != null ? simpleDateFormat.format(rfecIn) : "");
-		datosInversionFinalizada.addProperty("Inv_rFecVe", rfecVe != null ? simpleDateFormat.format(rfecVe) : "");
+		datosInversionFinalizada.addProperty("Inv_rFecIn", rfecIn != null ? rfecIn : "");
+		datosInversionFinalizada.addProperty("Inv_rFecVe", rfecVe != null ? rfecVe : "");
 		datosInversionFinalizada.addProperty("Inv_rCanti", invCantid);
 		datosInversionFinalizada.addProperty("Inv_rTasa", invTasa);
 		datosInversionFinalizada.addProperty("Inv_rISR", invISR);
@@ -750,17 +769,19 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("datosInversionFinalizada" + datosInversionFinalizada);
 		JsonObject inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto = this.inversionesServicio.inversionesImportesDeInversionFinalizadaActualizar(datosInversionFinalizada);
 		logger.info("inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto" + inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto);
+		
+		Utilerias.verificarError(inversionesImportesDeInvercionFinalizadaActualizarOpResultadoObjeto);
 
 		JsonObject datosProcesoLiquidacion = new JsonObject();
 		datosProcesoLiquidacion.addProperty("Inv_Numero", invNumero);
-		datosProcesoLiquidacion.addProperty("Inv_rFecIn", rfecIn != null ? simpleDateFormat.format(rfecIn) : "");
-		datosProcesoLiquidacion.addProperty("Inv_rFecVe", rfecVe != null ? simpleDateFormat.format(rfecVe) : "");
+		datosProcesoLiquidacion.addProperty("Inv_rFecIn", rfecIn != null ? rfecIn : "");
+		datosProcesoLiquidacion.addProperty("Inv_rFecVe", rfecVe != null ? rfecVe : "");
 		datosProcesoLiquidacion.addProperty("Inv_rCanti", invCantid);
 		datosProcesoLiquidacion.addProperty("Inv_rTasa", invTasa);
 		datosProcesoLiquidacion.addProperty("Inv_rISR", invISR);
 		datosProcesoLiquidacion.addProperty("Inv_rCuent", invCuenta);
 		datosProcesoLiquidacion.addProperty("Dias_Base", parDiBaIn);		
-		datosProcesoLiquidacion.addProperty("Inv_Fecha", rfecIn != null ? simpleDateFormat.format(rfecIn) : "");
+		datosProcesoLiquidacion.addProperty("Inv_Fecha", rfecIn != null ? rfecIn : "");
 		datosProcesoLiquidacion.addProperty("Inv_rTBrut", invTasInt);
 		datosProcesoLiquidacion.addProperty("NumTransac", numTransac);		
 		datosProcesoLiquidacion.addProperty("FechaSis", fechaSis);
@@ -769,7 +790,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject inversionesProcesoLiquidacionGenerarOpResultadoObjeto = this.inversionesServicio.inversionesProcesoLiquidacionGenerar(datosProcesoLiquidacion);
 		logger.info("inversionesProcesoLiquidacionGenerarOpResultadoObjeto" + inversionesProcesoLiquidacionGenerarOpResultadoObjeto);
 		
-		JsonObject ProcesoLiquidacionGenerar = Utilerias.obtenerJsonObjectPropiedad(inversionesProcesoLiquidacionGenerarOpResultadoObjeto, "ProcesoLiquidacionGenerar");
+		Utilerias.verificarError(inversionesProcesoLiquidacionGenerarOpResultadoObjeto);
+		
+		JsonObject ProcesoLiquidacionGenerar = Utilerias.obtenerJsonObjectPropiedad(inversionesProcesoLiquidacionGenerarOpResultadoObjeto, "procesoLiquidacionGenerar");
 		String errCodigo = Utilerias.obtenerStringPropiedad(ProcesoLiquidacionGenerar, "Err_Codigo");
 		String errMensaj = Utilerias.obtenerStringPropiedad(ProcesoLiquidacionGenerar, "Err_Mensaj");
 		String invNueva = Utilerias.obtenerStringPropiedad(ProcesoLiquidacionGenerar, "Inv_Nueva");
@@ -785,12 +808,15 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
+		datosBitacora.addProperty("Bit_TipOpe", ReinversionBitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("NumTransac", numTransac);
 		datosBitacora.addProperty("FechaSis", fechaSis);
 
 		logger.info("datosBitacora" + datosBitacora);
 		JsonObject bitacoraCreacionOpResultadoObjeto = this.bitacoraServicio.creacionBitacora(datosBitacora);
 		logger.info("bitacoraCreacionOpResultadoObjeto" + bitacoraCreacionOpResultadoObjeto);
+		
+		Utilerias.verificarError(bitacoraCreacionOpResultadoObjeto);
 
 		JsonObject datosIversionVsEstadoCuenta = new JsonObject();
 		datosIversionVsEstadoCuenta.addProperty("Cor_Usuari", usuNumero);
@@ -803,6 +829,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject inversionesContraEstadoCuentaActualizarOpResultadoObjeto = this.inversionesServicio.inversionesContraEstadoCuentaActualizar(datosIversionVsEstadoCuenta);
 		logger.info("inversionesContraEstadoCuentaActualizarOpResultadoObjeto" + inversionesContraEstadoCuentaActualizarOpResultadoObjeto);
 		
+		Utilerias.verificarError(inversionesContraEstadoCuentaActualizarOpResultadoObjeto);
+		
 		JsonObject inversionesPagareNumeroUsuarioObtener = new JsonObject();
 		inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Usuari", usuNumero);
 		inversionesPagareNumeroUsuarioObtener.addProperty("NumTransac", numTransac);
@@ -811,13 +839,15 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("inversionesPagareNumeroUsuarioObtener" + inversionesPagareNumeroUsuarioObtener);
 		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = this.inversionesServicio.inversionesPagareNumeroUsuarioObtener(inversionesPagareNumeroUsuarioObtener);
 		logger.info("inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto" + inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto);
+		
+		Utilerias.verificarError(inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto);
 
 		JsonObject inversiones = Utilerias.obtenerJsonObjectPropiedad(inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto, "inversiones");
 		JsonArray inversionesArreglos = Utilerias.obtenerJsonArrayPropiedad(inversiones, "inversion");
 
 		Double objInvGAT = null;
-		Date fecIni = null;
-		Date fecVen = null;
+		String fecIni = null;
+		String fecVen = null;
 		String rInvCuenta = "";
 		Double rInvCantid = null;
 		int rPlazo = 0;	
@@ -841,22 +871,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 				String invFecIni = Utilerias.obtenerStringPropiedad(inversionObj, "Inv_FecIni");
 				String invFecVen = Utilerias.obtenerStringPropiedad(inversionObj, "Inv_FecVen");
-
-				 try {
-					 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-					 fecIni = sdf.parse(invFecIni);
-				 } catch (Exception e) {
-					BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.43");
-					throw new InternalServerException(bimMessageDTO.toString());
-				 }
-
-				 try {
-					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-					fecVen = sdf.parse(invFecVen);
-				} catch (Exception e) {
-					BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.43");
-					throw new InternalServerException(bimMessageDTO.toString());
-				}
+				
+				fecIni = Utilerias.convertirFecha(invFecIni, formato);
+				fecVen = Utilerias.convertirFecha(invFecVen, formato);
 
 				rInvCuenta = Utilerias.obtenerStringPropiedad(inversionObj, "Inv_Cuenta");
 				rInvCantid = Utilerias.obtenerDoublePropiedad(inversionObj, "Inv_Cantid");
@@ -880,10 +897,10 @@ public class InversionesCtrl extends BimBaseCtrl {
 				inversionRenovada.addProperty("invCanBru", rImpIntere);
 				inversionRenovada.addProperty("invGat", objInvGAT);
 				inversionRenovada.addProperty("invGatRea", objInvGATRea);
-				inversionRenovada.addProperty("invFecIni", fecIni != null ? simpleDateFormat.format(fecIni) : "");
+				inversionRenovada.addProperty("invFecIni", fecIni != null ? fecIni : "");
 				inversionRenovada.addProperty("invISR", invISR);
 				inversionRenovada.addProperty("invCanISR", rInvCanISR);
-				inversionRenovada.addProperty("invFecVen", fecVen != null ? simpleDateFormat.format(fecVen) : "");
+				inversionRenovada.addProperty("invFecVen", fecVen != null ? fecVen : "");
 				inversionRenovada.addProperty("invTasa", rInvTasa);
 				inversionRenovada.addProperty("invCanNet", invCanNet);
 				inversionRenovada.addProperty("adiInsLiq", rAdiInstLiq);
@@ -936,8 +953,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		emailTemplateDTO.addMergeVariable("Inv_Deposi", String.valueOf(formatter.format(invCapita)));
 		emailTemplateDTO.addMergeVariable("Inv_Plazo", String.valueOf(rPlazo));
 		emailTemplateDTO.addMergeVariable("Inv_InfGAT", String.valueOf(formatter.format(objInvGAT)));
-		emailTemplateDTO.addMergeVariable("Inv_FecIni", fecIni != null ? simpleDateFormat.format(fecIni) : "");
-		emailTemplateDTO.addMergeVariable("Inv_FecVen", fecVen != null ? simpleDateFormat.format(fecVen) : "");
+		emailTemplateDTO.addMergeVariable("Inv_FecIni", fecIni != null ? fecIni : "");
+		emailTemplateDTO.addMergeVariable("Inv_FecVen", fecVen != null ? fecVen : "");
 		emailTemplateDTO.addMergeVariable("Str_InsLiq", rAdiInstLiq);
 		emailTemplateDTO.addMergeVariable("Inv_TBruta", rIntTBruta.toString());
 		emailTemplateDTO.addMergeVariable("Inv_CanBru", String.valueOf(formatter.format(rImpIntere)));

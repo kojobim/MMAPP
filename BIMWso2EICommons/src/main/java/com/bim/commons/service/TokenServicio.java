@@ -127,6 +127,8 @@ public class TokenServicio extends BaseService {
 
 		JsonObject intentosActualizacionOpResultadoObjecto = Utilerias.performOperacion(TokenServicio, IntentosActualizacionOp, datosToken);
 		logger.info("intentosActualizacionOpResultadoObjecto: " + intentosActualizacionOpResultadoObjecto);
+		
+		Utilerias.verificarError(intentosActualizacionOpResultadoObjecto);		
 		JsonObject intentosActualizacion = Utilerias.obtenerJsonObjectPropiedad(intentosActualizacionOpResultadoObjecto, "intentosActualizacion");
 		
 		if(intentosActualizacion != null && intentosActualizacion.has("Usu_Status"))
