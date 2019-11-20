@@ -366,7 +366,7 @@ public class InversionesServicio extends BaseService {
 	public JsonObject inversionesProcesoLiquidacionGenerar(JsonObject datosProcesoLiquidacion) {
 		logger.info("COMMONS: Comenzando inversionesProcesoLiquidacionGenerar metodo... ");
 		datosProcesoLiquidacion.addProperty("Inv_rAutor", InversionesProcesoLiquidacionGenerarOpInvrAutor);
-		datosProcesoLiquidacion.addProperty("Inv_MonRef", InversionesProcesoLiquidacionGenerarOpInvMonRef);
+		datosProcesoLiquidacion.addProperty("Inv_MonRef", Double.parseDouble(InversionesProcesoLiquidacionGenerarOpInvMonRef));
 		datosProcesoLiquidacion.addProperty("Transaccio", InversionesProcesoLiquidacionGenerarOpTransaccio);
 		datosProcesoLiquidacion.addProperty("Usuario", InversionesProcesoLiquidacionGenerarOpUsuari);
 		datosProcesoLiquidacion.addProperty("SucOrigen", InversionesProcesoLiquidacionGenerarOpSucOrigen);
@@ -409,7 +409,7 @@ public class InversionesServicio extends BaseService {
 			datosIversionVsEstadoCuenta.addProperty("Cor_CliUsu", "");
 		if(!datosIversionVsEstadoCuenta.has("Cor_Alias"))
 			datosIversionVsEstadoCuenta.addProperty("Cor_Alias", "");
-		datosIversionVsEstadoCuenta.addProperty("Cor_MoLiDi", InversionesContraEstadoCuentaActualizarOpCorMoLiDi);
+		datosIversionVsEstadoCuenta.addProperty("Cor_MoLiDi", Double.parseDouble(InversionesContraEstadoCuentaActualizarOpCorMoLiDi));
 		datosIversionVsEstadoCuenta.addProperty("Tip_Actual", InversionesContraEstadoCuentaActualizarOpTipActual);		
 		datosIversionVsEstadoCuenta.addProperty("Transaccio", InversionesContraEstadoCuentaActualizarOpTransaccio);
 		datosIversionVsEstadoCuenta.addProperty("Usuario", InversionesContraEstadoCuentaActualizarOpUsuari);
