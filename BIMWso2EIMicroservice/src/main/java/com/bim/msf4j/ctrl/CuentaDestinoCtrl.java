@@ -58,6 +58,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 	private static String CuentaDestinoBIMTipConsul;
 	private static String AltaCuentaDestinoBIMBitacoraCreacionOpBitTipOpe;
 	private static String AltaCuentaDestinoNacionalBitacoraCreacionOpBitTipOpe;
+	private static String ActivarCuentasDestinoNacionalBitacoraCreacionOpBitTipOpe;
+	private static String ActivarCuentasDestinoBIMBitacoraCreacionOpBitTipOpe;
 	
 	public CuentaDestinoCtrl() {
 		super();
@@ -78,6 +80,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		CuentaDestinoBIMTipConsul = properties.getProperty("op.cuenta_destino_bim_consultar.tip_consul.l1");
 		AltaCuentaDestinoBIMBitacoraCreacionOpBitTipOpe = properties.getProperty("op.alta_cuenta_destino_bim.bitacora_creacion.bit_tip_ope");
 		AltaCuentaDestinoNacionalBitacoraCreacionOpBitTipOpe = properties.getProperty("op.alta_cuenta_destino_nacional.bitacora_creacion.bit_tip_ope");
+		ActivarCuentasDestinoNacionalBitacoraCreacionOpBitTipOpe = properties.getProperty("op.activar_cuentas_destino_nacional.bitacora_creacion.bit_tip_ope");
+		ActivarCuentasDestinoBIMBitacoraCreacionOpBitTipOpe = properties.getProperty("op.activar_cuentas_destino_bim.bitacora_creacion.bit_tip_ope");
 		
 		logger.info("CTRL: Finalizando metodo init...");		
 	}
@@ -717,6 +721,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
             throw new BadRequestException(bimMessageDTO.toString());
 		}
 
+        String ActivarCuentasDestinoBitacoraCreacionOpBitTipOpe = "";
 		if("BIM".equals(tipo)) {
 			JsonObject datosCuentaDestinoBIM = new JsonObject();
 			datosCuentaDestinoBIM.addProperty("Cdb_UsuAdm", usuUsuAdm);
@@ -727,6 +732,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 			
 			JsonObject cuentaDestinoBIMActualizacionResultado = this.cuentaDestinoServicio.cuentaDestinoBIMActualizacion(datosCuentaDestinoBIM);
 			Utilerias.verificarError(cuentaDestinoBIMActualizacionResultado);
+			
+			ActivarCuentasDestinoBitacoraCreacionOpBitTipOpe = ActivarCuentasDestinoBIMBitacoraCreacionOpBitTipOpe;
 			
 			JsonObject avisoPrivacidadActualizacionResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoBIMActualizacionResultado, "cuentaDestino");
 			String errCodigo = Utilerias.obtenerStringPropiedad(avisoPrivacidadActualizacionResultadoObjeto, "Err_Codigo");
@@ -750,6 +757,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 			JsonObject cuentaDestinoSPEIActualizacionResultado = this.cuentaDestinoServicio.cuentaDestinoSPEIActualizacion(datosCuentaDestinoSPEI);
 			Utilerias.verificarError(cuentaDestinoSPEIActualizacionResultado);
 			
+			ActivarCuentasDestinoBitacoraCreacionOpBitTipOpe = ActivarCuentasDestinoNacionalBitacoraCreacionOpBitTipOpe;
+			
 			JsonObject avisoPrivacidadActualizacionResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoSPEIActualizacionResultado, "cuentaDestino");
 			String errCodigo = Utilerias.obtenerStringPropiedad(avisoPrivacidadActualizacionResultadoObjeto, "Err_Codigo");
 
@@ -766,6 +775,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
+		datosBitacora.addProperty("Bit_TipOpe", Integer.parseInt(ActivarCuentasDestinoBitacoraCreacionOpBitTipOpe));
 		datosBitacora.addProperty("NumTransac", numTransac);
         datosBitacora.addProperty("Bit_NumTra", numTransac);
 		datosBitacora.addProperty("FechaSis", fechaSis);
