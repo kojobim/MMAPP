@@ -62,6 +62,21 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		
 		String fechaSis = Utilerias.obtenerFechaSis();
 		logger.info("- fechaSis " + fechaSis);
+
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
+		logger.info("- folioTransaccionGenerarOpResultadoObjeto: " + folioTransaccionGenerarOpResultadoObjeto);
+
+		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarOpResultadoObjeto, "transaccion");
+		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
+
+		JsonObject datosCuentaDestinoSPEIActivacion = new JsonObject();
+		datosCuentaDestinoSPEIActivacion.addProperty("Cds_UsuAdm", usuAdm);
+		datosCuentaDestinoSPEIActivacion.addProperty("NumTransac", numTransac);
+		datosCuentaDestinoSPEIActivacion.addProperty("FechaSis", fechaSis);
+		JsonObject cuentaDestinoSPEIActivacion = this.cuentaDestinoServicio.cuentaDestinoSPEIActivacion(datosCuentaDestinoSPEIActivacion);
+		logger.info("- cuentaDestinoSPEIActivacion: " + cuentaDestinoSPEIActivacion);
+
+		Utilerias.verificarError(cuentaDestinoSPEIActivacion);
 		
 		JsonObject datosCuentaDestinoSPEI = new JsonObject();
 		datosCuentaDestinoSPEI.addProperty("Cds_UsuAdm", usuAdm);
