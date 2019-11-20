@@ -50,7 +50,6 @@ public class CorreoServicio {
 	 * @param destinatario
 	 * @param asunto
 	 * @param cuerpo
-	 * @throws Exception
 	 */
 	public void enviarCorreo(String destinatario, String asunto, String cuerpo) {
 		logger.info("SERVICE: Comenzando enviarCorreo metodo...");

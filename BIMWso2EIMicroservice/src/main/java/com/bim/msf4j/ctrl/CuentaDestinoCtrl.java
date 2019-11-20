@@ -56,6 +56,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 	private static String CuentaDestinoBIMStatusActivo;
 	private static String CuentaDestinoBIMStatusPendiente;
 	private static String CuentaDestinoBIMTipConsul;
+	private static String AltaCuentaDestinoBIMBitacoraCreacionOpBitTipOpe;
+	private static String AltaCuentaDestinoNacionalBitacoraCreacionOpBitTipOpe;
 	
 	public CuentaDestinoCtrl() {
 		super();
@@ -74,6 +76,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		CuentaDestinoBIMStatusActivo = properties.getProperty("cuenta_destino_servicio.status_activo");
 		CuentaDestinoBIMStatusPendiente = properties.getProperty("cuenta_destino_servicio.status_pendiente");
 		CuentaDestinoBIMTipConsul = properties.getProperty("op.cuenta_destino_bim_consultar.tip_consul.l1");
+		AltaCuentaDestinoBIMBitacoraCreacionOpBitTipOpe = properties.getProperty("op.alta_cuenta_destino_bim.bitacora_creacion.bit_tip_ope");
+		AltaCuentaDestinoNacionalBitacoraCreacionOpBitTipOpe = properties.getProperty("op.alta_cuenta_destino_nacional.bitacora_creacion.bit_tip_ope");
 		
 		logger.info("CTRL: Finalizando metodo init...");		
 	}
@@ -345,6 +349,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_PriRef", bitPriRef);
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP);
+		datosBitacora.addProperty("Bit_TipOpe", AltaCuentaDestinoBIMBitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("NumTransac", numTransac);
 		datosBitacora.addProperty("FechaSis", fechaSis);
 
@@ -546,6 +551,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
+		datosBitacora.addProperty("Bit_TipOpe", AltaCuentaDestinoNacionalBitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("NumTransac", numTransac);
 		datosBitacora.addProperty("FechaSis", fechaSis);
 

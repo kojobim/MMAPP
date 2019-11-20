@@ -42,6 +42,11 @@ public class CuentasCtrl extends BimBaseCtrl {
 	private SoapServicio soapService;
 	private TokenServicio tokenServicio;
 	
+	private static String ClienteConsultarOpTipConsul;
+	private static String CuentasListadoBitacoraCreacionOpBitTipOpe;
+	private static String MovimientosListadoBitacoraCreacionOpBitTipOpe;
+	private static String MovimientosRegistroBitacoraCreacionOpBitTipOpe;
+	
 	public CuentasCtrl() {
 		super();
 		
@@ -52,6 +57,12 @@ public class CuentasCtrl extends BimBaseCtrl {
 		this.saldoServicio = new SaldoServicio();
 		this.soapService = new SoapServicio();
 		this.tokenServicio = new TokenServicio();
+
+				
+		ClienteConsultarOpTipConsul = properties.getProperty("op.cliente_consultar.tip_consul.c9");
+		CuentasListadoBitacoraCreacionOpBitTipOpe = properties.getProperty("op.cuentas_listado.bitacora_creacion.bit_tip_ope");
+		MovimientosListadoBitacoraCreacionOpBitTipOpe = properties.getProperty("op.movimientos_listado.bitacora_creacion.bit_tip_ope");
+		MovimientosRegistroBitacoraCreacionOpBitTipOpe = properties.getProperty("op.movimientos_registro.bitacora_creacion.bit_tip_ope");
 
 	}
 	
@@ -76,6 +87,13 @@ public class CuentasCtrl extends BimBaseCtrl {
 		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
 		String bitDireIp = solicitud.getHeader("X-Forwarded-For");
 		
+		JsonObject folioTransaccionGenerarResultadoObjeto =  this.transaccionServicio.folioTransaccionGenerar();
+		
+		logger.info("- folioTransaccionGenerarResultadoObjeto " + folioTransaccionGenerarResultadoObjeto); 
+		
+		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarResultadoObjeto,"transaccion");
+		String folTransa = Utilerias.obtenerStringPropiedad(transaccion,"Fol_Transa");
+		
 		JsonObject datosSaldosClienteConsultar = new JsonObject();
 		datosSaldosClienteConsultar.addProperty("Cue_Client", cueClient);
 		datosSaldosClienteConsultar.addProperty("Usu_Numero", usuNumero);
@@ -85,6 +103,19 @@ public class CuentasCtrl extends BimBaseCtrl {
 		JsonObject saldosClienteConsultarResultadoObjecto = this.saldoServicio.saldosClienteConsultar(datosSaldosClienteConsultar);
 		
 		logger.info(">>>>>>>>>saldosClienteConsultarResultadoObjecto " + saldosClienteConsultarResultadoObjecto);
+		
+		JsonObject datosBitacora = new JsonObject();
+		datosBitacora.addProperty("Bit_Usuari", usuNumero);
+		datosBitacora.addProperty("Bit_Fecha", fechaSis);
+		datosBitacora.addProperty("Bit_PriRef", cueClient);
+		datosBitacora.addProperty("Bit_DireIP", bitDireIp);
+		datosBitacora.addProperty("Bit_TipOpe", CuentasListadoBitacoraCreacionOpBitTipOpe);
+		datosBitacora.addProperty("NumTransac", folTransa);
+		datosBitacora.addProperty("FechaSis", fechaSis);
+		
+		JsonObject bitacoraCreacionResultadoObjeto = bitacoraServicio.creacionBitacora(datosBitacora);
+		
+		logger.info("- bitacoraCreacionResultadoObjeto " + bitacoraCreacionResultadoObjeto);
 		
 		JsonObject cuenta = Utilerias.obtenerJsonObjectPropiedad(saldosClienteConsultarResultadoObjecto, "cuenta");
 		
@@ -125,6 +156,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		JsonObject datosClienteConsultar = new JsonObject();
 		datosClienteConsultar.addProperty("Cli_Numero", cliNumero);
 		datosClienteConsultar.addProperty("FechaSis", fechaSis);
+		datosClienteConsultar.addProperty("Tip_Consul", ClienteConsultarOpTipConsul);
 		
 		JsonObject clienteConsultarResultadoObjecto = this.clienteServicio.clienteConsultar(datosClienteConsultar);
 		
@@ -257,6 +289,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_PriRef", salCuenta);
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP);
+		datosBitacora.addProperty("Bit_TipOpe", MovimientosListadoBitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("NumTransac", folTransa);
 		datosBitacora.addProperty("FechaSis", fechaSis);
 		
@@ -325,7 +358,9 @@ public class CuentasCtrl extends BimBaseCtrl {
 		datosBitacoraCreacion.addProperty("Bit_Fecha", fechaSis);
 		datosBitacoraCreacion.addProperty("Bit_PriRef", bitPriRef);
 		datosBitacoraCreacion.addProperty("Bit_DireIP", bitDireIp);
+		datosBitacoraCreacion.addProperty("Bit_TipOpe", MovimientosRegistroBitacoraCreacionOpBitTipOpe);
 		datosBitacoraCreacion.addProperty("Num_Transac", numTransac);
+		datosBitacoraCreacion.addProperty("FechaSis", fechaSis);
 		
 		this.bitacoraServicio.creacionBitacora(datosBitacoraCreacion);
 		
