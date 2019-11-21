@@ -591,9 +591,10 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosCuentaDestinoSPEI.addProperty("FechaSis", fechaSis);
 		
 		JsonObject cuentaDestinoSPEICreacionResultado = this.cuentaDestinoServicio.cuentaDestinoSPEICreacion(datosCuentaDestinoSPEI);
-		JsonObject cuentaDestinoSPEI = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoSPEICreacionResultado, "cuentaDestinoBIM");
-		Utilerias.verificarError(folioTransaccionGenerarOpResultadoObjeto);
 		logger.info("cuentaDestinoSPEICreacionResultado  " + cuentaDestinoSPEICreacionResultado);
+		Utilerias.verificarError(folioTransaccionGenerarOpResultadoObjeto);
+		
+		JsonObject cuentaDestinoSPEI = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoSPEICreacionResultado, "cuentaDestino");
 		String errCodigo = Utilerias.obtenerStringPropiedad(cuentaDestinoSPEI, "Err_Codigo");
 		
 		if(!"000000".equals(errCodigo)) {
@@ -626,7 +627,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosConfiguracion.addProperty("FechaSis", fechaSis);
 
 		JsonObject configuracionBancoConsultarDetalleResultado = this.configuracionServicio.configuracionBancoConsultarDetalle(datosConfiguracion);
-		logger.info("cuentaDestinoProcesarResultado  " + configuracionBancoConsultarDetalleResultado);
+		logger.info("configuracionBancoConsultarDetalleResultado  " + configuracionBancoConsultarDetalleResultado);
 		JsonObject configuracionesBanco = Utilerias.obtenerJsonObjectPropiedad(configuracionBancoConsultarDetalleResultado, "configuracionesBanco");
 		JsonArray configuracionBanco = Utilerias.obtenerJsonArrayPropiedad(configuracionesBanco, "configuracionBanco");
 		String parMiCuDe = Utilerias.obtenerStringPropiedad(configuracionBanco.get(0).getAsJsonObject(), "Par_MiCuDe");
