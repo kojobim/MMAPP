@@ -775,7 +775,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
-		datosBitacora.addProperty("Bit_TipOpe", Integer.parseInt(ActivarCuentasDestinoBitacoraCreacionOpBitTipOpe));
+		datosBitacora.addProperty("Bit_TipOpe", ActivarCuentasDestinoBitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("NumTransac", numTransac);
         datosBitacora.addProperty("Bit_NumTra", numTransac);
 		datosBitacora.addProperty("FechaSis", fechaSis);
