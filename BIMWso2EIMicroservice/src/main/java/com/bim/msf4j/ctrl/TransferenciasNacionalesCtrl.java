@@ -41,6 +41,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 	private CuentaDestinoServicio cuentaDestinoServicio;
 	private CorreoServicio correoServicio;
 	
+	private  static String TransferenciaNacionalBitacoraCreacionOpBitTipOpe;
+	
 	public TransferenciasNacionalesCtrl() {
 		super();
 		
@@ -50,6 +52,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		this.bitacoraServicio = new BitacoraServicio();
 		this.cuentaDestinoServicio = new CuentaDestinoServicio();
 		this.correoServicio = new CorreoServicio();
+		
+		TransferenciaNacionalBitacoraCreacionOpBitTipOpe = properties.getProperty("op.tranferencia_nacional.bitacora_creacion.bit_tip_ope");
 	}
 
 	@Path("/")
@@ -157,9 +161,12 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		
 		JsonObject datosBitacora = new JsonObject();
 		datosBitacora.addProperty("Bit_Usuari", usuNumero);
+		datosBitacora.addProperty("Bit_Fecha", fechaSis);
+		datosBitacora.addProperty("Bit_TipOpe", TransferenciaNacionalBitacoraCreacionOpBitTipOpe);
+		datosBitacora.addProperty("Bit_NumTra", numTransac);
 		datosBitacora.addProperty("Bit_CueOri", trsCueOri);
 		datosBitacora.addProperty("Bit_CueDes", trsCueDes);
-		datosBitacora.addProperty("Bit_Monto", Double.parseDouble(trsMonto));
+		datosBitacora.addProperty("Bit_Monto", 0);
 		//Bit_PriRef es un dato propuesto
 		String bitPriRef = new StringBuilder()
 				.append("Cuenta: ")
@@ -175,10 +182,9 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_SegRef", bitSegRef);
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP);
 		datosBitacora.addProperty("NumTransac", numTransac);
-		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("FechaSis", fechaSis);
 		
-		JsonObject bitacoraCreacionResultado = this.bitacoraServicio.creacionBitacora(datosBitacora );
+		JsonObject bitacoraCreacionResultado = this.bitacoraServicio.creacionBitacora(datosBitacora);
 		Utilerias.verificarError(bitacoraCreacionResultado);
 		logger.info("- bitacoraCreacionResultado " + bitacoraCreacionResultado);
 		
@@ -241,7 +247,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		String trsFecAut = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecAut");
 		String trsFecCar = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecCar");
 		String trsFecApl = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecApl");
-		String trsFirma = Utilerias.obtenerStringPropiedad(transferenciaSPEIConsultarResultadoObjeto, "Trs_Firma");
+		String trsFirma = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_Firma");
 		
 		if(!"000000".equals(errCodigo)) {
 			String errMensaj = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Err_Mensaj");			
