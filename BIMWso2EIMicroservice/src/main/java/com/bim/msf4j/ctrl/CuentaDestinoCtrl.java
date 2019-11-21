@@ -591,8 +591,18 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosCuentaDestinoSPEI.addProperty("FechaSis", fechaSis);
 		
 		JsonObject cuentaDestinoSPEICreacionResultado = this.cuentaDestinoServicio.cuentaDestinoSPEICreacion(datosCuentaDestinoSPEI);
+		JsonObject cuentaDestinoSPEI = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoSPEICreacionResultado, "cuentaDestinoBIM");
 		Utilerias.verificarError(folioTransaccionGenerarOpResultadoObjeto);
 		logger.info("cuentaDestinoSPEICreacionResultado  " + cuentaDestinoSPEICreacionResultado);
+		String errCodigo = Utilerias.obtenerStringPropiedad(cuentaDestinoSPEI, "Err_Codigo");
+		
+		if(!"000000".equals(errCodigo)) {
+			String errMensaj = Utilerias.obtenerStringPropiedad(cuentaDestinoSPEI, "Err_Mensaj");
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.31");
+			bimMessageDTO.addMergeVariable("errMensaj", errMensaj);
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+
 		
 		JsonObject datosCuentaDestinoProcesar = new JsonObject();
 		datosCuentaDestinoProcesar.addProperty("Cud_UsuAdm", usuUsuAdm);
@@ -602,7 +612,6 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosCuentaDestinoProcesar.addProperty("FechaSis", fechaSis);
 		
 		JsonObject cuentaDestinoProcesarResultado = this.cuentaDestinoServicio.cuentaDestinoProcesar(datosCuentaDestinoProcesar);
-		logger.info("cuentaDestinoSPEICreacionResultado  " + cuentaDestinoSPEICreacionResultado);
 		logger.info("cuentaDestinoProcesarResultado  " + cuentaDestinoProcesarResultado);
 		
 		JsonObject datosCuentaDestinoSPEIAct = new JsonObject();
@@ -611,7 +620,6 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		datosCuentaDestinoSPEIAct.addProperty("FechaSis", fechaSis);
 		
 		JsonObject cuentaDestinoSPEIActivacionResultado = this.cuentaDestinoServicio.cuentaDestinoSPEIActivacion(datosCuentaDestinoSPEIAct);
-		logger.info("cuentaDestinoProcesarResultado  " + cuentaDestinoSPEIActivacionResultado);
 		logger.info("cuentaDestinoSPEIActivacionResultado  " + cuentaDestinoSPEIActivacionResultado);
 
 		JsonObject datosConfiguracion = new JsonObject();
