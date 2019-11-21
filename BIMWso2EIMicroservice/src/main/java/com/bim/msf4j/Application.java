@@ -6,6 +6,7 @@ import com.bim.msf4j.ctrl.CuentaDestinoCtrl;
 import com.bim.msf4j.ctrl.CuentasCtrl;
 import com.bim.msf4j.ctrl.InversionesCtrl;
 import com.bim.msf4j.ctrl.LoginCtrl;
+import com.bim.msf4j.ctrl.LogoutCtrl;
 import com.bim.msf4j.ctrl.PingCtrl;
 import com.bim.msf4j.ctrl.UsuarioCtrl;
 import com.bim.msf4j.exceptions.BimExceptionMapper;
@@ -18,6 +19,7 @@ public class Application {
         		.addExceptionMapper(new BimExceptionMapper())
                 .deploy(new PingCtrl(), 
                 		new LoginCtrl(),
+                		new LogoutCtrl(),
                         new InversionesCtrl(),
                 		new CuentaDestinoCtrl(),
                         new CuentasCtrl(),
