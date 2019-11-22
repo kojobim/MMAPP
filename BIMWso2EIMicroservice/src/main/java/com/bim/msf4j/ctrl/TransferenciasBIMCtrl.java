@@ -17,6 +17,7 @@ import com.bim.commons.service.TokenServicio;
 import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.service.TransferenciasBIMServicio;
 import com.bim.commons.utils.Utilerias;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 @Path("/transferencias-bim")
@@ -38,6 +39,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		this.transferenciasBIMServicio = new TransferenciasBIMServicio();
 		this.bitacoraServicio = new BitacoraServicio();
 		this.tokenServicio = new TokenServicio();
+		this.correoServicio = new CorreoServicio();
 	}
 
 
@@ -95,8 +97,12 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		String trbCueDes = Utilerias.obtenerStringPropiedad(transferenciaBIM, "trbCueDes");
 		Double trbMonto = Utilerias.obtenerDoublePropiedad(transferenciaBIM, "trbMonto");
 		String trbDescri = Utilerias.obtenerStringPropiedad(transferenciaBIM, "trbDescri");
+		String trbRFC = Utilerias.obtenerStringPropiedad(transferenciaBIM, "trbRFC");
+		Double trbIVA = Utilerias.obtenerDoublePropiedad(transferenciaBIM, "trbIVA"); 
 		
 		JsonObject datosTransferenciaBIMCreacion = new JsonObject();
+		datosTransferenciaBIMCreacion.addProperty("Trb_RFC", trbRFC);
+		datosTransferenciaBIMCreacion.addProperty("Trb_IVA", trbIVA);
 		datosTransferenciaBIMCreacion.addProperty("Trb_Client", usuClient);
 		datosTransferenciaBIMCreacion.addProperty("Trb_CueOri", trbCueOri);
 		datosTransferenciaBIMCreacion.addProperty("Trb_CueDes", trbCueDes);
@@ -145,10 +151,41 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("Bit_DireIP", bitDireIP);
 		datosBitacora.addProperty("NumTransac", folTransa);
 		datosBitacora.addProperty("FechaSis", fechaSis);
+		datosBitacora.addProperty("Bit_TipOpe", "085");
 		JsonObject datosBitacoraResultado = this.bitacoraServicio.creacionBitacora(datosBitacora);
 		logger.info("- datosBitacoraResultado " + datosBitacoraResultado);
 		
+		JsonObject datosCuentaDestinoTransferenciaBIMActivacionResultado2 = this.transferenciasBIMServicio.cuentaDestinoTransferenciaBIMActivacion(datosCuentaDestinoTransferenciaBIMActivacion );
+		logger.info("- datosCuentaDestinoTransferenciaBIMActivacionResultado2 " + datosCuentaDestinoTransferenciaBIMActivacionResultado2);
+		
+		JsonObject datosTransferenciaBIMConsultar = new JsonObject();
+		datosTransferenciaBIMConsultar.addProperty("Trb_UsuAdm", usuUsuAdm);
+		datosTransferenciaBIMConsultar.addProperty("Trb_Usuari", usuNumero);
+		datosTransferenciaBIMConsultar.addProperty("FechaSis", fechaSis);
+		datosTransferenciaBIMConsultar.addProperty("Tip_Consul", "L2");
+		JsonObject datosTransferenciaBIMConsultarResultado = this.transferenciasBIMServicio.transferenciasBIMConsultar(datosTransferenciaBIMConsultar );
+		logger.info("- datosTransferenciaBIMConsultarResultado " + datosTransferenciaBIMConsultarResultado);
+
+		JsonObject transferenciasBIMConsultar = Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaBIMConsultarResultado, "transferenciasBIM");
+		logger.info("- trbConsec " + trbConsec);
+		JsonObject transferenciaBIMConsultar = Utilerias.obtenerJsonObjectPropiedad(transferenciasBIMConsultar, "transferenciaBIM");
+		logger.info("- transferenciaBIMConsultar " + transferenciaBIMConsultar);
+		
+		JsonObject datosTransferenciaBIMFirmasConsultar = new JsonObject();
+		datosTransferenciaBIMFirmasConsultar.addProperty("Ftb_Consec", trbConsec);
+		datosTransferenciaBIMFirmasConsultar.addProperty("FechaSis", fechaSis);
+		JsonObject transferenciaBIMFirmasConsultarResultado = this.transferenciasBIMServicio.transferenciaBIMFirmasConsultar(datosTransferenciaBIMFirmasConsultar );
+		
+		JsonObject tranferenciaBIMFirmas = Utilerias.obtenerJsonObjectPropiedad(transferenciaBIMFirmasConsultarResultado, "transferenciaBIMFirmas");
+		
+		String ftbConse = Utilerias.obtenerStringPropiedad(tranferenciaBIMFirmas, "Ftb_Consec");
+		String ftbNivFir = Utilerias.obtenerStringPropiedad(tranferenciaBIMFirmas, "Ftb_NivFir");
+		String ftbCantid = Utilerias.obtenerStringPropiedad(tranferenciaBIMFirmas, "Ftb_Cantid");
+		String trbFecCap = Utilerias.obtenerStringPropiedad(transferenciaBIM, "Trb_FecCap");
+		
 		JsonObject datosTransferenciaBIMProcesar = new JsonObject();
+		datosTransferenciaBIMProcesar.addProperty("Trb_RFC", trbRFC);
+		datosTransferenciaBIMProcesar.addProperty("Trb_IVA", trbIVA);
 		datosTransferenciaBIMProcesar.addProperty("Trb_UsuAdm", usuUsuAdm);
 		datosTransferenciaBIMProcesar.addProperty("Trb_Usuari", usuNumero);
 		datosTransferenciaBIMProcesar.addProperty("Trb_Client", usuClient);
@@ -161,18 +198,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		datosTransferenciaBIMProcesar.addProperty("FechaSis", fechaSis);
 		JsonObject datosTransferenciaBIMProcesarResultado = this.transferenciasBIMServicio.transferenciaBIMProcesar(datosTransferenciaBIMProcesar );
 		logger.info("- datosTransferenciaBIMProcesarResultado " +  datosTransferenciaBIMProcesarResultado);
-		
-		JsonObject datosTransferenciaBIMConsultar = new JsonObject();
-		datosTransferenciaBIMConsultar.addProperty("Trb_UsuAdm", usuUsuAdm);
-		datosTransferenciaBIMConsultar.addProperty("Trb_Usuari", usuNumero);
-		datosTransferenciaBIMConsultar.addProperty("FechaSis", fechaSis);
-		datosTransferenciaBIMConsultar.addProperty("Trb_Consec", "");
-		JsonObject datosTransferenciaBIMConsultarResultado = this.transferenciasBIMServicio.transferenciasBIMConsultar(datosTransferenciaBIMConsultar );
-		logger.info("- datosTransferenciaBIMConsultarResultado " + datosTransferenciaBIMConsultarResultado);
-		
-		JsonObject transferenciasBIMConsultar = Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaBIMConsultarResultado, "transferenciasBIM");
-		JsonObject transferenciaBIMConsultar = Utilerias.obtenerJsonObjectPropiedad(transferenciasBIMConsultar, "transferenciaBIM");
-		
+
 		String trbDeCuOr = Utilerias.obtenerStringPropiedad(transferenciaBIMConsultar, "Trb_DeCuOr");
 		String corAlias = Utilerias.obtenerStringPropiedad(transferenciaBIMConsultar, "Cor_Alias");
 		String trbDeCuDe = Utilerias.obtenerStringPropiedad(transferenciaBIMConsultar, "Trb_DeCuDe");
@@ -180,6 +206,8 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		String trbMonPes = Utilerias.obtenerStringPropiedad(transferenciaBIMConsultar, "Trb_MonPes");
 		String trbFecAut = Utilerias.obtenerStringPropiedad(transferenciaBIMConsultar, "Trb_FecAut");
 		String trbUsCaNo = Utilerias.obtenerStringPropiedad(transferenciaBIMConsultar, "Trb_UsCaNo");
+		String trbEmaBen = Utilerias.obtenerStringPropiedad(transferenciaBIMConsultar, "Trb_EmaBen");
+		String trbDesMon = Utilerias.obtenerStringPropiedad(transferenciaBIMConsultar, "Trb_DesMon");
 		
 		JsonObject datosTransferenciaBIMExitosa = new JsonObject();
 		datosTransferenciaBIMExitosa.addProperty("trbDeCuOr", trbDeCuOr);
@@ -211,61 +239,61 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		String digitoVerificador = Utilerias.generarDigitoVerificador(sVarVerif);
 		logger.info("- digitoVerificador " + digitoVerificador);
 		
-		String transferenciaBIMClientAsunto = Utilerias.obtenerPropiedadPlantilla("mail.transferencias_bim.cliente.asunto");
-		String transferenciaBIMClientPlantilla = Utilerias.obtenerPropiedadPlantilla("mail.transferencias_bim.cliente.plantilla");
-		BimEmailTemplateDTO emailTemplateTransferenciaBIMClienteDTO = new BimEmailTemplateDTO(transferenciaBIMClientPlantilla);
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("str_Firmas", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_ProDes", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_DeCuOr", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_DeCuDe", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_DesMon", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_TipCam", "");
+		String transferenciaBIMClienteAsunto = Utilerias.obtenerPropiedadPlantilla("mail.transferencias_bim.cliente.asunto");
+		String transferenciaBIMClientePlantillaName = Utilerias.obtenerPropiedadPlantilla("mail.transferencias_bim.cliente.plantilla");
+		String transferenciaBIMClientePlantilla = Utilerias.obtenerPlantilla(transferenciaBIMClientePlantillaName);
+		BimEmailTemplateDTO emailTemplateTransferenciaBIMClienteDTO = new BimEmailTemplateDTO(transferenciaBIMClientePlantilla);
+		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_DeCuOr", Utilerias.formatearCuenta(trbCueOri, 2));
+		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_DeCuDe", Utilerias.formatearCuenta(trbCueDes, 2));
+		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_Monto", trbMonto.toString()); 
+		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_DesMon", trbDesMon);
+		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_TipCam", trbDesMon);
+		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_MonEqu", "");
 		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_StrEqu", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_Descri", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_RFC", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_IVA", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("NumTransac", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_UsCaNo", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_FecCapDDMMYYYY", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_FecCapHHMM", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("str_Autori", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_FecAutDDMMYYYY", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_FecAutHHMM", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_FePrEnDDMMYYYY", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("strFrecuencia", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("strDuracion", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("strRecordatorio", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("verificador170", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("verificador7170", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("verificador14170", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("verificador21170", "");
-		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("verificador28170", "");
+		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_Descri", trbDescri);
+		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("NumTransac", folTransa);
+		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_FecCarDDMMYYYY", Utilerias.formatearFecha(trbFecCap, "dd-MM-yyyy"));
+		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_FecCarHHMM", Utilerias.formatearFecha(trbFecCap, "HH:mm"));
+		
 		String transferenciaBIMClienteCuerpo = Utilerias.obtenerMensajePlantilla(emailTemplateTransferenciaBIMClienteDTO);
 		logger.info("- usuEmail " + usuEmail);
-		logger.info("- transferenciaBIMClientAsunto " + transferenciaBIMClientAsunto);
-		logger.info("- transferenciaBIMClienteCuerpo " + transferenciaBIMClienteCuerpo);
-		this.correoServicio.enviarCorreo(usuEmail, transferenciaBIMClientAsunto, transferenciaBIMClienteCuerpo);
+		logger.info("- transferenciaBIMClientAsunto " + transferenciaBIMClienteAsunto);
+		this.correoServicio.enviarCorreo("penriquez@mediomelon.mx", transferenciaBIMClienteAsunto, transferenciaBIMClienteCuerpo);
 		
 		String transferenciaBIMBeneficiarioAsunto = Utilerias.obtenerPropiedadPlantilla("mail.transferencias_bim.beneficiario.asunto");
-		String transferenciaBIMBeneficiarioPlantilla = Utilerias.obtenerPropiedadPlantilla("mail.transferencias_bim.beneficiario.plantilla");
+		String transferenciaBIMBeneficiarioPlantillaName = Utilerias.obtenerPropiedadPlantilla("mail.transferencias_bim.beneficiario.plantilla");
+		String transferenciaBIMBeneficiarioPlantilla = Utilerias.obtenerPlantilla(transferenciaBIMBeneficiarioPlantillaName);
 		BimEmailTemplateDTO emailTemplateTransferenciaBIMBeneficiarioDTO = new BimEmailTemplateDTO(transferenciaBIMBeneficiarioPlantilla);
-		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_DeCuOr", "");
-		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_DeCuDe", "");
-		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_Monto", ""); 
-		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_DesMon", "");
-		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_TipCam", "");
-		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_MonEqu", "");
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("str_Firmas", ftbNivFir);
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_ProDes", "");
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_DeCuOr", Utilerias.formatearCuenta(trbCueOri, 2));
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_DeCuDe", Utilerias.formatearCuenta(trbCueDes, 2));
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_DesMon", trbMonto.toString());
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_TipCam", trbDesMon);
 		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_StrEqu", "");
-		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_Descri", "");
-		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("NumTransac", "");
-		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_FecCarDDMMYYYY", "");
-		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_FecCarHHMM", "");
-		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_FecCarHHMM", "");
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_Descri", trbDescri);
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_RFC", trbRFC);
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_IVA", trbIVA.toString());
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("NumTransac", folTransa);
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_UsCaNo", trbUsCaNo);
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_FecCapDDMMYYYY", Utilerias.formatearFecha(trbFecCap, "dd-MM-yyyy"));
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_FecCapHHMM", Utilerias.formatearFecha(trbFecCap, "HH:mm"));
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("str_Autori", "");
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_FecAutDDMMYYYY", "");
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_FecAutHHMM", "");
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_FePrEnDDMMYYYY", "");
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("strFrecuencia", "");
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("strDuracion", "");
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("strRecordatorio", "");
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("verificador170", digitoVerificador.substring(1,70));
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("verificador7170", digitoVerificador.substring(70,140));
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("verificador14170", digitoVerificador.substring(140,211));
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("verificador21170", digitoVerificador.substring(211,281));
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("verificador28170", digitoVerificador.substring(281));
 		String transferenciaBIMBeneficiarioCuerpo = Utilerias.obtenerMensajePlantilla(emailTemplateTransferenciaBIMBeneficiarioDTO);
-		logger.info("- usuEmail " + usuEmail);
+		logger.info("- trbEmaBen " + trbEmaBen);
 		logger.info("- transferenciaBIMBeneficiarioAsunto " + transferenciaBIMBeneficiarioAsunto);
-		logger.info("- emailTemplateTransferenciaBIMBeneficiarioDTO " + emailTemplateTransferenciaBIMBeneficiarioDTO);
-		this.correoServicio.enviarCorreo(usuEmail, transferenciaBIMBeneficiarioAsunto, transferenciaBIMBeneficiarioCuerpo);
+		this.correoServicio.enviarCorreo("penriquez@mediomelon.mx", transferenciaBIMBeneficiarioAsunto, transferenciaBIMBeneficiarioCuerpo);
 		logger.info("CTRL: Terminando transferenciaBIMCreacion metodo");
 		return Response
 				.ok(transferenciaBIMExitosa, MediaType.APPLICATION_JSON)

@@ -1,28 +1,19 @@
-<p class='encabezado'>
-    Comprobante de la Solicitud de Transferencia realizada a través de tu servicio de Banca Electrónica eBIM.
-</p>
+<p class='encabezado'>Se ha solicitado una transferencia B.I.M. a tu cuenta.</p>
 <table border='0' width='512px'>
     <tr>
-        <td class='firmtitulo' colspan='2'>La autorización se ha realizado con éxito, " &
-            "actualmente esta transferencia tiene las siguientes firmas: {str_Firmas}
-        </td>
+        <td class='tbltitulo' colSpan='2'> Transferencia B.I.M. </td>
     </tr>
     <tr>
-        <td class='tbltitulo' colSpan='2'>
-            Transferencia B.I.M. {Trb_ProDes}
-        </td>
-    </tr>
-    <tr>
-        <td class='linsup2' style='padding-left:10px'><b>Cuenta Origen:</b></td>
+        <td class='linsup2' style='padding-left:10px'><b>Cuenta Origen: </b></td>
         <td class='linsup2' style='padding-left:10px'>{Trb_DeCuOr}</td>
     </tr>
     <tr>
-        <td class='linsup2' style='padding-left:10px'><b>Cuenta Destino:</b></td>
+        <td class='linsup2' style='padding-left:10px'><b>Cuenta Destino: </b></td>
         <td class='linsup2' style='padding-left:10px'>{Trb_DeCuDe}</td>
     </tr>
     <tr>
-        <td class='linsup2' style='padding-left:10px'><b>Monto:</b></td>
-        <td class='linsup2' style='padding-left:10px'>{Trb_DesMon}</td>
+        <td class='linsup2' style='padding-left:10px'><b>Monto: </b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trb_Monto} {Trb_DesMon}</td>
     </tr>
     <tr>
         <td class='linsup2' style='padding-left:10px'><b>Tipo de Cambio:</b></td>
@@ -30,72 +21,19 @@
     </tr>
     <tr>
         <td class='linsup2' style='padding-left:10px'><b>Monto Equivalente:</b></td>
-        <td class='linsup2' style='padding-left:10px'>{Trb_StrEqu}</td>
+        <td class='linsup2' style='padding-left:10px'>{Trb_MonEqu} {Trb_StrEqu}</td>
     </tr>
     <tr>
         <td class='linsup2' style='padding-left:10px'><b>Descripción: </b></td>
         <td class='linsup2' style='padding-left:10px'>{Trb_Descri}</td>
     </tr>
     <tr>
-        <td class='linsup2' style='padding-left:10px'><b>RFC:</b></td>
-        <td class='linsup2' style='padding-left:10px'>{Trb_RFC}</td>
-    </tr>
-    <tr>
-        <td class='linsup2' style='padding-left:10px'><b>IVA:</b></td>
-        <td class='linsup2' style='padding-left:10px'>{Trb_IVA}</td>
-    </tr>
-    <tr>
-        <td class='linsup2' style='padding-left:10px'><b>Folio de la Transacción: </b></td>
+        <td class='linsup2' style='padding-left:10px'><b>Folio de Transacción: </b></td>
         <td class='linsup2' style='padding-left:10px'>{NumTransac}</td>
     </tr>
     <tr>
-        <td class='linsup2' style='padding-left:10px'><b>Usuario solicita: </b></td>
-        <td class='linsup2' style='padding-left:10px'>{Trb_UsCaNo}</td>
-    </tr>
-    <tr>
-        <td class='linsup2' style='padding-left:10px'><b>Fecha solicita: </b></td>
-        <td class='linsup2' style='padding-left:10px'>{Trb_FecCapDDMMYYYY}
-            {Trb_FecCapHHMM}</td>
-    </tr>
-    <tr>
-        <td class='linsup2' style='padding-left:10px'><b>Usuario autoriza: </b></td>
-        <td class='linsup2' style='padding-left:10px'>{str_Autori}</td>
-    </tr>
-    <tr>
-        <td class='linsup2' style='padding-left:10px'><b>Fecha autoriza: </b></td>
-        <td class='linsup2' style='padding-left:10px'>{Trb_FecAutDDMMYYYY}
-           {Trb_FecAutHHMM}</td>
-    </tr>
-    <tr>
-        <td class='linsup2' style='padding-left:10px'><b>Fecha Inicio: </b></td>
-        <td class='linsup2' style='padding-left:10px'>{Trb_FePrEnDDMMYYYY}</td>
-    </tr>
-    <tr>
-        <td class='linsup2' style='padding-left:10px'><b>Frecuencia: </b></td>
-        <td class='linsup2' style='padding-left:10px'>{strFrecuencia}</td>
-    </tr>
-    <tr>
-        <td class='linsup2' style='padding-left:10px'><b>Duraci&oacute;n: </b></td>
-        <td class='linsup2' style='padding-left:10px'>{strDuracion}</td>
-    </tr>
-    <tr>
-        <td class='linsup2' style='padding-left:10px'><b>Recordatorio: </b></td>
-        <td class='linsup2' style='padding-left:10px'>{strRecordatorio}</td>
-    </tr>
-    <tr>
-        <td colspan='2'>
-            <table border='0' width='510px'>
-                <tr>
-                    <td class='linsup2' style='text-align:center; padding:10px'>
-                        <b>Verificador</b><br>
-                        {verificador170}<br>
-                        {verificador7170}<br>
-                        {verificador14170}<br>
-                        {verificador21170}<br>
-                        {verificador28170}
-                    </td>
-                </tr>
-            </table>
-        </td>
+        <td class='linsup2' style='padding-left:10px'><b>Fecha de cargo: </b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trb_FecCarDDMMYYYY} {Trb_FecCarHHMM}</td>
     </tr>
 </table>
+<p class='encabezado'>Cualquier comentario favor de comunicarte con el Solicitante de la misma</p>

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,7 +15,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.TimeZone;
 import java.util.Map.Entry;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -395,6 +395,7 @@ public class Utilerias {
 		String resultado = HttpClientUtils.postPerform(solicitudOperacion);
 		logger.info("- HttpClientUtils - resultado "  + resultado);
 		JsonObject resultadoObjeto = resultado != null ? new Gson().fromJson(resultado, JsonObject.class) : null;
+		verificarError(resultadoObjeto);
 		return resultadoObjeto;
 	}
 	
@@ -498,7 +499,7 @@ public class Utilerias {
 	}
 	
 	public static void verificarError(JsonObject resultado) {
-		if(resultado.has("Fault") ) {
+		if(resultado == null || resultado.has("Fault") ) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("COMMONS.500");
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
@@ -517,6 +518,62 @@ public class Utilerias {
 			arrayResultante = Utilerias.obtenerJsonArrayPropiedad(resultado, propiedad);
 		
 		return arrayResultante;
+	}
+	
+	public static Date convertirFechaFormato(String fecha, String formato) {
+		SimpleDateFormat sdfSalida = new SimpleDateFormat(formato);
+		TimeZone tz = TimeZone.getTimeZone("UTC");
+		sdfSalida.setTimeZone(tz);
+		Date fechaResultado = null;
+		try {
+			fechaResultado = sdfSalida.parse(fecha);
+		} catch (ParseException e) {
+			logger.info("Error en el formato de fecha.");
+			e.printStackTrace();
+		}
+		return fechaResultado;
+	}
+	
+	public static String formatearFecha(String fecha, String formatoResultado) {
+		List<String> formatosEntrada = new ArrayList<>();
+		formatosEntrada.add("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+		formatosEntrada.add("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+		formatosEntrada.add("yyyy-MM-dd HH:mm:ss");
+		formatosEntrada.add("yyyy-MM-dd");
+		formatosEntrada.add("dd-MM-yyyy");
+		formatosEntrada.add("dd/MM/yyyy");
+		formatosEntrada.add("HH:mm");
+		Date fechaResultado = null;
+		
+		if(fecha == null || fecha.isEmpty())
+			return "";
+		for(String formatoEntrada : formatosEntrada) {
+			fechaResultado = convertirFechaFormato(fecha, formatoEntrada);
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatoResultado);
+				if(fechaResultado != null)
+					return simpleDateFormat.format(fechaResultado);
+		}
+		return "";
+	}
+	
+	public static String formatearFecha(String fecha) {
+		List<String> formatosEntrada = new ArrayList<>();
+		formatosEntrada.add("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+		formatosEntrada.add("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+		formatosEntrada.add("yyyy-MM-dd HH:mm:ss");
+		formatosEntrada.add("yyyy-MM-dd");
+		formatosEntrada.add("dd-MM-yyyy");
+		formatosEntrada.add("dd/MM/yyyy");
+		formatosEntrada.add("HH:mm");
+		Date fechaResultado = null;
+		
+		for(String formatoEntrada : formatosEntrada) {
+			fechaResultado = convertirFechaFormato(fecha, formatoEntrada);
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatoEntrada);
+				if(fechaResultado != null)
+					return simpleDateFormat.format(fechaResultado);
+		}
+		return null;
 	}
 	
 	public static String convertirFecha(String fecha, String formato) {
@@ -556,5 +613,36 @@ public class Utilerias {
 		
 		logger.info("COMMONS: Finalizando convertirFecha metodo...");
 		return fechaEntrada != null ? sdfSalida.format(fechaEntrada) :  null;
+	}
+	
+	public static String formatearCuenta(String cadenaOriginal, int numeroCarateres) {
+		logger.info("COMMONS: Comenzando formatearCuenta metodo");
+		String caracteres = "**********";
+		String digitos = cadenaOriginal.substring(cadenaOriginal.length() - numeroCarateres);
+		String cadenaFinal = new StringBuilder()
+				.append(caracteres.substring(digitos.length()))
+				.append(digitos)
+				.toString();
+		logger.info("COMMONS: Finalizando formatearCuenta metodo");
+		return cadenaFinal;
+	}
+	
+	public static JsonObject obtenerElementoPorPropiedadValorString(JsonArray arreglo, String propiedad, String valor) {
+		if(arreglo == null)
+			return null;
+		if(arreglo.size() == 0)
+			return null;
+		if(propiedad == null || propiedad.isEmpty())
+			return null;
+		if(valor == null || valor.isEmpty())
+			return null;
+		for(JsonElement elemento : arreglo) {
+			JsonObject elementoObjeto = (JsonObject) elemento;
+			if(!elementoObjeto.has(propiedad))
+				return null;
+			if(elementoObjeto.get(propiedad).getAsString().equals(valor))
+				return elementoObjeto;
+		}
+		return null;
 	}
 }

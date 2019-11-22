@@ -44,6 +44,13 @@ public class TransferenciasBIMServicio extends BaseService {
 	private static String TransferenciaBIMConsultarOpSucOrigen;
 	private static String TransferenciaBIMConsultarOpSucDestino;
 	private static String TransferenciaBIMConsultarOpModulo;
+	private static String TransferenciaBIMFirmasConsultarOp;
+	private static String TransferenciaBIMFirmasConsultarOpTipConsul;
+	private static String TransferenciaBIMFirmasConsultarOpTransaccio;
+	private static String TransferenciaBIMFirmasConsultarOpUsuario;
+	private static String TransferenciaBIMFirmasConsultarOpSucOrigen;
+	private static String TransferenciaBIMFirmasConsultarOpSucDestino;
+	private static String TransferenciaBIMFirmasConsultarOpModulo;
 	
 	public TransferenciasBIMServicio() {
 		super();
@@ -55,6 +62,7 @@ public class TransferenciasBIMServicio extends BaseService {
 		TransferenciaBIMProcesarOp = properties.getProperty("transferencias_bim_servicio.op.transferencia_bim_procesar");
 		TransferenciaBIMCreacionOp = properties.getProperty("transferencias_bim_servicio.op.transferencia_bim_creacion");
 		TransferenciaBIMConsultarOp = properties.getProperty("transferencias_bim_servicio.op.transferencia_bim_consultar");
+		TransferenciaBIMFirmasConsultarOp = properties.getProperty("transferencias_bim_servicio.op.transferencia_bim_firmas_consultar");
 		
 		CuentasOrigenConsultarOpTipConsul = properties.getProperty("op.cuentas_origen_consultar.tip_consul");
 		CuentasOrigenConsultarOpTransaccio = properties.getProperty("op.cuentas_origen_consultar.transaccio");
@@ -89,6 +97,14 @@ public class TransferenciasBIMServicio extends BaseService {
 		TransferenciaBIMConsultarOpSucOrigen = properties.getProperty("op.transferencia_bim_consultar.suc_origen");
 		TransferenciaBIMConsultarOpSucDestino = properties.getProperty("op.transferencia_bim_consultar.suc_destino");
 		TransferenciaBIMConsultarOpModulo = properties.getProperty("op.transferencia_bim_consultar.modulo");
+
+		TransferenciaBIMFirmasConsultarOpTipConsul = properties.getProperty("op.transferencia_bim_firmas_consultar.tip_consul");
+		TransferenciaBIMFirmasConsultarOpTransaccio = properties.getProperty("op.transferencia_bim_firmas_consultar.transaccio");
+		TransferenciaBIMFirmasConsultarOpUsuario = properties.getProperty("op.transferencia_bim_firmas_consultar.usuario");
+		TransferenciaBIMFirmasConsultarOpSucOrigen = properties.getProperty("op.transferencia_bim_firmas_consultar.suc_origen");
+		TransferenciaBIMFirmasConsultarOpSucDestino = properties.getProperty("op.transferencia_bim_firmas_consultar.suc_destino");
+		TransferenciaBIMFirmasConsultarOpModulo = properties.getProperty("op.transferencia_bim_firmas_consultar.modulo");
+		
 	}
 	
 	public JsonObject cuentasOrigenConsultar(JsonObject datosCuentasOrigenConsultar) {
@@ -124,8 +140,10 @@ public class TransferenciasBIMServicio extends BaseService {
 	
 	public JsonObject transferenciaBIMProcesar(JsonObject datosTransferenciaBIMProcesar) {
 		logger.info("COMMONS: Comenzando transferenciaBIMProcesar metodo... ");
-		datosTransferenciaBIMProcesar.addProperty("Trb_RFC", "");
-		datosTransferenciaBIMProcesar.addProperty("Trb_IVA", 0.000);
+		if(!datosTransferenciaBIMProcesar.has("Trb_RFC") || datosTransferenciaBIMProcesar.get("Trb_RFC") == null)
+			datosTransferenciaBIMProcesar.addProperty("Trb_RFC", "");
+		if(!datosTransferenciaBIMProcesar.has("Trb_IVA") || datosTransferenciaBIMProcesar.get("Trb_IVA") == null)
+			datosTransferenciaBIMProcesar.addProperty("Trb_IVA", 0.000);
 		datosTransferenciaBIMProcesar.addProperty("Trb_DireIP", "");
 		datosTransferenciaBIMProcesar.addProperty("Trb_TipTra", TransferenciaBIMProcesarOpTrbTipTra);
 		datosTransferenciaBIMProcesar.addProperty("Trb_ValFir", TransferenciaBIMProcesarOpTrbValFir);
@@ -142,8 +160,10 @@ public class TransferenciasBIMServicio extends BaseService {
 
 	public JsonObject transferenciaBIMCreacion(JsonObject datosTransferenciaBIMCreacion) {
 		logger.info("COMMONS: Comenzando transferenciaBIMCreacion metodo... ");
-		datosTransferenciaBIMCreacion.addProperty("Trb_RFC", "");
-		datosTransferenciaBIMCreacion.addProperty("Trb_IVA", 0);
+		if(!datosTransferenciaBIMCreacion.has("Trb_RFC") || datosTransferenciaBIMCreacion.get("Trb_RFC") == null)
+			datosTransferenciaBIMCreacion.addProperty("Trb_RFC", "");
+		if(!datosTransferenciaBIMCreacion.has("Trb_IVA") || datosTransferenciaBIMCreacion.get("Trb_IVA") == null)
+			datosTransferenciaBIMCreacion.addProperty("Trb_IVA", 0);
 		datosTransferenciaBIMCreacion.addProperty("Trb_UsuAut", "");
 		datosTransferenciaBIMCreacion.addProperty("Trb_TipDur", "");
 		datosTransferenciaBIMCreacion.addProperty("Trb_DurTra", 0);
@@ -161,11 +181,15 @@ public class TransferenciasBIMServicio extends BaseService {
 	}
 	
 	public JsonObject transferenciasBIMConsultar(JsonObject datosTransferenciaBIMConsultar) {
+		logger.info("COMMONS: Comenzando transferenciasBIMConsultar metodo... ");
 		datosTransferenciaBIMConsultar.addProperty("Trb_Client", "");
-		datosTransferenciaBIMConsultar.addProperty("Trb_Status", "");
+		if(!datosTransferenciaBIMConsultar.has("Trb_Status"))
+			datosTransferenciaBIMConsultar.addProperty("Trb_Status", "");
 		datosTransferenciaBIMConsultar.addProperty("Trb_TipTra", "");
 		datosTransferenciaBIMConsultar.addProperty("NumTransac", "");
-		datosTransferenciaBIMConsultar.addProperty("Tip_Consul", TransferenciaBIMConsultarOpTipConsul);
+		datosTransferenciaBIMConsultar.addProperty("Trb_Consec", "");
+		if(!datosTransferenciaBIMConsultar.has("Tip_Consul"))
+			datosTransferenciaBIMConsultar.addProperty("Tip_Consul", TransferenciaBIMConsultarOpTipConsul);
 		datosTransferenciaBIMConsultar.addProperty("Transaccio", TransferenciaBIMConsultarOpTransaccio);
 		datosTransferenciaBIMConsultar.addProperty("Usuario", TransferenciaBIMConsultarOpUsuario);
 		datosTransferenciaBIMConsultar.addProperty("SucOrigen", TransferenciaBIMConsultarOpSucOrigen);
@@ -175,5 +199,23 @@ public class TransferenciasBIMServicio extends BaseService {
 		logger.info("transferenciaBIMConsultarResultadoObjeto" + transferenciaBIMConsultarResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaBIMCreacion metodo... ");
 		return transferenciaBIMConsultarResultadoObjeto;
+	}
+	
+	public JsonObject transferenciaBIMFirmasConsultar(JsonObject datosTransferenciaBIMFirmasConsultar) {
+		logger.info("COMMONS: Comenzando transferenciaBIMFirmasConsultar metodo... ");
+		datosTransferenciaBIMFirmasConsultar.addProperty("Ftb_Valida", "");
+		datosTransferenciaBIMFirmasConsultar.addProperty("Ftb_Usuari", "");
+		datosTransferenciaBIMFirmasConsultar.addProperty("Ftb_Client", "");
+		datosTransferenciaBIMFirmasConsultar.addProperty("NumTransac", "");
+		datosTransferenciaBIMFirmasConsultar.addProperty("Tip_Consul", TransferenciaBIMFirmasConsultarOpTipConsul);
+		datosTransferenciaBIMFirmasConsultar.addProperty("Transaccio", TransferenciaBIMFirmasConsultarOpTransaccio);
+		datosTransferenciaBIMFirmasConsultar.addProperty("Usuario", TransferenciaBIMFirmasConsultarOpUsuario);
+		datosTransferenciaBIMFirmasConsultar.addProperty("SucOrigen", TransferenciaBIMFirmasConsultarOpSucOrigen);
+		datosTransferenciaBIMFirmasConsultar.addProperty("SucDestino", TransferenciaBIMFirmasConsultarOpSucDestino);
+		datosTransferenciaBIMFirmasConsultar.addProperty("Modulo", TransferenciaBIMFirmasConsultarOpModulo);
+		JsonObject datosTransferenciaBIMFirmasConsultarResultadoObjeto = Utilerias.performOperacion(TransferenciasBIMServicio, TransferenciaBIMFirmasConsultarOp, datosTransferenciaBIMFirmasConsultar);
+		logger.info("datosTransferenciaBIMFirmasConsultarResultadoObjeto" + datosTransferenciaBIMFirmasConsultarResultadoObjeto);
+		logger.info("COMMONS: Finalizando transferenciaBIMFirmasConsultar metodo... ");
+		return datosTransferenciaBIMFirmasConsultarResultadoObjeto;
 	}
 }

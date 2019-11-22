@@ -2,6 +2,10 @@ package com.bim.commons.service;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.platform.runner.JUnitPlatform;
@@ -208,4 +212,43 @@ public class TransferenciasBIMServicioTest {
 		logger.info("TEST: Terminando transferenciasBIMConsultarTestDeberiaSerExitoso metodo");
 	}
 	
+	@Test
+	public void transferenciasBIMFirmasConsultarTestfDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando transferenciasBIMFirmasConsultarTestDeberiaSerExitoso metodo");
+		JsonObject datosTransferenciaBIMFirmasConsultar = new JsonObject();
+		datosTransferenciaBIMFirmasConsultar.addProperty("Ftb_Consec", "0000007346");
+		datosTransferenciaBIMFirmasConsultar.addProperty("FechaSis", Utilerias.obtenerFechaSis());
+		JsonObject resultado = transferenciasBIMServicio.transferenciaBIMFirmasConsultar(datosTransferenciaBIMFirmasConsultar );
+		logger.info("- resultado " + resultado);
+		
+		assertTrue(resultado.has("transferenciaBIMFirmas"));
+		assertTrue(resultado.get("transferenciaBIMFirmas").isJsonObject());
+		
+		JsonObject tranferenciaBIMFirmas = Utilerias.obtenerJsonObjectPropiedad(resultado, "transferenciaBIMFirmas");
+		
+		assertTrue(tranferenciaBIMFirmas.has("Ftb_Consec"));
+		assertTrue(tranferenciaBIMFirmas.has("Ftb_NivFir"));
+		assertTrue(tranferenciaBIMFirmas.has("Ftb_Cantid"));
+		
+		String ftbConse = Utilerias.obtenerStringPropiedad(tranferenciaBIMFirmas, "Ftb_Consec");
+		String ftbNivFir = Utilerias.obtenerStringPropiedad(tranferenciaBIMFirmas, "Ftb_NivFir");
+		String ftbCantid = Utilerias.obtenerStringPropiedad(tranferenciaBIMFirmas, "Ftb_Cantid");
+		
+		assertTrue(ftbConse != null);
+		assertTrue(ftbNivFir != null);
+		assertTrue(ftbCantid != null);
+		
+		logger.info("TEST: Terminando transferenciasBIMFirmasConsultarTestDeberiaSerExitoso metodo");
+	}
+	
+	@Test
+	public void formatoTest() {
+		String cadenaOriginal = "001953830023";
+		String cadenaSensurada = Utilerias.formatearCuenta(cadenaOriginal, 2);
+		logger.info("cadenaOriginal:  " + cadenaOriginal);
+		logger.info("cadenaSensurada: " + cadenaSensurada);
+		String cadenaFecha = "2019-11-21T07:38:00.000-06:00";
+		logger.info("DDMMYY: " + Utilerias.formatearFecha(cadenaFecha, "dd-MM-yyyy"));
+		logger.info("HHmm: " + Utilerias.formatearFecha(cadenaFecha, "HH:mm"));
+	}
 }
