@@ -502,4 +502,60 @@ public class Utilerias {
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
 	}
+	
+	public static JsonArray obtenerJsonArrayResultante(JsonObject resultado, String propiedad) {
+		JsonArray arrayResultante = null;
+		if(!resultado.has(propiedad))
+			return arrayResultante;
+		if(resultado.get(propiedad).isJsonObject()) {
+			JsonObject resultadoObjecto = Utilerias.obtenerJsonObjectPropiedad(resultado, propiedad);
+			if(resultadoObjecto.entrySet().size() == 0)
+				return null;
+			arrayResultante = new JsonArray();
+			arrayResultante.add(resultadoObjecto);
+		}
+		if(resultado.get(propiedad).isJsonArray())
+			arrayResultante = Utilerias.obtenerJsonArrayPropiedad(resultado, propiedad);
+		
+		return arrayResultante;
+	}
+	
+	public static String convertirFecha(String fecha, String formato) {
+		logger.info("COMMONS: Comenzando convertirFecha metodo...");
+		
+		SimpleDateFormat sdfSalida = new SimpleDateFormat(formato);
+		TimeZone tz = TimeZone.getTimeZone("UTC");
+		sdfSalida.setTimeZone(tz);
+		
+		Date fechaEntrada = null;
+		try {
+			SimpleDateFormat sdfEntrada = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");			
+			sdfEntrada.setTimeZone(tz);
+			fechaEntrada = sdfEntrada.parse(fecha);
+		} catch (Exception e) {
+			try {
+				SimpleDateFormat sdfEntrada = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				sdfEntrada.setTimeZone(tz);
+				fechaEntrada = sdfEntrada.parse(fecha);
+			} catch (Exception ex) {
+				try {
+					SimpleDateFormat sdfEntrada = new SimpleDateFormat("yyyy-MM-dd");
+					sdfEntrada.setTimeZone(tz);
+					fechaEntrada = sdfEntrada.parse(fecha);
+				} catch (Exception ei) {
+					try {
+						SimpleDateFormat sdfEntrada = new SimpleDateFormat("dd/MM/yyyy");
+						sdfEntrada.setTimeZone(tz);
+						fechaEntrada = sdfEntrada.parse(fecha);
+					} catch (Exception eo) {
+						logger.info("Error en el formato de fecha.");
+						eo.printStackTrace();
+					}
+				}
+			}
+		}
+		
+		logger.info("COMMONS: Finalizando convertirFecha metodo...");
+		return fechaEntrada != null ? sdfSalida.format(fechaEntrada) :  null;
+	}
 }
