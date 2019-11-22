@@ -144,10 +144,10 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosTransfarenciaSPEI.addProperty("Trs_PriRef", usuNombre);
 		datosTransfarenciaSPEI.addProperty("Trs_RFC", trsRFC);
 		datosTransfarenciaSPEI.addProperty("Trs_IVA", Double.parseDouble(trsIVA));
-		datosTransfarenciaSPEI.addProperty("Trs_Tipo","I");
+		datosTransfarenciaSPEI.addProperty("Trs_Tipo", "I");
 		datosTransfarenciaSPEI.addProperty("Trs_UsuCap", usuNumero);
-		datosTransfarenciaSPEI.addProperty("Trs_TipTra","I");
-		datosTransfarenciaSPEI.addProperty("Trs_Frecue","U");
+		datosTransfarenciaSPEI.addProperty("Trs_TipTra", "I");
+		datosTransfarenciaSPEI.addProperty("Trs_Frecue", "U");
 		//Trs_FePrEn es un dato de prueba
 		datosTransfarenciaSPEI.addProperty("Trs_FePrEn", "1900-01-01 00:00:00");
 		//Trs_DurFec es un dato de prueba
@@ -155,7 +155,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosTransfarenciaSPEI.addProperty("NumTransac", numTransac);	
 		datosTransfarenciaSPEI.addProperty("FechaSis", fechaSis);
 		
-		JsonObject transferenciaSPEICreacionResultado = this.speiServicio.transferenciaSPEICreacion(datosTransfarenciaSPEI );
+		JsonObject transferenciaSPEICreacionResultado = this.speiServicio.transferenciaSPEICreacion(datosTransfarenciaSPEI);
 		Utilerias.verificarError(transferenciaSPEICreacionResultado);
 		logger.info("- transferenciaSPEICreacionResultado " + transferenciaSPEICreacionResultado);
 		
@@ -219,6 +219,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		String trnEmaBen = Utilerias.obtenerStringPropiedad(transferenciaSPEIConsultarResultadoObjeto, "Trn_EmaBen");
 		
 		JsonObject datosTransferenciaSPEI = new JsonObject();
+		datosTransferenciaSPEI.addProperty("Trs_UsuAdm", usuUsuAdm);
 		datosTransferenciaSPEI.addProperty("Trs_Usuari", usuNumero);
 		datosTransferenciaSPEI.addProperty("Trs_UsuCli", usuClient);
 		datosTransferenciaSPEI.addProperty("Trs_Consec", trnConsec);
