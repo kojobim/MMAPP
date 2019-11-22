@@ -510,6 +510,8 @@ public class Utilerias {
 			return arrayResultante;
 		if(resultado.get(propiedad).isJsonObject()) {
 			JsonObject resultadoObjecto = Utilerias.obtenerJsonObjectPropiedad(resultado, propiedad);
+			if(resultadoObjecto.entrySet().size() == 0)
+				return null;
 			arrayResultante = new JsonArray();
 			arrayResultante.add(resultadoObjecto);
 		}

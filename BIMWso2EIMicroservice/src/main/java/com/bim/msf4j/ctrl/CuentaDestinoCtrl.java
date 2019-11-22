@@ -141,7 +141,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 			cuentaDestinoVerificarObjeto.addProperty("cueNumero", cueNumero);
 			cuentaDestinoVerificarObjeto.addProperty("cliComOrd", cliComOrd);
 			logger.info("- cuentaDestinoVerificarObjeto " + cuentaDestinoVerificarObjeto);
-		}
+		}else
+			cuentaDestinoVerificarObjeto = null;
 
 		JsonObject cuentaDestinoVerificarResultado = new JsonObject();
 		cuentaDestinoVerificarResultado.add("beneficiario", cuentaDestinoVerificarObjeto);
