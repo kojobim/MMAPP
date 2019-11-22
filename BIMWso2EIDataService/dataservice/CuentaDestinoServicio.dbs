@@ -34,6 +34,7 @@
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <result defaultNamespace="http://bem.com/cuentaDestinoBIMConsultarNE" element="cuentaDestinoBIM" rowName="cuentasDestinoBIM">
+            <element column="Cdb_Client" name="Cdb_Client" xsdType="xs:string" optional="true"/>
             <element column="Cdb_Consec" name="Cdb_Consec" xsdType="xs:string" optional="true"/>
             <element column="Cdb_UsuAdm" name="Cdb_UsuAdm" xsdType="xs:string" optional="true"/>
             <element column="Cdb_Cuenta" name="Cdb_Cuenta" xsdType="xs:string" optional="true"/>
@@ -48,6 +49,98 @@
             <element column="Cli_ComOrd" name="Cli_ComOrd" xsdType="xs:string" optional="true"/>
             <element column="Pat_Codigo" name="Pat_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Pat_Consec" name="Pat_Consec" xsdType="xs:integer" optional="true"/>
+            <element column="Cdb_CueFor" name="Cdb_CueFor" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <query id="cuentaDestinoBIMConsultarL1SQL" useConfig="BIMDB">
+        <sql>
+        	EXEC NBCUDEBRCON
+	        @Cdb_Client = :cdbClient,
+	        @Cdb_UsuAdm = :cdbUsuAdm,
+	        @Cdb_Usuari = :cdbUsuari,
+	        @Cdb_Cuenta = :cdbCuenta,
+	        @Cdb_Status = :cdbStatus,
+	        @Tip_Consul = :tipConsul,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="cdbClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbUsuAdm" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbUsuari" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbCuenta" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbStatus" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/cuentaDestinoBIMConsultarL1NE" element="cuentaDestinoBIM" rowName="cuentasDestinoBIM">
+            <element column="Cdb_Consec" name="Cdb_Consec" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_UsuAdm" name="Cdb_UsuAdm" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_Cuenta" name="Cdb_Cuenta" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_CliUsu" name="Cdb_CliUsu" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_Status" name="Cdb_Status" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_Alias" name="Cdb_Alias" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_RFCBen" name="Cdb_RFCBen" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_EmaBen" name="Cdb_EmaBen" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_FecAlt" name="Cdb_FecAlt" xsdType="xsdateTime" optional="true"/>
+            <element column="Cdb_FecCan" name="Cdb_FecCan" xsdType="xs:dateTime" optional="true"/>
+            <element column="Cli_ComOrd" name="Cli_ComOrd" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_TipCue" name="Cdb_TipCue" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <query id="cuentaDestinoBIMConsultarL2SQL" useConfig="BIMDB">
+        <sql>
+        	EXEC NBCUDEBRCON
+	        @Cdb_Client = :cdbClient,
+	        @Cdb_UsuAdm = :cdbUsuAdm,
+	        @Cdb_Usuari = :cdbUsuari,
+	        @Cdb_Cuenta = :cdbCuenta,
+	        @Cdb_Status = :cdbStatus,
+	        @Tip_Consul = :tipConsul,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="cdbClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbUsuAdm" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbUsuari" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbCuenta" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cdbStatus" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/cuentaDestinoBIMConsultarL2NE" element="cuentaDestinoBIM" rowName="cuentasDestinoBIM">
+            <element column="Cdb_Consec" name="Cdb_Consec" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_UsuAdm" name="Cdb_UsuAdm" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_Cuenta" name="Cdb_Cuenta" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_CliUsu" name="Cdb_CliUsu" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_Status" name="Cdb_Status" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_Alias" name="Cdb_Alias" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_RFCBen" name="Cdb_RFCBen" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_EmaBen" name="Cdb_EmaBen" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_FecAlt" name="Cdb_FecAlt" xsdType="xsdateTime" optional="true"/>
+            <element column="Cdb_FecCan" name="Cdb_FecCan" xsdType="xs:dateTime" optional="true"/>
+            <element column="Cue_Moneda" name="Cue_Moneda" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_FeAlFo" name="Cdb_FeAlFo" xsdType="xs:string" optional="true"/>
+            <element column="Cdb_CueFor" name="Cdb_CueFor" xsdType="xs:string" optional="true"/>
         </result>
     </query>
     <query id="cuentaDestinoBIMCreacionSQL" useConfig="BIMDB">
@@ -387,6 +480,40 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
+    <operation returnRequestStatus="true" name="cuentaDestinoBIMConsultarL1Op">
+        <call-query href="cuentaDestinoBIMConsultarL1SQL">
+            <with-param name="cdbClient" query-param="Cdb_Client"/>
+            <with-param name="cdbUsuAdm" query-param="Cdb_UsuAdm"/>
+            <with-param name="cdbUsuari" query-param="Cdb_Usuari"/>
+            <with-param name="cdbCuenta" query-param="Cdb_Cuenta"/>
+            <with-param name="cdbStatus" query-param="Cdb_Status"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="cuentaDestinoBIMConsultarL2Op">
+        <call-query href="cuentaDestinoBIMConsultarL2SQL">
+            <with-param name="cdbClient" query-param="Cdb_Client"/>
+            <with-param name="cdbUsuAdm" query-param="Cdb_UsuAdm"/>
+            <with-param name="cdbUsuari" query-param="Cdb_Usuari"/>
+            <with-param name="cdbCuenta" query-param="Cdb_Cuenta"/>
+            <with-param name="cdbStatus" query-param="Cdb_Status"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
     <operation name="cuentaDestinoBIMCreacionOp">
         <call-query href="cuentaDestinoBIMCreacionSQL">
             <with-param name="cdbUsuAdm" query-param="Cdb_UsuAdm"/>
@@ -484,7 +611,7 @@
             <with-param name="cdsUsuAdm" query-param="Cds_UsuAdm"/>
             <with-param name="cdsConsec" query-param="Cds_Consec"/>
             <with-param name="cdsCLABE" query-param="Cds_CLABE"/>
-            <with-param name="cdsRandom" query-param="Cds_Randoms"/>
+            <with-param name="cdsRandom" query-param="Cds_Random"/>
             <with-param name="tipActual" query-param="Tip_Actual"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>

@@ -35,6 +35,9 @@ public class LoginCtrl extends BimBaseCtrl {
 	private TokenServicio tokenServicio;
 	private UsuarioServicio usuarioServicio;
 	
+	private static String UsuarioActualizacionTipActual;
+	private static String LoginBitacoraCreacionOpBitTipOpe;
+	
 	public LoginCtrl() {
 		super();
 		
@@ -42,6 +45,9 @@ public class LoginCtrl extends BimBaseCtrl {
 		this.transaccionServicio = new TransaccionServicio();
 		this.tokenServicio = new TokenServicio();
 		this.usuarioServicio = new UsuarioServicio();
+		
+		UsuarioActualizacionTipActual = properties.getProperty("op.usuario_actualizacion.tip_actual.a");
+		LoginBitacoraCreacionOpBitTipOpe = properties.getProperty("op.login.bitacora_creacion.bit_tip_ope");
 		
 	}
 	
@@ -214,6 +220,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		
 		JsonObject datosUsuarioActualizacion = new JsonObject();
 		datosUsuarioActualizacion.addProperty("Usu_Clave", datosUsuario.get("Usu_Clave").getAsString());
+		datosUsuarioActualizacion.addProperty("Tip_Actual", UsuarioActualizacionTipActual);
 		datosUsuarioActualizacion.addProperty("NumTransac", folTransa);
 		datosUsuarioActualizacion.addProperty("FechaSis", fechaSis);
 		
@@ -253,7 +260,9 @@ public class LoginCtrl extends BimBaseCtrl {
 		datosBitacoraCreacion.addProperty("Bit_Fecha", fechaSis);
 		datosBitacoraCreacion.addProperty("Bit_PriRef", bitPriRef);
 		datosBitacoraCreacion.addProperty("Bit_DireIP", bitDireIP);
-		datosBitacoraCreacion.addProperty("NumTransac", folTransa);		
+		datosBitacoraCreacion.addProperty("Bit_TipOpe", LoginBitacoraCreacionOpBitTipOpe);
+		datosBitacoraCreacion.addProperty("NumTransac", folTransa);
+		datosBitacoraCreacion.addProperty("FechaSis", fechaSis);
 		
 
 		this.bitacoraServicio.creacionBitacora(datosBitacoraCreacion);
@@ -267,7 +276,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
 		 * String usuFolTok = principalResultadoObjecto.get("usuFolTok").getAsString();
 		 */
-		String usuFolTok = "416218850";
+		String usuFolTok = "0416218854";
 		
 		JsonObject usuarioResultado = new JsonObject();
 		usuarioResultado.addProperty("usuClave", usuClave);

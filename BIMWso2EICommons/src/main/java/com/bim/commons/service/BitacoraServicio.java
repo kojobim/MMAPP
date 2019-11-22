@@ -18,7 +18,7 @@ public class BitacoraServicio extends BaseService {
  
 	private static String BitacoraServicio;
 	private static String BitacoraCreacionOp;
-	private static String BitacoraCreacionOpBitTipOpe;
+	private static String BitacoraCreacionOpBitMonto;
 	private static String BitacoraCreacionOpTransaccio;
 	private static String BitacoraCreacionOpUsuario;
 	private static String BitacoraCreacionOpSucOrigen;
@@ -31,12 +31,12 @@ public class BitacoraServicio extends BaseService {
 		BitacoraServicio = properties.getProperty("data_service.bitacora_servicio");
 		
 		BitacoraCreacionOp = properties.getProperty("bitacora_servicio.op.bitacora_creacion");
-		BitacoraCreacionOpBitTipOpe = properties.getProperty("op.bitacora_creacion.bit_tipope");
-		BitacoraCreacionOpModulo = properties.getProperty("op.bitacora_creacion.transaccio");
-		BitacoraCreacionOpSucDestino = properties.getProperty("op.bitacora_creacion.usuario");
+		BitacoraCreacionOpBitMonto = properties.getProperty("op.bitacora_creacion.bit_monto");
 		BitacoraCreacionOpSucOrigen = properties.getProperty("op.bitacora_creacion.suc_origen");
-		BitacoraCreacionOpTransaccio = properties.getProperty("op.bitacora_creacion.suc_destino");
-		BitacoraCreacionOpUsuario = properties.getProperty("op.bitacora_creacion.modulo");
+		BitacoraCreacionOpSucDestino = properties.getProperty("op.bitacora_creacion.suc_destino");
+		BitacoraCreacionOpTransaccio = properties.getProperty("op.bitacora_creacion.transaccio");
+		BitacoraCreacionOpUsuario = properties.getProperty("op.bitacora_creacion.usuario");
+		BitacoraCreacionOpModulo = properties.getProperty("op.bitacora_creacion.modulo");
 	}
 	
 	
@@ -48,6 +48,7 @@ public class BitacoraServicio extends BaseService {
 	 * { 
 	 *	Bit_Usuari: String,	 
 	 *	Bit_Fecha:  String,
+	 *	Bit_TipOpe: String,
 	 *	Bit_NumTra?: String,
 	 *	Bit_CueOri?: String,
 	 *	Bit_CueDes?: String,
@@ -69,14 +70,13 @@ public class BitacoraServicio extends BaseService {
 		logger.info("COMMONS: Comenzando creacionBitacora...");
 		if(!datosBitacora.has("Bit_NumTra"))
 			datosBitacora.addProperty("Bit_NumTra", "");
-		datosBitacora.addProperty("Bit_TipOpe", BitacoraCreacionOpBitTipOpe);
 		if(!datosBitacora.has("Bit_CueOri"))
 			datosBitacora.addProperty("Bit_CueOri", "");
 		if(!datosBitacora.has("Bit_CueDes"))
 			datosBitacora.addProperty("Bit_CueDes", "");
-		datosBitacora.addProperty("Bit_Monto", 0);
 		if(!datosBitacora.has("Bit_SegRef"))
 			datosBitacora.addProperty("Bit_SegRef", "");
+		datosBitacora.addProperty("Bit_Monto", Integer.parseInt(BitacoraCreacionOpBitMonto));
 		datosBitacora.addProperty("Transaccio", BitacoraCreacionOpTransaccio);
 		datosBitacora.addProperty("Usuario", BitacoraCreacionOpUsuario);
 		datosBitacora.addProperty("SucOrigen", BitacoraCreacionOpSucOrigen);

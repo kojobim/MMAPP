@@ -18,7 +18,6 @@ public class ClienteServicio extends BaseService {
 	
 	private static String ClienteServicio;
 	private static String ClienteConsultarOp;
-	private static String ClienteConsultarOpTipConsul;
 	private static String ClienteConsultarOpTransaccio;
 	private static String ClienteConsultarOpUsuario;
 	private static String ClienteConsultarOpSucOrigen;
@@ -31,12 +30,11 @@ public class ClienteServicio extends BaseService {
 		ClienteServicio = properties.getProperty("data_service.cliente_servicio");
 		
 		ClienteConsultarOp = properties.getProperty("cliente_servicio.op.cliente_consultar");
-		ClienteConsultarOpModulo = properties.getProperty("op.cliente_consultar.modulo");
-		ClienteConsultarOpSucDestino = properties.getProperty("op.cliente_consultar.suc_destino");
-		ClienteConsultarOpSucOrigen = properties.getProperty("op.cliente_consultar.suc_origen");
-		ClienteConsultarOpTipConsul = properties.getProperty("op.cliente_consultar.tip_consul");
 		ClienteConsultarOpTransaccio = properties.getProperty("op.cliente_consultar.transaccio");
 		ClienteConsultarOpUsuario = properties.getProperty("op.cliente_consultar.usuario");
+		ClienteConsultarOpSucOrigen = properties.getProperty("op.cliente_consultar.suc_origen");
+		ClienteConsultarOpSucDestino = properties.getProperty("op.cliente_consultar.suc_destino");
+		ClienteConsultarOpModulo = properties.getProperty("op.cliente_consultar.modulo");
 	}
 	
 	
@@ -47,6 +45,7 @@ public class ClienteServicio extends BaseService {
 	 * <pre> 
 	 * { 
 	 *	Cli_Numero: String,
+	 *	Tip_Consul: String,
 	 *	Cli_Sucurs?: String,
 	 *	Cli_Nombre?: String,
 	 *	NumTransac?: String,
@@ -130,7 +129,6 @@ public class ClienteServicio extends BaseService {
 			datosClienteConsultar.addProperty("Cli_Sucurs", "");
 		if(!datosClienteConsultar.has("Cli_Nombre"))
 			datosClienteConsultar.addProperty("Cli_Nombre", "");
-		datosClienteConsultar.addProperty("Tip_Consul", ClienteConsultarOpTipConsul);
 		if(!datosClienteConsultar.has("NumTransac"))
 			datosClienteConsultar.addProperty("NumTransac", "");
 		datosClienteConsultar.addProperty("Transaccio", ClienteConsultarOpTransaccio);

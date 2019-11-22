@@ -47,6 +47,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesStatusActualizarOpSucDestino;
 	private static String InversionesStatusActualizarOpModulo;
 	private static String InversionesProcesoLiquidacionGenerarOp;
+	private static String InversionesProcesoLiquidacionGenerarOpInvrAutor;
 	private static String InversionesProcesoLiquidacionGenerarOpInvMonRef;
 	private static String InversionesProcesoLiquidacionGenerarOpTransaccio;
 	private static String InversionesProcesoLiquidacionGenerarOpUsuari;
@@ -71,6 +72,9 @@ public class InversionesServicio extends BaseService {
 		InversionesObtenerOp = properties.getProperty("inversiones_servicio.op.inversiones_obtener");
 		InversionesPagareNumeroUsuarioObtenerOp = properties.getProperty("inversiones_servicio.op.inversiones_pagare_numero_usuario_obtener");
 		InversionesImportesDeInversionFinalizadaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_importes_de_inversion_finalizada_actualizar");
+		InversionesStatusActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_status_actualizar");
+		InversionesProcesoLiquidacionGenerarOp = properties.getProperty("inversiones_servicio.op.inversiones_proceso_liquidacion_generar");
+		InversionesContraEstadoCuentaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_contra_estado_cuenta_actualizar");		
 
 		InversionesObtenerOpInvMoneda = properties.getProperty("op.inversiones_obtener.inv_moneda");
 		InversionesObtenerOpTransaccio = properties.getProperty("op.inversiones_obtener.transaccio");
@@ -86,11 +90,36 @@ public class InversionesServicio extends BaseService {
 		InversionesPagareNumeroUsuarioObtenerOpSucDestino = properties.getProperty("op.inversiones_pagare_numero_usuario_obtener.suc_destino");
 		InversionesPagareNumeroUsuarioObtenerOpModulo = properties.getProperty("op.inversiones_pagare_numero_usuario_obtener.modulo");
 
-		InversionesImportesDeInversionFinalizadaActualizarOpTransaccio  = properties.getProperty("op.inversiones_importes_de_inversion_finalizada_actualizar.transaccio");
+		InversionesImportesDeInversionFinalizadaActualizarOpInvrAutor = properties.getProperty("op.inversiones_importes_de_inversion_finalizada_actualizar.inv_rautor");
+		InversionesImportesDeInversionFinalizadaActualizarOpTransaccio = properties.getProperty("op.inversiones_importes_de_inversion_finalizada_actualizar.transaccio");
 		InversionesImportesDeInversionFinalizadaActualizarOpUsuari = properties.getProperty("op.inversiones_importes_de_inversion_finalizada_actualizar.usuario");
 		InversionesImportesDeInversionFinalizadaActualizarOpSucOrigen = properties.getProperty("op.inversiones_importes_de_inversion_finalizada_actualizar.suc_origen");
 		InversionesImportesDeInversionFinalizadaActualizarOpSucDestino = properties.getProperty("op.inversiones_importes_de_inversion_finalizada_actualizar.suc_destino");
-		InversionesImportesDeInversionFinalizadaActualizarOpModulo = properties.getProperty("op.inversiones_importes_de_inversion_finalizada_actualizar.modulo");
+		InversionesImportesDeInversionFinalizadaActualizarOpModulo = properties.getProperty("op.inversiones_importes_de_inversion_finalizada_actualizar.modulo");		
+		
+		InversionesStatusActualizarOpAdiInsLiq = properties.getProperty("op.inversiones_status_actualizar.adi_insLiq");
+		InversionesStatusActualizarOpAdiMoReGr = properties.getProperty("op.inversiones_status_actualizar.adi_moregr");
+		InversionesStatusActualizarOpTransaccio = properties.getProperty("op.inversiones_status_actualizar.transaccio");
+		InversionesStatusActualizarOpUsuari = properties.getProperty("op.inversiones_status_actualizar.usuario");
+		InversionesStatusActualizarOpSucOrigen = properties.getProperty("op.inversiones_status_actualizar.suc_origen");
+		InversionesStatusActualizarOpSucDestino = properties.getProperty("op.inversiones_status_actualizar.suc_destino");
+		InversionesStatusActualizarOpModulo = properties.getProperty("op.inversiones_status_actualizar.modulo");		
+		
+		InversionesProcesoLiquidacionGenerarOpInvrAutor = properties.getProperty("op.inversiones_proceso_liquidacion_generar.inv_rautor");
+		InversionesProcesoLiquidacionGenerarOpInvMonRef = properties.getProperty("op.inversiones_proceso_liquidacion_generar.inv_monref");
+		InversionesProcesoLiquidacionGenerarOpTransaccio = properties.getProperty("op.inversiones_proceso_liquidacion_generar.transaccio");
+		InversionesProcesoLiquidacionGenerarOpUsuari = properties.getProperty("op.inversiones_proceso_liquidacion_generar.usuario");
+		InversionesProcesoLiquidacionGenerarOpSucOrigen = properties.getProperty("op.inversiones_proceso_liquidacion_generar.suc_origen");
+		InversionesProcesoLiquidacionGenerarOpSucDestino = properties.getProperty("op.inversiones_proceso_liquidacion_generar.suc_destino");
+		InversionesProcesoLiquidacionGenerarOpModulo = properties.getProperty("op.inversiones_proceso_liquidacion_generar.modulo");		
+		
+		InversionesContraEstadoCuentaActualizarOpCorMoLiDi = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.cor_molidi");
+		InversionesContraEstadoCuentaActualizarOpTipActual = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.tip_actual");
+		InversionesContraEstadoCuentaActualizarOpTransaccio = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.transaccio");
+		InversionesContraEstadoCuentaActualizarOpUsuari = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.usuario");
+		InversionesContraEstadoCuentaActualizarOpSucOrigen = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.suc_origen");
+		InversionesContraEstadoCuentaActualizarOpSucDestino = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.suc_destino");		
+		InversionesContraEstadoCuentaActualizarOpModulo = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.modulo");
 
 	}
 
@@ -336,8 +365,8 @@ public class InversionesServicio extends BaseService {
 	 */
 	public JsonObject inversionesProcesoLiquidacionGenerar(JsonObject datosProcesoLiquidacion) {
 		logger.info("COMMONS: Comenzando inversionesProcesoLiquidacionGenerar metodo... ");
-		datosProcesoLiquidacion.addProperty("Inv_rAutor", InversionesImportesDeInversionFinalizadaActualizarOpUsuari);
-		datosProcesoLiquidacion.addProperty("Inv_MonRef", InversionesProcesoLiquidacionGenerarOpInvMonRef);
+		datosProcesoLiquidacion.addProperty("Inv_rAutor", InversionesProcesoLiquidacionGenerarOpInvrAutor);
+		datosProcesoLiquidacion.addProperty("Inv_MonRef", Double.parseDouble(InversionesProcesoLiquidacionGenerarOpInvMonRef));
 		datosProcesoLiquidacion.addProperty("Transaccio", InversionesProcesoLiquidacionGenerarOpTransaccio);
 		datosProcesoLiquidacion.addProperty("Usuario", InversionesProcesoLiquidacionGenerarOpUsuari);
 		datosProcesoLiquidacion.addProperty("SucOrigen", InversionesProcesoLiquidacionGenerarOpSucOrigen);
@@ -380,7 +409,7 @@ public class InversionesServicio extends BaseService {
 			datosIversionVsEstadoCuenta.addProperty("Cor_CliUsu", "");
 		if(!datosIversionVsEstadoCuenta.has("Cor_Alias"))
 			datosIversionVsEstadoCuenta.addProperty("Cor_Alias", "");
-		datosIversionVsEstadoCuenta.addProperty("Cor_MoLiDi", InversionesContraEstadoCuentaActualizarOpCorMoLiDi);
+		datosIversionVsEstadoCuenta.addProperty("Cor_MoLiDi", Double.parseDouble(InversionesContraEstadoCuentaActualizarOpCorMoLiDi));
 		datosIversionVsEstadoCuenta.addProperty("Tip_Actual", InversionesContraEstadoCuentaActualizarOpTipActual);		
 		datosIversionVsEstadoCuenta.addProperty("Transaccio", InversionesContraEstadoCuentaActualizarOpTransaccio);
 		datosIversionVsEstadoCuenta.addProperty("Usuario", InversionesContraEstadoCuentaActualizarOpUsuari);

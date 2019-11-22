@@ -117,7 +117,7 @@ public class Racal {
 		return caracter;
 	}
 
-	public static void logToken(String tkn, String respValidacion) {
+	public static void logToken(String tkn, String respValidacion, String scriptName) {
 		String TokenServicio = properties.getProperty("data_service.token_servicio");
 		String LogCreacionOp = properties.getProperty("token_servicio.op.log_creacion");
 
@@ -127,17 +127,19 @@ public class Racal {
 		JsonObject datosToken = new JsonObject();
 		datosToken.addProperty("serieToken", tokSerie);
 		datosToken.addProperty("respuesta", respValidacion);
-		datosToken.addProperty("scriptName", Racal.class.toString());
+		datosToken.addProperty("scriptName", scriptName);
 		datosToken.addProperty("valueEnter", tokValue);
 
 		logger.info("datosToken" + datosToken);
 		JsonObject logCreacionOpResultadoObjeto = Utilerias.performOperacion(TokenServicio, LogCreacionOp, datosToken);
 		logger.info("logCreacionOpResultadoObjeto" + logCreacionOpResultadoObjeto);
+		
+		Utilerias.verificarError(logCreacionOpResultadoObjeto);
 	}
 
-	public static String validaTokenOpera(String clave) {
+	public static String validaTokenOpera(String clave, String scriptName) {
 		String returnVal = validaToken(clave);
-		logToken(clave, returnVal);
+		logToken(clave, returnVal, scriptName);
 		return returnVal;
 	}
 }
