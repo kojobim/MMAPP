@@ -1,9 +1,5 @@
 package com.bim.commons.utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -17,8 +13,7 @@ public class Filtrado {
 	
     public static JsonObject filtroInversiones(JsonArray inversionArray, Integer page, Integer per_page, String filter_by) {
 		logger.info("COMMONS: Comenzando filtroInversiones metodo");
-
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		
 		double cpTotalInvCantidP = 0, cpTotalInvCantidV = 0, cpTotalInvCantidC = 0, cpTotalInvCantidF = 0;
 		
 		JsonObject categoriaFija = new JsonObject();
@@ -63,18 +58,11 @@ public class Filtrado {
 			elementosObjeto.addProperty("invNumero", invNumero);
 			elementosObjeto.addProperty("invCantid", invCantid);
 			
-			SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy");
 			String invFecVen = null;
 			if(elemento.has("Inv_FecVen"))
 				invFecVen = elemento.get("Inv_FecVen").getAsString();
-			Date fechaActual = new Date();
 			if(invFecVen != null && !invFecVen.contains("Proximo Vencimiento ")) {
-				try {
-					fechaActual = formatoFecha.parse(invFecVen);
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				elementosObjeto.addProperty("Inv_FecVen", simpleDateFormat.format(fechaActual));
+				elementosObjeto.addProperty("Inv_FecVen", Utilerias.formatearFecha(invFecVen, "dd-MM-yyyy HH:mm:ss"));
 			}
 			elementosObjeto.addProperty("cpRenInv", cpRenInv);
 			

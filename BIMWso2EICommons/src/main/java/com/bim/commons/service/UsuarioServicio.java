@@ -25,7 +25,6 @@ public class UsuarioServicio extends BaseService {
 	private static String UsuarioConsultarOpSucDestino;
 	private static String UsuarioConsultarOpModulo;
 	private static String UsuarioActualizacionOp;
-	private static String UsuarioActualizacionOpTipActual;
 	private static String UsuarioActualizacionOpTransaccio;
 	private static String UsuarioActualizacionOpUsuario;
 	private static String UsuarioActualizacionOpSucOrigen;
@@ -54,8 +53,7 @@ public class UsuarioServicio extends BaseService {
 		UsuarioConsultarOpSucOrigen = properties.getProperty("op.usuario_consultar.suc_origen");
 		UsuarioConsultarOpSucDestino = properties.getProperty("op.usuario_consultar.suc_destino");
 		UsuarioConsultarOpModulo = properties.getProperty("op.usuario_consultar.modulo");
-
-		UsuarioActualizacionOpTipActual = properties.getProperty("op.usuario_actualizacion.tip_actual");
+		
 		UsuarioActualizacionOpTransaccio = properties.getProperty("op.usuario_actualizacion.transaccio");
 		UsuarioActualizacionOpUsuario = properties.getProperty("op.usuario_actualizacion.usuario");
 		UsuarioActualizacionOpSucOrigen = properties.getProperty("op.usuario_actualizacion.suc_origen");
@@ -211,6 +209,8 @@ public class UsuarioServicio extends BaseService {
 		logger.info("COMMONS: Comenzando usuarioActualizar metodo... ");
 		if(!datosUsuarioActualizar.has("Usu_Numero"))
 			datosUsuarioActualizar.addProperty("Usu_Numero", "");
+		if(!datosUsuarioActualizar.has("Usu_Clave"))
+			datosUsuarioActualizar.addProperty("Usu_Clave", "");
 		if(!datosUsuarioActualizar.has("Usu_Passwo"))
 			datosUsuarioActualizar.addProperty("Usu_Passwo", "");
 		if(!datosUsuarioActualizar.has("Usu_Status"))
@@ -229,7 +229,6 @@ public class UsuarioServicio extends BaseService {
 		if(!datosUsuarioActualizar.has("Usu_Nombre"))
 			datosUsuarioActualizar.addProperty("Usu_Nombre", "");
 		datosUsuarioActualizar.addProperty("Usuario", UsuarioActualizacionOpUsuario);
-		datosUsuarioActualizar.addProperty("Tip_Actual", UsuarioActualizacionOpTipActual);
 		datosUsuarioActualizar.addProperty("Transaccio", UsuarioActualizacionOpTransaccio);
 		datosUsuarioActualizar.addProperty("SucOrigen", UsuarioActualizacionOpSucOrigen);
 		datosUsuarioActualizar.addProperty("SucDestino", UsuarioActualizacionOpSucDestion);

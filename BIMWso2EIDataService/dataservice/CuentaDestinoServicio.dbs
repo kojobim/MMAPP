@@ -127,7 +127,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/cuentaDestinoBIMConsultarL1NE" element="cuentaDestinoBIM" rowName="cuentasDestinoBIM">
+        <result defaultNamespace="http://bem.com/cuentaDestinoBIMConsultarL2NE" element="cuentaDestinoBIM" rowName="cuentasDestinoBIM">
             <element column="Cdb_Consec" name="Cdb_Consec" xsdType="xs:string" optional="true"/>
             <element column="Cdb_UsuAdm" name="Cdb_UsuAdm" xsdType="xs:string" optional="true"/>
             <element column="Cdb_Cuenta" name="Cdb_Cuenta" xsdType="xs:string" optional="true"/>

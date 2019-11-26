@@ -93,7 +93,7 @@
     
     
     <properties>
-    	<microservice.resourceClasses>com.bim.msf4j.ctrl.InversionesCtrl,com.bim.msf4j.ctrl.LoginCtrl,com.bim.msf4j.ctrl.PingCtrl,com.bim.msf4j.ctrl.CuentasCtrl,com.bim.msf4j.ctrl.UsuarioCtrl,com.bim.msf4j.ctrl.AvisoPrivacidadCtrl,com.bim.msf4j.ctrl.CuentaDestinoCtrl,com.bim.msf4j.ctrl.CatalogosCtrl,com.bim.msf4j.ctrl.TransferenciasNacionalesCtrl</microservice.resourceClasses>
+    	<microservice.resourceClasses>com.bim.msf4j.ctrl.InversionesCtrl,com.bim.msf4j.ctrl.LoginCtrl,com.bim.msf4j.ctrl.LogoutCtrl,com.bim.msf4j.ctrl.PingCtrl,com.bim.msf4j.ctrl.CuentasCtrl,com.bim.msf4j.ctrl.UsuarioCtrl,com.bim.msf4j.ctrl.AvisoPrivacidadCtrl,com.bim.msf4j.ctrl.CuentaDestinoCtrl,com.bim.msf4j.ctrl.CatalogosCtrl,com.bim.msf4j.ctrl.TransferenciasNacionalesCtrl</microservice.resourceClasses>
     </properties>
     
     <build>
