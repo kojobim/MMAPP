@@ -35,6 +35,7 @@ public class LoginCtrl extends BimBaseCtrl {
 	private TokenServicio tokenServicio;
 	private UsuarioServicio usuarioServicio;
 	
+	private static String UsuarioActualizacionTipActual;
 	private static String LoginBitacoraCreacionOpBitTipOpe;
 	
 	public LoginCtrl() {
@@ -45,6 +46,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		this.tokenServicio = new TokenServicio();
 		this.usuarioServicio = new UsuarioServicio();
 		
+		UsuarioActualizacionTipActual = properties.getProperty("op.usuario_actualizacion.tip_actual.a");
 		LoginBitacoraCreacionOpBitTipOpe = properties.getProperty("op.login.bitacora_creacion.bit_tip_ope");
 		
 	}
@@ -218,6 +220,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		
 		JsonObject datosUsuarioActualizacion = new JsonObject();
 		datosUsuarioActualizacion.addProperty("Usu_Clave", datosUsuario.get("Usu_Clave").getAsString());
+		datosUsuarioActualizacion.addProperty("Tip_Actual", UsuarioActualizacionTipActual);
 		datosUsuarioActualizacion.addProperty("NumTransac", folTransa);
 		datosUsuarioActualizacion.addProperty("FechaSis", fechaSis);
 		

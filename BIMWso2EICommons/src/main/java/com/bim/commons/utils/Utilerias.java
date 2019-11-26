@@ -124,18 +124,6 @@ public class Utilerias {
 	    logger.info("COMMONS: Finalizando redondear metodo...");
     	return Math.round(cantidad * escala) / escala;
 	}
-	
-	public static String convertirFechaAFormatoSimple(String fecha) {
-		logger.info("COMMONS: Comenzando convertirFecha metodo...");
-		String fechaConvertir = fecha.trim();
-		if(fechaConvertir.length() == 10 && fechaConvertir.contains("/")) {
-			fechaConvertir = fechaConvertir.substring(6)
-				+ "-" + fechaConvertir.substring(3, 5)
-				+ "-" + fechaConvertir.substring(0, 2);
-		}		
-		logger.info("COMMONS: Finalizando convertirFecha metodo...");
-		return fechaConvertir;
-	}
 
 	/**
 	 * Método que calcula tasa
@@ -511,6 +499,8 @@ public class Utilerias {
 			return arrayResultante;
 		if(resultado.get(propiedad).isJsonObject()) {
 			JsonObject resultadoObjecto = Utilerias.obtenerJsonObjectPropiedad(resultado, propiedad);
+			if(resultadoObjecto.entrySet().size() == 0)
+				return null;
 			arrayResultante = new JsonArray();
 			arrayResultante.add(resultadoObjecto);
 		}
@@ -520,18 +510,49 @@ public class Utilerias {
 		return arrayResultante;
 	}
 	
-	public static Date convertirFechaFormato(String fecha, String formato) {
-		SimpleDateFormat sdfSalida = new SimpleDateFormat(formato);
+	public static Date convertirFecha(String fecha, String formato) {
+		SimpleDateFormat sdf = new SimpleDateFormat(formato);
 		TimeZone tz = TimeZone.getTimeZone("UTC");
-		sdfSalida.setTimeZone(tz);
+		sdf.setTimeZone(tz);
 		Date fechaResultado = null;
 		try {
-			fechaResultado = sdfSalida.parse(fecha);
+			fechaResultado = sdf.parse(fecha);
 		} catch (ParseException e) {
 			logger.info("Error en el formato de fecha.");
 			e.printStackTrace();
 		}
 		return fechaResultado;
+	}
+
+	public static Date convertirFecha(String fecha) {
+		List<String> formatosEntrada = new ArrayList<>();
+		formatosEntrada.add("yyyy-MM-dd'T'HH:mm:ss.SSSX");
+		formatosEntrada.add("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+		formatosEntrada.add("yyyy-MM-dd HH:mm:ss");
+		formatosEntrada.add("yyyy-MM-dd");
+		formatosEntrada.add("dd-MM-yyyy");
+		formatosEntrada.add("dd/MM/yyyy");
+		formatosEntrada.add("HH:mm");
+		Date fechaResultado = null;
+
+		if(fecha == null || fecha.isEmpty())
+			return null;
+
+		for(String formatoEntrada : formatosEntrada) {
+			SimpleDateFormat sdf = new SimpleDateFormat(formatoEntrada);
+			TimeZone tz = TimeZone.getTimeZone("UTC");
+			sdf.setTimeZone(tz);
+			try {
+				fechaResultado = sdf.parse(fecha);
+			} catch (ParseException e) {
+				logger.info("Error en el formato de fecha.");
+				e.printStackTrace();
+			}
+
+			if(fechaResultado != null)
+				return fechaResultado;
+		}
+		return null;
 	}
 	
 	public static String formatearFecha(String fecha, String formatoResultado) {
@@ -548,10 +569,10 @@ public class Utilerias {
 		if(fecha == null || fecha.isEmpty())
 			return "";
 		for(String formatoEntrada : formatosEntrada) {
-			fechaResultado = convertirFechaFormato(fecha, formatoEntrada);
-				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatoResultado);
-				if(fechaResultado != null)
-					return simpleDateFormat.format(fechaResultado);
+			fechaResultado = convertirFecha(fecha, formatoEntrada);
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatoResultado);
+			if(fechaResultado != null)
+				return simpleDateFormat.format(fechaResultado);
 		}
 		return "";
 	}
@@ -568,51 +589,12 @@ public class Utilerias {
 		Date fechaResultado = null;
 		
 		for(String formatoEntrada : formatosEntrada) {
-			fechaResultado = convertirFechaFormato(fecha, formatoEntrada);
-				SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatoEntrada);
-				if(fechaResultado != null)
-					return simpleDateFormat.format(fechaResultado);
+			fechaResultado = convertirFecha(fecha, formatoEntrada);
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatoEntrada);
+			if(fechaResultado != null)
+				return simpleDateFormat.format(fechaResultado);
 		}
 		return null;
-	}
-	
-	public static String convertirFecha(String fecha, String formato) {
-		logger.info("COMMONS: Comenzando convertirFecha metodo...");
-		
-		SimpleDateFormat sdfSalida = new SimpleDateFormat(formato);
-		TimeZone tz = TimeZone.getTimeZone("UTC");
-		sdfSalida.setTimeZone(tz);
-		
-		Date fechaEntrada = null;
-		try {
-			SimpleDateFormat sdfEntrada = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");			
-			sdfEntrada.setTimeZone(tz);
-			fechaEntrada = sdfEntrada.parse(fecha);
-		} catch (Exception e) {
-			try {
-				SimpleDateFormat sdfEntrada = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				sdfEntrada.setTimeZone(tz);
-				fechaEntrada = sdfEntrada.parse(fecha);
-			} catch (Exception ex) {
-				try {
-					SimpleDateFormat sdfEntrada = new SimpleDateFormat("yyyy-MM-dd");
-					sdfEntrada.setTimeZone(tz);
-					fechaEntrada = sdfEntrada.parse(fecha);
-				} catch (Exception ei) {
-					try {
-						SimpleDateFormat sdfEntrada = new SimpleDateFormat("dd/MM/yyyy");
-						sdfEntrada.setTimeZone(tz);
-						fechaEntrada = sdfEntrada.parse(fecha);
-					} catch (Exception eo) {
-						logger.info("Error en el formato de fecha.");
-						eo.printStackTrace();
-					}
-				}
-			}
-		}
-		
-		logger.info("COMMONS: Finalizando convertirFecha metodo...");
-		return fechaEntrada != null ? sdfSalida.format(fechaEntrada) :  null;
 	}
 	
 	public static String formatearCuenta(String cadenaOriginal, int numeroCarateres) {

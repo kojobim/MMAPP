@@ -90,13 +90,15 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		
 		JsonArray cuentasDestinoResultado = new JsonArray();
 		
-		for(JsonElement cuentaDestinoElemento : cuentaDestinoArray) {
-			JsonObject cuentaDestinoElementoObjeto = (JsonObject) cuentaDestinoElemento;
-			JsonObject cuentaDestinoResultado = new JsonObject();
-			cuentaDestinoResultado.addProperty("cdsCLABE", Utilerias.obtenerStringPropiedad(cuentaDestinoElementoObjeto, "Cds_CLABE"));
-			cuentaDestinoResultado.addProperty("cdsConsec", Utilerias.obtenerStringPropiedad(cuentaDestinoElementoObjeto, "Cds_Consec"));
-			cuentaDestinoResultado.addProperty("cdsDesCue", Utilerias.obtenerStringPropiedad(cuentaDestinoElementoObjeto, "Cds_DesCue"));
-			cuentasDestinoResultado.add(cuentaDestinoResultado);
+		if(cuentaDestinoArray != null) {
+			for(JsonElement cuentaDestinoElemento : cuentaDestinoArray) {
+				JsonObject cuentaDestinoElementoObjeto = (JsonObject) cuentaDestinoElemento;
+				JsonObject cuentaDestinoResultado = new JsonObject();
+				cuentaDestinoResultado.addProperty("cdsCLABE", Utilerias.obtenerStringPropiedad(cuentaDestinoElementoObjeto, "Cds_CLABE"));
+				cuentaDestinoResultado.addProperty("cdsConsec", Utilerias.obtenerStringPropiedad(cuentaDestinoElementoObjeto, "Cds_Consec"));
+				cuentaDestinoResultado.addProperty("cdsDesCue", Utilerias.obtenerStringPropiedad(cuentaDestinoElementoObjeto, "Cds_DesCue"));
+				cuentasDestinoResultado.add(cuentaDestinoResultado);
+			}
 		}
 		
 		JsonObject cuentasDestino = new JsonObject();
@@ -279,18 +281,18 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		JsonObject  datosCuentaDestinoBIMConsultarResultado = this.cuentaDestinoServicio.cuentaDestinoBIMConsultar(datosCuentaDestinoBIMConsultar );
 		logger.info("- datosCuentaDestinoBIMConsultarResultado  "  + datosCuentaDestinoBIMConsultarResultado);
 		
-		JsonObject cuentaDestinoBIM = Utilerias.obtenerJsonObjectPropiedad(datosCuentaDestinoBIMConsultarResultado, "cuentaDestinoBIM");
-		
+		JsonObject cuentaDestinoBIM = Utilerias.obtenerJsonObjectPropiedad(datosCuentaDestinoBIMConsultarResultado, "cuentaDestinoBIM");		
 		JsonArray cuentasDestinoBIM = Utilerias.obtenerJsonArrayResultante(cuentaDestinoBIM, "cuentasDestinoBIM");
 		
-		JsonArray cuentasDestinoBIMResultado = new JsonArray();
-		
-		for(JsonElement cuentaDestinoBIMElemento: cuentasDestinoBIM) {
-			JsonObject cuentaDestinoBIMItem = (JsonObject) cuentaDestinoBIMElemento;
-			JsonObject cuentaDestinoBIMResultado = new JsonObject();
-			cuentaDestinoBIMResultado.addProperty("cdbCuenta", Utilerias.obtenerStringPropiedad(cuentaDestinoBIMItem, "Cdb_Cuenta"));
-			cuentaDestinoBIMResultado.addProperty("cdbCueFor", Utilerias.obtenerStringPropiedad(cuentaDestinoBIMItem, "Cdb_CueFor"));
-			cuentasDestinoBIMResultado.add(cuentaDestinoBIMResultado);
+		JsonArray cuentasDestinoBIMResultado = new JsonArray();		
+		if(cuentasDestinoBIM != null) {
+			for(JsonElement cuentaDestinoBIMElemento: cuentasDestinoBIM) {
+				JsonObject cuentaDestinoBIMItem = (JsonObject) cuentaDestinoBIMElemento;
+				JsonObject cuentaDestinoBIMResultado = new JsonObject();
+				cuentaDestinoBIMResultado.addProperty("cdbCuenta", Utilerias.obtenerStringPropiedad(cuentaDestinoBIMItem, "Cdb_Cuenta"));
+				cuentaDestinoBIMResultado.addProperty("cdbCueFor", Utilerias.obtenerStringPropiedad(cuentaDestinoBIMItem, "Cdb_CueFor"));
+				cuentasDestinoBIMResultado.add(cuentaDestinoBIMResultado);
+			}
 		}
 		
 		JsonObject cuentasDestinoRespuesta = new JsonObject();
