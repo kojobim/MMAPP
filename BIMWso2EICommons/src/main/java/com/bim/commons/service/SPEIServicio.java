@@ -171,7 +171,8 @@ public class SPEIServicio extends BaseService {
 	 * {
 	 * 	transaccionSPEI: {
 	 *		Err_Codigo: String,
-	 *		Err_Mensaj: String
+	 *		Err_Mensaj: String,
+	 *		Trs_Consec: String
 	 *	}
 	 * }
 	 * </pre>
@@ -210,12 +211,10 @@ public class SPEIServicio extends BaseService {
 	 * 	Trs_Usuari: String,
 	 * 	Trs_UsuCli: String,
 	 * 	Trs_Consec: String,
-	 * 	Trs_OrdPag: String,
 	 * 	Trs_CueOri: String,
 	 * 	Trs_TiCuBe: String,
 	 * 	Trs_CueBen: String,
 	 * 	Trs_Monto: Double,
-	 * 	Trs_RFC: String,
 	 * 	Trs_IVA: Double,
 	 * 	Trs_Comisi: Double,
 	 * 	Trs_ConPag: String,
@@ -376,7 +375,6 @@ public class SPEIServicio extends BaseService {
 		datosTransferenciaSPEI.addProperty("SucDestino", TransferenciaSPEIConsultarOpSucDestino);
 		datosTransferenciaSPEI.addProperty("Modulo", TransferenciaSPEIConsultarOpModulo);
 		JsonObject transferenciaSPEIConsultarOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransferenciaSPEIConsultarOp, datosTransferenciaSPEI);
-		logger.info("transferenciaSPEIConsultarOpResultadoObjeto" + transferenciaSPEIConsultarOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaSPEIConsultar metodo... ");
 		return transferenciaSPEIConsultarOpResultadoObjeto;
 	}
