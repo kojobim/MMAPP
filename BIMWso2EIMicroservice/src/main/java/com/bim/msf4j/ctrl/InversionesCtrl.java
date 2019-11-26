@@ -133,11 +133,12 @@ public class InversionesCtrl extends BimBaseCtrl {
         if(filterBy != null && !filterBy.equals(InversionesFilterBy)) {
             BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.6");
             throw new BadRequestException(bimMessageDTO.toString());
-        }
+		}
+		
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjeto = Utilerias.obtenerPrincipal(bearerToken);
 
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
-		Date fecha = new Date();
-		String fechaSis = simpleDateFormat.format(fecha);
+		String fechaSis = Utilerias.obtenerFechaSis();
 		
 		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
 		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
@@ -146,11 +147,11 @@ public class InversionesCtrl extends BimBaseCtrl {
 		
 		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
-		String bit_DireIP = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("User-Agent") : "";
-		String bit_PriRef = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("X-Forwarded-For") : "";
+		String bit_DireIP = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("User-Agent") : "";
+		String bit_PriRef = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("X-Forwarded-For") : "";
 		
-		String usuNumero = "001844";
-		String usuClient = "00193500";
+		String usuNumero = principalResultadoObjeto.get("usuNumero").getAsString();
+		String usuClient = principalResultadoObjeto.get("usuClient").getAsString();
 		
 		JsonObject datosBitacora = new JsonObject();
 		datosBitacora.addProperty("Bit_Usuari", usuNumero);
@@ -170,17 +171,25 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject inversionesObtenerOpResultadoObjeto = this.inversionesServicio.inversionesObtener(inversionesObtener);
 		logger.info("inversionesObtenerOpResultadoObjeto" + inversionesObtenerOpResultadoObjeto);
 		
+		Utilerias.verificarError(inversionesObtenerOpResultadoObjeto);
+		
 		JsonObject inversionesPagareNumeroUsuarioObtener = new JsonObject();
 		inversionesPagareNumeroUsuarioObtener.addProperty("Inv_Usuari", usuNumero);
 		inversionesPagareNumeroUsuarioObtener.addProperty("NumTransac", numTransac);
 		inversionesPagareNumeroUsuarioObtener.addProperty("FechaSis", fechaSis);
 	
-		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = this.inversionesServicio.inversionesPagareNumeroUsuarioObtener(inversionesPagareNumeroUsuarioObtener);
-		logger.info("inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto" + inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto);
+		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjeto = this.inversionesServicio.inversionesPagareNumeroUsuarioObtener(inversionesPagareNumeroUsuarioObtener);
+		logger.info("inversionesPagareNumeroUsuarioObtenerOpResultadoObjeto" + inversionesPagareNumeroUsuarioObtenerOpResultadoObjeto);
+		
+		Utilerias.verificarError(inversionesPagareNumeroUsuarioObtenerOpResultadoObjeto);
 		
 		JsonArray inversionesResultado = new JsonArray();
 
-		inversionesResultado.addAll(inversionesObtenerOpResultadoObjeto.get("inversiones").getAsJsonObject().get("inversion").getAsJsonArray());
+		if(inversionesObtenerOpResultadoObjeto.get("inversiones").getAsJsonObject().has("inversion"))
+			inversionesResultado.addAll(inversionesObtenerOpResultadoObjeto.get("inversiones").getAsJsonObject().get("inversion").getAsJsonArray());
+		
+		if(inversionesPagareNumeroUsuarioObtenerOpResultadoObjeto.get("inversiones").getAsJsonObject().has("inversion"))
+			inversionesResultado.addAll(inversionesPagareNumeroUsuarioObtenerOpResultadoObjeto.get("inversiones").getAsJsonObject().get("inversion").getAsJsonArray());
 
 		JsonObject datosHorario = new JsonObject();
 		datosHorario.addProperty("NumTransac", numTransac);
@@ -212,45 +221,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 				}
 			}
 
-			Date fechaVen = null;
-			Date horIni = null;
-			Date horFin = null;
-
-			try {
-				SimpleDateFormat sdfFecha = new SimpleDateFormat("yyyy-MM-dd");
-				fechaVen = sdfFecha.parse(invFecVen);
-			} catch (Exception e) {
-				try {
-					SimpleDateFormat sdfFecha = new SimpleDateFormat("dd/MM/yyyy");
-					fechaVen = sdfFecha.parse(invFecVen);
-				} catch (ParseException ex) {
-					logger.info("formato sdfFecha no valido.");
-				}
-			}
-
-			try {
-				SimpleDateFormat sdfHora = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-				horIni = sdfHora.parse(horHorIni);
-			} catch (Exception e) {
-				try {
-					SimpleDateFormat sdfHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					horIni = sdfHora.parse(horHorIni);
-				} catch (Exception ex) {
-					logger.info("error al formatear HorIni.");
-				}
-			}
-
-			try {
-				SimpleDateFormat sdfHora = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
-				horFin = sdfHora.parse(horHorFin);
-			} catch (Exception e) {
-				try {
-					SimpleDateFormat sdfHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					horFin = sdfHora.parse(horHorFin);
-				} catch (Exception ex) {
-					logger.info("error al formatear HorFin.");
-				}
-			}
+			Date fechaVen = Utilerias.convertirFecha(invFecVen);
+			Date horIni = Utilerias.convertirFecha(horHorIni);
+			Date horFin = Utilerias.convertirFecha(horHorFin);
 
 			Boolean cpRenInv = Utilerias.calcularVencimiento(fechaVen, horIni, horFin);		
 			Double invCantidRedondeado = Utilerias.redondear(Double.parseDouble(invCantid), 3);
@@ -398,49 +371,11 @@ public class InversionesCtrl extends BimBaseCtrl {
 					invISRTot = inversionObj.has("Inv_ISRTot") ? inversionObj.get("Inv_ISRTot").getAsDouble() : 0;
 				}
 
-				Date fechaIni = null;
-				Date fechaVen = null;
+				Date fechaIni = Utilerias.convertirFecha(invFecIni);
+				Date fechaVen = Utilerias.convertirFecha(invFecVen);
 
-				try {
-					SimpleDateFormat sdfFecha = new SimpleDateFormat("yyyy-MM-dd");
-					fechaIni = sdfFecha.parse(invFecIni);
-				} catch (Exception e) {
-					try {
-						SimpleDateFormat sdfFecha = new SimpleDateFormat("dd/MM/yyyy");
-						fechaIni = sdfFecha.parse(invFecIni);
-					} catch (ParseException ex) {
-						logger.info("formato sdfFecha no valido.");
-					}
-				}
-
-				try {
-					SimpleDateFormat sdfFecha = new SimpleDateFormat("yyyy-MM-dd");
-					fechaVen = sdfFecha.parse(invFecVen);
-				} catch (Exception e) {
-					try {
-						SimpleDateFormat sdfFecha = new SimpleDateFormat("dd/MM/yyyy");
-						fechaVen = sdfFecha.parse(invFecVen);
-					} catch (ParseException ex) {
-						logger.info("formato sdfFecha no valido.");
-					}
-				}
-
-				Date horIni = null;
-				Date horFin = null;
-
-				SimpleDateFormat sdfHora = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-				try {
-					horIni = sdfHora.parse(horHorIni);
-				} catch (Exception e) {
-					logger.info("error al formatear HorIni.");
-				}
-
-				try {
-					horFin = sdfHora.parse(horHorFin);
-				} catch (Exception e) {
-					logger.info("error al formatear HorFin.");
-				}
+				Date horIni = Utilerias.convertirFecha(horHorIni, "yyyy-MM-dd HH:mm:ss");
+				Date horFin = Utilerias.convertirFecha(horHorFin, "yyyy-MM-dd HH:mm:ss");
 
 				Boolean cpRenInv = Utilerias.calcularVencimiento(fechaVen, horIni, horFin);
 				intBru = Utilerias.redondear(intBru, 2);
@@ -606,7 +541,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		Double invCantid = Utilerias.obtenerDoublePropiedad(inversion, "Inv_Cantid");
 		String fecVenInv = Utilerias.obtenerStringPropiedad(inversion, "Inv_FecVen");
 
-		String fecVenI = Utilerias.convertirFecha(fecVenInv, "yyyy-MM-dd HH:mm:ss");
+		String fecVenI = Utilerias.formatearFecha(fecVenInv, "yyyy-MM-dd HH:mm:ss");
 
 		JsonObject datosTasaCliente = new JsonObject();
 		datosTasaCliente.addProperty("Cli_Numero", usuClient);
@@ -684,7 +619,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		String cliCobISR = Utilerias.obtenerStringPropiedad(cliente, "Cli_CobISR");
 
 		/**
-		 * REGLA DE NEGOCIO: verifica que la cantidad de inversión sea mayor a 5000 y el plazo sea mayor a cero 
+		 * REGLA DE NEGOCIO: verifica que la cantidad de inversiï¿½n sea mayor a 5000 y el plazo sea mayor a cero 
 		 */
 
 		if(invCantid < 5000 || invPlazo <= 0){
@@ -705,7 +640,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("resultadoCalculaTasa" + resultadoCalculaTasa);
 
 		/**
-		 * REGLA DE NEGOCIO: valida token de transacción y bloquea al usuario en caso de 5 intentos fallidos
+		 * REGLA DE NEGOCIO: valida token de transacciï¿½n y bloquea al usuario en caso de 5 intentos fallidos
 		 */
 
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(renovarInversion, "cpRSAToken");
@@ -748,8 +683,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		Double invCanNet = Utilerias.obtenerDoublePropiedad(resultadoCalculaTasa, "Inv_CanNet");
 
 		String formato = "yyyy-MM-dd";
-		String rfecIn = Utilerias.convertirFecha(fechaSis, formato);
-		String rfecVe = Utilerias.convertirFecha(sigFecha, formato);
+		String rfecIn = Utilerias.formatearFecha(fechaSis, formato);
+		String rfecVe = Utilerias.formatearFecha(sigFecha, formato);
 		
 		String invCuenta = Utilerias.obtenerStringPropiedad(inversion, "Inv_Cuenta");
 
@@ -872,8 +807,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 				String invFecIni = Utilerias.obtenerStringPropiedad(inversionObj, "Inv_FecIni");
 				String invFecVen = Utilerias.obtenerStringPropiedad(inversionObj, "Inv_FecVen");
 				
-				fecIni = Utilerias.convertirFecha(invFecIni, formato);
-				fecVen = Utilerias.convertirFecha(invFecVen, formato);
+				fecIni = Utilerias.formatearFecha(invFecIni, formato);
+				fecVen = Utilerias.formatearFecha(invFecVen, formato);
 
 				rInvCuenta = Utilerias.obtenerStringPropiedad(inversionObj, "Inv_Cuenta");
 				rInvCantid = Utilerias.obtenerDoublePropiedad(inversionObj, "Inv_Cantid");
