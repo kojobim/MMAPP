@@ -596,10 +596,13 @@ public class Utilerias {
 		return null;
 	}
 	
-	public static String formatearCuenta(String cadenaOriginal, int numeroCarateres) {
+	public static String formatearCuenta(String cadenaOriginal, int numeroCaracteres, int numerosOcultos) {
 		logger.info("COMMONS: Comenzando formatearCuenta metodo");
-		String caracteres = "**********";
-		String digitos = cadenaOriginal.substring(cadenaOriginal.length() - numeroCarateres);
+		String caracteres = null;
+		for(int i = 0; i<numerosOcultos; i++) {
+			caracteres += "*";
+		}
+		String digitos = cadenaOriginal.substring(cadenaOriginal.length() - numeroCaracteres);
 		String cadenaFinal = new StringBuilder()
 				.append(caracteres.substring(digitos.length()))
 				.append(digitos)
