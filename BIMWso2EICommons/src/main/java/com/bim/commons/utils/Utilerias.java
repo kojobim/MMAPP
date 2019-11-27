@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.TimeZone;
+import java.util.function.Predicate;
 import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -347,7 +348,7 @@ public class Utilerias {
 		String principalResultado = HttpClientUtils.getPerform(principalSolicitud);
 		JsonObject principalResultadoObjecto = new Gson().fromJson(principalResultado, JsonObject.class);
 		
-		if(principalResultadoObjecto.has("error")) {
+		if(principalResultadoObjecto == null) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.29");
 			throw new UnauthorizedException(bimMessageDTO.toString());
 		}
@@ -628,5 +629,30 @@ public class Utilerias {
 				return elementoObjeto;
 		}
 		return null;
+	}
+	
+	public static JsonArray  filtrarPropiedadesArray(JsonArray datos, Predicate<JsonObject> predicado){
+		logger.info("COMMONS: Comenzando filtrarPropiedadesArray metodo");
+		JsonArray resultante = null;
+		if(logger.isDebugEnabled()){
+			logger.debug("DATOS A FILTRAR "+datos);
+		}
+		if(datos != null && !datos.isJsonNull() && datos.isJsonArray()) {
+			resultante = new JsonArray();
+			for(JsonElement elemento : datos) {
+
+				if(predicado.test(elemento.getAsJsonObject())) {
+					
+					if(logger.isDebugEnabled()){
+						logger.debug("elemento coincide con el predicado [ Elemento = "+elemento+", Predicado = "+predicado.toString());
+					}
+					
+					resultante.add(elemento);
+
+				}				
+			}
+		}
+		logger.info("COMMONS: Finalizando filtrarPropiedadesArray metodo");
+		return resultante;
 	}
 }
