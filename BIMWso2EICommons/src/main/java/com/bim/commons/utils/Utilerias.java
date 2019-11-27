@@ -348,7 +348,7 @@ public class Utilerias {
 		String principalResultado = HttpClientUtils.getPerform(principalSolicitud);
 		JsonObject principalResultadoObjecto = new Gson().fromJson(principalResultado, JsonObject.class);
 		
-		if(principalResultadoObjecto == null) {
+		if(principalResultadoObjecto.has("error")) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.29");
 			throw new UnauthorizedException(bimMessageDTO.toString());
 		}
