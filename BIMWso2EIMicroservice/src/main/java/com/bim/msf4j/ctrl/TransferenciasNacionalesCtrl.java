@@ -371,6 +371,25 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 			@Context final Request solicitud) {
 		logger.info("CTRL: Comenzando listadoTransferenciasNacionalesProgramadas mï¿½todo");
 		
+
+		String cpTrnTransf = null;
+		String trnDeCuOr =  null;
+		String trnDeCuDe =  null;
+		String trnBanDes =  null;
+		String trnDescri =  null;
+		String trnFePrEn =  null;
+		String trnEmaBen =  null;
+		String trnFrecue =  null;
+		String cpTrnSecue =  null;
+		Integer trnDiAnEm =  null;
+		String cpTrnSec =  null;
+		String trnSigSec =  null;
+		String trnSecuen =  null;
+		String trnTipDur =  null;
+		String trnTransf = null;
+		String trnfecha = null;
+		
+		
 		if(page == null || perPage == null) 
 			throw new BadRequestException("BIM.MENSAJ.2");
 		
@@ -439,22 +458,77 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		JsonObject transaccionesSPEI = Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaSPEIConsultarResultado, "transaccionesSPEI");
 		JsonArray transaccionElementoArray = Utilerias.obtenerJsonArrayPropiedad(transaccionesSPEI, "transaccionSPEI");
 		
+		
 		if(transaccionesSPEI.entrySet().isEmpty()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.58");
 			throw new ConflictException(bimMessageDTO.toString());
 		}
 		
+		JsonArray transferenciasProgramadasActivas = Utilerias.filtrarPropiedadesArray(
+				transaccionElementoArray,
+				jsonObject -> jsonObject.get("Trb_TipTra").getAsString().equals("P")
+						&& jsonObject.get("Trb_Status").getAsString().equals("A"));
+
+		Integer totalElementos = transaccionElementoArray.size();
+		transaccionElementoArray = Utilerias.paginado(transaccionElementoArray, pageValue, perPageValue);
 		
-		JsonArray inversionesResultadoFinal = new JsonArray();
-		for(JsonElement tramsaccionElemento : transaccionElementoArray) {
-			JsonObject transaccionObjeto = (JsonObject) tramsaccionElemento;
-			inversionesResultadoFinal.add(inversionesResultadoFinal);
+		JsonArray transferenciasProgramadas = new JsonArray();
+		for(JsonElement transaccionElemento : transaccionElementoArray) {
+			JsonObject transaccionObjeto = (JsonObject) transaccionElemento;
+			trnDeCuOr = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_DeCuOr");
+			trnDeCuDe = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_CueOri");
+			trnBanDes = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_BanDes");
+			trnDescri = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_Descri");
+			trnfecha = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_FePrEn");
+			trnEmaBen = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_EmaBen");
+			trnFrecue = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_Frecue");
+			trnDiAnEm = Utilerias.obtenerIntPropiedad(transaccionObjeto, "Trn_DiAnEm");
+			trnSigSec = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_SigSec");
+			trnSecuen = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_Secuen");
+			trnTipDur = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_TipDur");
+			trnTransf = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_Transf");
+			trnFePrEn = Utilerias.formatearFecha(trnfecha, "2019-11-28");
+			
+			if(trnTipDur.trim().equals("I")){ // duración ilimitada
+				trnSecuen = "N";
+				String cpTrbSecue = "Sin limite";
+			}else {
+				trnSecuen = Utilerias.obtenerStringPropiedad(transaccionObjeto.getAsJsonObject(), "Trb_Secuen");
+				cpTrnSecue = trnSecuen;
+			}
+			
+			cpTrnSec = new StringBuilder(trnSigSec)
+					.append("/")
+					.append(trnSecuen)
+					.toString();
+			if(trnTransf.trim().equals("S")) {
+				cpTrnTransf = "SPEI";
+			}else {
+				cpTrnTransf = "TEF";
+			}
+
+			JsonObject datosTransaccionNacionalObjeto = new JsonObject();
+			datosTransaccionNacionalObjeto.addProperty("cpTrnTransf", cpTrnTransf);
+			datosTransaccionNacionalObjeto.addProperty("trnDeCuOr", trnDeCuOr);
+			datosTransaccionNacionalObjeto.addProperty("trnDeCuDe", trnDeCuDe);
+			datosTransaccionNacionalObjeto.addProperty("trnBanDes", trnBanDes);
+			datosTransaccionNacionalObjeto.addProperty("trnDescri", trnDescri);//string
+			datosTransaccionNacionalObjeto.addProperty("trnFePrEn", trnFePrEn);//string fecha 2019-11-28
+			datosTransaccionNacionalObjeto.addProperty("cpTrnSec", cpTrnSec);//string
+			datosTransaccionNacionalObjeto.addProperty("trnEmaBen", trnEmaBen);//string
+			datosTransaccionNacionalObjeto.addProperty("trnFrecue", trnFrecue);//String U
+			datosTransaccionNacionalObjeto.addProperty("cpTrnSecue", trnSecuen);//string
+			datosTransaccionNacionalObjeto.addProperty("trnDiAnEm", trnDiAnEm);//integre 0
+			transferenciasProgramadas.add(datosTransaccionNacionalObjeto);
+			
 		}
 
 		
 		
 		logger.info("CTRL: Terminando listadoTransferenciasNacionalesProgramadas mï¿½todo");	
-		return Response.ok(inversionesResultadoFinal.toString(), MediaType.APPLICATION_JSON)
+		return Response
+				.ok(transferenciasProgramadas)
+				.header("X-Total-Count", totalElementos)
 				.build();
 	}
 

@@ -45,6 +45,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		this.transaccionServicio = new TransaccionServicio();
 		this.tokenServicio = new TokenServicio();
 		this.usuarioServicio = new UsuarioServicio();
+		this.configuracionServicio = new ConfiguracionServicio();
 		
 		UsuarioActualizacionTipActual = properties.getProperty("op.usuario_actualizacion.tip_actual.a");
 		LoginBitacoraCreacionOpBitTipOpe = properties.getProperty("op.login.bitacora_creacion.bit_tip_ope");
@@ -271,6 +272,9 @@ public class LoginCtrl extends BimBaseCtrl {
 		String usuNombre = Utilerias.obtenerStringPropiedad(usuario, "Usu_Nombre");
 		String usuEmail = Utilerias.obtenerStringPropiedad(usuario, "Usu_Email");
 		String usuUsuAdm = Utilerias.obtenerStringPropiedad(usuario, "Usu_UsuAdm");
+		String usuTipo = Utilerias.obtenerStringPropiedad(usuario, "Usu_Tipo");
+		String usuFeAcPa = Utilerias.obtenerStringPropiedad(usuario, "Usu_FeAcPa");
+		String usuFecAlt = Utilerias.obtenerStringPropiedad(usuario, "Usu_FecAlt");
 		
 		/**
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
@@ -286,6 +290,9 @@ public class LoginCtrl extends BimBaseCtrl {
 		usuarioResultado.addProperty("usuEmail", usuEmail);
 		usuarioResultado.addProperty("usuUsuAdm", usuUsuAdm);
 		usuarioResultado.addProperty("usuFolTok", usuFolTok);
+		usuarioResultado.addProperty("usuTipo", usuTipo);
+		usuarioResultado.addProperty("usuFeAcPa", usuFeAcPa);
+		usuarioResultado.addProperty("usuFecAlt", usuFecAlt);
 		logger.info("CTRL: Terminando login metodo");
 		return Response.ok(usuarioResultado.toString(), MediaType.APPLICATION_JSON)
 				.build();

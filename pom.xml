@@ -15,7 +15,6 @@
 	<module>BIMWso2EIDataService</module>
     <module>BIMWso2EICompositeApplication</module>
     <module>BIMWso2EIMicroservice</module>
-    <module>BIMWso2EICustomMediator</module>
   </modules>
   <build>
     <plugins>
