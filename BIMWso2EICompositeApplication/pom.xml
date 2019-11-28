@@ -184,7 +184,7 @@
     
     <dependency>
       <groupId>com.bim.dataservice</groupId>
-      <artifactId>CambiarPasswordServicio</artifactId>
+      <artifactId>PasswordServicio</artifactId>
       <version>1.0.0</version>
       <type>dbs</type>
     </dependency>
