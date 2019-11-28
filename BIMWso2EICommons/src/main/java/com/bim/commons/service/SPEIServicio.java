@@ -307,9 +307,6 @@ public class SPEIServicio extends BaseService {
 	 *	Trn_UsuAdm: String,
 	 *	Trn_Usuari: String,
 	 *	Trn_Client: String,
-	 *	Trn_Consec: String,
-	 *	Trn_Transf: String,
-	 *	NumTransac: String,
 	 *	FechaSis: String
 	 * }
 	 * </pre>
@@ -348,7 +345,7 @@ public class SPEIServicio extends BaseService {
 	 * 		Trn_UsCaNo: String,
 	 * 		Trn_UsAuNo: String,
 	 * 		Trn_BanDes: String,
-	 * 		Trn_MonTot: Duble,
+	 * 		Trn_MonTot: Double,
 	 * 		Trn_EmaBen: String,
 	 * 		Trn_DeCuOr: String,
 	 * 		Trn_DeCuDe: String,

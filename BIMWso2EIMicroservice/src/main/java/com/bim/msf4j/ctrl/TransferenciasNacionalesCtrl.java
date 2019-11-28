@@ -2,11 +2,14 @@ package com.bim.msf4j.ctrl;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -26,8 +29,10 @@ import com.bim.commons.service.CuentaDestinoServicio;
 import com.bim.commons.service.SPEIServicio;
 import com.bim.commons.service.TokenServicio;
 import com.bim.commons.service.TransaccionServicio;
+import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 @Path("/transferencias-nacionales")
@@ -42,6 +47,9 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 	private CuentaDestinoServicio cuentaDestinoServicio;
 	private CorreoServicio correoServicio;
 	
+	private static String InversionesFilterBy;
+	private static Integer InversionesMaximoPagina;
+	
 	private  static String TransferenciaNacionalBitacoraCreacionOpBitTipOpe;
 	
 	public TransferenciasNacionalesCtrl() {
@@ -55,6 +63,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		this.correoServicio = new CorreoServicio();
 		
 		TransferenciaNacionalBitacoraCreacionOpBitTipOpe = properties.getProperty("op.tranferencia_nacional.bitacora_creacion.bit_tip_ope");
+		InversionesFilterBy = properties.getProperty("inversiones_servicio.filter_by");
+		InversionesMaximoPagina = Integer.parseInt(properties.getProperty("inversiones_servicio.maximo_pagina"));
 	}
 
 	@Path("/")
@@ -350,5 +360,103 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		return Response.ok(transferenciaExitosa.toString(), MediaType.APPLICATION_JSON)
 				.build();
 	}
+	
+	@Path("/")
+	@GET()
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response listadoTransferenciasNacionalesProgramadas(@QueryParam("page") String page,
+			@QueryParam("per_page") String perPage, 
+			@QueryParam("filter_by") String filterBy,
+			@Context final Request solicitud) {
+		logger.info("CTRL: Comenzando listadoTransferenciasNacionalesProgramadas método");
+		
+		if(page == null || perPage == null) 
+			throw new BadRequestException("BIM.MENSAJ.2");
+		
+		if(!Utilerias.validaNumero(page)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.9");
+			bimMessageDTO.addMergeVariable("page", page);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		if(!Utilerias.validaNumero(perPage)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.22");
+			bimMessageDTO.addMergeVariable("perPage", perPage);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		int pageValue = Integer.parseInt(page);
+		int perPageValue = Integer.parseInt(perPage);
+
+		if(pageValue <= 0) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.9");
+			bimMessageDTO.addMergeVariable("page", page);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		if(perPageValue <= 0 || perPageValue > InversionesMaximoPagina) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.10");
+			bimMessageDTO.addMergeVariable("perPage", perPage);
+			bimMessageDTO.addMergeVariable("maximo", InversionesMaximoPagina.toString());
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+
+        if(filterBy != null && !filterBy.equals(InversionesFilterBy)) {
+            BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.6");
+            throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjeto = Utilerias.obtenerPrincipal(bearerToken);
+
+		String fechaSis = Utilerias.obtenerFechaSis();
+		
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
+		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
+
+		String numTransac = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
+		
+		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
+		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
+		String bit_DireIP = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("User-Agent") : "";
+		String bit_PriRef = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("X-Forwarded-For") : "";
+		
+		String usuUsuAdm = principalResultadoObjeto.get("usuUsuAdm").getAsString();
+		String usuClient = principalResultadoObjeto.get("usuClient").getAsString();
+		String usuNumero = principalResultadoObjeto.get("usuNumero").getAsString();
+		
+		
+		JsonObject datosTransferenciaSPEIConsultar = new JsonObject();
+		datosTransferenciaSPEIConsultar.addProperty("Trn_UsuAdm", usuUsuAdm);
+		datosTransferenciaSPEIConsultar.addProperty("Trn_Usuari", usuNumero);
+		datosTransferenciaSPEIConsultar.addProperty("Trn_Client", usuClient);
+		datosTransferenciaSPEIConsultar.addProperty("FechaSis", fechaSis);
+		
+		JsonObject  datosTransferenciaSPEIConsultarResultado = this.speiServicio.transferenciaSPEIConsultar(datosTransferenciaSPEIConsultar);
+		Utilerias.verificarError(datosTransferenciaSPEIConsultarResultado);
+		
+		JsonObject transaccionesSPEI = Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaSPEIConsultarResultado, "transaccionesSPEI");
+		JsonArray transaccionElementoArray = Utilerias.obtenerJsonArrayPropiedad(transaccionesSPEI, "transaccionSPEI");
+		
+		if(transaccionesSPEI.entrySet().isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.58");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		
+		JsonArray inversionesResultadoFinal = new JsonArray();
+		for(JsonElement tramsaccionElemento : transaccionElementoArray) {
+			JsonObject transaccionObjeto = (JsonObject) tramsaccionElemento;
+			inversionesResultadoFinal.add(inversionesResultadoFinal);
+		}
+
+		
+		
+		logger.info("CTRL: Terminando listadoTransferenciasNacionalesProgramadas método");	
+		return Response.ok(inversionesResultadoFinal.toString(), MediaType.APPLICATION_JSON)
+				.build();
+	}
+
 	
 }
