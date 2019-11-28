@@ -275,6 +275,8 @@ public class LoginCtrl extends BimBaseCtrl {
 		String usuTipo = Utilerias.obtenerStringPropiedad(usuario, "Usu_Tipo");
 		String usuFeAcPa = Utilerias.obtenerStringPropiedad(usuario, "Usu_FeAcPa");
 		String usuFecAlt = Utilerias.obtenerStringPropiedad(usuario, "Usu_FecAlt");
+		String usuFecUlAc = Utilerias.obtenerStringPropiedad(usuario, "Usu_FeUlAc");
+		
 		
 		/**
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
@@ -293,6 +295,8 @@ public class LoginCtrl extends BimBaseCtrl {
 		usuarioResultado.addProperty("usuTipo", usuTipo);
 		usuarioResultado.addProperty("usuFeAcPa", usuFeAcPa);
 		usuarioResultado.addProperty("usuFecAlt", usuFecAlt);
+		usuarioResultado.addProperty("usuFecUlAc", usuFecUlAc);
+		
 		logger.info("CTRL: Terminando login metodo");
 		return Response.ok(usuarioResultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
