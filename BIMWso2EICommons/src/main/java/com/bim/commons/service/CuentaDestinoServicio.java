@@ -196,7 +196,8 @@ public class CuentaDestinoServicio extends BaseService {
      */
 	public JsonObject cuentaDestinoSPEIActivacion(JsonObject datosCuentaDestinoSPEI) {
 		logger.info("COMMONS: Comenzando cuentaDestinoSPEIActivacion...");
-		datosCuentaDestinoSPEI.addProperty("Transaccio", CuentaDestinoSPEIActivacionOpTransaccio);
+		if(!datosCuentaDestinoSPEI.has("Transaccio"))
+			datosCuentaDestinoSPEI.addProperty("Transaccio", CuentaDestinoSPEIActivacionOpTransaccio);
         datosCuentaDestinoSPEI.addProperty("Usuario", CuentaDestinoSPEIActivacionOpUsuario);
         datosCuentaDestinoSPEI.addProperty("SucOrigen", CuentaDestinoSPEIActivacionOpSucOrigen);
         datosCuentaDestinoSPEI.addProperty("SucDestino", CuentaDestinoSPEIActivacionOpSucDestino);
