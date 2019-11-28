@@ -371,7 +371,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 			@Context final Request solicitud) {
 		logger.info("CTRL: Comenzando listadoTransferenciasNacionalesProgramadas m�todo");
 		
-
+		// Inicia declaración de variables
 		String cpTrnTransf = null;
 		String trnDeCuOr =  null;
 		String trnDeCuDe =  null;
@@ -380,7 +380,6 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		String trnFePrEn =  null;
 		String trnEmaBen =  null;
 		String trnFrecue =  null;
-		String cpTrnSecue =  null;
 		Integer trnDiAnEm =  null;
 		String cpTrnSec =  null;
 		String trnSigSec =  null;
@@ -388,6 +387,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		String trnTipDur =  null;
 		String trnTransf = null;
 		String trnfecha = null;
+		String cpTrnSecue = null;
 		
 		
 		if(page == null || perPage == null) 
@@ -435,12 +435,6 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
 
 		String numTransac = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
-		
-		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
-		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
-		String bit_DireIP = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("User-Agent") : "";
-		String bit_PriRef = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("X-Forwarded-For") : "";
-		
 		String usuUsuAdm = principalResultadoObjeto.get("usuUsuAdm").getAsString();
 		String usuClient = principalResultadoObjeto.get("usuClient").getAsString();
 		String usuNumero = principalResultadoObjeto.get("usuNumero").getAsString();
@@ -451,6 +445,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosTransferenciaSPEIConsultar.addProperty("Trn_Usuari", usuNumero);
 		datosTransferenciaSPEIConsultar.addProperty("Trn_Client", usuClient);
 		datosTransferenciaSPEIConsultar.addProperty("FechaSis", fechaSis);
+		datosTransferenciaSPEIConsultar.addProperty("NumTransac", numTransac);
 		
 		JsonObject  datosTransferenciaSPEIConsultarResultado = this.speiServicio.transferenciaSPEIConsultar(datosTransferenciaSPEIConsultar);
 		Utilerias.verificarError(datosTransferenciaSPEIConsultarResultado);
@@ -464,7 +459,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 			throw new ConflictException(bimMessageDTO.toString());
 		}
 		
-		JsonArray transferenciasProgramadasActivas = Utilerias.filtrarPropiedadesArray(
+		transaccionElementoArray = Utilerias.filtrarPropiedadesArray(
 				transaccionElementoArray,
 				jsonObject -> jsonObject.get("Trb_TipTra").getAsString().equals("P")
 						&& jsonObject.get("Trb_Status").getAsString().equals("A"));
@@ -475,6 +470,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		JsonArray transferenciasProgramadas = new JsonArray();
 		for(JsonElement transaccionElemento : transaccionElementoArray) {
 			JsonObject transaccionObjeto = (JsonObject) transaccionElemento;
+			//asignación de variables
 			trnDeCuOr = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_DeCuOr");
 			trnDeCuDe = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_CueOri");
 			trnBanDes = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_BanDes");
@@ -487,13 +483,12 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 			trnSecuen = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_Secuen");
 			trnTipDur = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_TipDur");
 			trnTransf = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_Transf");
-			trnFePrEn = Utilerias.formatearFecha(trnfecha, "2019-11-28");
+			trnFePrEn = Utilerias.formatearFecha(trnfecha, "yyyy-MM-dd");
 			
-			if(trnTipDur.trim().equals("I")){ // duraci�n ilimitada
+			if(trnTipDur.trim().equals("I")){ // duraci�n ilimitada
 				trnSecuen = "N";
-				String cpTrbSecue = "Sin limite";
+				cpTrnSecue = "Sin limite";
 			}else {
-				trnSecuen = Utilerias.obtenerStringPropiedad(transaccionObjeto.getAsJsonObject(), "Trb_Secuen");
 				cpTrnSecue = trnSecuen;
 			}
 			
@@ -507,23 +502,22 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 				cpTrnTransf = "TEF";
 			}
 
+			//formateo de objeto
 			JsonObject datosTransaccionNacionalObjeto = new JsonObject();
 			datosTransaccionNacionalObjeto.addProperty("cpTrnTransf", cpTrnTransf);
 			datosTransaccionNacionalObjeto.addProperty("trnDeCuOr", trnDeCuOr);
 			datosTransaccionNacionalObjeto.addProperty("trnDeCuDe", trnDeCuDe);
 			datosTransaccionNacionalObjeto.addProperty("trnBanDes", trnBanDes);
-			datosTransaccionNacionalObjeto.addProperty("trnDescri", trnDescri);//string
-			datosTransaccionNacionalObjeto.addProperty("trnFePrEn", trnFePrEn);//string fecha 2019-11-28
-			datosTransaccionNacionalObjeto.addProperty("cpTrnSec", cpTrnSec);//string
-			datosTransaccionNacionalObjeto.addProperty("trnEmaBen", trnEmaBen);//string
-			datosTransaccionNacionalObjeto.addProperty("trnFrecue", trnFrecue);//String U
-			datosTransaccionNacionalObjeto.addProperty("cpTrnSecue", trnSecuen);//string
-			datosTransaccionNacionalObjeto.addProperty("trnDiAnEm", trnDiAnEm);//integre 0
+			datosTransaccionNacionalObjeto.addProperty("trnDescri", trnDescri);
+			datosTransaccionNacionalObjeto.addProperty("trnFePrEn", trnFePrEn);
+			datosTransaccionNacionalObjeto.addProperty("cpTrnSec", cpTrnSec);
+			datosTransaccionNacionalObjeto.addProperty("trnEmaBen", trnEmaBen);
+			datosTransaccionNacionalObjeto.addProperty("trnFrecue", trnFrecue);
+			datosTransaccionNacionalObjeto.addProperty("cpTrnSecue", cpTrnSecue);
+			datosTransaccionNacionalObjeto.addProperty("trnDiAnEm", trnDiAnEm);
 			transferenciasProgramadas.add(datosTransaccionNacionalObjeto);
 			
-		}
-
-		
+		}		
 		
 		logger.info("CTRL: Terminando listadoTransferenciasNacionalesProgramadas m�todo");	
 		return Response
