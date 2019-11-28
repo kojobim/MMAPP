@@ -32,7 +32,7 @@ public class CambiarPasswordServicio extends BaseService {
 	private static String CuentasEspecialesConsultarOpSucDestino;
 	private static String CuentasEspecialesConsultarOpModulo;
 	
-	static { // inicializando variables estáticas
+	static { // inicializando variables estaticas
 		
 		CambiarPasswordServicio = properties.getProperty("data_service.cambiar_password_servicio");
 		
