@@ -113,7 +113,7 @@
 	        @Transaccio= :transaccio,
 	        @Usuario= :usuario,
 	        @FechaSis= :fechaSis,
-	        @SucOrigen= sucOrigen,
+	        @SucOrigen= :sucOrigen,
 	        @SucDestino= :sucDestino,
 	        @Modulo= :modulo
 		</sql>
@@ -138,6 +138,8 @@
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <result defaultNamespace="http://bem.com/usuarioActualizacionNE" element="usuario">
             <element column="Usu_CoAcNe" name="Usu_CoAcNe" xsdType="xs:integer" optional="true"/>
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
         </result>
     </query>
     <query id="usuarioPerfilRiesgoConsultarSQL" useConfig="BIMDB">
