@@ -267,7 +267,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		}
 		
 		/**
-		 * REGLA DE NEGOCIO: Envío de correo con plantilla establecida por BIM y encriptado de digito verificador
+		 * REGLA DE NEGOCIO: Envï¿½o de correo con plantilla establecida por BIM y encriptado de digito verificador
 		 */
 		String asuntoCliente = Utilerias.obtenerPropiedadPlantilla("mail.transferencia_nacional.asunto_cliente");
 		String plantillaCliente = Utilerias.obtenerPlantilla("transferencia-nacional-cliente");
@@ -369,7 +369,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 			@QueryParam("per_page") String perPage, 
 			@QueryParam("filter_by") String filterBy,
 			@Context final Request solicitud) {
-		logger.info("CTRL: Comenzando listadoTransferenciasNacionalesProgramadas método");
+		logger.info("CTRL: Comenzando listadoTransferenciasNacionalesProgramadas mï¿½todo");
 		
 		if(page == null || perPage == null) 
 			throw new BadRequestException("BIM.MENSAJ.2");
@@ -453,7 +453,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 
 		
 		
-		logger.info("CTRL: Terminando listadoTransferenciasNacionalesProgramadas método");	
+		logger.info("CTRL: Terminando listadoTransferenciasNacionalesProgramadas mï¿½todo");	
 		return Response.ok(inversionesResultadoFinal.toString(), MediaType.APPLICATION_JSON)
 				.build();
 	}
