@@ -16,16 +16,16 @@ import com.google.gson.JsonObject;
 
 @RunWith(JUnitPlatform.class)
 @SelectPackages({"com.bim.commons.service", "com.bim.commons.utils"})
-public class CambiarPasswordServicioTest {
+public class PasswordServicioTest {
 
-	private static final Logger logger = LoggerFactory.getLogger(CambiarPasswordServicioTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(PasswordServicioTest.class);
 	
-	private static CambiarPasswordServicio cambiarPasswordServicio = null;
+	private static PasswordServicio cambiarPasswordServicio = null;
 	
 	@BeforeClass
 	public static void init() {
 		logger.info("init...");
-		cambiarPasswordServicio = new CambiarPasswordServicio();
+		cambiarPasswordServicio = new PasswordServicio();
 	}
 	
 	@Test
