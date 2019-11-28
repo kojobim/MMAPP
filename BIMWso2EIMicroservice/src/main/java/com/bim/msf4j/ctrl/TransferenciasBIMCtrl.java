@@ -71,7 +71,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		JsonObject transferenciasProgramadas = null;
 		JsonObject transferenciaProgramadaActiva = null;
 		BimMessageDTO bimMessageDTO = null;
-		// termina declaración de variables
+		// termina declaraciï¿½n de variables
 
 		if (page <= 0) {
 			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.9");
@@ -129,7 +129,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 				
 				// parseo de entidad
 				for(JsonElement elemento : transferenciasProgramadasActivas){
-					//asignación de variables
+					//asignaciï¿½n de variables
 					trbDeCuOr = Utilerias.obtenerStringPropiedad(elemento.getAsJsonObject(), "Trb_DeCuOr");
 					trbDeCuDe = Utilerias.obtenerStringPropiedad(elemento.getAsJsonObject(), "Trb_DeCuDe");
 					trbTotPes = Utilerias.obtenerDoublePropiedad(elemento.getAsJsonObject(), "Trb_TotPes");
@@ -145,7 +145,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 					trbSigSec = Utilerias.obtenerStringPropiedad(elemento.getAsJsonObject(),"Trb_SigSec");
 					
 					
-					if(trbTipDur.trim().equals("I")){ // duración ilimitada
+					if(trbTipDur.trim().equals("I")){ // duraciï¿½n ilimitada
 						trbSecuen = "N";
 						cpTrbSecue = "Sin limite";
 					}else {
