@@ -32,6 +32,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 
 	private static final Logger logger = Logger.getLogger(TransferenciasNacionalesCtrl.class);
 	
+	//servicio
 	private TokenServicio tokenServicio;
 	private TransaccionServicio transaccionServicio;
 	private SPEIServicio speiServicio;
@@ -39,19 +40,23 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 	private CuentaDestinoServicio cuentaDestinoServicio;
 	private CorreoServicio correoServicio;
 	
+	// propiedades
 	private  static String TransferenciaNacionalBitacoraCreacionOpBitTipOpe;
+	
+	static {		
+		TransferenciaNacionalBitacoraCreacionOpBitTipOpe = properties.getProperty("op.tranferencia_nacional.bitacora_creacion.bit_tip_ope");
+	}
 	
 	public TransferenciasNacionalesCtrl() {
 		super();
-		
+		logger.info("CTRL: Comenzando metodo init...");
 		this.tokenServicio = new TokenServicio();
 		this.transaccionServicio = new TransaccionServicio();
 		this.speiServicio = new SPEIServicio();
 		this.bitacoraServicio = new BitacoraServicio();
 		this.cuentaDestinoServicio = new CuentaDestinoServicio();
 		this.correoServicio = new CorreoServicio();
-		
-		TransferenciaNacionalBitacoraCreacionOpBitTipOpe = properties.getProperty("op.tranferencia_nacional.bitacora_creacion.bit_tip_ope");
+		logger.info("CTRL: Terminando metodo init...");
 	}
 
 	@Path("/")
@@ -60,87 +65,186 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response transferenciaNacionalCreacion(JsonObject datosTransferenciaSolicitud, @Context Request solicitud) {
 		logger.info("CTRL: Comenzando transferenciaNacionalCreacion metodo");
-		String bearerToken = solicitud.getHeader("Authorization");
-		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
-		String fechaSis = Utilerias.obtenerFechaSis();
 		
-		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
-		logger.info("- principalResultadoObjecto " + principalResultadoObjecto);
+		StringBuilder scriptName = null;
 		
-		String usuUsuAdm = principalResultadoObjecto.get("usuUsuAdm").getAsString();
-		String usuClient = principalResultadoObjecto.get("usuClient").getAsString();
-		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
-		String usuNombre = principalResultadoObjecto.get("usuNombre").getAsString();
-		String usuEmail = principalResultadoObjecto.get("usuEmail").getAsString();	
-
-		if(datosTransferenciaSolicitud.isJsonNull()) {
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.56");
-			throw new BadRequestException(bimMessageDTO.toString());
-		}
+		String bearerToken = null;
+		String bitDireIP = null;
+		String fechaSis = null;
+		String usuUsuAdm = null;
+		String usuClient = null;
+		String usuNumero = null;
+		String usuNombre = null;
+		String usuEmail = null;
+		String numTransac = null;
+		String cpRSAToken = null;
+		String trsCueOri = null;
+		String trsCueDes = null;
+		String trsDescri = null;
+		String trsRFC = null;
+		String trsDaBeAd = null;
+		String validarToken = null;
+		String usuFolTok = null;
+		String trsConsec = null;
+		String bitPriRef = null;
+		String bitSegRef = null;		
+		String trnBanDes = null;
+		String trnMonTot = null;
+		String trnUsCaNo = null;
+		String cdeConsec = null;
+		String trnBanco = null;
+		String trnFePrEn = null;
+		String trnDesAdi = null;
+		String trnFecCap = null;
+		String cdeEmaBen = null;
+		String trnTipTra = null;
+		String errCodigo = null;
+		String trsClaRas = null;
+		String trsFecAut = null;
+		String trsFecCar = null;
+		String trsFecApl = null;
+		String trsFirma = null;
+		String errMensaj = null;
+		String asuntoCliente = null;
+		String asuntoBeneficiario = null;
+		String plantillaTransferenciaInmediataCliente = null;
+		String plantillaTransferenciaBeneficiario = null;		
+		String strVerifi = null;
+		String digitoVerificador = null;
+		String strVerifi1 = null;
+		String strVerifi2 = null;
+		String strVerifi3 = null;
+		String strVerifi4 = null;
+		String strVerifi5 = null;		
+		String trnCueOriOcu = null;
+		String trnCueDesOcu = null;		
+		String fechaFormato = null;
+		String fechaFormatoHoras = null;
+		String monto = null;
+		String cuerpoEmailCliente = null;
+		String cuerpoEmailBeneficiario = null;
+		Double trsIVA = null;
+		Double trsMonto = null;
 		
-		JsonObject datosTransferencia = Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaSolicitud, "transferencia");
-		logger.info("- datosTransferencia " + datosTransferencia);
+		BimMessageDTO bimMessageDTO = null;
+		BimEmailTemplateDTO emailTemplateCliente = null;
+		BimEmailTemplateDTO emailTemplateBeneficiario = null;
 		
-		String cpRSAToken = Utilerias.obtenerStringPropiedad(datosTransferencia, "cpRSAToken");
-		String trsCueOri = Utilerias.obtenerStringPropiedad(datosTransferencia, "trsCueOri");
-		String trsCueDes = Utilerias.obtenerStringPropiedad(datosTransferencia, "trsCueDes");
-		String trsDescri = Utilerias.obtenerStringPropiedad(datosTransferencia, "trsDescri");
-		String trsMonto = Utilerias.obtenerStringPropiedad(datosTransferencia, "trsMonto");		
-		String trsRFC = Utilerias.obtenerStringPropiedad(datosTransferencia, "trsRFC");
-		String trsIVA = Utilerias.obtenerStringPropiedad(datosTransferencia, "trsIVA"); 
-		String trsDaBeAd = Utilerias.obtenerStringPropiedad(datosTransferencia, "trsDaBeAd");
+		JsonObject datosTransferencia = null;
+		JsonObject principalResultadoObjecto = null;
+		JsonObject datosTransferenciaExitosa = null;
+		JsonObject folioTransaccion = null;
+		JsonObject folioTransaccionResultado = null;
+		JsonObject datosHorariosSPEI = null;
+		JsonObject datosTransferenciaNacional = null;
+		JsonObject transferenciaSPEICreacionResultado = null;
+		JsonObject transaccionSPEICreacion = null;
+		JsonObject datosBitacora = null;
+		JsonObject bitacoraCreacionResultado = null;
+		JsonObject datosCuentaDestinoSPEI = null;
+		JsonObject cuentaDestinoSPEIActivacionResultado = null;
+		JsonObject datosTransferenciaSPEIConsultar = null;
+		JsonObject  datosTransferenciaSPEIConsultarResultado = null;
+		JsonObject transaccionesSPEI = null;
+		JsonObject transaccionSPEIObjeto = null;
+		JsonObject datosTransferenciaSPEI = null;
+		JsonObject transferenciaSPEIProcesarResultado = null;
+		JsonObject transferenciaSPEIProcesarResultadoObjeto = null;
+		JsonObject transferenciaExitosa = null;
 		
-		JsonObject folioTransaccionResultado = this.transaccionServicio.folioTransaccionGenerar();
-		Utilerias.verificarError(folioTransaccionResultado);
+		JsonArray transaccionSPEI = null;
 		
-		JsonObject folioTransaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionResultado, "transaccion"); 
-		String numTransac = Utilerias.obtenerStringPropiedad(folioTransaccion, "Fol_Transa");
+		bearerToken = solicitud.getHeader("Authorization");
+		bitDireIP = solicitud.getHeader("X-Forwarded-For");
+		fechaSis = Utilerias.obtenerFechaSis();
 		
+		principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
+		
+		// propiedades extraidas del principal
+		usuUsuAdm = principalResultadoObjecto.get("usuUsuAdm").getAsString();
+		usuClient = principalResultadoObjecto.get("usuClient").getAsString();
+		usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
+		usuNombre = principalResultadoObjecto.get("usuNombre").getAsString();
+		usuEmail = principalResultadoObjecto.get("usuEmail").getAsString();	
 		/**
 		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
 		 */
 		// String usuFolTok = Utilerias.obtenerStringPropiedad(principalResultado, "usuFolTok");
-		String usuFolTok = "0416218854";
+		usuFolTok = "0416218854";
 		
-		StringBuilder scriptName = new StringBuilder()
+		if(datosTransferenciaSolicitud.isJsonNull()) {
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.56");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		datosTransferencia = Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaSolicitud, "transferencia");
+		
+		if(datosTransferencia.has("trsMonto")) {
+			trsMonto = Utilerias.obtenerDoublePropiedad(datosTransferencia, "trsMonto");
+		} else {
+			bimMessageDTO = new BimMessageDTO("COMMONS.400");
+			bimMessageDTO.addMergeVariable("propiedad", "trsMonto");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		if(datosTransferencia.has("trsIVA")) {
+			trsIVA = Utilerias.obtenerDoublePropiedad(datosTransferencia, "trsIVA"); 
+		} else {
+			trsIVA = 0.0;
+		}
+
+		// propiedades extraidas de la solicitud
+		cpRSAToken = Utilerias.obtenerStringPropiedad(datosTransferencia, "cpRSAToken");
+		trsCueOri = Utilerias.obtenerStringPropiedad(datosTransferencia, "trsCueOri");
+		trsCueDes = Utilerias.obtenerStringPropiedad(datosTransferencia, "trsCueDes");
+		trsDescri = Utilerias.obtenerStringPropiedad(datosTransferencia, "trsDescri");
+		trsRFC = Utilerias.obtenerStringPropiedad(datosTransferencia, "trsRFC");
+		trsDaBeAd = Utilerias.obtenerStringPropiedad(datosTransferencia, "trsDaBeAd");
+		
+		folioTransaccionResultado = this.transaccionServicio.folioTransaccionGenerar();
+		Utilerias.verificarError(folioTransaccionResultado);
+		
+		folioTransaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionResultado, "transaccion"); 
+		numTransac = Utilerias.obtenerStringPropiedad(folioTransaccion, "Fol_Transa");
+		
+		scriptName = new StringBuilder()
 				.append(TransferenciasNacionalesCtrl.class.getName())
 				.append(".transferenciaNacionalCreacion");
 		
-		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac, scriptName.toString());
+		validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac, scriptName.toString());
 		
 		if ("B".equals(validarToken)) {
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
 			throw new UnauthorizedException(bimMessageDTO.toString());
 		}
 
 		if ("C".equals(validarToken)) {
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.28");
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.28");
 			throw new ForbiddenException(bimMessageDTO.toString());
 		}
 		
-		JsonObject datosHorariosSPEI = new JsonObject();
+		datosHorariosSPEI = new JsonObject();
 		datosHorariosSPEI.addProperty("FechaSis", fechaSis);
 		
 		JsonObject horariosSPEIResultado = speiServicio.horariosSPEIConsultar(datosHorariosSPEI);
 		logger.info("- horariosSPEIResultado " + horariosSPEIResultado );
 		
 		if(horariosSPEIResultado.has("Msj_Error")) {
-			String errMensaj = Utilerias.obtenerStringPropiedad(horariosSPEIResultado, "Msj_Error");
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.31");
+			errMensaj = Utilerias.obtenerStringPropiedad(horariosSPEIResultado, "Msj_Error");
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.31");
 			bimMessageDTO.addMergeVariable("errMensaj", errMensaj);
 			throw new ConflictException(bimMessageDTO.toString());
 		}
 		
-		JsonObject datosTransferenciaNacional = new JsonObject();
+		datosTransferenciaNacional = new JsonObject();
 		datosTransferenciaNacional.addProperty("Trs_Usuari", usuUsuAdm);
 		datosTransferenciaNacional.addProperty("Trs_Client", usuClient);
 		datosTransferenciaNacional.addProperty("Trs_CueOri", trsCueOri);
 		datosTransferenciaNacional.addProperty("Trs_CueDes", trsCueDes);
-		datosTransferenciaNacional.addProperty("Trs_Monto", Double.parseDouble(trsMonto));
+		datosTransferenciaNacional.addProperty("Trs_Monto", trsMonto);
 		datosTransferenciaNacional.addProperty("Trs_Descri", trsDescri);
 		datosTransferenciaNacional.addProperty("Trs_PriRef", usuNombre);
 		datosTransferenciaNacional.addProperty("Trs_RFC", trsRFC);
-		datosTransferenciaNacional.addProperty("Trs_IVA", Double.parseDouble(trsIVA));
+		datosTransferenciaNacional.addProperty("Trs_IVA", trsIVA);
 		datosTransferenciaNacional.addProperty("Trs_Tipo", "I");
 		datosTransferenciaNacional.addProperty("Trs_UsuCap", usuNumero);
 		datosTransferenciaNacional.addProperty("Trs_TipTra", "I");
@@ -150,27 +254,27 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosTransferenciaNacional.addProperty("NumTransac", numTransac);	
 		datosTransferenciaNacional.addProperty("FechaSis", fechaSis);
 		
-		JsonObject transferenciaSPEICreacionResultado = this.speiServicio.transferenciaSPEICreacion(datosTransferenciaNacional);
+		transferenciaSPEICreacionResultado = this.speiServicio.transferenciaSPEICreacion(datosTransferenciaNacional);
 		Utilerias.verificarError(transferenciaSPEICreacionResultado);
 		
-		JsonObject transaccionSPEICreacion = Utilerias.obtenerJsonObjectPropiedad(transferenciaSPEICreacionResultado, "transaccionSPEI");
+		transaccionSPEICreacion = Utilerias.obtenerJsonObjectPropiedad(transferenciaSPEICreacionResultado, "transaccionSPEI");
 		logger.info("-- transaccionSPEICreacion " + transaccionSPEICreacion);
-		String trsConsec = Utilerias.obtenerStringPropiedad(transaccionSPEICreacion, "Trs_Consec");
+		trsConsec = Utilerias.obtenerStringPropiedad(transaccionSPEICreacion, "Trs_Consec");
 		
-		JsonObject datosBitacora = new JsonObject();
+		datosBitacora = new JsonObject();
 		datosBitacora.addProperty("Bit_Usuari", usuNumero);
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
 		datosBitacora.addProperty("Bit_TipOpe", TransferenciaNacionalBitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("Bit_NumTra", numTransac);
 		datosBitacora.addProperty("Bit_CueOri", trsCueOri);
 		datosBitacora.addProperty("Bit_CueDes", trsCueDes);
-		datosBitacora.addProperty("Bit_Monto", 0);
-		String bitPriRef = new StringBuilder()
+		datosBitacora.addProperty("Bit_Monto", trsMonto);
+		bitPriRef = new StringBuilder()
 				.append("Cuenta: ")
 				.append(trsCueDes)
 				.toString();
 		datosBitacora.addProperty("Bit_PriRef", bitPriRef);
-		String bitSegRef = new StringBuilder()
+		bitSegRef = new StringBuilder()
 				.append("$")
 				.append(trsMonto)
 				.append(" pesos")
@@ -180,49 +284,49 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosBitacora.addProperty("NumTransac", numTransac);
 		datosBitacora.addProperty("FechaSis", fechaSis);
 		
-		JsonObject bitacoraCreacionResultado = this.bitacoraServicio.creacionBitacora(datosBitacora);
+		bitacoraCreacionResultado = this.bitacoraServicio.creacionBitacora(datosBitacora);
 		Utilerias.verificarError(bitacoraCreacionResultado);
 		
-		JsonObject datosCuentaDestinoSPEI = new JsonObject();
+		datosCuentaDestinoSPEI = new JsonObject();
 		datosCuentaDestinoSPEI.addProperty("Cds_UsuAdm", usuUsuAdm);
 		datosCuentaDestinoSPEI.addProperty("NumTransac", numTransac);
 		datosCuentaDestinoSPEI.addProperty("FechaSis", fechaSis);
 		
-		JsonObject cuentaDestinoSPEIActivacionResultado = this.cuentaDestinoServicio.cuentaDestinoSPEIActivacion(datosCuentaDestinoSPEI );
+		cuentaDestinoSPEIActivacionResultado = this.cuentaDestinoServicio.cuentaDestinoSPEIActivacion(datosCuentaDestinoSPEI );
 		Utilerias.verificarError(cuentaDestinoSPEIActivacionResultado);
 		
-		JsonObject datosTransferenciaSPEIConsultar = new JsonObject();
+		datosTransferenciaSPEIConsultar = new JsonObject();
 		datosTransferenciaSPEIConsultar.addProperty("Trn_UsuAdm", usuUsuAdm);
 		datosTransferenciaSPEIConsultar.addProperty("Trn_Usuari", usuNumero);
 		datosTransferenciaSPEIConsultar.addProperty("FechaSis", fechaSis);
 		
-		JsonObject  datosTransferenciaSPEIConsultarResultado = this.speiServicio.transferenciaSPEIConsultar(datosTransferenciaSPEIConsultar);
+		datosTransferenciaSPEIConsultarResultado = this.speiServicio.transferenciaSPEIConsultar(datosTransferenciaSPEIConsultar);
 		Utilerias.verificarError(datosTransferenciaSPEIConsultarResultado);
 		
-		JsonObject transaccionesSPEI = Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaSPEIConsultarResultado, "transaccionesSPEI");
-		JsonArray transaccionSPEI = Utilerias.obtenerJsonArrayResultante(transaccionesSPEI, "transaccionSPEI");
-		JsonObject transaccionSPEIObjeto = (JsonObject)transaccionSPEI.get(transaccionSPEI.size()-1);
+		transaccionesSPEI = Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaSPEIConsultarResultado, "transaccionesSPEI");
+		transaccionSPEI = Utilerias.obtenerJsonArrayResultante(transaccionesSPEI, "transaccionSPEI");
+		transaccionSPEIObjeto = (JsonObject)transaccionSPEI.get(transaccionSPEI.size()-1);
 		
-		String trnBanDes = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_BanDes");
-		String trnMonTot = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_MonTot");
-		String trnUsCaNo = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_UsCaNo");
-		String cdeConsec = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Cde_Consec");
-		String trnBanco = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_Banco");
-		String trnFePrEn = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_FePrEn");
-		String trnDesAdi = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_DesAdi");
-		String trnFecCap = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_FecCap");
-		String cdeEmaBen = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Cde_EmaBen");
-		String trnTipTra = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_TipTra");
+		trnBanDes = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_BanDes");
+		trnMonTot = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_MonTot");
+		trnUsCaNo = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_UsCaNo");
+		cdeConsec = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Cde_Consec");
+		trnBanco = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_Banco");
+		trnFePrEn = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_FePrEn");
+		trnDesAdi = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_DesAdi");
+		trnFecCap = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_FecCap");
+		cdeEmaBen = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Cde_EmaBen");
+		trnTipTra = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_TipTra");
 		
-		JsonObject datosTransferenciaSPEI = new JsonObject();
+		datosTransferenciaSPEI = new JsonObject();
 		datosTransferenciaSPEI.addProperty("Trs_UsuAdm", usuUsuAdm);
 		datosTransferenciaSPEI.addProperty("Trs_Usuari", usuNumero);
 		datosTransferenciaSPEI.addProperty("Trs_UsuCli", usuClient);
 		datosTransferenciaSPEI.addProperty("Trs_Consec", trsConsec);
 		datosTransferenciaSPEI.addProperty("Trs_CueOri", trsCueOri);
 		datosTransferenciaSPEI.addProperty("Trs_CueBen", trsCueDes);
-		datosTransferenciaSPEI.addProperty("Trs_Monto", Double.parseDouble(trsMonto));
-		datosTransferenciaSPEI.addProperty("Trs_IVA", Double.parseDouble(trsIVA));
+		datosTransferenciaSPEI.addProperty("Trs_Monto", trsMonto);
+		datosTransferenciaSPEI.addProperty("Trs_IVA", trsIVA);
 		datosTransferenciaSPEI.addProperty("Trs_ConPag", trsDescri);
 		datosTransferenciaSPEI.addProperty("Trs_Banco", trnBanco);
 		datosTransferenciaSPEI.addProperty("Trs_SegRef", usuNombre);
@@ -234,21 +338,21 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosTransferenciaSPEI.addProperty("NumTransac", numTransac);
 		datosTransferenciaSPEI.addProperty("FechaSis", fechaSis);
 		
-		JsonObject transferenciaSPEIProcesarResultado = this.speiServicio.transferenciaSPEIProcesar(datosTransferenciaSPEI);
+		transferenciaSPEIProcesarResultado = this.speiServicio.transferenciaSPEIProcesar(datosTransferenciaSPEI);
 		Utilerias.verificarError(transferenciaSPEIProcesarResultado);
 
-		JsonObject transferenciaSPEIProcesarResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(transferenciaSPEIProcesarResultado, "transaccionSPEI");
-		String errCodigo = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Err_Codigo");
-		String trsClaRas = (Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_ClaRas").trim());
-		String trsFecAut = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecAut");
-		String trsFecCar = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecCar");
-		String trsFecApl = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecApl");
-		String trsFirma = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_Firma");
+		transferenciaSPEIProcesarResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(transferenciaSPEIProcesarResultado, "transaccionSPEI");
+		errCodigo = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Err_Codigo");
+		trsClaRas = (Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_ClaRas").trim());
+		trsFecAut = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecAut");
+		trsFecCar = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecCar");
+		trsFecApl = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecApl");
+		trsFirma = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_Firma");
 		logger.info("-- transferenciaSPEIProcesarResultadoObjeto " + transferenciaSPEIProcesarResultadoObjeto);
 		
 		if(!"000000".equals(errCodigo)) {
-			String errMensaj = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Err_Mensaj");			
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.31");
+			errMensaj = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Err_Mensaj");			
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.31");
 			bimMessageDTO.addMergeVariable("errMensaj", errMensaj);
 			throw new ConflictException(bimMessageDTO.toString());
 		}
@@ -256,38 +360,37 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		/**
 		 * REGLA DE NEGOCIO: Envío de correo con plantilla establecida por BIM y encriptado de digito verificador
 		 */
-		String asuntoCliente = Utilerias.obtenerPropiedadPlantilla("mail.transferencia_nacional.asunto_cliente");
-		String asuntoBeneficiario = Utilerias.obtenerPropiedadPlantilla("mail.transferencia_nacional.asunto_beneficiario");
-		String plantillaTransferenciaInmediataCliente = Utilerias.obtenerPlantilla("transferencia-nacional-inmediata-cliente");
-		String plantillaTransferenciaBeneficiario = Utilerias.obtenerPlantilla("transferencia-nacional-beneficiario");
+		asuntoCliente = Utilerias.obtenerPropiedadPlantilla("mail.transferencia_nacional.asunto_cliente");
+		asuntoBeneficiario = Utilerias.obtenerPropiedadPlantilla("mail.transferencia_nacional.asunto_beneficiario");
+		plantillaTransferenciaInmediataCliente = Utilerias.obtenerPlantilla("transferencia-nacional-inmediata-cliente");
+		plantillaTransferenciaBeneficiario = Utilerias.obtenerPlantilla("transferencia-nacional-beneficiario");
 		
-		String strVerifi = "Origen:" + trsCueOri + " Destino:" + trsCueDes + " Cantidad:" + trsMonto + " Folio:" + numTransac;
-		String digitoVerificador = Utilerias.generarDigitoVerificador(strVerifi);
-		String strVerifi1 = digitoVerificador.substring(0, 70);
-		String strVerifi2 = digitoVerificador.substring(70, 140);
-		String strVerifi3 = digitoVerificador.substring(140, 210);
-		String strVerifi4 = digitoVerificador.substring(210, 280);
-		String strVerifi5 = digitoVerificador.substring(280);
+		strVerifi = "Origen:" + trsCueOri + " Destino:" + trsCueDes + " Cantidad:" + trsMonto + " Folio:" + numTransac;
+		digitoVerificador = Utilerias.generarDigitoVerificador(strVerifi);
+		strVerifi1 = digitoVerificador.substring(0, 70);
+		strVerifi2 = digitoVerificador.substring(70, 140);
+		strVerifi3 = digitoVerificador.substring(140, 210);
+		strVerifi4 = digitoVerificador.substring(210, 280);
+		strVerifi5 = digitoVerificador.substring(280);
 		
-		String trnCueOriOcu = Utilerias.formatearCuenta(trsCueOri, 4, 10);
-		String trnCueDesOcu = Utilerias.formatearCuenta(trsCueDes, 4, 14);
+		trnCueOriOcu = Utilerias.formatearCuenta(trsCueOri, 4, 10);
+		trnCueDesOcu = Utilerias.formatearCuenta(trsCueDes, 4, 14);
 		
-		String fechaFormato = "dd-MM-yyyy";
-		String fechaFormatoHoras = "dd-MM-yyyy HH:mm";
+		fechaFormato = "dd-MM-yyyy";
+		fechaFormatoHoras = "dd-MM-yyyy HH:mm";
 		trsFecApl = Utilerias.formatearFecha(trsFecApl, fechaFormato);
 		trsFecCar = Utilerias.formatearFecha(trsFecCar, fechaFormato);
 		trsFecAut = Utilerias.formatearFecha(trsFecAut, fechaFormatoHoras);
 		trnFecCap = Utilerias.formatearFecha(trnFecCap, fechaFormatoHoras);
 		
-		BimEmailTemplateDTO emailTemplateCliente = null;
 		if(("I").equals(trnTipTra)) {
 			emailTemplateCliente = new BimEmailTemplateDTO(plantillaTransferenciaInmediataCliente);
 			emailTemplateCliente.addMergeVariable("Trn_ProDes", "ACEPTADA");
 		}
 		
-		String monto = new StringBuilder()
+		monto = new StringBuilder()
 			.append("$")
-			.append(Double.parseDouble(trsMonto))
+			.append(trsMonto)
 			.toString();
 		emailTemplateCliente.addMergeVariable("Trn_Monto", monto);
 		emailTemplateCliente.addMergeVariable("str_Firmas", trsFirma);
@@ -296,7 +399,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		emailTemplateCliente.addMergeVariable("Trn_BanDes", trnBanDes);
 		emailTemplateCliente.addMergeVariable("Trn_Descri", trsDescri);
 		emailTemplateCliente.addMergeVariable("Trn_RFC", trsRFC);
-		emailTemplateCliente.addMergeVariable("Trn_IVA", trsIVA);
+		emailTemplateCliente.addMergeVariable("Trn_IVA", trsIVA.toString());
 		emailTemplateCliente.addMergeVariable("NumTransac", numTransac);
 		emailTemplateCliente.addMergeVariable("Trn_ClaRas", trsClaRas);
 		emailTemplateCliente.addMergeVariable("Trn_DesAdi", trnDesAdi);
@@ -313,10 +416,10 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		emailTemplateCliente.addMergeVariable("Str_Verifi3", strVerifi3);
 		emailTemplateCliente.addMergeVariable("Str_Verifi4", strVerifi4);
 		emailTemplateCliente.addMergeVariable("Str_Verifi5", strVerifi5);
-		String cuerpoEmailCliente = Utilerias.obtenerMensajePlantilla(emailTemplateCliente);
+		cuerpoEmailCliente = Utilerias.obtenerMensajePlantilla(emailTemplateCliente);
 		correoServicio.enviarCorreo(usuEmail, asuntoCliente, cuerpoEmailCliente);
 		
-		BimEmailTemplateDTO emailTemplateBeneficiario = new BimEmailTemplateDTO(plantillaTransferenciaBeneficiario);
+		emailTemplateBeneficiario = new BimEmailTemplateDTO(plantillaTransferenciaBeneficiario);
 		emailTemplateBeneficiario.addMergeVariable("Trn_DeCuOr", trnCueOriOcu.toString());
 		emailTemplateBeneficiario.addMergeVariable("Trn_CueDe", trnCueDesOcu.toString());
 		emailTemplateBeneficiario.addMergeVariable("Trn_Monto", monto);
@@ -324,10 +427,10 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		emailTemplateBeneficiario.addMergeVariable("NumTransac", numTransac);
 		emailTemplateBeneficiario.addMergeVariable("Trn_FecCar", trsFecCar);
 		emailTemplateBeneficiario.addMergeVariable("Trn_FecApl", trsFecApl);
-		String cuerpoEmailBeneficiario = Utilerias.obtenerMensajePlantilla(emailTemplateBeneficiario);
+		cuerpoEmailBeneficiario = Utilerias.obtenerMensajePlantilla(emailTemplateBeneficiario);
 		correoServicio.enviarCorreo(cdeEmaBen, asuntoBeneficiario, cuerpoEmailBeneficiario);
-		
-		JsonObject datosTransferenciaExitosa = new JsonObject();
+
+		datosTransferenciaExitosa = new JsonObject();
 		datosTransferenciaExitosa.addProperty("trnCueOri", trsCueOri);
 		datosTransferenciaExitosa.addProperty("trnCueDes", trsCueDes);
 		datosTransferenciaExitosa.addProperty("trnDescri", trsDescri);
@@ -340,7 +443,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosTransferenciaExitosa.addProperty("trsFecCar", trsFecCar);
 		datosTransferenciaExitosa.addProperty("trsFecApl", trsFecApl);
 
-		JsonObject transferenciaExitosa = new JsonObject();
+		transferenciaExitosa = new JsonObject();
 		transferenciaExitosa.add("transferenciaExitosa", datosTransferenciaExitosa);
 		
 		logger.info("CTRL: Finalizando transferenciaNacionalCreacion metodo");
