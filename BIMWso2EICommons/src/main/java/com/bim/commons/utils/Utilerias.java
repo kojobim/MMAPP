@@ -561,6 +561,7 @@ public class Utilerias {
 		formatosEntrada.add("yyyy-MM-dd HH:mm:ss");
 		formatosEntrada.add("yyyy-MM-dd");
 		formatosEntrada.add("dd-MM-yyyy");
+		formatosEntrada.add("dd-MM-yyyy HH:mm");
 		formatosEntrada.add("dd/MM/yyyy");
 		formatosEntrada.add("HH:mm");
 		Date fechaResultado = null;

@@ -1,8 +1,5 @@
 package com.bim.msf4j.ctrl;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -214,8 +211,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		String trnFePrEn = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_FePrEn");
 		String trnDesAdi = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_DesAdi");
 		String trnFecCap = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_FecCap");
-		String trnDeCuOr = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_DeCuOr");
-		String trnEmaBen = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_EmaBen");
+		String cdeEmaBen = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Cde_EmaBen");
+		String trnTipTra = Utilerias.obtenerStringPropiedad(transaccionSPEIObjeto, "Trn_TipTra");
 		
 		JsonObject datosTransferenciaSPEI = new JsonObject();
 		datosTransferenciaSPEI.addProperty("Trs_UsuAdm", usuUsuAdm);
@@ -242,7 +239,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 
 		JsonObject transferenciaSPEIProcesarResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(transferenciaSPEIProcesarResultado, "transaccionSPEI");
 		String errCodigo = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Err_Codigo");
-		String trsClaRas = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_ClaRas");
+		String trsClaRas = (Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_ClaRas").trim());
 		String trsFecAut = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecAut");
 		String trsFecCar = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecCar");
 		String trsFecApl = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecApl");
@@ -260,8 +257,10 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		 * REGLA DE NEGOCIO: Envío de correo con plantilla establecida por BIM y encriptado de digito verificador
 		 */
 		String asuntoCliente = Utilerias.obtenerPropiedadPlantilla("mail.transferencia_nacional.asunto_cliente");
-		String plantillaCliente = Utilerias.obtenerPlantilla("transferencia-nacional-cliente");
-
+		String asuntoBeneficiario = Utilerias.obtenerPropiedadPlantilla("mail.transferencia_nacional.asunto_beneficiario");
+		String plantillaTransferenciaInmediataCliente = Utilerias.obtenerPlantilla("transferencia-nacional-inmediata-cliente");
+		String plantillaTransferenciaBeneficiario = Utilerias.obtenerPlantilla("transferencia-nacional-beneficiario");
+		
 		String strVerifi = "Origen:" + trsCueOri + " Destino:" + trsCueDes + " Cantidad:" + trsMonto + " Folio:" + numTransac;
 		String digitoVerificador = Utilerias.generarDigitoVerificador(strVerifi);
 		String strVerifi1 = digitoVerificador.substring(0, 70);
@@ -269,24 +268,32 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		String strVerifi3 = digitoVerificador.substring(140, 210);
 		String strVerifi4 = digitoVerificador.substring(210, 280);
 		String strVerifi5 = digitoVerificador.substring(280);
-
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-mm-yyyy");
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-mm-yyyy HH:mm");
-		DecimalFormat formatter = new DecimalFormat("#,###.00");
 		
 		String trnCueOriOcu = Utilerias.formatearCuenta(trsCueOri, 4, 10);
-		logger.info(">>>>>>>>>>>>>> trnCueOriOcu " + trnCueOriOcu);
-		
 		String trnCueDesOcu = Utilerias.formatearCuenta(trsCueDes, 4, 14);
-		logger.info(">>>>>>>>>>>>>> trnCueDesOcu " + trnCueDesOcu);
 		
-		BimEmailTemplateDTO emailTemplateCliente = new BimEmailTemplateDTO(plantillaCliente);
+		String fechaFormato = "dd-MM-yyyy";
+		String fechaFormatoHoras = "dd-MM-yyyy HH:mm";
+		trsFecApl = Utilerias.formatearFecha(trsFecApl, fechaFormato);
+		trsFecCar = Utilerias.formatearFecha(trsFecCar, fechaFormato);
+		trsFecAut = Utilerias.formatearFecha(trsFecAut, fechaFormatoHoras);
+		trnFecCap = Utilerias.formatearFecha(trnFecCap, fechaFormatoHoras);
+		
+		BimEmailTemplateDTO emailTemplateCliente = null;
+		if(("I").equals(trnTipTra)) {
+			emailTemplateCliente = new BimEmailTemplateDTO(plantillaTransferenciaInmediataCliente);
+			emailTemplateCliente.addMergeVariable("Trn_ProDes", "ACEPTADA");
+		}
+		
+		String monto = new StringBuilder()
+			.append("$")
+			.append(Double.parseDouble(trsMonto))
+			.toString();
+		emailTemplateCliente.addMergeVariable("Trn_Monto", monto);
 		emailTemplateCliente.addMergeVariable("str_Firmas", trsFirma);
-//		emailTemplateCliente.addMergeVariable("Trn_ProDes", "");
 		emailTemplateCliente.addMergeVariable("Trn_DeCuOr", trnCueOriOcu.toString());
 		emailTemplateCliente.addMergeVariable("Trn_CueDes", trnCueDesOcu.toString());		
 		emailTemplateCliente.addMergeVariable("Trn_BanDes", trnBanDes);
-		emailTemplateCliente.addMergeVariable("Trn_Monto", trsMonto);
 		emailTemplateCliente.addMergeVariable("Trn_Descri", trsDescri);
 		emailTemplateCliente.addMergeVariable("Trn_RFC", trsRFC);
 		emailTemplateCliente.addMergeVariable("Trn_IVA", trsIVA);
@@ -295,39 +302,30 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		emailTemplateCliente.addMergeVariable("Trn_DesAdi", trnDesAdi);
 		emailTemplateCliente.addMergeVariable("Trn_UsCaNo", trnUsCaNo);
 		emailTemplateCliente.addMergeVariable("Trn_FecCap", trnFecCap);
-//		emailTemplateCliente.addMergeVariable("str_Autori", "");
+		// pendiente str_Autori por ResultSet de NBTRANACCON parametro Fir_UsuNom
+		emailTemplateCliente.addMergeVariable("str_Autori", "");
 		emailTemplateCliente.addMergeVariable("Trn_FecAut", trsFecAut);
 		emailTemplateCliente.addMergeVariable("Trn_FecCar", trsFecCar);
 		emailTemplateCliente.addMergeVariable("Trn_FecApl", trsFecApl); 
 		emailTemplateCliente.addMergeVariable("Trn_FePrEn", trnFePrEn);
-//		emailTemplateCliente.addMergeVariable("strFrecuencia", ""); 
-//		emailTemplateCliente.addMergeVariable("strDuracion", ""); 
-//		emailTemplateCliente.addMergeVariable("strRecordatorio", ""); 
 		emailTemplateCliente.addMergeVariable("Str_Verifi1", strVerifi1);
 		emailTemplateCliente.addMergeVariable("Str_Verifi2", strVerifi2);
 		emailTemplateCliente.addMergeVariable("Str_Verifi3", strVerifi3);
 		emailTemplateCliente.addMergeVariable("Str_Verifi4", strVerifi4);
 		emailTemplateCliente.addMergeVariable("Str_Verifi5", strVerifi5);
-//		emailTemplateCliente.addMergeVariable("Trn_FecOpe", fechaSis);
-//		emailTemplateCliente.addMergeVariable("She_HorIni", "");
 		String cuerpoEmailCliente = Utilerias.obtenerMensajePlantilla(emailTemplateCliente);
-		logger.info(">>>>>>>>>>>>>>>>> emailTemplateCliente " + emailTemplateCliente);
 		correoServicio.enviarCorreo(usuEmail, asuntoCliente, cuerpoEmailCliente);
 		
-		String asuntoBeneficiario = Utilerias.obtenerPropiedadPlantilla("mail.transferencia_nacional.asunto_beneficiario");
-		String plantillaBeneficiario = Utilerias.obtenerPlantilla("transferencia-nacional-beneficiario");
-		
-		BimEmailTemplateDTO emailTemplateBeneficiario = new BimEmailTemplateDTO(plantillaBeneficiario);
+		BimEmailTemplateDTO emailTemplateBeneficiario = new BimEmailTemplateDTO(plantillaTransferenciaBeneficiario);
 		emailTemplateBeneficiario.addMergeVariable("Trn_DeCuOr", trnCueOriOcu.toString());
 		emailTemplateBeneficiario.addMergeVariable("Trn_CueDe", trnCueDesOcu.toString());
-		emailTemplateBeneficiario.addMergeVariable("Trn_Monto", trsMonto);
+		emailTemplateBeneficiario.addMergeVariable("Trn_Monto", monto);
 		emailTemplateBeneficiario.addMergeVariable("Trn_Descri", trsDescri);
 		emailTemplateBeneficiario.addMergeVariable("NumTransac", numTransac);
 		emailTemplateBeneficiario.addMergeVariable("Trn_FecCar", trsFecCar);
 		emailTemplateBeneficiario.addMergeVariable("Trn_FecApl", trsFecApl);
-		String cuerpoEmailBeneficiario = Utilerias.obtenerMensajePlantilla(emailTemplateCliente);
-		
-		correoServicio.enviarCorreo(trnEmaBen, asuntoBeneficiario, cuerpoEmailBeneficiario);
+		String cuerpoEmailBeneficiario = Utilerias.obtenerMensajePlantilla(emailTemplateBeneficiario);
+		correoServicio.enviarCorreo(cdeEmaBen, asuntoBeneficiario, cuerpoEmailBeneficiario);
 		
 		JsonObject datosTransferenciaExitosa = new JsonObject();
 		datosTransferenciaExitosa.addProperty("trnCueOri", trsCueOri);
@@ -344,7 +342,6 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 
 		JsonObject transferenciaExitosa = new JsonObject();
 		transferenciaExitosa.add("transferenciaExitosa", datosTransferenciaExitosa);
-		logger.info("- transferenciaExitosa " + transferenciaExitosa);
 		
 		logger.info("CTRL: Finalizando transferenciaNacionalCreacion metodo");
 		return Response.ok(transferenciaExitosa.toString(), MediaType.APPLICATION_JSON)
