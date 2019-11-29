@@ -69,3 +69,5 @@ BIMWso2EIConnectorExporter/.settings/org.eclipse.m2e.core.prefs
 BIMWso2EIDataService/.settings/org.eclipse.m2e.core.prefs
 BIMWso2EIRegistry/.settings/org.eclipse.m2e.core.prefs
 BIMWso2EIMicroservice/dependency-reduced-pom.xml
+
+BIMWso2EICommons/lib/

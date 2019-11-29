@@ -3,12 +3,16 @@ package com.bim.commons.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bim.commons.dao.TransferenciasBIMDAO;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
 public class TransferenciasBIMServicio extends BaseService {
 
 	private static final Logger logger = LoggerFactory.getLogger(TransferenciasBIMServicio.class);
+	
+	private TransferenciasBIMDAO transferenciasBIMDAO;
+	
 	private static String TransferenciasBIMServicio;
 	private static String CuentasOrigenConsultarOp;
 	private static String CuentasOrigenConsultarOpTipConsul;
@@ -37,7 +41,6 @@ public class TransferenciasBIMServicio extends BaseService {
 	private static String TransferenciaBIMCreacionOpSucOrigen;
 	private static String TransferenciaBIMCreacionOpSucDestino;
 	private static String TransferenciaBIMCreacionOpModulo;
-	private static String TransferenciaBIMConsultarOp;
 	private static String TransferenciaBIMConsultarOpTipConsul;
 	private static String TransferenciaBIMConsultarOpTransaccio;
 	private static String TransferenciaBIMConsultarOpUsuario;
@@ -55,13 +58,14 @@ public class TransferenciasBIMServicio extends BaseService {
 	public TransferenciasBIMServicio() {
 		super();
 		
+		this.transferenciasBIMDAO = new TransferenciasBIMDAO();
+		
 		TransferenciasBIMServicio = properties.getProperty("data_service.transferencias_bim_servicio");
 		
 		CuentasOrigenConsultarOp = properties.getProperty("transferencias_bim_servicio.op.cuentas_origen_consultar");
 		CuentaDestinoTransferenciaBIMActivacionOp = properties.getProperty("transferencias_bim_servicio.op.cuentas_destino_transferencia_bim_activacion");
 		TransferenciaBIMProcesarOp = properties.getProperty("transferencias_bim_servicio.op.transferencia_bim_procesar");
 		TransferenciaBIMCreacionOp = properties.getProperty("transferencias_bim_servicio.op.transferencia_bim_creacion");
-		TransferenciaBIMConsultarOp = properties.getProperty("transferencias_bim_servicio.op.transferencia_bim_consultar");
 		TransferenciaBIMFirmasConsultarOp = properties.getProperty("transferencias_bim_servicio.op.transferencia_bim_firmas_consultar");
 		
 		CuentasOrigenConsultarOpTipConsul = properties.getProperty("op.cuentas_origen_consultar.tip_consul");
@@ -119,6 +123,7 @@ public class TransferenciasBIMServicio extends BaseService {
 		datosCuentasOrigenConsultar.addProperty("SucOrigen", CuentasOrigenConsultarOpSucOrigen);
 		datosCuentasOrigenConsultar.addProperty("SucDestino", CuentasOrigenConsultarOpSucDestino);
 		datosCuentasOrigenConsultar.addProperty("Modulo", CuentasOrigenConsultarOpModulo);
+		
 		JsonObject datosCuentasOrigenConsultarOpResultadoObjeto = Utilerias.performOperacion(TransferenciasBIMServicio, CuentasOrigenConsultarOp, datosCuentasOrigenConsultar);
 		logger.info("datosCuentasOrigenConsultarOpResultadoObjeto" + datosCuentasOrigenConsultarOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando datosCuentasOrigenConsultar metodo... ");
@@ -195,7 +200,8 @@ public class TransferenciasBIMServicio extends BaseService {
 		datosTransferenciaBIMConsultar.addProperty("SucOrigen", TransferenciaBIMConsultarOpSucOrigen);
 		datosTransferenciaBIMConsultar.addProperty("SucDestino", TransferenciaBIMConsultarOpSucDestino);
 		datosTransferenciaBIMConsultar.addProperty("Modulo", TransferenciaBIMConsultarOpModulo);
-		JsonObject transferenciaBIMConsultarResultadoObjeto = Utilerias.performOperacion(TransferenciasBIMServicio, TransferenciaBIMConsultarOp, datosTransferenciaBIMConsultar);
+		
+		JsonObject transferenciaBIMConsultarResultadoObjeto = transferenciasBIMDAO.transferenciasBIMConsultar(datosTransferenciaBIMConsultar);
 		logger.info("transferenciaBIMConsultarResultadoObjeto" + transferenciaBIMConsultarResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaBIMCreacion metodo... ");
 		return transferenciaBIMConsultarResultadoObjeto;

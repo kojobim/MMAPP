@@ -138,7 +138,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 				.append(trbMonto)
 				.append(" Pesos")
 				.toString();
-		String bitDireIP = solicitud.getHeader("X_Forwarded_For");
+		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
 		
 		JsonObject datosBitacora = new JsonObject();
 		datosBitacora.addProperty("Bit_Usuari", usuNumero);
@@ -163,7 +163,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		datosTransferenciaBIMConsultar.addProperty("Trb_Usuari", usuNumero);
 		datosTransferenciaBIMConsultar.addProperty("FechaSis", fechaSis);
 		datosTransferenciaBIMConsultar.addProperty("Tip_Consul", "L2");
-		JsonObject datosTransferenciaBIMConsultarResultado = this.transferenciasBIMServicio.transferenciasBIMConsultar(datosTransferenciaBIMConsultar );
+		JsonObject datosTransferenciaBIMConsultarResultado = this.transferenciasBIMServicio.transferenciasBIMConsultar(datosTransferenciaBIMConsultar);
 		logger.info("- datosTransferenciaBIMConsultarResultado " + datosTransferenciaBIMConsultarResultado);
 
 		JsonObject transferenciasBIMConsultar = Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaBIMConsultarResultado, "transferenciasBIM");
