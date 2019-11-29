@@ -2,23 +2,35 @@ package com.bim.msf4j.ctrl;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
 
 import com.bim.commons.dto.BimMessageDTO;
+import com.bim.commons.exceptions.BadRequestException;
+import com.bim.commons.exceptions.ConflictException;
+import com.bim.commons.exceptions.ForbiddenException;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.service.AvisoPrivacidadServicio;
+import com.bim.commons.service.BitacoraServicio;
 import com.bim.commons.service.CuentaDestinoServicio;
+import com.bim.commons.service.PasswordServicio;
+import com.bim.commons.service.TokenServicio;
 import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.service.TransferenciasBIMServicio;
+import com.bim.commons.service.UsuarioServicio;
+import com.bim.commons.utils.Racal;
 import com.bim.commons.utils.Utilerias;
+import com.google.common.base.Strings;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -28,11 +40,19 @@ public class UsuarioCtrl extends BimBaseCtrl {
 
 	private static Logger logger = Logger.getLogger(UsuarioCtrl.class);
 	
-	private String CuentaDestinoBIMConsultarTipConsulL2;
+	private static String CuentaDestinoBIMConsultarTipConsulL2;
 	private CuentaDestinoServicio cuentaDestinoServicio;
 	private TransaccionServicio transaccionServicio;
 	private AvisoPrivacidadServicio avisoPrivacidadServicio;
 	private TransferenciasBIMServicio transferenciasBIMServicio;
+	private TokenServicio tokenServicio;
+	private PasswordServicio passwordServicio;
+	private UsuarioServicio usuarioServicio;
+	private BitacoraServicio bitacoraServicio;
+	
+	static {
+		CuentaDestinoBIMConsultarTipConsulL2 = properties.getProperty("op.cuenta_destino_bim_consultar.tip_consul.l2");	
+	}
 	
 	public UsuarioCtrl() {
 		super();
@@ -41,8 +61,11 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		this.transaccionServicio = new TransaccionServicio();
 		this.avisoPrivacidadServicio = new AvisoPrivacidadServicio();
 		this.transferenciasBIMServicio = new TransferenciasBIMServicio();
-		
-		CuentaDestinoBIMConsultarTipConsulL2 = properties.getProperty("op.cuenta_destino_bim_consultar.tip_consul.l2");
+		this.tokenServicio = new TokenServicio();
+		this.passwordServicio = new PasswordServicio();
+		this.usuarioServicio = new UsuarioServicio();
+		this.bitacoraServicio = new BitacoraServicio();
+
 	}
 
 	@Path("/cuentas-destino-nacionales")
@@ -301,4 +324,227 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		return Response.ok(cuentasDestinoRespuesta, MediaType.APPLICATION_JSON)
 				.build();
 	}
+	
+	@Path("/password")
+	@PUT
+	@Consumes({MediaType.APPLICATION_JSON})
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response actualizaPassword(
+					JsonObject datosCambiarPassword,
+					@HeaderParam("Authorization")final String token,
+					@HeaderParam("X-Forwarded-For")final String bitDireIP) {
+		
+		logger.info("CTRL: Comenzando cambiarPassword metodo.....");
+
+		datosCambiarPassword = Utilerias
+				.obtenerJsonObjectPropiedad(datosCambiarPassword, "actualizaPassword"); //obtener inner object
+		
+		//inicia declaracion de variables
+		String cpRSAToken = null;
+		String actPasswo = null;
+		String usuPasswo = null;
+		String conPasswo = null;
+		String usuFolTok = "0416218854"; //valor hard-code hasta integracion de servicio login
+		String validarToken = null;
+		String numTransac = null;
+		String usuClave = null;
+		String usuNumero = null;
+		String scriptName = null;
+		String usuUsuAdm = null;
+	
+		JsonObject bitacoraResultado = null;
+		JsonObject transac = null;
+		JsonObject usuario = null;
+		JsonObject usuarioAct = null;
+		JsonObject servicioRequest = null;
+		JsonObject usuarioParamAct = null;
+		JsonObject cuentasEspeciales = null;
+		BimMessageDTO bimMessageDTO = null;
+		//termina declaracion de variables
+		
+		// asignacion de variables para su manipulacion
+		cpRSAToken = Utilerias.obtenerStringPropiedad(datosCambiarPassword, "cpRSAToken");
+		actPasswo = Utilerias.obtenerStringPropiedad(datosCambiarPassword, "actPasswo");
+		usuPasswo = Utilerias.obtenerStringPropiedad(datosCambiarPassword, "usuPasswo");
+		conPasswo = Utilerias.obtenerStringPropiedad(datosCambiarPassword, "conPasswo");
+		//termina la asignacion de variables para su manipulacion
+		
+		//se valida que todos los parametros obligatorios se encuentren presentes		
+		if(Strings.isNullOrEmpty(cpRSAToken)){
+			bimMessageDTO = new BimMessageDTO("COMMONS.400");
+			bimMessageDTO.addMergeVariable("propiedad", "cpRSAToken");
+			throw new BadRequestException(bimMessageDTO.toString());
+			
+		} else if(Strings.isNullOrEmpty(actPasswo)) {
+			bimMessageDTO = new BimMessageDTO("COMMONS.400");
+			bimMessageDTO.addMergeVariable("propiedad", "actPasswo");
+			throw new BadRequestException(bimMessageDTO.toString());
+			
+		} else if(Strings.isNullOrEmpty(usuPasswo)) {
+			bimMessageDTO = new BimMessageDTO("COMMONS.400");
+			bimMessageDTO.addMergeVariable("propiedad", "usuPasswo");
+			throw new BadRequestException(bimMessageDTO.toString());
+			
+		} else if(Strings.isNullOrEmpty(conPasswo)) {
+			bimMessageDTO = new BimMessageDTO("COMMONS.400");
+			bimMessageDTO.addMergeVariable("propiedad", "conPasswo");
+			throw new BadRequestException(bimMessageDTO.toString());
+			
+		}
+		
+		//obtener principal y propiedades para su manipulacion
+		usuario = Utilerias.obtenerPrincipal(token);
+		usuClave = Utilerias.obtenerStringPropiedad(usuario, "usuClave");
+		usuNumero = Utilerias.obtenerStringPropiedad(usuario, "usuNumero");
+		usuUsuAdm = Utilerias.obtenerStringPropiedad(usuario, "usuUsuAdm");
+		
+		// se validan casos de error especificados en DSS
+		if(!StringUtils.equals(usuPasswo, conPasswo)) { // nuevo password y confirmacion son distintos
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.60");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		if(StringUtils.equals(usuPasswo, usuClave)){ //password igual a clave de usuario 
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.61");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		scriptName = new StringBuilder()
+				.append(UsuarioCtrl.class.getName())
+				.append(".actualizaPassword").toString();
+		
+		transac =this.transaccionServicio.folioTransaccionGenerar(); //obtener transaccion para operaciones siguientes
+		transac = Utilerias.obtenerJsonObjectPropiedad(transac, "transaccion"); //obteniendo inner object
+		numTransac = Utilerias.obtenerStringPropiedad(transac, "Fol_Transa"); //obteniendo numero de transaccion
+		
+		validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac, scriptName);
+		
+		if ("B".equals(validarToken)) {
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
+			throw new ForbiddenException(bimMessageDTO.toString());
+		}
+
+		if ("C".equals(validarToken)) {
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.28");
+			throw new ForbiddenException(bimMessageDTO.toString());
+		}
+		
+		// consulta especial de usuario
+		servicioRequest = new JsonObject();
+		servicioRequest.addProperty("Ces_Usuari", usuNumero);
+		servicioRequest.addProperty("NumTransac", numTransac);
+		servicioRequest.addProperty("FechaSis", Utilerias.obtenerFechaSis());
+		
+		cuentasEspeciales = this.passwordServicio.cuentasEspecialesConsulta(servicioRequest);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("CuentasEspeciales response: "+cuentasEspeciales.toString());			
+		}
+		
+		cuentasEspeciales = Utilerias.obtenerJsonObjectPropiedad(cuentasEspeciales, "cuentasEspeciales");
+
+		actPasswo = Racal.cifraPassword_HSM(actPasswo); // cifrar password actual
+		
+		if(actPasswo.length() == 7 && actPasswo.equals("autoriz")) {
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.7");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+
+		if(actPasswo.isEmpty()) {
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.8");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+		
+		if(logger.isDebugEnabled()) {
+			logger.debug("actPasswo encriptado: "+actPasswo);
+			logger.debug("UsuPasswo: "+Utilerias.obtenerStringPropiedad(cuentasEspeciales, "Usu_Passwo"));
+		}
+		
+		//el password proporcionado como actual no coincide con el almacenado en Sybase
+		
+		if(!StringUtils.equals(actPasswo.trim(), Utilerias.obtenerStringPropiedad(cuentasEspeciales, "Usu_Passwo").trim())) {
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.63");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		usuPasswo = Racal.cifraPassword_HSM(usuPasswo); //encriptando el nuevo password
+		
+		if(usuPasswo.length() == 7 && usuPasswo.equals("autoriz")) {
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.7");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+
+		if(usuPasswo.isEmpty()) {
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.8");
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+		
+		// guardando nuevo password de usuario....
+		servicioRequest = new JsonObject();
+		servicioRequest.addProperty("Usu_Numero", usuNumero);
+		servicioRequest.addProperty("Usu_Passwo", usuPasswo);
+		servicioRequest.addProperty("Tip_Actual", "E");
+		servicioRequest.addProperty("NumTransac", numTransac);
+		servicioRequest.addProperty("Usu_UsuAdm", usuUsuAdm);
+		servicioRequest.addProperty("FechaSis", Utilerias.obtenerFechaSis());
+		
+		usuarioAct = this.usuarioServicio.usuarioActualizar(servicioRequest);
+		usuarioAct = Utilerias.obtenerJsonObjectPropiedad(usuarioAct, "usuario"); //obteniendo inner property usuario
+		
+		if(usuarioAct.has("Err_Codigo")) { //posible error proveniente de SP
+			
+			// el password que intenta utilizarse ya fue usado con anterioridad
+			if(StringUtils.equals(Utilerias.obtenerStringPropiedad(usuarioAct, "Err_Codigo"), "000001")) { 
+				bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.62");
+				throw new ConflictException(bimMessageDTO.toString());
+			}
+			
+		}
+		
+		// actualizando parametros
+		servicioRequest = new JsonObject();
+		servicioRequest.addProperty("Pau_Usuari", usuNumero);
+		servicioRequest.addProperty("Tip_Actual", "D");
+		servicioRequest.addProperty("NumTransac", numTransac);		
+		servicioRequest.addProperty("FechaSis", Utilerias.obtenerFechaSis());
+		
+		usuarioParamAct = this.usuarioServicio.usuarioParametrosActualizacion(servicioRequest);
+		
+		if(usuarioParamAct.has("REQUEST_STATUS")){ //obtenida respuesta de servidor
+			
+			// No se obtuvo una respuesta exitosa por parte del servidor...
+			if(! StringUtils.equals(Utilerias.obtenerStringPropiedad(usuarioParamAct, "REQUEST_STATUS"), "SUCCESSFUL")){
+				 //should manage an sneaky throw (?) but instead prints a log at error level for tracing purposes
+				logger.error("ERROR: NBPARUSUACT devolvio un codigo diferente de exitoso. CODIGO: "+
+					Utilerias.obtenerStringPropiedad(usuarioParamAct, "REQUEST_STATUS"));
+			}
+			
+		}		
+		
+		// guardado en bitacora
+		servicioRequest = new JsonObject();
+		servicioRequest.addProperty("Bit_Usuari", usuNumero);
+		servicioRequest.addProperty("Bit_Fecha", Utilerias.obtenerFechaSis());
+		servicioRequest.addProperty("Bit_TipOpe", "120");
+		servicioRequest.addProperty("NumTransac", numTransac);
+		servicioRequest.addProperty("FechaSis", Utilerias.obtenerFechaSis());
+		servicioRequest.addProperty("Bit_DireIP", bitDireIP);
+		
+		bitacoraResultado = this.bitacoraServicio.creacionBitacora(servicioRequest);
+
+		if(bitacoraResultado.has("REQUEST_STATUS")){ //obtenida respuesta de servidor
+			
+			// No se obtuvo una respuesta exitosa por parte del servidor al guardar en la bitacora...
+			if(! StringUtils.equals(Utilerias.obtenerStringPropiedad(bitacoraResultado, "REQUEST_STATUS"), "SUCCESSFUL")){
+				//should manage an sneaky throw (?) but instead prints a log at error level for tracing purposes
+				logger.error("ERROR: NBBITACOALT devolvio un codigo diferente de exitoso. CODIGO: "+
+					Utilerias.obtenerStringPropiedad(bitacoraResultado, "REQUEST_STATUS"));
+			}
+			
+		}
+		
+		logger.info("CTRL: Terminando cambiarPassword metodo.....");
+		return Response.noContent().build();
+	}
+	
 }
