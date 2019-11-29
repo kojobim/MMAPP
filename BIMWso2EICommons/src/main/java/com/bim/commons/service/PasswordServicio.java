@@ -118,17 +118,23 @@ public class PasswordServicio extends BaseService {
     	if(!datosCuentasEspeciales.has("NumTransac")) {
     		datosCuentasEspeciales.addProperty("NumTransac", "");    		
     	}
-
+    	if(!datosCuentasEspeciales.has("Ces_Cuenta")) {
+    		datosCuentasEspeciales.addProperty("Ces_Cuenta", "");
+    	}
     	
 		// agregando propiedades hard-code
 		datosCuentasEspeciales.addProperty("Tip_Consul", CuentasEspecialesConsultarOpTipConsul);
 		datosCuentasEspeciales.addProperty("Transaccio",CuentasEspecialesConsultarOpTransaccio);
 		datosCuentasEspeciales.addProperty("Usuario",CuentasEspecialesConsultarOpUsuario);
-		datosCuentasEspeciales.addProperty("Suc_Origen",CuentasEspecialesConsultarOpSucOrigen);
-		datosCuentasEspeciales.addProperty("Suc_Destino",CuentasEspecialesConsultarOpSucDestino);
+		datosCuentasEspeciales.addProperty("SucOrigen",CuentasEspecialesConsultarOpSucOrigen);
+		datosCuentasEspeciales.addProperty("SucDestino",CuentasEspecialesConsultarOpSucDestino);
 		datosCuentasEspeciales.addProperty("Modulo",CuentasEspecialesConsultarOpModulo);
 		
 		JsonObject result = Utilerias.performOperacion(CambiarPasswordServicio,CuentasEspecialesConsultarOp,datosCuentasEspeciales);
+		
+		logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> JSON CUENTAS ESPECIALES START");
+		logger.info(datosCuentasEspeciales.toString());		
+		logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> JSON CUENTAS ESPECIALES END");
 		logger.info("COMMONS: Finalizando cuentasEspecialesConsulta...");
 		return result;
 		

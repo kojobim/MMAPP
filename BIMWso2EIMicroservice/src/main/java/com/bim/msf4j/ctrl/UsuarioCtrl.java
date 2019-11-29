@@ -19,6 +19,7 @@ import org.wso2.msf4j.Request;
 
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.exceptions.BadRequestException;
+import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.exceptions.ForbiddenException;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.service.AvisoPrivacidadServicio;
@@ -394,18 +395,20 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		}
 		
 		//obtener principal y propiedades para su manipulacion
-		usuario = Utilerias.obtenerPrincipal(token); 
+		usuario = Utilerias.obtenerPrincipal(token);
 		usuClave = Utilerias.obtenerStringPropiedad(usuario, "usuClave");
 		usuNumero = Utilerias.obtenerStringPropiedad(usuario, "usuNumero");
 		usuUsuAdm = Utilerias.obtenerStringPropiedad(usuario, "usuUsuAdm");
 		
 		// se validan casos de error especificados en DSS
 		if(!StringUtils.equals(usuPasswo, conPasswo)) { // nuevo password y confirmacion son distintos
-		
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.60");
+			throw new ConflictException(bimMessageDTO.toString());
 		}
 		
 		if(StringUtils.equals(usuPasswo, usuClave)){ //password igual a clave de usuario 
-			
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.61");
+			throw new ConflictException(bimMessageDTO.toString());
 		}
 		
 		scriptName = new StringBuilder()
@@ -435,6 +438,10 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		servicioRequest.addProperty("FechaSis", Utilerias.obtenerFechaSis());
 		
 		cuentasEspeciales = this.passwordServicio.cuentasEspecialesConsulta(servicioRequest);
+		
+		logger.info(">>>>>>>>>>>>>>>>>>>>>>>>CUENTAS ESPECIALES");
+		logger.info(cuentasEspeciales.toString());
+		logger.info(">>>>>>>>>>>>>>>>>>>>>>>>CUENTAS ESPECIALES");
 		cuentasEspeciales = Utilerias.obtenerJsonObjectPropiedad(cuentasEspeciales, "cuentasEspeciales");
 
 		actPasswo = Racal.cifraPassword_HSM(actPasswo); // cifrar password actual
@@ -449,9 +456,14 @@ public class UsuarioCtrl extends BimBaseCtrl {
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
 		
+		logger.info(">>>>>>>> actPasswo: "+actPasswo);
+		logger.info(">>>>>>>> actPasswo: "+Utilerias.obtenerStringPropiedad(cuentasEspeciales, "Usu_Passwo"));
+		
 		//el password proporcionado como actual no coincide con el almacenado en Sybase
-		if(StringUtils.equals(actPasswo, Utilerias.obtenerStringPropiedad(cuentasEspeciales, "Usu_Passwo"))) { 
+		if(!StringUtils.equals(actPasswo, Utilerias.obtenerStringPropiedad(cuentasEspeciales, "Usu_Passwo"))) {
 			
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.63");
+			throw new ConflictException(bimMessageDTO.toString());
 		}
 		
 		usuPasswo = Racal.cifraPassword_HSM(usuPasswo); //encriptando el nuevo password
@@ -482,7 +494,8 @@ public class UsuarioCtrl extends BimBaseCtrl {
 			
 			// el password que intenta utilizarse ya fue usado con anterioridad
 			if(StringUtils.equals(Utilerias.obtenerStringPropiedad(usuarioAct, "Err_Codigo"), "000001")) { 
-				
+				bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.62");
+				throw new ConflictException(bimMessageDTO.toString());
 			}
 			
 		}
@@ -500,11 +513,12 @@ public class UsuarioCtrl extends BimBaseCtrl {
 			
 			// No se obtuvo una respuesta exitosa por parte del servidor...
 			if(! StringUtils.equals(Utilerias.obtenerStringPropiedad(usuarioParamAct, "REQUEST_STATUS"), "SUCCESSFUL")){
-				
+				 //should manage an sneaky throw (?) but instead print a log at error level for tracing purposes
+				logger.error("ERROR: NBPARUSUACT devolvio un codigo diferente de exitoso. CODIGO: "+
+					Utilerias.obtenerStringPropiedad(usuarioParamAct, "REQUEST_STATUS"));
 			}
 			
-		}
-		
+		}		
 		
 		// guardado en bitacora
 		servicioRequest = new JsonObject();
@@ -521,7 +535,9 @@ public class UsuarioCtrl extends BimBaseCtrl {
 			
 			// No se obtuvo una respuesta exitosa por parte del servidor al guardar en la bitacora...
 			if(! StringUtils.equals(Utilerias.obtenerStringPropiedad(bitacoraResultado, "REQUEST_STATUS"), "SUCCESSFUL")){
-				
+				//should manage an sneaky throw (?) but instead print a log at error level for tracing purposes
+				logger.error("ERROR: NBBITACOALT devolvio un codigo diferente de exitoso. CODIGO: "+
+					Utilerias.obtenerStringPropiedad(bitacoraResultado, "REQUEST_STATUS"));
 			}
 			
 		}
