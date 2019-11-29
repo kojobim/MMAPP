@@ -214,7 +214,7 @@
             <element column="Cds_CLABE" name="Cds_CLABE" xsdType="xs:string" optional="true"/>
             <element column="Cds_Consec" name="Cds_Consec" xsdType="xs:string" optional="true"/>
             <element column="Cds_UsuAdm" name="Cds_UsuAdm" xsdType="xs:string" optional="true"/>
-            <element column="Cdb_Cuenta" name="Cdb_Cuenta" xsdType="xs:string" optional="true"/>
+            <element column="Cdp_Cuenta" name="Cdp_Cuenta" xsdType="xs:string" optional="true"/>
             <element column="Cds_CliUsu" name="Cds_CliUsu" xsdType="xs:string" optional="true"/>
             <element column="Cds_Banco" name="Cds_Banco" xsdType="xs:string" optional="true"/>
             <element column="Ins_Descri" name="Ins_Descri" xsdType="xs:string" optional="true"/>
@@ -229,6 +229,10 @@
             <element column="Cds_DesAdi" name="Cds_DesAdi" xsdType="xs:string" optional="true"/>
             <element column="Cds_DesCue" name="Cds_DesCue" xsdType="xs:string" optional="true"/>
             <element column="Cds_FeAlFo" name="Cds_FeAlFo" xsdType="xs:string" optional="true"/>
+            <element column="Ban_NomCor" name="Ban_NomCor" xsdType="xs:string" optional="true"/>
+            <element column="Cdp_Alias" name="Cdp_Alias" xsdType="xs:string" optional="true"/>
+            <element column="Cds_FecAct" name="Cds_FecAct" xsdType="xs:string" optional="true"/>
+            <element column="Cds_MinRes" name="Cds_MinRes" xsdType="xs:integer" optional="true"/>
         </result>
     </query>
     <query id="cuentaDestinoSPEIActivacionSQL" useConfig="BIMDB">

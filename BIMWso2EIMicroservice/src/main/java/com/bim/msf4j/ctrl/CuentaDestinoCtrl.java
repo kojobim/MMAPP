@@ -60,6 +60,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 	private static String AltaCuentaDestinoNacionalBitacoraCreacionOpBitTipOpe;
 	private static String ActivarCuentasDestinoNacionalBitacoraCreacionOpBitTipOpe;
 	private static String ActivarCuentasDestinoBIMBitacoraCreacionOpBitTipOpe;
+	private static String CuentaDestinoSPEIConsultarOpTipConsulL1;
+    private static String CuentaDestinoSPEIConsultarOpTipConsulL2;
 	
 	public CuentaDestinoCtrl() {
 		super();
@@ -82,6 +84,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		AltaCuentaDestinoNacionalBitacoraCreacionOpBitTipOpe = properties.getProperty("op.alta_cuenta_destino_nacional.bitacora_creacion.bit_tip_ope");
 		ActivarCuentasDestinoNacionalBitacoraCreacionOpBitTipOpe = properties.getProperty("op.activar_cuentas_destino_nacional.bitacora_creacion.bit_tip_ope");
 		ActivarCuentasDestinoBIMBitacoraCreacionOpBitTipOpe = properties.getProperty("op.activar_cuentas_destino_bim.bitacora_creacion.bit_tip_ope");
+		CuentaDestinoSPEIConsultarOpTipConsulL1 = properties.getProperty("op.cuenta_destino_spei_consultar.tip_consul.l1");
+        CuentaDestinoSPEIConsultarOpTipConsulL2 = properties.getProperty("op.cuenta_destino_spei_consultar.tip_consul.l2");
 		
 		logger.info("CTRL: Finalizando metodo init...");		
 	}
@@ -444,10 +448,14 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 
 		Utilerias.verificarError(cuentaDestinoSPEIActivacion);
 		
+		String cuentaDestinoEstado = CuentaDestinoEstadosEnum.validarEstado(status).toString();
+		String CuentaDestinoSPEIConsultarOpTipConsul = "A".equals(cuentaDestinoEstado) ? CuentaDestinoSPEIConsultarOpTipConsulL1 : CuentaDestinoSPEIConsultarOpTipConsulL2;
+				
 		JsonObject datosCuentaDestinoSPEI = new JsonObject();
 		datosCuentaDestinoSPEI.addProperty("Cds_UsuAdm", usuUsuAdm);
 		datosCuentaDestinoSPEI.addProperty("Cds_Usuari", usuNumero);
 		datosCuentaDestinoSPEI.addProperty("FechaSis", fechaSis);
+		datosCuentaDestinoSPEI.addProperty("Tip_Consul", CuentaDestinoSPEIConsultarOpTipConsul);
 		JsonObject cuentaDestinoSPEIConsultarResultado = cuentaDestinoServicio.cuentaDestinoSPEIConsultar(datosCuentaDestinoSPEI);
 		
 		Utilerias.verificarError(cuentaDestinoSPEIConsultarResultado);
@@ -457,7 +465,6 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		
 		JsonObject resultado = new JsonObject();
 		JsonArray cuentasDestinoNacional = new JsonArray();
-		String cuentaDestinoEstado = CuentaDestinoEstadosEnum.validarEstado(status).toString();
 		
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
@@ -465,6 +472,10 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 			JsonObject cuentaDestinoObjeto = cuentaDestinoElemento.getAsJsonObject();
 			String cdsStatus = Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_Status");
 			String cdsFecAlt = Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_FecAlt");
+			String cpCLABE = "A".equals(cuentaDestinoEstado) ? Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_CLABE")
+					: Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cdp_Cuenta");
+			String cpAlias = "A".equals(cuentaDestinoEstado) ? Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_Alias")
+					: Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cdp_Alias");
 			
 			Date fecAlt = null;
 			try {
@@ -477,8 +488,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 			
 			if(cdsStatus != null && cdsStatus.equals(cuentaDestinoEstado)) {
 				JsonObject cuentaDestino = new JsonObject();
-				cuentaDestino.addProperty("cpCLABE", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_CLABE"));
-				cuentaDestino.addProperty("cpAlias", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_Alias"));
+				cuentaDestino.addProperty("cpCLABE", cpCLABE != null ? cpCLABE : "");
+				cuentaDestino.addProperty("cpAlias", cpAlias != null ? cpAlias : "");
 				cuentaDestino.addProperty("cpBanco", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_Banco").trim());
 				cuentaDestino.addProperty("cpFecAlt", fecAlt != null ? simpleDateFormat.format(fecAlt) : "");
 				cuentaDestino.addProperty("cpRFCBen", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_RFCBen"));

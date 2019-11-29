@@ -36,7 +36,6 @@ public class CuentaDestinoServicio extends BaseService {
 	private static String CuentaDestinoSPEIActivacionOpSucOrigen;
 	private static String CuentaDestinoSPEIActivacionOpSucDestino;
     private static String CuentaDestinoSPEIActivacionOpModulo;
-    private static String CuentaDestinoSPEIConsultarOpTipConsul;
     private static String CuentaDestinoSPEIConsultarOpTransaccio;
     private static String CuentaDestinoSPEIConsultarOpUsuario;
     private static String CuentaDestinoSPEIConsultarOpSucOrigen;
@@ -112,7 +111,6 @@ public class CuentaDestinoServicio extends BaseService {
 		CuentaDestinoSPEIActivacionOpSucDestino = properties.getProperty("op.cuenta_destino_spei_activacion.suc_destino");
         CuentaDestinoSPEIActivacionOpModulo = properties.getProperty("op.cuenta_destino_spei_activacion.modulo");
         
-        CuentaDestinoSPEIConsultarOpTipConsul = properties.getProperty("op.cuenta_destino_spei_consultar.tip_consul");
         CuentaDestinoSPEIConsultarOpTransaccio = properties.getProperty("op.cuenta_destino_spei_consultar.transaccio");
         CuentaDestinoSPEIConsultarOpUsuario = properties.getProperty("op.cuenta_destino_spei_consultar.usuario");
         CuentaDestinoSPEIConsultarOpSucOrigen = properties.getProperty("op.cuenta_destino_spei_consultar.suc_origen");
@@ -219,6 +217,7 @@ public class CuentaDestinoServicio extends BaseService {
      *	Cds_Usuari: String,
      *	Cds_Consec?: String,
      *	Cds_CLABE?: String,
+     *	Tip_Consul: String,
      *	NumTransac?: String,
      *	FechaSis: String
      * }
@@ -259,7 +258,6 @@ public class CuentaDestinoServicio extends BaseService {
             datosCuentaDestinoSPEI.addProperty("Cds_Consec", "");
         if(!datosCuentaDestinoSPEI.has("Cds_CLABE"))
             datosCuentaDestinoSPEI.addProperty("Cds_CLABE", "");
-        datosCuentaDestinoSPEI.addProperty("Tip_Consul", CuentaDestinoSPEIConsultarOpTipConsul);
         if(!datosCuentaDestinoSPEI.has("NumTransac"))
             datosCuentaDestinoSPEI.addProperty("NumTransac", "");
 		datosCuentaDestinoSPEI.addProperty("Transaccio", CuentaDestinoSPEIConsultarOpTransaccio);
