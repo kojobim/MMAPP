@@ -244,7 +244,7 @@ public class TransferenciasBIMServicioTest {
 	@Test
 	public void formatoTest() {
 		String cadenaOriginal = "001953830023";
-		String cadenaSensurada = Utilerias.formatearCuenta(cadenaOriginal, 2);
+		String cadenaSensurada = Utilerias.formatearCuenta(cadenaOriginal, 4, 10);
 		logger.info("cadenaOriginal:  " + cadenaOriginal);
 		logger.info("cadenaSensurada: " + cadenaSensurada);
 		String cadenaFecha = "2019-11-21T07:38:00.000-06:00";

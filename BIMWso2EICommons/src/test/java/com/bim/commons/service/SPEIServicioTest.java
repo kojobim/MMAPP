@@ -60,12 +60,12 @@ public class SPEIServicioTest {
 	public void transaferenciaSPEICreacionTestDeberiasSerExitoso() {
 		logger.info("TEST: Comenzando transaferenciaSPEICreacionTestDeberiasSerExitoso metodo...");
 		JsonObject datosTransfarenciaSPEI = new JsonObject();
-		datosTransfarenciaSPEI.addProperty("Trs_Usuari","000149");
-		datosTransfarenciaSPEI.addProperty("Trs_Client","00195171");
+		datosTransfarenciaSPEI.addProperty("Trs_Usuari","001844");
+		datosTransfarenciaSPEI.addProperty("Trs_Client","00193500");
 		datosTransfarenciaSPEI.addProperty("Trs_CueOri","001951710012");
 		datosTransfarenciaSPEI.addProperty("Trs_CueDes","012180029483065593");
-		datosTransfarenciaSPEI.addProperty("Trs_Monto", 3);
-		datosTransfarenciaSPEI.addProperty("Trs_Descri","PRUEBA SPEI");
+		datosTransfarenciaSPEI.addProperty("Trs_Monto", 3.0);
+		datosTransfarenciaSPEI.addProperty("Trs_Descri","PRUEBA SPEI POSTMAN");
 		datosTransfarenciaSPEI.addProperty("Trs_PriRef","Nombre Usuario BE");
 		datosTransfarenciaSPEI.addProperty("Trs_Tipo","I");
 		datosTransfarenciaSPEI.addProperty("Trs_UsuCap","000149");
@@ -77,14 +77,22 @@ public class SPEIServicioTest {
 		datosTransfarenciaSPEI.addProperty("NumTransac","42246953");
 		
 		/**
-		 * String mock = "{\"REQUEST_STATUS\":\"SUCCESSFUL\"}";
+		 * String mock = "{\"transaccionSPEI\":{\"Err_Codigo\":\"000001\",\"Err_Mensaj\":\"La cuenta no se encuentra en su catalogo de cuentas origen\"}}";
 		 * JsonObject resultado = Utilerias.fromJsonObject(mock);
 		 */
-		JsonObject resultado = speiServicio.transaferenciaSPEICreacion(datosTransfarenciaSPEI);
+		JsonObject resultado = speiServicio.transferenciaSPEICreacion(datosTransfarenciaSPEI);
 		logger.info("- resultado " + resultado);
 		
-		assertTrue(resultado.has("REQUEST_STATUS"));
-		assertTrue(resultado.get("REQUEST_STATUS").getAsString().equals("SUCCESSFUL"));
+		assertTrue(resultado.has("transaccionSPEI"));
+		assertTrue(resultado.get("transaccionSPEI").isJsonObject());
+		
+		JsonObject transaccionSPEI = Utilerias.obtenerJsonObjectPropiedad(resultado, "transaccionSPEI");
+		
+		assertTrue(transaccionSPEI.has("Err_Codigo"));
+		
+		String errCodigo = transaccionSPEI.get("Err_Codigo").getAsString();
+		assertTrue("000000".equals(errCodigo));
+		
 		
 		logger.info("TEST: Finalizando transaferenciaSPEICreacionTestDeberiasSerExitoso metodo...");
 	}
@@ -112,7 +120,7 @@ public class SPEIServicioTest {
 		datosTransferenciaSPEI.addProperty("Ban_Descri", "BBVA BANCOMER");
 		datosTransferenciaSPEI.addProperty("NumTransac", "42246958");
 		datosTransferenciaSPEI.addProperty("FechaSis", Utilerias.obtenerFechaSis());
-		JsonObject resultado = speiServicio.transaferenciaSPEIProcesar(datosTransferenciaSPEI);
+		JsonObject resultado = speiServicio.transferenciaSPEIProcesar(datosTransferenciaSPEI);
 		logger.info("- resultado " + resultado);
 		
 		assertTrue("El resultado no tienen la propiedad transaccionSPEI", resultado.has("transaccionSPEI"));
@@ -137,7 +145,7 @@ public class SPEIServicioTest {
 		datosTransferenciaSPEI.addProperty("Trn_Usuari", "000014");
 		datosTransferenciaSPEI.addProperty("Trn_Status", "A");
 		datosTransferenciaSPEI.addProperty("FechaSis", Utilerias.obtenerFechaSis());
-		JsonObject resultado = speiServicio.transaferenciaSPEIConsultar(datosTransferenciaSPEI );
+		JsonObject resultado = speiServicio.transferenciaSPEIConsultar(datosTransferenciaSPEI );
 		logger.info("- resultado " + resultado);
 		
 		assertTrue("El resultado no tiene la propiedad transaccionesSPEI", resultado.has("transaccionesSPEI"));
