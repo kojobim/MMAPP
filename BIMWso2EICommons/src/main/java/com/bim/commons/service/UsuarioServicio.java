@@ -16,37 +16,51 @@ public class UsuarioServicio extends BaseService {
 
 	private static final Logger logger = LoggerFactory.getLogger(UsuarioServicio.class);
 
+	//servicio
 	private static String UsuarioServicio;
+	
+	//operaciones
 	private static String UsuarioConsultarOp;
+	private static String UsuarioActualizacionOp;
+	private static String UsuarioPerfilRiesgoConsultarOp;
+	private static String UsuarioParametrosActualizacionOp;
+	
+	//propiedades usuario consultar
 	private static String UsuarioConsultarOpTipConsul;
 	private static String UsuarioConsultarOpTransaccio;
 	private static String UsuarioConsultarOpUsuario;
 	private static String UsuarioConsultarOpSucOrigen;
 	private static String UsuarioConsultarOpSucDestino;
 	private static String UsuarioConsultarOpModulo;
-	private static String UsuarioActualizacionOp;
+	
+	//propiedades usuario actualizacion
 	private static String UsuarioActualizacionOpTransaccio;
 	private static String UsuarioActualizacionOpUsuario;
 	private static String UsuarioActualizacionOpSucOrigen;
 	private static String UsuarioActualizacionOpSucDestion;
 	private static String UsuarioActualizacionOpModulo;
-	private static String UsuarioPerfilRiesgoConsultarOp;
+	
+	//propiedades usuario consultar perfil riesgo
 	private static String UsuarioPerfilRiesgoConsultarOpTipConsul;
 	private static String UsuarioPerfilRiesgoConsultarOpTransaccio;
 	private static String UsuarioPerfilRiesgoConsultarOpUsuari;
 	private static String UsuarioPerfilRiesgoConsultarOpSucOrigen;
 	private static String UsuarioPerfilRiesgoConsultarOpSucDestino;
 	private static String UsuarioPerfilRiesgoConsultarOpModulo;
+
+	//propiedades usuario actualizacion parametros
+	private static String UsuarioParametrosActualizacionOpTransaccio;
+	private static String UsuarioParametrosActualizacionOpUsuario;
+	private static String UsuarioParametrosActualizacionOpSucOrigen;
+	private static String UsuarioParametrosActualizacionOpSucDestino;
+	private static String UsuarioParametrosActualizacionOpModulo;
 	
-	public UsuarioServicio() {
-		super();
-
-		UsuarioServicio = properties.getProperty("data_service.usuario_servicio");
-
-		UsuarioConsultarOp = properties.getProperty("usuario_servicio.op.usuario_consultar");
-		UsuarioActualizacionOp = properties.getProperty("usuario_servicio.op.usuario_actualizacion");
-		UsuarioPerfilRiesgoConsultarOp = properties.getProperty("usuario_servicio.op.usuario_perfil_riesgo_consultar");
+	static { // inicializando variables estaticas
 		
+		UsuarioServicio = properties.getProperty("data_service.usuario_servicio");
+		
+		// inicializacion de variables para consultar usuario
+		UsuarioConsultarOp = properties.getProperty("usuario_servicio.op.usuario_consultar");
 		UsuarioConsultarOpTipConsul = properties.getProperty("op.usuario_consultar.tip_consul");
 		UsuarioConsultarOpTransaccio = properties.getProperty("op.usuario_consultar.transaccio");
 		UsuarioConsultarOpUsuario = properties.getProperty("op.usuario_consultar.usuario");
@@ -54,18 +68,34 @@ public class UsuarioServicio extends BaseService {
 		UsuarioConsultarOpSucDestino = properties.getProperty("op.usuario_consultar.suc_destino");
 		UsuarioConsultarOpModulo = properties.getProperty("op.usuario_consultar.modulo");
 		
+		// inicializacion de variables para actualizacion de usuario
+		UsuarioActualizacionOp = properties.getProperty("usuario_servicio.op.usuario_actualizacion");
 		UsuarioActualizacionOpTransaccio = properties.getProperty("op.usuario_actualizacion.transaccio");
 		UsuarioActualizacionOpUsuario = properties.getProperty("op.usuario_actualizacion.usuario");
 		UsuarioActualizacionOpSucOrigen = properties.getProperty("op.usuario_actualizacion.suc_origen");
 		UsuarioActualizacionOpSucDestion = properties.getProperty("op.usuario_actualizacion.suc_destino");
 		UsuarioActualizacionOpModulo = properties.getProperty("op.usuario_actualizacion.modulo");
 
+		// inicializacion de variables para consultar perfil riesgo de usuario
+		UsuarioPerfilRiesgoConsultarOp = properties.getProperty("usuario_servicio.op.usuario_perfil_riesgo_consultar");
 		UsuarioPerfilRiesgoConsultarOpTipConsul = properties.getProperty("op.usuario_perfil_riesgo_consultar.tip_consul");
 		UsuarioPerfilRiesgoConsultarOpTransaccio = properties.getProperty("op.usuario_perfil_riesgo_consultar.transaccio");
 		UsuarioPerfilRiesgoConsultarOpUsuari = properties.getProperty("op.usuario_perfil_riesgo_consultar.usuario");
 		UsuarioPerfilRiesgoConsultarOpSucOrigen = properties.getProperty("op.usuario_perfil_riesgo_consultar.suc_origen");
 		UsuarioPerfilRiesgoConsultarOpSucDestino = properties.getProperty("op.usuario_perfil_riesgo_consultar.suc_destino");
 		UsuarioPerfilRiesgoConsultarOpModulo = properties.getProperty("op.usuario_perfil_riesgo_consultar.modulo");
+
+		// inicializacion de variables para actualizar parametros del usuario
+		UsuarioParametrosActualizacionOp = properties.getProperty("usuario_servicio.op.usuario_parametros_actualizacion");
+		UsuarioParametrosActualizacionOpTransaccio = properties.getProperty("op.usuario_parametros_actualizacion.transaccio");
+		UsuarioParametrosActualizacionOpUsuario = properties.getProperty("op.usuario_parametros_actualizacion.usuario");
+		UsuarioParametrosActualizacionOpSucOrigen = properties.getProperty("op.usuario_parametros_actualizacion.suc_origen");
+		UsuarioParametrosActualizacionOpSucDestino = properties.getProperty("op.usuario_parametros_actualizacion.suc_destino");
+		UsuarioParametrosActualizacionOpModulo = properties.getProperty("op.usuario_parametros_actualizacion.modulo");
+	}
+	
+	public UsuarioServicio() {
+		super();
 	}
 	
 	/**
@@ -281,5 +311,99 @@ public class UsuarioServicio extends BaseService {
 		
 		logger.info("COMMONS: Finalizando usuarioPerfilRiesgoConsultar metodo... ");
 		return usuarioPerfilRiesgoOpResultadoObjecto;
+	}//Cierre del método
+	
+	/**
+	 * Método para actualizar parametros del usuario
+	 * ProcedureName: NBPARUSUACT
+	 * @param parametrosUsuario
+	 * <pre>
+	 * {
+	 * 	Pau_Usuari: String,
+	 * 	Pau_OpMeHa?: String,
+	 * 	Pau_ImaSeg?: String,
+	 * 	Pau_FraSeg?: String,
+	 * 	Pau_PanIni?: String,
+	 * 	Pau_PrPrSe?: String,
+	 * 	Pau_PrPrPe?: String,
+	 * 	Pau_PrReSe?: String,
+	 * 	Pau_SePrSe?: String,
+	 * 	Pau_SePrPe?: String,
+	 * 	Pau_SeReSe?: String,
+	 * 	Pau_TipAcc?: String,
+	 * 	Pau_ConCue?: String,
+	 * 	Pau_AltCue?: String,
+	 * 	Pau_CarCue?: String,
+	 * 	Pau_Solici?: String,
+	 * 	Pau_Autori?: String,
+	 * 	Pau_NivFir?: String,
+	 * 	Pau_UlPrSe?: String,
+	 * 	Pau_OrCuOr?: String,
+	 * 	Pau_OrCuDe?: String,
+	 * 	Pau_ArMeHa?: String
+	 * 	Tip_Actual: String,
+	 * 	NumTransac: String,
+	 * 	FechaSis: String
+	 * }
+	 * </pre>
+	 * @return
+	 */
+	public JsonObject usuarioParametrosActualizacion(JsonObject parametrosUsuario) {
+		logger.info("COMMONS: Comenzando usuarioParametrosActualizacion metodo... ");
+		if(!parametrosUsuario.has("Pau_OpMeHa"))
+			parametrosUsuario.addProperty("Pau_OpMeHa", "");
+		if(!parametrosUsuario.has("Pau_ImaSeg"))
+			parametrosUsuario.addProperty("Pau_ImaSeg", "");
+		if(!parametrosUsuario.has("Pau_FraSeg"))
+			parametrosUsuario.addProperty("Pau_FraSeg", "");
+		if(!parametrosUsuario.has("Pau_PanIni"))
+			parametrosUsuario.addProperty("Pau_PanIni", "");
+		if(!parametrosUsuario.has("Pau_PrPrSe"))
+			parametrosUsuario.addProperty("Pau_PrPrSe", "");
+		if(!parametrosUsuario.has("Pau_PrPrPe"))
+			parametrosUsuario.addProperty("Pau_PrPrPe", "");
+		if(!parametrosUsuario.has("Pau_PrReSe"))
+			parametrosUsuario.addProperty("Pau_PrReSe", "");
+		if(!parametrosUsuario.has("Pau_SePrSe"))
+			parametrosUsuario.addProperty("Pau_SePrSe", "");
+		if(!parametrosUsuario.has("Pau_SePrPe"))
+			parametrosUsuario.addProperty("Pau_SePrPe", "");
+		if(!parametrosUsuario.has("Pau_SeReSe"))
+			parametrosUsuario.addProperty("Pau_SeReSe", "");
+		if(!parametrosUsuario.has("Pau_TipAcc"))
+			parametrosUsuario.addProperty("Pau_TipAcc", "");
+		if(!parametrosUsuario.has("Pau_ConCue"))
+			parametrosUsuario.addProperty("Pau_ConCue", "");
+		if(!parametrosUsuario.has("Pau_AltCue"))
+			parametrosUsuario.addProperty("Pau_AltCue", "");
+		if(!parametrosUsuario.has("Pau_CarCue"))
+			parametrosUsuario.addProperty("Pau_CarCue", "");
+		if(!parametrosUsuario.has("Pau_Solici"))
+			parametrosUsuario.addProperty("Pau_Solici", "");
+		if(!parametrosUsuario.has("Pau_Autori"))
+			parametrosUsuario.addProperty("Pau_Autori", "");
+		if(!parametrosUsuario.has("Pau_NivFir"))
+			parametrosUsuario.addProperty("Pau_NivFir", "");
+		if(!parametrosUsuario.has("Pau_UlPrSe"))
+			parametrosUsuario.addProperty("Pau_UlPrSe", "");
+		if(!parametrosUsuario.has("Pau_OrCuOr"))
+			parametrosUsuario.addProperty("Pau_OrCuOr", "");
+		if(!parametrosUsuario.has("Pau_OrCuDe"))
+			parametrosUsuario.addProperty("Pau_OrCuDe", "");
+		if(!parametrosUsuario.has("Pau_ArMeHa"))
+			parametrosUsuario.addProperty("Pau_ArMeHa", "");
+		if(!parametrosUsuario.has("Tip_Actual"))
+			parametrosUsuario.addProperty("Tip_Actual", "");
+		
+        // agregando propiedades hard-code
+        parametrosUsuario.addProperty("Transaccio", UsuarioParametrosActualizacionOpTransaccio);
+        parametrosUsuario.addProperty("Usuario", UsuarioParametrosActualizacionOpUsuario);
+        parametrosUsuario.addProperty("SucOrigen", UsuarioParametrosActualizacionOpSucOrigen);
+        parametrosUsuario.addProperty("SucDestino", UsuarioParametrosActualizacionOpSucDestino);
+        parametrosUsuario.addProperty("Modulo", UsuarioParametrosActualizacionOpModulo);
+        
+		JsonObject result = Utilerias.performOperacion(UsuarioServicio, UsuarioParametrosActualizacionOp, parametrosUsuario);
+		logger.info("COMMONS: Finalizando usuarioParametrosActualizacion metodo... ");
+		return result;
 	}//Cierre del método
 }
