@@ -490,7 +490,14 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 				JsonObject cuentaDestino = new JsonObject();
 				cuentaDestino.addProperty("cpCLABE", cpCLABE != null ? cpCLABE : "");
 				cuentaDestino.addProperty("cpAlias", cpAlias != null ? cpAlias : "");
-				cuentaDestino.addProperty("cpBanco", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_Banco").trim());
+				
+				//parametros especiales: nombre de la institucion bancaria
+				if(CuentaDestinoEstadosEnum.validarEstado(status) == CuentaDestinoEstadosEnum.A) { // activos
+					cuentaDestino.addProperty("cpBanco", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Ins_Descri"));					
+				}else { // pendientes
+					cuentaDestino.addProperty("cpBanco", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Ban_NomCor"));
+				}				
+
 				cuentaDestino.addProperty("cpFecAlt", fecAlt != null ? simpleDateFormat.format(fecAlt) : "");
 				cuentaDestino.addProperty("cpRFCBen", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_RFCBen"));
 				cuentaDestino.addProperty("cpEmaBen", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_EmaBen"));
