@@ -55,7 +55,7 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <query id="transaferenciaSPEICreacionSQL" useConfig="BIMDB">
+    <query id="transferenciaSPEICreacionSQL" useConfig="BIMDB">
         <sql>
 			EXECUTE NBTRASPEALT
 			@Trs_Usuari	= :trsUsuari,
@@ -113,9 +113,14 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/transaccionCreacionSPEI" element="transaccionSPEI">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+            <element column="Trs_Consec" name="Trs_Consec" xsdType="xs:string" optional="true"/>
+        </result>
     </query>
-    <operation returnRequestStatus="true" name="transaferenciaSPEICreacionOp">
-        <call-query href="transaferenciaSPEICreacionSQL">
+    <operation returnRequestStatus="true" name="transferenciaSPEICreacionOp">
+        <call-query href="transferenciaSPEICreacionSQL">
             <with-param name="trsUsuari" query-param="Trs_Usuari"/>
             <with-param name="trsClient" query-param="Trs_Client"/>
             <with-param name="trsCueOri" query-param="Trs_CueOri"/>
@@ -145,7 +150,7 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <query id="transaferenciaSPEIProcesarSQL" useConfig="BIMDB">
+    <query id="transferenciaSPEIProcesarSQL" useConfig="BIMDB">
         <sql>
 			EXECUTE NBTRASPEPRO
 			@Trs_UsuAdm	= :trsUsuAdm,
@@ -221,13 +226,23 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result element="transaccionSPEI">
+        <result defaultNamespace="http://bem.com/transaccionProcesarSPEI" element="transaccionSPEI">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+            <element column="NumTransac" name="NumTransac" xsdType="xs:string" optional="true"/>
+            <element column="Numero" name="Numero" xsdType="xs:string" optional="true"/>
+            <element column="Trs_FecAut" name="Trs_FecAut" xsdType="xs:dateTime" optional="true"/>
+            <element column="Trs_FecCar" name="Trs_FecCar" xsdType="xs:dateTime" optional="true"/>
+            <element column="Trs_FecApl" name="Trs_FecApl" xsdType="xs:string" optional="true"/>
+            <element column="Trs_Proces" name="Trs_Proces" xsdType="xs:string" optional="true"/>
+            <element column="Trs_ClaRas" name="Trs_ClaRas" xsdType="xs:string" optional="true"/>
+            <element column="Trs_Firma" name="Trs_Firma" xsdType="xs:string" optional="true"/>
+            <element column="Trs_Progra" name="Trs_Progra" xsdType="xs:string" optional="true"/>
+            <element column="Trs_TipSPE" name="Trs_TipSPE" xsdType="xs:string" optional="true"/>
         </result>
     </query>
-    <operation name="transaferenciaSPEIProcesarOp">
-        <call-query href="transaferenciaSPEIProcesarSQL">
+    <operation name="transferenciaSPEIProcesarOp">
+        <call-query href="transferenciaSPEIProcesarSQL">
             <with-param name="trsUsuAdm" query-param="Trs_UsuAdm"/>
             <with-param name="trsUsuari" query-param="Trs_Usuari"/>
             <with-param name="trsUsuCli" query-param="Trs_UsuCli"/>
@@ -266,7 +281,7 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <query id="transaferenciaSPEIConsultarSQL" useConfig="BIMDB">
+    <query id="transferenciaSPEIConsultarSQL" useConfig="BIMDB">
         <sql>
 			EXECUTE NBTRANACCON
 			@Trn_UsuAdm	= :trnUsuAdm,
@@ -298,7 +313,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/transaccionesSPEI" element="transaccionesSPEI" rowName="transaccionSPEI">
+        <result defaultNamespace="http://bem.com/transaccionesConsultarSPEI" element="transaccionesSPEI" rowName="transaccionSPEI">
             <element column="Trn_Client" name="Trn_Client" xsdType="xs:string" optional="true"/>
             <element column="Trn_Consec" name="Trn_Consec" xsdType="xs:string" optional="true"/>
             <element column="Trn_CueOri" name="Trn_CueOri" xsdType="xs:string" optional="true"/>
@@ -337,8 +352,8 @@
             <element column="Trn_DesAdi" name="Trn_DesAdi" xsdType="xs:string" optional="true"/>
         </result>
     </query>
-    <operation name="transaferenciaSPEIConsultarOp">
-        <call-query href="transaferenciaSPEIConsultarSQL">
+    <operation returnRequestStatus="true" name="transferenciaSPEIConsultarOp">
+        <call-query href="transferenciaSPEIConsultarSQL">
             <with-param name="trnUsuAdm" query-param="Trn_UsuAdm"/>
             <with-param name="trnUsuari" query-param="Trn_Usuari"/>
             <with-param name="trnClient" query-param="Trn_Client"/>

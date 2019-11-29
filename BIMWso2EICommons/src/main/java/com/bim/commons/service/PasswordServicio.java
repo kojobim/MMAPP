@@ -13,9 +13,9 @@ import com.google.gson.JsonObject;
  *
  */
 
-public class CambiarPasswordServicio extends BaseService {
+public class PasswordServicio extends BaseService {
 
-	private static final Logger logger = LoggerFactory.getLogger(CambiarPasswordServicio.class);
+	private static final Logger logger = LoggerFactory.getLogger(PasswordServicio.class);
 
 	// servicio
 	private static String CambiarPasswordServicio;
@@ -47,7 +47,7 @@ public class CambiarPasswordServicio extends BaseService {
 		
 	}
 	
-	public CambiarPasswordServicio() {
+	public PasswordServicio() {
 		super();
 	}
 	
