@@ -543,6 +543,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 			
 		}
 		
+		logger.info("CTRL: Terminando cambiarPassword metodo.....");
 		return Response.noContent().build();
 	}
 	
