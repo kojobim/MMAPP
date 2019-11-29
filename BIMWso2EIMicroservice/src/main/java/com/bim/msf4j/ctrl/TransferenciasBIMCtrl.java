@@ -61,6 +61,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		String trbTipDur = null;
 		String trbSigSec = null;
 		String trbSecuen = null;
+		String trbDescri = null;
 		Integer trbDiAnEm = null;
 		Integer totalElementos = null;
 		
@@ -123,7 +124,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 						jsonObject -> jsonObject.get("Trb_TipTra").getAsString().equals("P")
 								&& jsonObject.get("Trb_Status").getAsString().equals("A"));
 				
-				totalElementos = transferenciasProgramadasActivas.size();
+				totalElementos = transferenciasProgramadasActivas != null ? transferenciasProgramadasActivas.size() : 0;
 				transferenciasProgramadasActivas = Utilerias.paginado(transferenciasProgramadasActivas, page, perPage);
 				
 				
@@ -138,6 +139,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 					trbFrecue = Utilerias.obtenerStringPropiedad(elemento.getAsJsonObject(),"Trb_Frecue");
 					trbFePrEn = Utilerias.obtenerStringPropiedad(elemento.getAsJsonObject(), "Trb_FePrEn");
 					trbDiAnEm = Utilerias.obtenerIntPropiedad(elemento.getAsJsonObject(), "Trb_DiAnEm");
+					trbDescri = Utilerias.obtenerStringPropiedad(elemento.getAsJsonObject(),"Trb_Descri");
 					trbFeSiEj = Utilerias.formatearFecha(trbFeSiEj, "yyyy-MM-dd");
 					
 					// generando String de secuencias
@@ -170,6 +172,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 					transferenciaProgramadaActiva.addProperty("cpTrbSecue",cpTrbSecue);
 					transferenciaProgramadaActiva.addProperty("trbFePrEn",trbFePrEn);
 					transferenciaProgramadaActiva.addProperty("trbDiAnEm",trbDiAnEm);
+					transferenciaProgramadaActiva.addProperty("trbDescri", trbDescri);
 					
 					transferenciasProgramadas.get("transferenciasProgramadas")
 						.getAsJsonArray().add(transferenciaProgramadaActiva);
