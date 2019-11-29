@@ -2,6 +2,7 @@ package com.bim.commons.service;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -160,5 +161,39 @@ public class UsuarioServicioTest {
 			assertNotNull("la propiedad perfilRiesgo es nula", perfilRiesgo);
 
 		logger.info("TEST: Finalizando usuarioPerfilRiesgoConsultarTestDeberiaSerExitoso metodo");
+	}
+	
+	@Test
+	public void usuarioParametrosActualizacionTestDeberiaSerExitoso() {
+		logger.info("TEST: Empezando usuarioParametrosActualizacionTestDeberiaSerExitoso metodo");
+		
+		String fechaSis = Utilerias.obtenerFechaSis();
+		
+		JsonObject parametrosUsuario = new JsonObject();
+		parametrosUsuario.addProperty("Pau_Usuari", "000149");
+		parametrosUsuario.addProperty("Tip_Actual", "D");
+		parametrosUsuario.addProperty("NumTransac", "42246896");
+		parametrosUsuario.addProperty("FechaSis", fechaSis);
+		
+		/**
+		 *	Mockup Test
+		 *	String json = "{\"REQUEST_STATUS\":\"SUCCESSFUL\"}";
+		 *	JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+		
+		/**
+		 *	Test
+		 */
+		JsonObject resultado = usuarioServicio.usuarioParametrosActualizacion(parametrosUsuario);
+		logger.info("- resultado " + resultado);
+		assertTrue("No viene la propiedad REQUEST_STATUS", resultado.has("REQUEST_STATUS"));
+		
+		String statusSolicitud = Utilerias.obtenerStringPropiedad(resultado, "REQUEST_STATUS");
+		logger.info("- requestStatus " + statusSolicitud);
+		
+		assertNotNull("La propiedad REQUEST_STATUS es nula", statusSolicitud);
+		assertEquals("La solicitud no fue exitosa", statusSolicitud.toString());
+
+		logger.info("TEST: Terminando usuarioParametrosActualizacionTestDeberiaSerExitoso metodo");
 	}
 }
