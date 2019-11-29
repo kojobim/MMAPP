@@ -1,7 +1,5 @@
 package com.bim.msf4j.ctrl;
 
-import java.util.Optional;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -368,7 +366,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		cpRSAToken = Utilerias.obtenerStringPropiedad(datosCambiarPassword, "cpRSAToken");
 		actPasswo = Utilerias.obtenerStringPropiedad(datosCambiarPassword, "actPasswo");
 		usuPasswo = Utilerias.obtenerStringPropiedad(datosCambiarPassword, "usuPasswo");
-		conPasswo = Utilerias.obtenerStringPropiedad(datosCambiarPassword, "conPasswo");		
+		conPasswo = Utilerias.obtenerStringPropiedad(datosCambiarPassword, "conPasswo");
 		//termina la asignacion de variables para su manipulacion
 		
 		//se valida que todos los parametros obligatorios se encuentren presentes		
@@ -431,7 +429,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 			throw new ForbiddenException(bimMessageDTO.toString());
 		}
 		
-		// consultado usuario
+		// consulta especial de usuario
 		servicioRequest = new JsonObject();
 		servicioRequest.addProperty("Ces_Usuari", usuNumero);
 		servicioRequest.addProperty("NumTransac", numTransac);
@@ -439,9 +437,10 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		
 		cuentasEspeciales = this.passwordServicio.cuentasEspecialesConsulta(servicioRequest);
 		
-		logger.info(">>>>>>>>>>>>>>>>>>>>>>>>CUENTAS ESPECIALES");
-		logger.info(cuentasEspeciales.toString());
-		logger.info(">>>>>>>>>>>>>>>>>>>>>>>>CUENTAS ESPECIALES");
+		if(logger.isDebugEnabled()){
+			logger.debug("CuentasEspeciales response: "+cuentasEspeciales.toString());			
+		}
+		
 		cuentasEspeciales = Utilerias.obtenerJsonObjectPropiedad(cuentasEspeciales, "cuentasEspeciales");
 
 		actPasswo = Racal.cifraPassword_HSM(actPasswo); // cifrar password actual
@@ -456,12 +455,14 @@ public class UsuarioCtrl extends BimBaseCtrl {
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
 		
-		logger.info(">>>>>>>> actPasswo: "+actPasswo);
-		logger.info(">>>>>>>> actPasswo: "+Utilerias.obtenerStringPropiedad(cuentasEspeciales, "Usu_Passwo"));
+		if(logger.isDebugEnabled()) {
+			logger.debug("actPasswo encriptado: "+actPasswo);
+			logger.debug("UsuPasswo: "+Utilerias.obtenerStringPropiedad(cuentasEspeciales, "Usu_Passwo"));
+		}
 		
 		//el password proporcionado como actual no coincide con el almacenado en Sybase
-		if(!StringUtils.equals(actPasswo, Utilerias.obtenerStringPropiedad(cuentasEspeciales, "Usu_Passwo"))) {
-			
+		
+		if(!StringUtils.equals(actPasswo.trim(), Utilerias.obtenerStringPropiedad(cuentasEspeciales, "Usu_Passwo").trim())) {
 			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.63");
 			throw new ConflictException(bimMessageDTO.toString());
 		}
@@ -513,7 +514,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 			
 			// No se obtuvo una respuesta exitosa por parte del servidor...
 			if(! StringUtils.equals(Utilerias.obtenerStringPropiedad(usuarioParamAct, "REQUEST_STATUS"), "SUCCESSFUL")){
-				 //should manage an sneaky throw (?) but instead print a log at error level for tracing purposes
+				 //should manage an sneaky throw (?) but instead prints a log at error level for tracing purposes
 				logger.error("ERROR: NBPARUSUACT devolvio un codigo diferente de exitoso. CODIGO: "+
 					Utilerias.obtenerStringPropiedad(usuarioParamAct, "REQUEST_STATUS"));
 			}
@@ -535,7 +536,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 			
 			// No se obtuvo una respuesta exitosa por parte del servidor al guardar en la bitacora...
 			if(! StringUtils.equals(Utilerias.obtenerStringPropiedad(bitacoraResultado, "REQUEST_STATUS"), "SUCCESSFUL")){
-				//should manage an sneaky throw (?) but instead print a log at error level for tracing purposes
+				//should manage an sneaky throw (?) but instead prints a log at error level for tracing purposes
 				logger.error("ERROR: NBBITACOALT devolvio un codigo diferente de exitoso. CODIGO: "+
 					Utilerias.obtenerStringPropiedad(bitacoraResultado, "REQUEST_STATUS"));
 			}

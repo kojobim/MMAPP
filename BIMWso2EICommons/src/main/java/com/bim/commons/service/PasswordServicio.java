@@ -132,9 +132,6 @@ public class PasswordServicio extends BaseService {
 		
 		JsonObject result = Utilerias.performOperacion(CambiarPasswordServicio,CuentasEspecialesConsultarOp,datosCuentasEspeciales);
 		
-		logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> JSON CUENTAS ESPECIALES START");
-		logger.info(datosCuentasEspeciales.toString());		
-		logger.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> JSON CUENTAS ESPECIALES END");
 		logger.info("COMMONS: Finalizando cuentasEspecialesConsulta...");
 		return result;
 		
