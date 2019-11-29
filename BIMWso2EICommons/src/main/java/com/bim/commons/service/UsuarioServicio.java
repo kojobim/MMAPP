@@ -320,6 +320,28 @@ public class UsuarioServicio extends BaseService {
 	 * <pre>
 	 * {
 	 * 	Pau_Usuari: String,
+	 * 	Pau_OpMeHa?: String,
+	 * 	Pau_ImaSeg?: String,
+	 * 	Pau_FraSeg?: String,
+	 * 	Pau_PanIni?: String,
+	 * 	Pau_PrPrSe?: String,
+	 * 	Pau_PrPrPe?: String,
+	 * 	Pau_PrReSe?: String,
+	 * 	Pau_SePrSe?: String,
+	 * 	Pau_SePrPe?: String,
+	 * 	Pau_SeReSe?: String,
+	 * 	Pau_TipAcc?: String,
+	 * 	Pau_ConCue?: String,
+	 * 	Pau_AltCue?: String,
+	 * 	Pau_CarCue?: String,
+	 * 	Pau_Solici?: String,
+	 * 	Pau_Autori?: String,
+	 * 	Pau_NivFir?: String,
+	 * 	Pau_UlPrSe?: String,
+	 * 	Pau_OrCuOr?: String,
+	 * 	Pau_OrCuDe?: String,
+	 * 	Pau_ArMeHa?: String
+	 * 	Tip_Actual: String,
 	 * 	NumTransac: String,
 	 * 	FechaSis: String
 	 * }
@@ -328,7 +350,51 @@ public class UsuarioServicio extends BaseService {
 	 */
 	public JsonObject usuarioParametrosActualizacion(JsonObject parametrosUsuario) {
 		logger.info("COMMONS: Comenzando usuarioParametrosActualizacion metodo... ");
-
+		if(!parametrosUsuario.has("Pau_OpMeHa"))
+			parametrosUsuario.addProperty("Pau_OpMeHa", "");
+		if(!parametrosUsuario.has("Pau_ImaSeg"))
+			parametrosUsuario.addProperty("Pau_ImaSeg", "");
+		if(!parametrosUsuario.has("Pau_FraSeg"))
+			parametrosUsuario.addProperty("Pau_FraSeg", "");
+		if(!parametrosUsuario.has("Pau_PanIni"))
+			parametrosUsuario.addProperty("Pau_PanIni", "");
+		if(!parametrosUsuario.has("Pau_PrPrSe"))
+			parametrosUsuario.addProperty("Pau_PrPrSe", "");
+		if(!parametrosUsuario.has("Pau_PrPrPe"))
+			parametrosUsuario.addProperty("Pau_PrPrPe", "");
+		if(!parametrosUsuario.has("Pau_PrReSe"))
+			parametrosUsuario.addProperty("Pau_PrReSe", "");
+		if(!parametrosUsuario.has("Pau_SePrSe"))
+			parametrosUsuario.addProperty("Pau_SePrSe", "");
+		if(!parametrosUsuario.has("Pau_SePrPe"))
+			parametrosUsuario.addProperty("Pau_SePrPe", "");
+		if(!parametrosUsuario.has("Pau_SeReSe"))
+			parametrosUsuario.addProperty("Pau_SeReSe", "");
+		if(!parametrosUsuario.has("Pau_TipAcc"))
+			parametrosUsuario.addProperty("Pau_TipAcc", "");
+		if(!parametrosUsuario.has("Pau_ConCue"))
+			parametrosUsuario.addProperty("Pau_ConCue", "");
+		if(!parametrosUsuario.has("Pau_AltCue"))
+			parametrosUsuario.addProperty("Pau_AltCue", "");
+		if(!parametrosUsuario.has("Pau_CarCue"))
+			parametrosUsuario.addProperty("Pau_CarCue", "");
+		if(!parametrosUsuario.has("Pau_Solici"))
+			parametrosUsuario.addProperty("Pau_Solici", "");
+		if(!parametrosUsuario.has("Pau_Autori"))
+			parametrosUsuario.addProperty("Pau_Autori", "");
+		if(!parametrosUsuario.has("Pau_NivFir"))
+			parametrosUsuario.addProperty("Pau_NivFir", "");
+		if(!parametrosUsuario.has("Pau_UlPrSe"))
+			parametrosUsuario.addProperty("Pau_UlPrSe", "");
+		if(!parametrosUsuario.has("Pau_OrCuOr"))
+			parametrosUsuario.addProperty("Pau_OrCuOr", "");
+		if(!parametrosUsuario.has("Pau_OrCuDe"))
+			parametrosUsuario.addProperty("Pau_OrCuDe", "");
+		if(!parametrosUsuario.has("Pau_ArMeHa"))
+			parametrosUsuario.addProperty("Pau_ArMeHa", "");
+		if(!parametrosUsuario.has("Tip_Actual"))
+			parametrosUsuario.addProperty("Tip_Actual", "");
+		
         // agregando propiedades hard-code
         parametrosUsuario.addProperty("Transaccio", UsuarioParametrosActualizacionOpTransaccio);
         parametrosUsuario.addProperty("Usuario", UsuarioParametrosActualizacionOpUsuario);

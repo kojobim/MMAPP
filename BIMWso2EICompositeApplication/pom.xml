@@ -38,7 +38,7 @@
     <com.bim.dataservice_._AvisoPrivacidadServicio>capp/DataServicesServer</com.bim.dataservice_._AvisoPrivacidadServicio>
     <com.bim.dataservice_._SPEIServicio>capp/DataServicesServer</com.bim.dataservice_._SPEIServicio>
     <com.bim.dataservice_._TransferenciasBIMServicio>capp/DataServicesServer</com.bim.dataservice_._TransferenciasBIMServicio>
-    <com.bim.dataservice_._CambiarPasswordServicio>capp/DataServicesServer</com.bim.dataservice_._CambiarPasswordServicio>
+    <com.bim.dataservice_._PasswordServicio>capp/DataServicesServer</com.bim.dataservice_._PasswordServicio>
   </properties>
   <dependencies>
     <dependency>

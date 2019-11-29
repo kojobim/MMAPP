@@ -206,7 +206,37 @@
 			@SucOrigen = :sucOrigen,
 			@SucDestino = :sucDestino,
 			@Modulo = :modulo
-    	</sql>
+		</sql>
+        <param name="pauUsuari" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauOpMeHa" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauImaSeg" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauFraSeg" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauPanIni" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauPrPrSe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauPrPrPe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauPrReSe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauSePrSe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauSePrPe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauSeReSe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauTipAcc" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauConCue" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauAltCue" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauCarCue" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauSolici" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauAutori" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauNivFir" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauUlPrSe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauOrCuOr" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauOrCuDe" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="pauArMeHa" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipActual" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
     </query>
     <operation name="usuarioConsultarOp">
         <call-query href="usuarioConsultarSQL">
@@ -271,7 +301,7 @@
         <call-query href="usuarioParametrosActualizacionSQL">
             <with-param name="pauUsuari" query-param="Pau_Usuari"/>
             <with-param name="pauOpMeHa" query-param="Pau_OpMeHa"/>
-            <with-param name="pauFraSeg" query-param="Pau_FraSeg"/>
+            <with-param name="pauImaSeg" query-param="Pau_ImaSeg"/>
             <with-param name="pauFraSeg" query-param="Pau_FraSeg"/>
             <with-param name="pauPanIni" query-param="Pau_PanIni"/>
             <with-param name="pauPrPrSe" query-param="Pau_PrPrSe"/>
