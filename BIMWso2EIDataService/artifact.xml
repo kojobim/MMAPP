@@ -62,4 +62,7 @@
     <artifact name="TransferenciasBIMServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/TransferenciasBIMServicio.dbs</file>
     </artifact>
+    <artifact name="PasswordServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/PasswordServicio.dbs</file>
+    </artifact>
 </artifacts>
