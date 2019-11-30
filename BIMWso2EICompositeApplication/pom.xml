@@ -9,10 +9,10 @@
   <name>bim-Wso2-integratorCompositeApplication</name>
   <description>bim-Wso2-integratorCompositeApplication</description>
   <properties>
-    <com.bim.proxy-service_._PingProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._PingProxy>
+    <!-- <com.bim.proxy-service_._PingProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._PingProxy>
     <com.bim.proxy-service_._RouterProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._RouterProxy>
     <com.bim.proxy-service_._FormateadorProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._FormateadorProxy>
-    <com.bim.proxy-service_._ConfiguracionDetalleProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._ConfiguracionDetalleProxy>
+    <com.bim.proxy-service_._ConfiguracionDetalleProxy>capp/EnterpriseServiceBus</com.bim.proxy-service_._ConfiguracionDetalleProxy> -->
     <com.bim.sequence_._PING>capp/EnterpriseServiceBus</com.bim.sequence_._PING>
     <com.bim.sequence_._CONFIGURATION>capp/EnterpriseServiceBus</com.bim.sequence_._CONFIGURATION>
     <com.bim.sequence_._TOKEN>capp/EnterpriseServiceBus</com.bim.sequence_._TOKEN>
