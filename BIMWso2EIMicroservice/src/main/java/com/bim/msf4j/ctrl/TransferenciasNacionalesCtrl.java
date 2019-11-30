@@ -509,7 +509,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		JsonObject datosTransferenciaSPEIConsultar = null;
 		JsonObject  datosTransferenciaSPEIConsultarResultado = null;
 		JsonObject transaccionesSPEI = null;
-		JsonObject datosTransaccionNacionalObjeto = null;		
+		JsonObject datosTransaccionNacionalObjeto = null;	
+		JsonObject numTransacObjeto = null;	
 		//verificando propiedades page y per_page
 		if(page == null || perPage == null) 
 			throw new BadRequestException("BIM.MENSAJ.2");
@@ -555,7 +556,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
 		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
 
-		numTransac = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
+		numTransacObjeto = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarOpResultadoObjeto, "transaccion");
+		numTransac = Utilerias.obtenerStringPropiedad(numTransacObjeto, "Fol_Transa");
 		usuUsuAdm = principalResultadoObjeto.get("usuUsuAdm").getAsString();
 		usuClient = principalResultadoObjeto.get("usuClient").getAsString();
 		usuNumero = principalResultadoObjeto.get("usuNumero").getAsString();	
