@@ -554,7 +554,9 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		fechaSis = Utilerias.obtenerFechaSis();
 		
 		folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
-		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
+		if(logger.isDebugEnabled()){
+			logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
+		}
 
 		numTransacObjeto = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarOpResultadoObjeto, "transaccion");
 		numTransac = Utilerias.obtenerStringPropiedad(numTransacObjeto, "Fol_Transa");
