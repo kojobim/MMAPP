@@ -384,6 +384,7 @@ public class Utilerias {
 		String resultado = HttpClientUtils.postPerform(solicitudOperacion);
 		logger.info("- HttpClientUtils - resultado "  + resultado);
 		JsonObject resultadoObjeto = resultado != null ? new Gson().fromJson(resultado, JsonObject.class) : null;
+		verificarError(resultadoObjeto);
 		return resultadoObjeto;
 	}
 	
