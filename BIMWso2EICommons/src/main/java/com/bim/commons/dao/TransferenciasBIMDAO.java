@@ -53,7 +53,7 @@ public class TransferenciasBIMDAO {
 		    		if(resultadoCon) {
 						ResultSetMetaData rsmd = rs.getMetaData();
 						JsonArray rsArreglo = new JsonArray();
-						if(rs != null && contadorAct == 0) {
+						if(rs != null) {
 							while(rs.next()) {
 								int numColumnas = rsmd.getColumnCount();
 								JsonObject rsObjeto = new JsonObject();
