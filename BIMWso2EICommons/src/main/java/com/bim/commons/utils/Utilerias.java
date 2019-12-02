@@ -632,7 +632,7 @@ public class Utilerias {
 		return null;
 	}
 	
-	public static JsonArray  filtrarPropiedadesArray(JsonArray datos, Predicate<JsonObject> predicado){
+	public static JsonArray filtrarPropiedadesArray(JsonArray datos, Predicate<JsonObject> predicado){
 		logger.info("COMMONS: Comenzando filtrarPropiedadesArray metodo");
 		JsonArray resultante = null;
 		if(logger.isDebugEnabled()){
