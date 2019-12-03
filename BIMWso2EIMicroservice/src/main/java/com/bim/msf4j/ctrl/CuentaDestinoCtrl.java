@@ -35,6 +35,7 @@ import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.service.TransferenciasBIMServicio;
 import com.bim.commons.utils.Racal;
 import com.bim.commons.utils.Utilerias;
+import com.google.common.base.Optional;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -461,10 +462,13 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		Utilerias.verificarError(cuentaDestinoSPEIConsultarResultado);
 		
 		JsonObject cuentaDestinoSPEIConsultarResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoSPEIConsultarResultado, "cuentasDestino");
-		JsonArray cuentasDestinoArreglo = Utilerias.obtenerJsonArrayPropiedad(cuentaDestinoSPEIConsultarResultadoObjeto, "cuentaDestino");
-		
+		JsonArray cuentasDestinoArreglo = Optional
+				.fromNullable(Utilerias.obtenerJsonArrayPropiedad(cuentaDestinoSPEIConsultarResultadoObjeto, "cuentaDestino"))
+				.or(new JsonArray());
 		JsonObject resultado = new JsonObject();
 		JsonArray cuentasDestinoNacional = new JsonArray();
+		
+		
 		
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
