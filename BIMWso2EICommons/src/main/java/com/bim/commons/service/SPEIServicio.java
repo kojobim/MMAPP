@@ -3,15 +3,32 @@ package com.bim.commons.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.bim.commons.dao.TransferenciasNacionalesDAO;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
+/**
+ * Esta clase define las operaciones sobre las transferencias nacionales
+ * @author Backend Team MedioMelon
+ * @version BackendMM022019
+ *
+ */
 public class SPEIServicio extends BaseService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SPEIServicio.class);
 	
+	private TransferenciasNacionalesDAO transferenciasNacionalesDAO;
+	
+	//servicio
 	private static String SPEIServicio;
+	
+	//operaciones
 	private static String HorariosSPEIConsultarOp;
+	private static String TransferenciaSPEICreacionOp;
+	private static String TransferenciaSPEIProcesarOp;
+	private static String TransferenciaSPEIConsultarOp;
+
+	//propiedades para consultar horarios
 	private static String HorariosSPEIConsultarOpHorHorIni;
 	private static String HorariosSPEIConsultarOpHorHorFin;
 	private static String HorariosSPEIConsultarOpTipConsul;
@@ -20,13 +37,15 @@ public class SPEIServicio extends BaseService {
 	private static String HorariosSPEIConsultarOpSucOrigen;
 	private static String HorariosSPEIConsultarOpSucDestino;
 	private static String HorariosSPEIConsultarOpModulo;
-	private static String TransferenciaSPEICreacionOp;
+	
+	//propiedades para creacion de transferencia nacional
 	private static String TransferenciaSPEICreacionOpTransaccio;
 	private static String TransferenciaSPEICreacionOpUsuario;
 	private static String TransferenciaSPEICreacionOpSucOrigen;
 	private static String TransferenciaSPEICreacionOpSucDestino;
 	private static String TransferenciaSPEICreacionOpModulo;
-	private static String TransferenciaSPEIProcesarOp;
+	
+	//propiedades para procesar tranferencia nacional
 	private static String TransferenciaSPEIProcesarOpTrsCuBe;
 	private static String TransferenciaSPEIProcesarOpTrsTipPag;
 	private static String TransferenciaSPEIProcesarOpTrsTipTra;
@@ -36,7 +55,8 @@ public class SPEIServicio extends BaseService {
 	private static String TransferenciaSPEIProcesarOpSucOrigen;
 	private static String TransferenciaSPEIProcesarOpSucDestino;
 	private static String TransferenciaSPEIProcesarOpModulo;
-	private static String TransferenciaSPEIConsultarOp;
+	
+	//propiedades consultar transferencia nacional 
 	private static String TransferenciaSPEIConsultarOpTrnStatus;
 	private static String TransferenciaSPEIConsultarOpTipConsul;
 	private static String TransferenciaSPEIConsultarOpTransaccio;
@@ -45,16 +65,12 @@ public class SPEIServicio extends BaseService {
 	private static String TransferenciaSPEIConsultarOpSucDestino;
 	private static String TransferenciaSPEIConsultarOpModulo;
 	
-	public SPEIServicio() {
-		super();
+	static { // inicializando variables estaticas
 		
 		SPEIServicio = properties.getProperty("data_service.spei_servicio");
 		
+		// inicializacion de variables para consultar horarios
 		HorariosSPEIConsultarOp = properties.getProperty("spei_servicio.op.horarios_spei_consultar");
-		TransferenciaSPEICreacionOp = properties.getProperty("spei_servicio.op.transferencias_spei_creacion");
-		TransferenciaSPEIProcesarOp = properties.getProperty("spei_servicio.op.transferencias_spei_procesar");
-		TransferenciaSPEIConsultarOp = properties.getProperty("spei_servicio.op.transferencias_spei_consultar");
-		
 		HorariosSPEIConsultarOpTipConsul = properties.getProperty("op.horarios_spei_consultar.tip_consul");
 		HorariosSPEIConsultarOpTransaccio = properties.getProperty("op.horarios_spei_consultar.transaccio");
 		HorariosSPEIConsultarOpUsuario = properties.getProperty("op.horarios_spei_consultar.usuario");
@@ -64,13 +80,16 @@ public class SPEIServicio extends BaseService {
 		HorariosSPEIConsultarOpHorHorIni = properties.getProperty("op.horarios_spei_consultar.hor_hor_ini");
 		HorariosSPEIConsultarOpHorHorFin = properties.getProperty("op.horarios_spei_consultar.hor_hor_fin");
 		
-				 
+		// inicializacion de variables para crear transferencia nacional
+		TransferenciaSPEICreacionOp = properties.getProperty("spei_servicio.op.transferencias_spei_creacion");
 		TransferenciaSPEICreacionOpTransaccio = properties.getProperty("op.transferencias_spei_creacion.transaccio");
 		TransferenciaSPEICreacionOpUsuario = properties.getProperty("op.transferencias_spei_creacion.usuario");
 		TransferenciaSPEICreacionOpSucOrigen = properties.getProperty("op.transferencias_spei_creacion.suc_origen");
 		TransferenciaSPEICreacionOpSucDestino = properties.getProperty("op.transferencias_spei_creacion.suc_destino");
 		TransferenciaSPEICreacionOpModulo = properties.getProperty("op.transferencias_spei_creacion.modulo");
 		
+		// inicializacion de variables para procesar tranferencia nacional
+		TransferenciaSPEIProcesarOp = properties.getProperty("spei_servicio.op.transferencias_spei_procesar");
 		TransferenciaSPEIProcesarOpTrsCuBe = properties.getProperty("op.transferencias_spei_procesar.trs_ti_cu_be");
 		TransferenciaSPEIProcesarOpTrsTipPag = properties.getProperty("op.transferencias_spei_procesar.trs_tip_pag");
 		TransferenciaSPEIProcesarOpTrsTipTra = properties.getProperty("op.transferencias_spei_procesar.trs_tip_tra");
@@ -81,6 +100,8 @@ public class SPEIServicio extends BaseService {
 		TransferenciaSPEIProcesarOpSucDestino = properties.getProperty("op.transferencias_spei_procesar.suc_destino");
 		TransferenciaSPEIProcesarOpModulo = properties.getProperty("op.transferencias_spei_procesar.modulo");
 		
+		// inicializacion de variables para consultar tranferencia nacional
+		TransferenciaSPEIConsultarOp = properties.getProperty("spei_servicio.op.transferencias_spei_consultar");
 		TransferenciaSPEIConsultarOpTrnStatus = properties.getProperty("op.transferencias_spei_consultar.trn_status");
 		TransferenciaSPEIConsultarOpTipConsul = properties.getProperty("op.transferencias_spei_consultar.tip_consul");
 		TransferenciaSPEIConsultarOpTransaccio = properties.getProperty("op.transferencias_spei_consultar.transaccio");
@@ -88,6 +109,12 @@ public class SPEIServicio extends BaseService {
 		TransferenciaSPEIConsultarOpSucOrigen = properties.getProperty("op.transferencias_spei_consultar.suc_origen");
 		TransferenciaSPEIConsultarOpSucDestino = properties.getProperty("op.transferencias_spei_consultar.suc_destino");
 		TransferenciaSPEIConsultarOpModulo = properties.getProperty("op.transferencias_spei_consultar.modulo");
+	
+	}
+	
+	public SPEIServicio() {
+		super();
+		this.transferenciasNacionalesDAO = new TransferenciasNacionalesDAO();
 	}
 
 	/**
@@ -189,8 +216,10 @@ public class SPEIServicio extends BaseService {
 			datosTransfarenciaSPEI.addProperty("Trs_TipDur", "");
 		if(!datosTransfarenciaSPEI.has("Trs_IVA"))
 			datosTransfarenciaSPEI.addProperty("Trs_IVA", 0);
-		datosTransfarenciaSPEI.addProperty("Trs_DurTra", 0);
-		datosTransfarenciaSPEI.addProperty("Trs_DiAnEm", 0);
+		if(!datosTransfarenciaSPEI.has("Trs_DurTra"))
+			datosTransfarenciaSPEI.addProperty("Trs_DurTra", 0);
+		if(!datosTransfarenciaSPEI.has("Trs_DiAnEm"))
+			datosTransfarenciaSPEI.addProperty("Trs_DiAnEm", 0);
 		datosTransfarenciaSPEI.addProperty("Transaccio", TransferenciaSPEICreacionOpTransaccio);
 		datosTransfarenciaSPEI.addProperty("Usuario", TransferenciaSPEICreacionOpUsuario);
 		datosTransfarenciaSPEI.addProperty("SucOrigen", TransferenciaSPEICreacionOpSucOrigen);
@@ -379,4 +408,27 @@ public class SPEIServicio extends BaseService {
 		return transferenciaSPEIConsultarOpResultadoObjeto;
 	}
 
+	public JsonObject transferenciaSPEIConsultarResultSets(JsonObject datosTransferenciaSPEI) {
+		logger.info("COMMONS: Comenzando transferenciaSPEIConsultarResultSets metodo... ");
+		if(!datosTransferenciaSPEI.has("Trn_Client"))
+			datosTransferenciaSPEI.addProperty("Trn_Client", "");
+		if(!datosTransferenciaSPEI.has("Trn_Consec"))
+			datosTransferenciaSPEI.addProperty("Trn_Consec", "");
+		if(!datosTransferenciaSPEI.has("Trn_Transf"))
+			datosTransferenciaSPEI.addProperty("Trn_Transf", "");
+		if(!datosTransferenciaSPEI.has("NumTransac"))
+			datosTransferenciaSPEI.addProperty("NumTransac", "");
+		datosTransferenciaSPEI.addProperty("Trn_Status", TransferenciaSPEIConsultarOpTrnStatus);
+		datosTransferenciaSPEI.addProperty("Tip_Consul", TransferenciaSPEIConsultarOpTipConsul);
+		datosTransferenciaSPEI.addProperty("Transaccio", TransferenciaSPEIConsultarOpTransaccio);
+		datosTransferenciaSPEI.addProperty("Usuario", TransferenciaSPEIConsultarOpUsuario);
+		datosTransferenciaSPEI.addProperty("SucOrigen", TransferenciaSPEIConsultarOpSucOrigen);
+		datosTransferenciaSPEI.addProperty("SucDestino", TransferenciaSPEIConsultarOpSucDestino);
+		datosTransferenciaSPEI.addProperty("Modulo", TransferenciaSPEIConsultarOpModulo);
+		JsonObject transferenciaSPEIConsultarOpResultadoObjeto = transferenciasNacionalesDAO.transferenciasNacionalesConsultar(datosTransferenciaSPEI);
+		logger.info("transferenciaSPEIConsultarOpResultadoObjeto" + transferenciaSPEIConsultarOpResultadoObjeto);
+		logger.info("COMMONS: Finalizando transferenciaSPEIConsultarResultSets metodo... ");
+		return transferenciaSPEIConsultarOpResultadoObjeto;
+	}
+	
 }
