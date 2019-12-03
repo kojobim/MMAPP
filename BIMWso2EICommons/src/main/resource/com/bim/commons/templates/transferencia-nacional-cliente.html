@@ -1,0 +1,92 @@
+<p class='encabezado'>
+    Comprobante de la Solicitud de Transferencia realizada a través de tu servicio de Banca Electrónica eBIM.
+</p>
+<table border='0' width='512px'>
+    <tr>
+        <td class='firmtitulo' colspan='2'>La autorización se ha realizado con éxito, " &
+            "actualmente esta transferencia tiene las siguientes firmas: {str_Firmas}</td>
+    </tr>
+    <tr>
+        <td class='tbltitulo' colSpan='2'>Transferencia Nacional SPEI {Trn_ProDes}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Cuenta Origen:</b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_DeCuOr}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Cuenta Destino:</b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_CueDes}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Banco:</b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_BanDes}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Monto:</b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_Monto}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Descripción:</b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_Descri}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>RFC:</b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_RFC}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>IVA:</b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_IVA}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Folio de la transacción:</b></td>
+        <td class='linsup2' style='padding-left:10px'>{NumTransac}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Folio del Banco de México: </b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_ClaRas}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Referencia del Beneficiario:</b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_DesAdi}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Usuario solicita:</b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_UsCaNo}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Fecha solicita: </b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_FecCap}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Usuario autoriza: </b></td>
+        <td class='linsup2' style='padding-left:10px'>{str_Autori}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Fecha autoriza: </b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_FecAut}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Fecha cargo: </b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_FecCar}</td>
+    </tr>
+    <tr>
+        <td class='linsup2' style='padding-left:10px'><b>Fecha aplicación: </b></td>
+        <td class='linsup2' style='padding-left:10px'>{Trn_FecApl}</td>
+    </tr>
+    <tr>
+        <td colspan='2'>
+            <table border='0' width='510px'>
+                <tr>
+                    <td class='linsup2' style='text-align:center; padding:10px'>
+                        <b>Verificador</b><br>
+						{Str_Verifi1}<br>
+						{Str_Verifi2}<br>
+						{Str_Verifi3}<br>
+						{Str_Verifi4}<br>		
+						{Str_Verifi5}	
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
