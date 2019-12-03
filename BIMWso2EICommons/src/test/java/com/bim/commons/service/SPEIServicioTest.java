@@ -77,20 +77,20 @@ public class SPEIServicioTest {
 		datosTransfarenciaSPEI.addProperty("NumTransac","42246953");
 		
 		/**
-		 * String mock = "{\"transaccionSPEI\":{\"Err_Codigo\":\"000001\",\"Err_Mensaj\":\"La cuenta no se encuentra en su catalogo de cuentas origen\"}}";
+		 * String mock = "{\"transferenciaSPEI\":{\"Err_Codigo\":\"000001\",\"Err_Mensaj\":\"La cuenta no se encuentra en su catalogo de cuentas origen\"}}";
 		 * JsonObject resultado = Utilerias.fromJsonObject(mock);
 		 */
 		JsonObject resultado = speiServicio.transferenciaSPEICreacion(datosTransfarenciaSPEI);
 		logger.info("- resultado " + resultado);
 		
-		assertTrue(resultado.has("transaccionSPEI"));
-		assertTrue(resultado.get("transaccionSPEI").isJsonObject());
+		assertTrue(resultado.has("transferenciaSPEI"));
+		assertTrue(resultado.get("transferenciaSPEI").isJsonObject());
 		
-		JsonObject transaccionSPEI = Utilerias.obtenerJsonObjectPropiedad(resultado, "transaccionSPEI");
+		JsonObject transferenciaSPEI = Utilerias.obtenerJsonObjectPropiedad(resultado, "transferenciaSPEI");
 		
-		assertTrue(transaccionSPEI.has("Err_Codigo"));
+		assertTrue(transferenciaSPEI.has("Err_Codigo"));
 		
-		String errCodigo = transaccionSPEI.get("Err_Codigo").getAsString();
+		String errCodigo = transferenciaSPEI.get("Err_Codigo").getAsString();
 		assertTrue("000000".equals(errCodigo));
 		
 		
@@ -123,15 +123,15 @@ public class SPEIServicioTest {
 		JsonObject resultado = speiServicio.transferenciaSPEIProcesar(datosTransferenciaSPEI);
 		logger.info("- resultado " + resultado);
 		
-		assertTrue("El resultado no tienen la propiedad transaccionSPEI", resultado.has("transaccionSPEI"));
-		assertTrue("La propiedad transaccionSPEI no es un JsonObject", resultado.get("transaccionSPEI").isJsonObject());
+		assertTrue("El resultado no tienen la propiedad transferenciaSPEI", resultado.has("transferenciaSPEI"));
+		assertTrue("La propiedad transferenciaSPEI no es un JsonObject", resultado.get("transferenciaSPEI").isJsonObject());
 		
-		JsonObject transaccionSPEI = resultado.get("transaccionSPEI").getAsJsonObject();
+		JsonObject transferenciaSPEI = resultado.get("transferenciaSPEI").getAsJsonObject();
 		
-		assertTrue("El objeto transaccionSPEI no tiene la propiedad Err_Codigo", transaccionSPEI.has("Err_Codigo"));
-		assertTrue("El objeto transaccionSPEI no tiene la propiedad Err_Mensaj", transaccionSPEI.has("Err_Mensaj"));
+		assertTrue("El objeto transferenciaSPEI no tiene la propiedad Err_Codigo", transferenciaSPEI.has("Err_Codigo"));
+		assertTrue("El objeto transferenciaSPEI no tiene la propiedad Err_Mensaj", transferenciaSPEI.has("Err_Mensaj"));
 		
-		String errCodigo = transaccionSPEI.get("Err_Codigo").getAsString();
+		String errCodigo = transferenciaSPEI.get("Err_Codigo").getAsString();
 		
 		assertTrue("La operacion no fue exitosa se obtuvo el error " + errCodigo, errCodigo.equals("000000"));
 		logger.info("TEST: Finalizando transaferenciaSPEIProcesarTestDeberiaSerExitoso metodo...");
@@ -148,27 +148,27 @@ public class SPEIServicioTest {
 		JsonObject resultado = speiServicio.transferenciaSPEIConsultar(datosTransferenciaSPEI );
 		logger.info("- resultado " + resultado);
 		
-		assertTrue("El resultado no tiene la propiedad transaccionesSPEI", resultado.has("transaccionesSPEI"));
-		assertTrue("La propiedad transaccionesSPEI no es un JsonObject", resultado.get("transaccionesSPEI").isJsonObject());
+		assertTrue("El resultado no tiene la propiedad transferenciasSPEI", resultado.has("transferenciasSPEI"));
+		assertTrue("La propiedad transferenciasSPEI no es un JsonObject", resultado.get("transferenciasSPEI").isJsonObject());
 		
-		JsonObject transaccionesSPEI = resultado.get("transaccionesSPEI").getAsJsonObject();
+		JsonObject transferenciasSPEI = resultado.get("transferenciasSPEI").getAsJsonObject();
 		
-		assertTrue("El objeto transaccionesSPEI no tiene la propiedad transaccionSPEI", transaccionesSPEI.has("transaccionSPEI"));
-		assertTrue("La propiedad transaccionSPEI no es un JsonArray", transaccionesSPEI.get("transaccionSPEI").isJsonArray());
+		assertTrue("El objeto transferenciasSPEI no tiene la propiedad transferenciaSPEI", transferenciasSPEI.has("transferenciaSPEI"));
+		assertTrue("La propiedad transferenciaSPEI no es un JsonArray", transferenciasSPEI.get("transferenciaSPEI").isJsonArray());
 		
-		JsonArray transaccionSPEI = transaccionesSPEI.get("transaccionSPEI").getAsJsonArray();
+		JsonArray transferenciaSPEI = transferenciasSPEI.get("transferenciaSPEI").getAsJsonArray();
 		
-		assertTrue("El arreglo transaccionSPEI no tiene elementos",transaccionSPEI.size() > 0);
-		assertTrue("El arreglo transaccionSPEI no tiene elementos del tipo JsonObject", transaccionSPEI.get(0).isJsonObject());
+		assertTrue("El arreglo transferenciaSPEI no tiene elementos",transferenciaSPEI.size() > 0);
+		assertTrue("El arreglo transferenciaSPEI no tiene elementos del tipo JsonObject", transferenciaSPEI.get(0).isJsonObject());
 
 		
-		JsonObject transaccionSPEIItem = transaccionSPEI.get(0).getAsJsonObject(); 
+		JsonObject transferenciaSPEIItem = transferenciaSPEI.get(0).getAsJsonObject(); 
 		
-		assertTrue("El elemento no tiene la propiedad Trn_Client", transaccionSPEIItem.has("Trn_Client"));
-		assertTrue("El elemento no tiene la propiedad Trn_CueOri",transaccionSPEIItem.has("Trn_CueOri"));
-		assertTrue("El elemento no tiene la propiedad Trn_CueDes",transaccionSPEIItem.has("Trn_CueDes"));
-		assertTrue("El elemento no tiene la propiedad Trn_Monto",transaccionSPEIItem.has("Trn_Monto"));
-		assertTrue("El elemento no tiene la propiedad Trn_Banco",transaccionSPEIItem.has("Trn_Banco"));
+		assertTrue("El elemento no tiene la propiedad Trn_Client", transferenciaSPEIItem.has("Trn_Client"));
+		assertTrue("El elemento no tiene la propiedad Trn_CueOri",transferenciaSPEIItem.has("Trn_CueOri"));
+		assertTrue("El elemento no tiene la propiedad Trn_CueDes",transferenciaSPEIItem.has("Trn_CueDes"));
+		assertTrue("El elemento no tiene la propiedad Trn_Monto",transferenciaSPEIItem.has("Trn_Monto"));
+		assertTrue("El elemento no tiene la propiedad Trn_Banco",transferenciaSPEIItem.has("Trn_Banco"));
 		
 		logger.info("TEST: Finalizando transaferenciaSPEIConsultarTestDeberiaSerExitoso metodo...");
 	}

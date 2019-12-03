@@ -22,8 +22,21 @@
 		<junit.jupiter.version>5.5.2</junit.jupiter.version>
 		<junit.platform.version>1.5.2</junit.platform.version>
 	</properties>
+	
+	<repositories>
+	   <repository>
+	       <id>lib</id>
+	       <url>file://${project.basedir}/lib</url>
+	   </repository>
+	</repositories>
+	
+	<dependencies>	
+		<dependency>
+			<groupId>com.sybase</groupId>
+			<artifactId>jconn4</artifactId>
+			<version>7.0</version>
+		</dependency>
 
-	<dependencies>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
@@ -90,7 +103,12 @@
 			<artifactId>stringtemplate</artifactId>
 			<version>4.0.2</version>
 		</dependency>
-
+		
+		<dependency>
+		    <groupId>com.zaxxer</groupId>
+		    <artifactId>HikariCP</artifactId>
+		    <version>3.4.1</version>
+		</dependency>
 	</dependencies>
 
 	<build>

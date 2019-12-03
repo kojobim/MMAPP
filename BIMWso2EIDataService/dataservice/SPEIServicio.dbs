@@ -113,7 +113,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/transaccionCreacionSPEI" element="transaccionSPEI">
+        <result defaultNamespace="http://bem.com/transferenciaCreacionSPEI" element="transferenciaSPEI">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
             <element column="Trs_Consec" name="Trs_Consec" xsdType="xs:string" optional="true"/>
@@ -226,7 +226,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/transaccionProcesarSPEI" element="transaccionSPEI">
+        <result defaultNamespace="http://bem.com/transferenciaProcesarSPEI" element="transferenciaSPEI">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
             <element column="NumTransac" name="NumTransac" xsdType="xs:string" optional="true"/>
@@ -313,7 +313,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/transaccionesConsultarSPEI" element="transaccionesSPEI" rowName="transaccionSPEI">
+        <result defaultNamespace="http://bem.com/transferenciasConsultarSPEI" element="transferenciasSPEI" rowName="transferenciaSPEI">
             <element column="Trn_Client" name="Trn_Client" xsdType="xs:string" optional="true"/>
             <element column="Trn_Consec" name="Trn_Consec" xsdType="xs:string" optional="true"/>
             <element column="Trn_CueOri" name="Trn_CueOri" xsdType="xs:string" optional="true"/>
