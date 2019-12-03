@@ -35,9 +35,9 @@ public class LoginCtrl extends BimBaseCtrl {
 	private TokenServicio tokenServicio;
 	private UsuarioServicio usuarioServicio;
 	
-	private static String UsuarioActualizacionTipActual;
+	private static String UsuarioActualizacionFallida;
 	private static String LoginBitacoraCreacionOpBitTipOpe;
-	
+	private static String UsuarioActualizacionExitosa;
 	public LoginCtrl() {
 		super();
 		
@@ -47,7 +47,8 @@ public class LoginCtrl extends BimBaseCtrl {
 		this.usuarioServicio = new UsuarioServicio();
 		this.configuracionServicio = new ConfiguracionServicio();
 		
-		UsuarioActualizacionTipActual = properties.getProperty("op.usuario_actualizacion.tip_actual.a");
+		UsuarioActualizacionFallida = properties.getProperty("op.usuario_actualizacion.tip_actual.a");
+		UsuarioActualizacionExitosa = properties.getProperty("op.usuario_actualizacion.tip_actual.b");
 		LoginBitacoraCreacionOpBitTipOpe = properties.getProperty("op.login.bitacora_creacion.bit_tip_ope");
 		
 	}
@@ -58,7 +59,10 @@ public class LoginCtrl extends BimBaseCtrl {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response login(JsonObject datosUsuario, @Context Request solicitud) {
 		logger.info("CTRL: Comenzando login metodo");
-		logger.info("datosUsuario " + datosUsuario);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("datosUsuario " + datosUsuario);			
+		}
 		
 		String usuClave = Utilerias.obtenerStringPropiedad(datosUsuario, "Usu_Clave");
 		 
@@ -80,14 +84,18 @@ public class LoginCtrl extends BimBaseCtrl {
 		
 		String folTransa = Utilerias.obtenerStringPropiedad(folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject(), "Fol_Transa");
 		
-		datosUsuario.addProperty("FechaSis",fechaSis);	
-		
-		logger.info("datosUsuario" + datosUsuario);
+		datosUsuario.addProperty("FechaSis",fechaSis);
+
 		JsonObject usuarioConsultarOpResultadoObjeto = this.usuarioServicio.usuarioConsultar(datosUsuario);
-		logger.info("usuarioConsultarOpResultadoObject" + usuarioConsultarOpResultadoObjeto);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("usuarioConsultarOpResultadoObject" + usuarioConsultarOpResultadoObjeto);
+		}
+
 
 		datosUsuario.addProperty("Usu_Passwo", usuPasswo);
 		JsonObject usuario = Utilerias.obtenerJsonObjectPropiedad(usuarioConsultarOpResultadoObjeto, "usuario");
+		
 		
 		if(usuario == null || usuario.isJsonPrimitive()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
@@ -98,7 +106,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		String usuStatus = Utilerias.obtenerStringPropiedad(usuario, "Usu_Status");
 		
 		if(usuNumero == null || (usuStatus == null || usuStatus.isEmpty())) {
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.1");
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.20");
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
 		
@@ -178,8 +186,11 @@ public class LoginCtrl extends BimBaseCtrl {
 		JsonObject datosConfiguracion = new JsonObject();
 		datosConfiguracion.addProperty("FechaSis", fechaSis);
 		
-		JsonObject configuracionBancoDetalleOpResultadoObjecto = this.configuracionServicio.configuracionBancoConsultarDetalle(datosConfiguracion); 
-		logger.info("configuracionBancoDetalleOpResultadoObjecto" + configuracionBancoDetalleOpResultadoObjecto);
+		JsonObject configuracionBancoDetalleOpResultadoObjecto = this.configuracionServicio.configuracionBancoConsultarDetalle(datosConfiguracion);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("configuracionBancoDetalleOpResultadoObjecto" + configuracionBancoDetalleOpResultadoObjecto);			
+		}
 		
 		JsonObject configuracionesBanco = Utilerias.obtenerJsonObjectPropiedad(configuracionBancoDetalleOpResultadoObjecto, "configuracionesBanco");
 							
@@ -197,7 +208,11 @@ public class LoginCtrl extends BimBaseCtrl {
 		}
 		
 		String usuPasCif = Racal.cifraPassword_HSM(datosUsuario.get("Usu_Passwo").getAsString());
-		logger.info("contrasenaCifrada " + usuPasCif);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("password Cifrado " + usuPasCif);
+			logger.debug("Password: " + usuario.get("Usu_Passwo"));
+		}
 		
 		if(usuPasCif.length() == 7 && usuPasCif.equals("autoriz")) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.7");
@@ -209,24 +224,34 @@ public class LoginCtrl extends BimBaseCtrl {
 			throw new InternalServerException(bimMessageDTO.toString());
 		}
 		
-		logger.info(">>>>>>>>>>>>>usuPasCif: " + usuPasCif);
-		logger.info(">>>>>>>>>>>>>usuPasswo: " + usuario.get("Usu_Passwo"));
-		
 		if(!usuPasCif.equals(usuario.get("Usu_Passwo").getAsString().trim())) {
+			// el usuario es válido, pero el password no lo es.... actualizando registro de errores
+			JsonObject datosUsuarioActualizacion = new JsonObject();
+			datosUsuarioActualizacion.addProperty("Usu_Clave", datosUsuario.get("Usu_Clave").getAsString());
+			datosUsuarioActualizacion.addProperty("Tip_Actual", UsuarioActualizacionFallida);
+			datosUsuarioActualizacion.addProperty("NumTransac", folTransa);
+			datosUsuarioActualizacion.addProperty("FechaSis", fechaSis);
+			this.usuarioServicio.usuarioActualizar(datosUsuarioActualizacion);
+			
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.20");
 			throw new UnauthorizedException(bimMessageDTO.toString());
 		}
 
 		usuarioConsultarOpResultadoObjeto = this.usuarioServicio.usuarioConsultar(datosUsuario);
 		
+		
+		
 		JsonObject datosUsuarioActualizacion = new JsonObject();
 		datosUsuarioActualizacion.addProperty("Usu_Clave", datosUsuario.get("Usu_Clave").getAsString());
-		datosUsuarioActualizacion.addProperty("Tip_Actual", UsuarioActualizacionTipActual);
+		datosUsuarioActualizacion.addProperty("Tip_Actual", UsuarioActualizacionExitosa);
 		datosUsuarioActualizacion.addProperty("NumTransac", folTransa);
 		datosUsuarioActualizacion.addProperty("FechaSis", fechaSis);
 		
 		JsonObject usuarioActualizacionOpResultadoObjecto = this.usuarioServicio.usuarioActualizar(datosUsuarioActualizacion);
-		logger.info("usuarioActualizacionOpResultadoObjecto" + usuarioActualizacionOpResultadoObjecto);
+		
+		if(logger.isDebugEnabled()) {
+			logger.debug("usuarioActualizacionOpResultadoObjecto" + usuarioActualizacionOpResultadoObjecto);			
+		}
 		
 		String tovSerie = Utilerias.obtenerStringPropiedad(usuarioConsultarOpResultadoObjeto.get("usuario").getAsJsonObject(), "Usu_FolTok");
 		
@@ -235,7 +260,10 @@ public class LoginCtrl extends BimBaseCtrl {
 		datosTokenVerificar.addProperty("FechaSis", fechaSis);
 		
 		JsonObject tokenVerificarOpResultadoObjecto = this.tokenServicio.tokenVerificar(datosTokenVerificar);
-		logger.info("tokenVerificarOpResultadoObjecto" + tokenVerificarOpResultadoObjecto);
+		
+		if(logger.isDebugEnabled()) {
+			logger.debug("tokenVerificarOpResultadoObjecto" + tokenVerificarOpResultadoObjecto);			
+		}
 		
 		JsonObject tokenVerificar = Utilerias.obtenerJsonObjectPropiedad(tokenVerificarOpResultadoObjecto, "tokenVerificar");
 		
@@ -246,12 +274,17 @@ public class LoginCtrl extends BimBaseCtrl {
 		}
 
 		usuarioActualizacionOpResultadoObjecto = this.usuarioServicio.usuarioActualizar(datosUsuarioActualizacion);
-		logger.info("usuarioActualizacionOpResultadoObjecto" + usuarioActualizacionOpResultadoObjecto);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("usuarioActualizacionOpResultadoObjecto" + usuarioActualizacionOpResultadoObjecto);			
+		}
 		
 		String bitUsuari = usuarioConsultarOpResultadoObjeto.get("usuario").getAsJsonObject().get("Usu_Numero").getAsString();
 
-		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
-		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
+		if(logger.isDebugEnabled()){
+			logger.debug("User-Agent: " + solicitud.getHeader("User-Agent"));
+			logger.debug("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));			
+		}
 		
 		String bitDireIP = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("User-Agent") : "";
 		String bitPriRef = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("X-Forwarded-For") : "";
@@ -276,13 +309,7 @@ public class LoginCtrl extends BimBaseCtrl {
 		String usuFeAcPa = Utilerias.obtenerStringPropiedad(usuario, "Usu_FeAcPa");
 		String usuFecAlt = Utilerias.obtenerStringPropiedad(usuario, "Usu_FecAlt");
 		String usuFecUlAc = Utilerias.obtenerStringPropiedad(usuario, "Usu_FeUlAc");
-		
-		
-		/**
-		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
-		 * String usuFolTok = principalResultadoObjecto.get("usuFolTok").getAsString();
-		 */
-		String usuFolTok = "0416218854";
+		String usuFolTok = Utilerias.obtenerStringPropiedad(usuario, "Usu_FolTok");
 		
 		JsonObject usuarioResultado = new JsonObject();
 		usuarioResultado.addProperty("usuClave", usuClave);
