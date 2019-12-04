@@ -71,6 +71,7 @@ BIMWso2EIRegistry/.settings/org.eclipse.m2e.core.prefs
 BIMWso2EIMicroservice/dependency-reduced-pom.xml
 
 BIMWso2EICommons/lib/
+BIMWso2EICommons/bin
 
 BIMWso2EICommons/.factorypath
 
