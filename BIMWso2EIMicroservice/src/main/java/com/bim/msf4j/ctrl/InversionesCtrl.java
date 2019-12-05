@@ -445,6 +445,28 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarOpResultadoObjeto, "transaccion");
 		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
+
+		/**
+		 * REGLA DE NEGOCIO: valida token de transacci�n y bloquea al usuario en caso de 5 intentos fallidos
+		 */
+
+		String cpRSAToken = Utilerias.obtenerStringPropiedad(renovarInversion, "cpRSAToken");
+
+		StringBuilder scriptName = new StringBuilder()
+				.append(InversionesCtrl.class.getName())
+				.append(".reinversion");
+
+		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac, scriptName.toString());
+
+		if ("B".equals(validarToken)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
+			throw new ForbiddenException(bimMessageDTO.toString());
+		}
+
+		if ("C".equals(validarToken)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.28");
+			throw new ForbiddenException(bimMessageDTO.toString());
+		}
 		
 		JsonObject datosInversion = new JsonObject();
 		datosInversion.addProperty("FechaSis", fechaSis);
@@ -639,27 +661,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		resultadoCalculaTasa = Utilerias.calculaTasa(calculaTasa);
 		logger.info("resultadoCalculaTasa" + resultadoCalculaTasa);
 
-		/**
-		 * REGLA DE NEGOCIO: valida token de transacci�n y bloquea al usuario en caso de 5 intentos fallidos
-		 */
-
-		String cpRSAToken = Utilerias.obtenerStringPropiedad(renovarInversion, "cpRSAToken");
-
-		StringBuilder scriptName = new StringBuilder()
-				.append(InversionesCtrl.class.getName())
-				.append(".reinversion");
-
-		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac, scriptName.toString());
-
-		if ("B".equals(validarToken)) {
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
-			throw new ForbiddenException(bimMessageDTO.toString());
-		}
-
-		if ("C".equals(validarToken)) {
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.28");
-			throw new ForbiddenException(bimMessageDTO.toString());
-		}
 		String inverNumero = Utilerias.obtenerStringPropiedad(inversion, "Inv_Numero");
 
 		JsonObject datosStatusActualizar = new JsonObject();
