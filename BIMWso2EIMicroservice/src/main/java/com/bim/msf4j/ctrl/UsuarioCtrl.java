@@ -40,6 +40,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 
 	private static Logger logger = Logger.getLogger(UsuarioCtrl.class);
 	
+	private static String CuentaDestinoSPEIConsultarOpTipConsulL1;
 	private static String CuentaDestinoBIMConsultarTipConsulL2;
 	private CuentaDestinoServicio cuentaDestinoServicio;
 	private TransaccionServicio transaccionServicio;
@@ -51,7 +52,8 @@ public class UsuarioCtrl extends BimBaseCtrl {
 	private BitacoraServicio bitacoraServicio;
 	
 	static {
-		CuentaDestinoBIMConsultarTipConsulL2 = properties.getProperty("op.cuenta_destino_bim_consultar.tip_consul.l2");	
+		CuentaDestinoSPEIConsultarOpTipConsulL1 = properties.getProperty("op.cuenta_destino_spei_consultar.tip_consul.l1");
+		CuentaDestinoBIMConsultarTipConsulL2 = properties.getProperty("op.cuenta_destino_bim_consultar.tip_consul.l2");
 	}
 	
 	public UsuarioCtrl() {
@@ -104,6 +106,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		JsonObject datosCuentaDestinoSPEI = new JsonObject();
 		datosCuentaDestinoSPEI.addProperty("Cds_UsuAdm", usuAdm);
 		datosCuentaDestinoSPEI.addProperty("Cds_Usuari", usuNumero);
+		datosCuentaDestinoSPEI.addProperty("Tip_Consul", CuentaDestinoSPEIConsultarOpTipConsulL1);
 		datosCuentaDestinoSPEI.addProperty("FechaSis", fechaSis);
 		JsonObject cuentasDestinoSPEIRespuesta = this.cuentaDestinoServicio.cuentaDestinoSPEIConsultar(datosCuentaDestinoSPEI );
 		logger.info("- cuentasDestinoSPEIRespuesta " + cuentasDestinoSPEIRespuesta);
