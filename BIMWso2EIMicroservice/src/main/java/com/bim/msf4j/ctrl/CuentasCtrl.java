@@ -351,7 +351,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 
 		String fechaSis = Utilerias.obtenerFechaSis();
 		String bitPriRef = Utilerias.obtenerStringPropiedad(principal, "usuClient");
-		String bitDireIp = solicitud.getHeader("X_Forwarded_For");
+		String bitDireIp = solicitud.getHeader("X-Forwarded-For");
 		
 		JsonObject datosBitacoraCreacion = new JsonObject();
 		datosBitacoraCreacion.addProperty("Bit_Usuari", bitUsuari);
@@ -359,7 +359,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		datosBitacoraCreacion.addProperty("Bit_PriRef", bitPriRef);
 		datosBitacoraCreacion.addProperty("Bit_DireIP", bitDireIp);
 		datosBitacoraCreacion.addProperty("Bit_TipOpe", MovimientosRegistroBitacoraCreacionOpBitTipOpe);
-		datosBitacoraCreacion.addProperty("Num_Transac", numTransac);
+		datosBitacoraCreacion.addProperty("NumTransac", numTransac);
 		datosBitacoraCreacion.addProperty("FechaSis", fechaSis);
 		
 		this.bitacoraServicio.creacionBitacora(datosBitacoraCreacion);

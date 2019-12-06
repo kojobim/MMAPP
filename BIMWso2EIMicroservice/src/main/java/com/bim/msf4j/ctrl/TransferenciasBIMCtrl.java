@@ -239,6 +239,8 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		String usuClient = Utilerias.obtenerStringPropiedad(principal, "usuClient");
 		String usuNumero = Utilerias.obtenerStringPropiedad(principal, "usuNumero");
 		String usuEmail = Utilerias.obtenerStringPropiedad(principal, "usuEmail");
+//		String usuFolTok = Utilerias.obtenerStringPropiedad(principal, "usuFolTok");
+		String usuFolTok = "0416218854";
 		
 		JsonObject transferenciaBIM = Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaBIM, "transferencia");
 		
@@ -254,14 +256,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		logger.debug("- folioTrasaccionResultado " +  folioTransaccionResultado);
 		
 		JsonObject folioTransaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionResultado, "transaccion");
-		String folTransa = Utilerias.obtenerStringPropiedad(folioTransaccion, "Fol_Transa");		
-
-		/**
-		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
-		 */
-		// String usuFolTok = Utilerias.obtenerStringPropiedad(principalResultado, "usuFolTok");
-
-		String usuFolTok = "0416218854";		
+		String folTransa = Utilerias.obtenerStringPropiedad(folioTransaccion, "Fol_Transa");
 
 		String scriptName = new StringBuilder()
 				.append(TransferenciasBIMCtrl.class.getName())
@@ -297,7 +292,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 
 		JsonArray cuentasDestinoBIM = Utilerias.obtenerJsonArrayPropiedad(cuentaDestinoBIM, "cuentasDestinoBIM");
 		
-		if(cuentasDestinoBIM.isJsonNull()) {
+		if(cuentasDestinoBIM == null) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.66");
 			throw new ConflictException(bimMessageDTO.toString());
 		}
@@ -318,8 +313,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		logger.debug("- datosCuentaDestinoTransferenciaBIMActivacionResultado1 " + datosCuentaDestinoTransferenciaBIMActivacionResultado1);
 		
 		/**
-		 * Trb_FePrEn y Trb_DurFec
-		 * se dejan en duro debido a que no se ha contemplado el flujo de transferencias programadas.
+		 * Trb_FePrEn y Trb_DurFec se dejan en duro debido a que no se ha contemplado el flujo de transferencias programadas.
 		 */
 		String fechaTransferenciasInmediatas = "1900-01-01 00:00:00";
 		
@@ -441,21 +435,32 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		
 		JsonObject transferenciasBIMProcesar= Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaBIMProcesarResultado, "transferenciasBIM");
 		JsonArray transferenciaBIMProcesar = Utilerias.obtenerJsonArrayPropiedad(transferenciasBIMProcesar, "transferenciaBIM");
-		logger.debug("- transferenciaBIMProcesar " + transferenciaBIMProcesar);
+		logger.info("- transferenciaBIMProcesar " + transferenciaBIMProcesar);
 		
-		JsonArray transferenciaBIMProcesarResultadoArreglo = transferenciaBIMProcesar.get(transferenciaBIMProcesar.size() - 1).getAsJsonArray();
+		JsonArray transferenciaBIMProcesarResultadoArreglo1 = transferenciaBIMProcesar.get(0).getAsJsonArray();
+		JsonObject transferenciaBIMProcesarResultadoObjeto1 = transferenciaBIMProcesarResultadoArreglo1.get(0).getAsJsonObject();
+		errCodigo = Utilerias.obtenerStringPropiedad(transferenciaBIMProcesarResultadoObjeto1, "Err_Codigo");
+		
+		if(errCodigo != null && !"000000".equals(errCodigo)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.31");
+			String errMensaj = Utilerias.obtenerStringPropiedad(transferenciaBIMProcesarResultadoObjeto1, "Err_Mensaj");
+			bimMessageDTO.addMergeVariable("errMensaj", errMensaj);
+			throw new InternalServerException(bimMessageDTO.toString());
+		}
+		
+		JsonArray transferenciaBIMProcesarResultadoArreglo2 = transferenciaBIMProcesar.get(transferenciaBIMProcesar.size() - 1).getAsJsonArray();
 		
 		JsonArray transferenciasProcesadas = Utilerias.filtrarPropiedadesArray(
-				transferenciaBIMProcesarResultadoArreglo,
+				transferenciaBIMProcesarResultadoArreglo2,
 				jsonObject -> jsonObject.get("Numero").getAsString().equals(trbConsec));
 		
-		JsonObject transferenciaBIMProcesarResultadoObjeto = transferenciasProcesadas.get(0).getAsJsonObject();
+		JsonObject transferenciaBIMProcesarResultadoObjeto2 = transferenciasProcesadas.get(0).getAsJsonObject();
 		
-		String trbMonEqu = Utilerias.obtenerStringPropiedad(transferenciaBIMProcesarResultadoObjeto, "Trb_MonEqu");
-		String trbStrEqu = Utilerias.obtenerStringPropiedad(transferenciaBIMProcesarResultadoObjeto, "Trb_StrEqu");
-		String trbTipCam = Utilerias.obtenerStringPropiedad(transferenciaBIMProcesarResultadoObjeto, "Trb_TipCam");
-		String trbProces = Utilerias.obtenerStringPropiedad(transferenciaBIMProcesarResultadoObjeto, "Trb_Proces");
-		String trbProgra = Utilerias.obtenerStringPropiedad(transferenciaBIMProcesarResultadoObjeto, "Trb_Progra");
+		String trbMonEqu = Utilerias.obtenerStringPropiedad(transferenciaBIMProcesarResultadoObjeto2, "Trb_MonEqu");
+		String trbStrEqu = Utilerias.obtenerStringPropiedad(transferenciaBIMProcesarResultadoObjeto2, "Trb_StrEqu");
+		String trbTipCam = Utilerias.obtenerStringPropiedad(transferenciaBIMProcesarResultadoObjeto2, "Trb_TipCam");
+		String trbProces = Utilerias.obtenerStringPropiedad(transferenciaBIMProcesarResultadoObjeto2, "Trb_Proces");
+		String trbProgra = Utilerias.obtenerStringPropiedad(transferenciaBIMProcesarResultadoObjeto2, "Trb_Progra");
 		
 		JsonObject datosTransferenciaBIMFirmasConsultar = new JsonObject();
 		datosTransferenciaBIMFirmasConsultar.addProperty("Ftb_Consec", trbConsec);
@@ -495,7 +500,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 				JsonObject transferenciaBIMFirmaObjeto = transferenciaBIMFirmaElemento.getAsJsonObject();
 				String ftbUsuNom = Utilerias.obtenerStringPropiedad(transferenciaBIMFirmaObjeto, "Ftb_UsuNom");
 				
-				strFirmas.append(strComa)
+				strAutori.append(strComa)
 					.append(ftbUsuNom);
 				
 				if("".equals(strComa))
@@ -593,7 +598,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_UsCaNo", trbUsCaNo);
 		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_FecCapDDMMYYYY", Utilerias.formatearFecha(trbFecCap, "dd-MM-yyyy"));
 		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_FecCapHHMM", Utilerias.formatearFecha(trbFecCap, "HH:mm"));
-		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("str_Autori", strAutori != null ? strAutori.toString() : "");
+		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("str_Autori", strAutori.toString());
 		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_FecAutDDMMYYYY", Utilerias.formatearFecha(trbFecAut, "dd-MM-yyyy"));
 		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("Trb_FecAutHHMM", Utilerias.formatearFecha(trbFecAut, "HH:mm"));
 		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("verificador170", digitoVerificador.substring(0,70));
