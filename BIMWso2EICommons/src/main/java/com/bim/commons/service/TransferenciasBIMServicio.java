@@ -3,7 +3,7 @@ package com.bim.commons.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bim.commons.dao.TransferenciasBIMDAO;
+import com.bim.commons.dao.ResultSetDAO;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
@@ -11,7 +11,7 @@ public class TransferenciasBIMServicio extends BaseService {
 
 	private static final Logger logger = LoggerFactory.getLogger(TransferenciasBIMServicio.class);
 	
-	private TransferenciasBIMDAO transferenciasBIMDAO;
+	private ResultSetDAO resultSetDAO;
 	
 	private static String TransferenciasBIMServicio;
 	private static String CuentasOrigenConsultarOp;
@@ -59,7 +59,7 @@ public class TransferenciasBIMServicio extends BaseService {
 	public TransferenciasBIMServicio() {
 		super();
 		
-		this.transferenciasBIMDAO = new TransferenciasBIMDAO();
+		this.resultSetDAO = new ResultSetDAO();
 		
 		TransferenciasBIMServicio = properties.getProperty("data_service.transferencias_bim_servicio");
 		
@@ -179,7 +179,7 @@ public class TransferenciasBIMServicio extends BaseService {
 		datosTransferenciaBIMProcesar.addProperty("SucOrigen", TransferenciaBIMProcesarOpSucOrigen);
 		datosTransferenciaBIMProcesar.addProperty("SucDestino", TransferenciaBIMProcesarOpSucDestino);
 		datosTransferenciaBIMProcesar.addProperty("Modulo", TransferenciaBIMProcesarOpModulo);
-		JsonObject datosTransferenciaBIMProcesarOpResultadoObjeto = transferenciasBIMDAO.transferenciaBIMProcesar(datosTransferenciaBIMProcesar);
+		JsonObject datosTransferenciaBIMProcesarOpResultadoObjeto = resultSetDAO.resultSet(datosTransferenciaBIMProcesar, "NBTRABANPRO", "transferenciasBIM", "transferenciaBIM");
 		logger.info("datosTransferenciaBIMProcesarOpResultadoObjeto" + datosTransferenciaBIMProcesarOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaBIMProcesar metodo... ");
 		return datosTransferenciaBIMProcesarOpResultadoObjeto;
@@ -243,7 +243,7 @@ public class TransferenciasBIMServicio extends BaseService {
 		datosTransferenciaBIMConsultar.addProperty("SucOrigen", TransferenciaBIMConsultarOpSucOrigen);
 		datosTransferenciaBIMConsultar.addProperty("SucDestino", TransferenciaBIMConsultarOpSucDestino);
 		datosTransferenciaBIMConsultar.addProperty("Modulo", TransferenciaBIMConsultarOpModulo);		
-		JsonObject transferenciaBIMConsultarResultadoObjeto = transferenciasBIMDAO.transferenciasBIMConsultar(datosTransferenciaBIMConsultar);
+		JsonObject transferenciaBIMConsultarResultadoObjeto = resultSetDAO.resultSet(datosTransferenciaBIMConsultar, "NBTRABANCON", "transferenciasBIM", "transferenciaBIM");
 		logger.info("transferenciaBIMConsultarResultadoObjeto" + transferenciaBIMConsultarResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciasBIMConsultarResultSets metodo... ");
 		return transferenciaBIMConsultarResultadoObjeto;
@@ -279,7 +279,7 @@ public class TransferenciasBIMServicio extends BaseService {
 		datosTransferenciaBIMFirmasConsultar.addProperty("SucOrigen", TransferenciaBIMFirmasConsultarOpSucOrigen);
 		datosTransferenciaBIMFirmasConsultar.addProperty("SucDestino", TransferenciaBIMFirmasConsultarOpSucDestino);
 		datosTransferenciaBIMFirmasConsultar.addProperty("Modulo", TransferenciaBIMFirmasConsultarOpModulo);
-		JsonObject datosTransferenciaBIMFirmasConsultarResultadoObjeto = transferenciasBIMDAO.transferenciaBIMFirmasConsultar(datosTransferenciaBIMFirmasConsultar);
+		JsonObject datosTransferenciaBIMFirmasConsultarResultadoObjeto = resultSetDAO.resultSet(datosTransferenciaBIMFirmasConsultar, "NBFITRBRCON", "transferenciasBIMFirmas", "transferenciaBIMFirmas");
 		logger.info("datosTransferenciaBIMFirmasConsultarResultadoObjeto" + datosTransferenciaBIMFirmasConsultarResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaBIMFirmasConsultar metodo... ");
 		return datosTransferenciaBIMFirmasConsultarResultadoObjeto;

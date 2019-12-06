@@ -239,8 +239,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		String usuClient = Utilerias.obtenerStringPropiedad(principal, "usuClient");
 		String usuNumero = Utilerias.obtenerStringPropiedad(principal, "usuNumero");
 		String usuEmail = Utilerias.obtenerStringPropiedad(principal, "usuEmail");
-//		String usuFolTok = Utilerias.obtenerStringPropiedad(principal, "usuFolTok");
-		String usuFolTok = "0416218854";
+		String usuFolTok = Utilerias.obtenerStringPropiedad(principal, "usuFolTok");
 		
 		JsonObject transferenciaBIM = Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaBIM, "transferencia");
 		
@@ -263,7 +262,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 				.append(".transferenciaBIMCreacion")
 				.toString();
 
-		logger.info("- scriptName  " + scriptName);
+		logger.debug("- scriptName  " + scriptName);
 		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, folTransa, scriptName);
 		logger.debug("- validarToken " + validarToken);
 		
@@ -435,7 +434,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		
 		JsonObject transferenciasBIMProcesar= Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaBIMProcesarResultado, "transferenciasBIM");
 		JsonArray transferenciaBIMProcesar = Utilerias.obtenerJsonArrayPropiedad(transferenciasBIMProcesar, "transferenciaBIM");
-		logger.info("- transferenciaBIMProcesar " + transferenciaBIMProcesar);
+		logger.debug("- transferenciaBIMProcesar " + transferenciaBIMProcesar);
 		
 		JsonArray transferenciaBIMProcesarResultadoArreglo1 = transferenciaBIMProcesar.get(0).getAsJsonArray();
 		JsonObject transferenciaBIMProcesarResultadoObjeto1 = transferenciaBIMProcesarResultadoArreglo1.get(0).getAsJsonObject();
@@ -556,7 +555,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 				.append(folTransa)
 				.toString();
 		String digitoVerificador = Utilerias.generarDigitoVerificador(sVarVerif);
-		logger.info("- digitoVerificador " + digitoVerificador);
+		logger.debug("- digitoVerificador " + digitoVerificador);
 		
 		String transferenciaBIMClienteAsunto = Utilerias.obtenerPropiedadPlantilla("mail.transferencias_bim.cliente.asunto");
 		String transferenciaBIMClientePlantillaName = Utilerias.obtenerPropiedadPlantilla("mail.transferencias_bim.cliente.plantilla");
@@ -575,8 +574,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		emailTemplateTransferenciaBIMClienteDTO.addMergeVariable("Trb_FecCarHHMM", Utilerias.formatearFecha(trbFecCap, "HH:mm"));
 		
 		String transferenciaBIMClienteCuerpo = Utilerias.obtenerMensajePlantilla(emailTemplateTransferenciaBIMClienteDTO);
-		// Para casos de prueba se esta utilizando el email en duro
-		this.correoServicio.enviarCorreo("ebalseca@mediomelon.mx", transferenciaBIMClienteAsunto, transferenciaBIMClienteCuerpo);
+		this.correoServicio.enviarCorreo(usuEmail, transferenciaBIMClienteAsunto, transferenciaBIMClienteCuerpo);
 		
 		String transferenciaBIMBeneficiarioAsunto = Utilerias.obtenerPropiedadPlantilla("mail.transferencias_bim.beneficiario.asunto");
 		String transferenciaBIMBeneficiarioPlantillaName = Utilerias.obtenerPropiedadPlantilla("mail.transferencias_bim.beneficiario.plantilla");
@@ -607,7 +605,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("verificador21170", digitoVerificador.substring(210,280));
 		emailTemplateTransferenciaBIMBeneficiarioDTO.addMergeVariable("verificador28170", digitoVerificador.substring(280));
 		String transferenciaBIMBeneficiarioCuerpo = Utilerias.obtenerMensajePlantilla(emailTemplateTransferenciaBIMBeneficiarioDTO);
-		this.correoServicio.enviarCorreo("ebalseca@mediomelon.mx", transferenciaBIMBeneficiarioAsunto, transferenciaBIMBeneficiarioCuerpo);
+		this.correoServicio.enviarCorreo(trbEmaBen, transferenciaBIMBeneficiarioAsunto, transferenciaBIMBeneficiarioCuerpo);
 		logger.info("CTRL: Terminando transferenciaBIMCreacion metodo...");
 
 		return Response.ok(transferenciaBIMExitosa, MediaType.APPLICATION_JSON)
