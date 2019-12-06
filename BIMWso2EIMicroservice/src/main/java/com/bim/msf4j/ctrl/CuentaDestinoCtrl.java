@@ -35,6 +35,7 @@ import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.service.TransferenciasBIMServicio;
 import com.bim.commons.utils.Racal;
 import com.bim.commons.utils.Utilerias;
+import com.google.common.base.Optional;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -60,6 +61,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 	private static String AltaCuentaDestinoNacionalBitacoraCreacionOpBitTipOpe;
 	private static String ActivarCuentasDestinoNacionalBitacoraCreacionOpBitTipOpe;
 	private static String ActivarCuentasDestinoBIMBitacoraCreacionOpBitTipOpe;
+	private static String CuentaDestinoSPEIConsultarOpTipConsulL1;
+    private static String CuentaDestinoSPEIConsultarOpTipConsulL2;
 	
 	public CuentaDestinoCtrl() {
 		super();
@@ -82,6 +85,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		AltaCuentaDestinoNacionalBitacoraCreacionOpBitTipOpe = properties.getProperty("op.alta_cuenta_destino_nacional.bitacora_creacion.bit_tip_ope");
 		ActivarCuentasDestinoNacionalBitacoraCreacionOpBitTipOpe = properties.getProperty("op.activar_cuentas_destino_nacional.bitacora_creacion.bit_tip_ope");
 		ActivarCuentasDestinoBIMBitacoraCreacionOpBitTipOpe = properties.getProperty("op.activar_cuentas_destino_bim.bitacora_creacion.bit_tip_ope");
+		CuentaDestinoSPEIConsultarOpTipConsulL1 = properties.getProperty("op.cuenta_destino_spei_consultar.tip_consul.l1");
+        CuentaDestinoSPEIConsultarOpTipConsulL2 = properties.getProperty("op.cuenta_destino_spei_consultar.tip_consul.l2");
 		
 		logger.info("CTRL: Finalizando metodo init...");		
 	}
@@ -444,20 +449,26 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 
 		Utilerias.verificarError(cuentaDestinoSPEIActivacion);
 		
+		String cuentaDestinoEstado = CuentaDestinoEstadosEnum.validarEstado(status).toString();
+		String CuentaDestinoSPEIConsultarOpTipConsul = "A".equals(cuentaDestinoEstado) ? CuentaDestinoSPEIConsultarOpTipConsulL1 : CuentaDestinoSPEIConsultarOpTipConsulL2;
+				
 		JsonObject datosCuentaDestinoSPEI = new JsonObject();
 		datosCuentaDestinoSPEI.addProperty("Cds_UsuAdm", usuUsuAdm);
 		datosCuentaDestinoSPEI.addProperty("Cds_Usuari", usuNumero);
 		datosCuentaDestinoSPEI.addProperty("FechaSis", fechaSis);
+		datosCuentaDestinoSPEI.addProperty("Tip_Consul", CuentaDestinoSPEIConsultarOpTipConsul);
 		JsonObject cuentaDestinoSPEIConsultarResultado = cuentaDestinoServicio.cuentaDestinoSPEIConsultar(datosCuentaDestinoSPEI);
 		
 		Utilerias.verificarError(cuentaDestinoSPEIConsultarResultado);
 		
 		JsonObject cuentaDestinoSPEIConsultarResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoSPEIConsultarResultado, "cuentasDestino");
-		JsonArray cuentasDestinoArreglo = Utilerias.obtenerJsonArrayPropiedad(cuentaDestinoSPEIConsultarResultadoObjeto, "cuentaDestino");
-		
+		JsonArray cuentasDestinoArreglo = Optional
+				.fromNullable(Utilerias.obtenerJsonArrayPropiedad(cuentaDestinoSPEIConsultarResultadoObjeto, "cuentaDestino"))
+				.or(new JsonArray());
 		JsonObject resultado = new JsonObject();
 		JsonArray cuentasDestinoNacional = new JsonArray();
-		String cuentaDestinoEstado = CuentaDestinoEstadosEnum.validarEstado(status).toString();
+		
+		
 		
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
@@ -465,6 +476,10 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 			JsonObject cuentaDestinoObjeto = cuentaDestinoElemento.getAsJsonObject();
 			String cdsStatus = Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_Status");
 			String cdsFecAlt = Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_FecAlt");
+			String cpCLABE = "A".equals(cuentaDestinoEstado) ? Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_CLABE")
+					: Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cdp_Cuenta");
+			String cpAlias = "A".equals(cuentaDestinoEstado) ? Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_Alias")
+					: Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cdp_Alias");
 			
 			Date fecAlt = null;
 			try {
@@ -477,9 +492,16 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 			
 			if(cdsStatus != null && cdsStatus.equals(cuentaDestinoEstado)) {
 				JsonObject cuentaDestino = new JsonObject();
-				cuentaDestino.addProperty("cpCLABE", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_CLABE"));
-				cuentaDestino.addProperty("cpAlias", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_Alias"));
-				cuentaDestino.addProperty("cpBanco", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_Banco").trim());
+				cuentaDestino.addProperty("cpCLABE", cpCLABE != null ? cpCLABE : "");
+				cuentaDestino.addProperty("cpAlias", cpAlias != null ? cpAlias : "");
+				
+				//parametros especiales: nombre de la institucion bancaria
+				if(CuentaDestinoEstadosEnum.validarEstado(status) == CuentaDestinoEstadosEnum.A) { // activos
+					cuentaDestino.addProperty("cpBanco", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Ins_Descri"));					
+				}else { // pendientes
+					cuentaDestino.addProperty("cpBanco", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Ban_NomCor"));
+				}				
+
 				cuentaDestino.addProperty("cpFecAlt", fecAlt != null ? simpleDateFormat.format(fecAlt) : "");
 				cuentaDestino.addProperty("cpRFCBen", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_RFCBen"));
 				cuentaDestino.addProperty("cpEmaBen", Utilerias.obtenerStringPropiedad(cuentaDestinoObjeto, "Cds_EmaBen"));
