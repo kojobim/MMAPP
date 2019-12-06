@@ -341,9 +341,21 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/transferenciaBIMCreacionNE" element="transferenciaBIM">
+        <result defaultNamespace="http://bem.com/transferenciaBIMProcesarNE" element="transferenciasBIM" rowName="transferenciaBIM">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+            <element column="NumTransac" name="NumTransac" xsdType="xs:string" optional="true"/>
+            <element column="Numero" name="Numero" xsdType="xs:string" optional="true"/>
+            <element column="Trb_FecAut" name="Trb_FecAut" xsdType="xs:string" optional="true"/>
+            <element column="Trb_Monto" name="Trb_Monto" xsdType="xs:double" optional="true"/>
+            <element column="Trb_MonRec" name="Trb_MonRec" xsdType="xs:double" optional="true"/>
+            <element column="Tip_Cambio" name="Tip_Cambio" xsdType="xs:double" optional="true"/>
+            <element column="Trb_Proces" name="Trb_Proces" xsdType="xs:string" optional="true"/>
+            <element column="Trb_Firma" name="Trb_Firma" xsdType="xs:string" optional="true"/>
+            <element column="Trb_Progra" name="Trb_Progra" xsdType="xs:string" optional="true"/>
+            <element column="Trb_MonEqu" name="Trb_MonEqu" xsdType="xs:double" optional="true"/>
+            <element column="Trb_TipCam" name="Trb_TipCam" xsdType="xs:double" optional="true"/>
+            <element column="Trb_StrEqu" name="Trb_StrEqu" xsdType="xs:string" optional="true"/>
         </result>
     </query>
     <operation name="transferenciaBIMProcesarOp">

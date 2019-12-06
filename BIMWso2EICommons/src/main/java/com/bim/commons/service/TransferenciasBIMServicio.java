@@ -77,11 +77,11 @@ public class TransferenciasBIMServicio extends BaseService {
 		CuentasOrigenConsultarOpSucDestino = properties.getProperty("op.cuentas_origen_consultar.suc_destino");
 		CuentasOrigenConsultarOpModulo = properties.getProperty("op.cuentas_origen_consultar.modulo");
 		
-		CuentaDestinoTransferenciaBIMActivacionOpTransaccio = properties.getProperty("op.cuentas_origen_consultar.transaccio");
-		CuentaDestinoTransferenciaBIMActivacionOpUsuario = properties.getProperty("op.cuentas_origen_consultar.usuario");
-		CuentaDestinoTransferenciaBIMActivacionOpSucOrigen = properties.getProperty("op.cuentas_origen_consultar.suc_origen");
-		CuentaDestinoTransferenciaBIMActivacionOpSucDestino = properties.getProperty("op.cuentas_origen_consultar.suc_destino");
-		CuentaDestinoTransferenciaBIMActivacionOpModulo = properties.getProperty("op.cuentas_origen_consultar.modulo");
+		CuentaDestinoTransferenciaBIMActivacionOpTransaccio = properties.getProperty("op.cuentas_destino_transferencia_bim_activacion.transaccio");
+		CuentaDestinoTransferenciaBIMActivacionOpUsuario = properties.getProperty("op.cuentas_destino_transferencia_bim_activacion.usuario");
+		CuentaDestinoTransferenciaBIMActivacionOpSucOrigen = properties.getProperty("op.cuentas_destino_transferencia_bim_activacion.suc_origen");
+		CuentaDestinoTransferenciaBIMActivacionOpSucDestino = properties.getProperty("op.cuentas_destino_transferencia_bim_activacion.suc_destino");
+		CuentaDestinoTransferenciaBIMActivacionOpModulo = properties.getProperty("op.cuentas_destino_transferencia_bim_activacion.modulo");
 
 		TransferenciaBIMProcesarOpTrbTipTra = properties.getProperty("op.transferencia_bim_procesar.trb_tip_tra");
 		TransferenciaBIMProcesarOpTrbValFir = properties.getProperty("op.transferencia_bim_procesar.trb_val_fir");
@@ -164,6 +164,26 @@ public class TransferenciasBIMServicio extends BaseService {
 		logger.info("COMMONS: Finalizando transferenciaBIMProcesar metodo... ");
 		return datosTransferenciaBIMProcesarOpResultadoObjeto;
 	}
+	
+	public JsonObject transferenciaBIMProcesarResultSets(JsonObject datosTransferenciaBIMProcesar) {
+		logger.info("COMMONS: Comenzando transferenciaBIMProcesar metodo... ");
+		if(!datosTransferenciaBIMProcesar.has("Trb_RFC") || datosTransferenciaBIMProcesar.get("Trb_RFC") == null)
+			datosTransferenciaBIMProcesar.addProperty("Trb_RFC", "");
+		if(!datosTransferenciaBIMProcesar.has("Trb_IVA") || datosTransferenciaBIMProcesar.get("Trb_IVA") == null)
+			datosTransferenciaBIMProcesar.addProperty("Trb_IVA", 0.000);
+		datosTransferenciaBIMProcesar.addProperty("Trb_DireIP", "");
+		datosTransferenciaBIMProcesar.addProperty("Trb_TipTra", TransferenciaBIMProcesarOpTrbTipTra);
+		datosTransferenciaBIMProcesar.addProperty("Trb_ValFir", TransferenciaBIMProcesarOpTrbValFir);
+		datosTransferenciaBIMProcesar.addProperty("Transaccio", TransferenciaBIMProcesarOpTransaccio);
+		datosTransferenciaBIMProcesar.addProperty("Usuario", TransferenciaBIMProcesarOpUsuario);
+		datosTransferenciaBIMProcesar.addProperty("SucOrigen", TransferenciaBIMProcesarOpSucOrigen);
+		datosTransferenciaBIMProcesar.addProperty("SucDestino", TransferenciaBIMProcesarOpSucDestino);
+		datosTransferenciaBIMProcesar.addProperty("Modulo", TransferenciaBIMProcesarOpModulo);
+		JsonObject datosTransferenciaBIMProcesarOpResultadoObjeto = transferenciasBIMDAO.transferenciaBIMProcesar(datosTransferenciaBIMProcesar);
+		logger.info("datosTransferenciaBIMProcesarOpResultadoObjeto" + datosTransferenciaBIMProcesarOpResultadoObjeto);
+		logger.info("COMMONS: Finalizando transferenciaBIMProcesar metodo... ");
+		return datosTransferenciaBIMProcesarOpResultadoObjeto;
+	}
 
 	public JsonObject transferenciaBIMCreacion(JsonObject datosTransferenciaBIMCreacion) {
 		logger.info("COMMONS: Comenzando transferenciaBIMCreacion metodo... ");
@@ -242,6 +262,24 @@ public class TransferenciasBIMServicio extends BaseService {
 		datosTransferenciaBIMFirmasConsultar.addProperty("SucDestino", TransferenciaBIMFirmasConsultarOpSucDestino);
 		datosTransferenciaBIMFirmasConsultar.addProperty("Modulo", TransferenciaBIMFirmasConsultarOpModulo);
 		JsonObject datosTransferenciaBIMFirmasConsultarResultadoObjeto = Utilerias.performOperacion(TransferenciasBIMServicio, TransferenciaBIMFirmasConsultarOp, datosTransferenciaBIMFirmasConsultar);
+		logger.info("datosTransferenciaBIMFirmasConsultarResultadoObjeto" + datosTransferenciaBIMFirmasConsultarResultadoObjeto);
+		logger.info("COMMONS: Finalizando transferenciaBIMFirmasConsultar metodo... ");
+		return datosTransferenciaBIMFirmasConsultarResultadoObjeto;
+	}
+	
+	public JsonObject transferenciaBIMFirmasConsultarResultSets(JsonObject datosTransferenciaBIMFirmasConsultar) {
+		logger.info("COMMONS: Comenzando transferenciaBIMFirmasConsultar metodo... ");
+		datosTransferenciaBIMFirmasConsultar.addProperty("Ftb_Valida", "");
+		datosTransferenciaBIMFirmasConsultar.addProperty("Ftb_Usuari", "");
+		datosTransferenciaBIMFirmasConsultar.addProperty("Ftb_Client", "");
+		datosTransferenciaBIMFirmasConsultar.addProperty("NumTransac", "");
+		datosTransferenciaBIMFirmasConsultar.addProperty("Tip_Consul", TransferenciaBIMFirmasConsultarOpTipConsul);
+		datosTransferenciaBIMFirmasConsultar.addProperty("Transaccio", TransferenciaBIMFirmasConsultarOpTransaccio);
+		datosTransferenciaBIMFirmasConsultar.addProperty("Usuario", TransferenciaBIMFirmasConsultarOpUsuario);
+		datosTransferenciaBIMFirmasConsultar.addProperty("SucOrigen", TransferenciaBIMFirmasConsultarOpSucOrigen);
+		datosTransferenciaBIMFirmasConsultar.addProperty("SucDestino", TransferenciaBIMFirmasConsultarOpSucDestino);
+		datosTransferenciaBIMFirmasConsultar.addProperty("Modulo", TransferenciaBIMFirmasConsultarOpModulo);
+		JsonObject datosTransferenciaBIMFirmasConsultarResultadoObjeto = transferenciasBIMDAO.transferenciaBIMFirmasConsultar(datosTransferenciaBIMFirmasConsultar);
 		logger.info("datosTransferenciaBIMFirmasConsultarResultadoObjeto" + datosTransferenciaBIMFirmasConsultarResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaBIMFirmasConsultar metodo... ");
 		return datosTransferenciaBIMFirmasConsultarResultadoObjeto;
