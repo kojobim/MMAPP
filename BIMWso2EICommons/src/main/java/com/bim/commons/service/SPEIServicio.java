@@ -3,7 +3,7 @@ package com.bim.commons.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.bim.commons.dao.TransferenciasNacionalesDAO;
+import com.bim.commons.dao.ResultSetDAO;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
@@ -17,7 +17,7 @@ public class SPEIServicio extends BaseService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SPEIServicio.class);
 	
-	private TransferenciasNacionalesDAO transferenciasNacionalesDAO;
+	private ResultSetDAO resultSetDAO;
 	
 	//servicio
 	private static String SPEIServicio;
@@ -48,7 +48,6 @@ public class SPEIServicio extends BaseService {
 	//propiedades para procesar tranferencia nacional
 	private static String TransferenciaSPEIProcesarOpTrsCuBe;
 	private static String TransferenciaSPEIProcesarOpTrsTipPag;
-	private static String TransferenciaSPEIProcesarOpTrsTipTra;
 	private static String TransferenciaSPEIProcesarOpTrsValFir;
 	private static String TransferenciaSPEIProcesarOpTransaccio;
 	private static String TransferenciaSPEIProcesarOpUsuario;
@@ -92,7 +91,6 @@ public class SPEIServicio extends BaseService {
 		TransferenciaSPEIProcesarOp = properties.getProperty("spei_servicio.op.transferencias_spei_procesar");
 		TransferenciaSPEIProcesarOpTrsCuBe = properties.getProperty("op.transferencias_spei_procesar.trs_ti_cu_be");
 		TransferenciaSPEIProcesarOpTrsTipPag = properties.getProperty("op.transferencias_spei_procesar.trs_tip_pag");
-		TransferenciaSPEIProcesarOpTrsTipTra = properties.getProperty("op.transferencias_spei_procesar.trs_tip_tra");
 		TransferenciaSPEIProcesarOpTrsValFir = properties.getProperty("op.transferencias_spei_procesar.trs_val_fir");
 		TransferenciaSPEIProcesarOpTransaccio = properties.getProperty("op.transferencias_spei_procesar.transaccio");
 		TransferenciaSPEIProcesarOpUsuario = properties.getProperty("op.transferencias_spei_procesar.usuario");
@@ -114,7 +112,7 @@ public class SPEIServicio extends BaseService {
 	
 	public SPEIServicio() {
 		super();
-		this.transferenciasNacionalesDAO = new TransferenciasNacionalesDAO();
+		this.resultSetDAO = new ResultSetDAO();
 	}
 
 	/**
@@ -158,7 +156,7 @@ public class SPEIServicio extends BaseService {
 		datosHorariosSPEI.addProperty("SucDestino", HorariosSPEIConsultarOpSucDestino);
 		datosHorariosSPEI.addProperty("Modulo", HorariosSPEIConsultarOpModulo);
 		JsonObject horariosSPEIConsultarOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, HorariosSPEIConsultarOp, datosHorariosSPEI);
-		logger.info("horariosSPEIConsultarOpResultadoObjeto" + horariosSPEIConsultarOpResultadoObjeto);
+		logger.info("-- horariosSPEIConsultarOpResultadoObjeto" + horariosSPEIConsultarOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando horariosSPEIConsultar metodo... ");
 		return horariosSPEIConsultarOpResultadoObjeto;
 	}
@@ -196,7 +194,7 @@ public class SPEIServicio extends BaseService {
 	 * @return
 	 * <pre>
 	 * {
-	 * 	transaccionSPEI: {
+	 * 	transferenciaSPEI: {
 	 *		Err_Codigo: String,
 	 *		Err_Mensaj: String,
 	 *		Trs_Consec: String
@@ -226,11 +224,11 @@ public class SPEIServicio extends BaseService {
 		datosTransfarenciaSPEI.addProperty("SucDestino", TransferenciaSPEICreacionOpSucDestino);
 		datosTransfarenciaSPEI.addProperty("Modulo", TransferenciaSPEICreacionOpModulo);
 		JsonObject transferenciaSPEICreacionOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransferenciaSPEICreacionOp, datosTransfarenciaSPEI);
-		logger.info("transferenciaSPEICreacionOpResultadoObjeto" + transferenciaSPEICreacionOpResultadoObjeto);
+		logger.info("-- transferenciaSPEICreacionOpResultadoObjeto" + transferenciaSPEICreacionOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaSPEICreacion metodo... ");
 		return transferenciaSPEICreacionOpResultadoObjeto;
 	}
-	
+
 	/**
 	 * Método para procesar la transferencia SPEI
 	 * ProcedureName: NBTRASPEPRO
@@ -271,7 +269,7 @@ public class SPEIServicio extends BaseService {
  	 * @return
 	 * <pre>
 	 * {
-	 * 	transaccionSPEI: {
+	 * 	transferenciaSPEI: {
 	 *		Err_Codigo: String,
 	 *		Err_Mensaj: String,
 	 *		NumTransac: String,
@@ -314,15 +312,13 @@ public class SPEIServicio extends BaseService {
 			datosTransferenciaSPEI.addProperty("Trs_DireIP", "");
 		datosTransferenciaSPEI.addProperty("Trs_TiCuBe", TransferenciaSPEIProcesarOpTrsCuBe);
 		datosTransferenciaSPEI.addProperty("Trs_TipPag", TransferenciaSPEIProcesarOpTrsTipPag);
-		datosTransferenciaSPEI.addProperty("Trs_TipTra", TransferenciaSPEIProcesarOpTrsTipTra);
-		datosTransferenciaSPEI.addProperty("Trs_ValFir", TransferenciaSPEIProcesarOpTrsValFir);
 		datosTransferenciaSPEI.addProperty("Transaccio", TransferenciaSPEIProcesarOpTransaccio);
 		datosTransferenciaSPEI.addProperty("Usuario", TransferenciaSPEIProcesarOpUsuario);
 		datosTransferenciaSPEI.addProperty("SucOrigen", TransferenciaSPEIProcesarOpSucOrigen);
 		datosTransferenciaSPEI.addProperty("SucDestino", TransferenciaSPEIProcesarOpSucDestino);
 		datosTransferenciaSPEI.addProperty("Modulo", TransferenciaSPEIProcesarOpModulo);
 		JsonObject transferenciaSPEIProcesarOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransferenciaSPEIProcesarOp, datosTransferenciaSPEI);
-		logger.info("transferenciaSPEIProcesarOpResultadoObjeto" + transferenciaSPEIProcesarOpResultadoObjeto);
+		logger.info("-- transferenciaSPEIProcesarOpResultadoObjeto" + transferenciaSPEIProcesarOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaSPEIProcesar metodo... ");
 		return transferenciaSPEIProcesarOpResultadoObjeto;
 	}
@@ -342,7 +338,7 @@ public class SPEIServicio extends BaseService {
 	 * @return
 	 * <pre>
 	 * {
-	 * 	transaccionesSPEI: {
+	 * 	transferenciasSPEI: {
 	 * 		Trn_Client: String,
 	 * 		Trn_Consec: String,
 	 * 		Trn_CueOri: String,
@@ -422,10 +418,11 @@ public class SPEIServicio extends BaseService {
 		datosTransferenciaSPEI.addProperty("SucOrigen", TransferenciaSPEIConsultarOpSucOrigen);
 		datosTransferenciaSPEI.addProperty("SucDestino", TransferenciaSPEIConsultarOpSucDestino);
 		datosTransferenciaSPEI.addProperty("Modulo", TransferenciaSPEIConsultarOpModulo);
-		JsonObject transferenciaSPEIConsultarOpResultadoObjeto = transferenciasNacionalesDAO.transferenciasNacionalesConsultar(datosTransferenciaSPEI);
-		logger.info("transferenciaSPEIConsultarOpResultadoObjeto" + transferenciaSPEIConsultarOpResultadoObjeto);
+
+		JsonObject transferenciaSPEIConsultarOpResultadoObjetoPrueba = resultSetDAO.resultSet(datosTransferenciaSPEI, "NBTRANACCON", "transferenciasSPEI", "transferenciaSPEI");
+		logger.info("-- transferenciaSPEIConsultarOpResultadoObjetoPrueba" + transferenciaSPEIConsultarOpResultadoObjetoPrueba);
 		logger.info("COMMONS: Finalizando transferenciaSPEIConsultarResultSets metodo... ");
-		return transferenciaSPEIConsultarOpResultadoObjeto;
+		return transferenciaSPEIConsultarOpResultadoObjetoPrueba;
 	}
 	
 }
