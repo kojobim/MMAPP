@@ -1,5 +1,6 @@
 package com.bim.commons.service;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
@@ -171,5 +172,52 @@ public class SPEIServicioTest {
 		assertTrue("El elemento no tiene la propiedad Trn_Banco",transaccionSPEIItem.has("Trn_Banco"));
 		
 		logger.info("TEST: Finalizando transaferenciaSPEIConsultarTestDeberiaSerExitoso metodo...");
+	}
+	
+	@Test
+	public void transferenciaSPEIFirmasConsultarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando transferenciaSPEIFirmasConsultarTestDeberiaSerExitoso metodo... ");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosTransferenciaSPEIFirmas = new JsonObject();
+		datosTransferenciaSPEIFirmas.addProperty("Fts_Consec", "0000132908");
+		datosTransferenciaSPEIFirmas.addProperty("FechaSis", fechaSis);
+		logger.info("datos >>>>" +  datosTransferenciaSPEIFirmas);
+		/**
+		 *	Mockup Test
+		 * String json = "{\"transferenciasSPEI\":{\"transferenciaSPEI\":[{\"Fts_Consec\":\"String\",\"Fts_NivFir\":\"String\",\"Fts_Cantid\":\"Integer\"}]}}";
+		 * JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+
+		/**
+		 * Test
+		 */
+		JsonObject resultado = speiServicio.transferenciaSPEIFirmasConsultar(datosTransferenciaSPEIFirmas);
+		logger.info("- resultado: "+ resultado);
+		
+		assertTrue("No viene la propiedad transferenciasSPEI", resultado.has("transferenciasSPEI"));
+		assertTrue("La propiedad transferenciasSPEI no es un JsonObject", resultado.get("transferenciasSPEI").isJsonObject());
+		
+		JsonObject transferenciasSPEI = Utilerias.obtenerJsonObjectPropiedad(resultado, "transferenciasSPEI");
+		
+		assertTrue("No viene la propiedad transferenciaSPEI", transferenciasSPEI.has("transferenciaSPEI"));
+		
+		JsonObject transferenciaSPEIElemento = null;
+		if(transferenciasSPEI.get("transferenciaSPEI").isJsonArray()) {
+			JsonArray transferenciaSPEI = Utilerias.obtenerJsonArrayPropiedad(transferenciasSPEI, "transferenciaSPEI");
+			
+			assertTrue("La propiedad transferenciaSPEI no tiene elementos", transferenciaSPEI.size() > 0);
+			assertTrue("El elemento de transferenciaSPEI no es un JsonObject", transferenciaSPEI.get(0).isJsonObject());
+			
+			transferenciaSPEIElemento = transferenciaSPEI.get(0).getAsJsonObject();
+			
+			assertTrue("La propiedad Fts_Consec no se encuentra en transferenciaSPEI", transferenciaSPEIElemento.has("Fts_Consec"));
+			assertTrue("La propiedad Fts_NivFir no se encuentra en transferenciaSPEI", transferenciaSPEIElemento.has("Fts_NivFir"));
+		}
+		else
+			transferenciaSPEIElemento = transferenciasSPEI.get("transferenciaSPEI").getAsJsonObject();
+		
+		assertNotNull("El elemento transferenciaSPEI es nulo", transferenciaSPEIElemento);
+		
+		logger.info("TEST: Finalizando transferenciaSPEIFirmasConsultarTestDeberiaSerExitoso metodo... ");
 	}
 }
