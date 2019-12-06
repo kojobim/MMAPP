@@ -29,7 +29,6 @@ public class ResultSetDAO {
 		Map<String, Object> datosMap = null;
 		ArrayList<Object> datosArray = null;
 		int index = 0;
-		String sql = null;
 		JsonObject resultado = null;
 		
 		if(datos != null && !datos.isJsonNull()){
@@ -55,8 +54,6 @@ public class ResultSetDAO {
 			}
 			datosArray.add(dato.getValue());
 		}
-		
-		
 		
 		try (Connection conn = DBConnection.getConnection();
 				PreparedStatement statement = conn.prepareStatement(query.toString());) {
