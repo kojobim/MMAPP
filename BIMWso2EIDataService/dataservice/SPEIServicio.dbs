@@ -38,6 +38,56 @@
             <element column="Hor_HorFin" name="Hor_HorFin" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="transferenciaSPEIFirmasConsultarSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE NBFITRSPCON
+			@Fts_Valida = :ftsValida,
+			@Fts_Usuari = :ftsUsuari,
+			@Fts_Client = :ftsClient,
+			@Fts_Consec = :ftsConsec,
+			@Tip_Consul = :tipConsul,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+    	</sql>
+        <param name="ftsValida" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="ftsUsuari" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="ftsClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="ftsConsec" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/transferenciasSPEIFirmasConsultar" element="transferenciasSPEIFirmas" rowName="transferenciaSPEIFirmas">
+            <element column="Fts_Consec" name="Fts_Consec" xsdType="xs:string" optional="true"/>
+            <element column="Fts_NivFir" name="Fts_NivFir" xsdType="xs:string" optional="true"/>
+            <element column="Fts_Cantid" name="Fts_Cantid" xsdType="xs:integer" optional="true"/>
+        </result>
+    </query>
+    <operation name="transferenciaSPEIFirmasConsultarOp">
+        <call-query href="transferenciaSPEIFirmasConsultarSQL">
+            <with-param name="ftsValida" query-param="Fts_Valida"/>
+            <with-param name="ftsUsuari" query-param="Fts_Usuari"/>
+            <with-param name="ftsClient" query-param="Fts_Client"/>
+            <with-param name="ftsConsec" query-param="Fts_Consec"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
     <operation name="horariosSPEIConsultarOp">
         <call-query href="horariosSPEIConsultarSQL">
             <with-param name="tipConsul" query-param="Tip_Consul"/>
