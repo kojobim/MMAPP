@@ -67,8 +67,8 @@ public class ResultSetDAO {
 
 			while (true) {
 				int contadorAct = statement.getUpdateCount();
-				logger.info("resultadoCon >>>>> " + resultadoCon);
-				logger.info("contadorAct >>>>> " + contadorAct);
+				logger.debug("resultadoCon >>>>> " + resultadoCon);
+				logger.debug("contadorAct >>>>> " + contadorAct);
 				ResultSet rs = statement.getResultSet();
 				if (resultadoCon) {
 					ResultSetMetaData rsmd = rs.getMetaData();
