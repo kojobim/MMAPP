@@ -48,7 +48,6 @@ public class SPEIServicio extends BaseService {
 	//propiedades para procesar tranferencia nacional
 	private static String TransferenciaSPEIProcesarOpTrsCuBe;
 	private static String TransferenciaSPEIProcesarOpTrsTipPag;
-	private static String TransferenciaSPEIProcesarOpTrsValFir;
 	private static String TransferenciaSPEIProcesarOpTransaccio;
 	private static String TransferenciaSPEIProcesarOpUsuario;
 	private static String TransferenciaSPEIProcesarOpSucOrigen;
@@ -100,7 +99,6 @@ public class SPEIServicio extends BaseService {
 		TransferenciaSPEIProcesarOp = properties.getProperty("spei_servicio.op.transferencias_spei_procesar");
 		TransferenciaSPEIProcesarOpTrsCuBe = properties.getProperty("op.transferencias_spei_procesar.trs_ti_cu_be");
 		TransferenciaSPEIProcesarOpTrsTipPag = properties.getProperty("op.transferencias_spei_procesar.trs_tip_pag");
-		TransferenciaSPEIProcesarOpTrsValFir = properties.getProperty("op.transferencias_spei_procesar.trs_val_fir");
 		TransferenciaSPEIProcesarOpTransaccio = properties.getProperty("op.transferencias_spei_procesar.transaccio");
 		TransferenciaSPEIProcesarOpUsuario = properties.getProperty("op.transferencias_spei_procesar.usuario");
 		TransferenciaSPEIProcesarOpSucOrigen = properties.getProperty("op.transferencias_spei_procesar.suc_origen");
@@ -181,7 +179,7 @@ public class SPEIServicio extends BaseService {
 	/**
 	 * Método para crear transferencias SPEI
 	 * ProcedureName: NBTRASPEALT
-	 * @param datosTransfarenciaSPEI
+	 * @param datosTransferenciaSPEI
 	 * <pre>
 	 * {
 	 *  Trs_Usuari: String,
@@ -219,28 +217,29 @@ public class SPEIServicio extends BaseService {
 	 * }
 	 * </pre>
 	 */
-	public JsonObject transferenciaSPEICreacion(JsonObject datosTransfarenciaSPEI) {
+	public JsonObject transferenciaSPEICreacion(JsonObject datosTransferenciaSPEI) {
 		logger.info("COMMONS: Comenzando transferenciaSPEICreacion metodo... ");
-		if(!datosTransfarenciaSPEI.has("Trs_SegRef"))
-			datosTransfarenciaSPEI.addProperty("Trs_SegRef", "");
-		if(!datosTransfarenciaSPEI.has("Trs_RFC"))
-			datosTransfarenciaSPEI.addProperty("Trs_RFC", "");
-		if(!datosTransfarenciaSPEI.has("Trs_Email"))
-			datosTransfarenciaSPEI.addProperty("Trs_Email", "");
-		if(!datosTransfarenciaSPEI.has("Trs_TipDur"))
-			datosTransfarenciaSPEI.addProperty("Trs_TipDur", "");
-		if(!datosTransfarenciaSPEI.has("Trs_IVA"))
-			datosTransfarenciaSPEI.addProperty("Trs_IVA", 0);
-		if(!datosTransfarenciaSPEI.has("Trs_DurTra"))
-			datosTransfarenciaSPEI.addProperty("Trs_DurTra", 0);
-		if(!datosTransfarenciaSPEI.has("Trs_DiAnEm"))
-			datosTransfarenciaSPEI.addProperty("Trs_DiAnEm", 0);
-		datosTransfarenciaSPEI.addProperty("Transaccio", TransferenciaSPEICreacionOpTransaccio);
-		datosTransfarenciaSPEI.addProperty("Usuario", TransferenciaSPEICreacionOpUsuario);
-		datosTransfarenciaSPEI.addProperty("SucOrigen", TransferenciaSPEICreacionOpSucOrigen);
-		datosTransfarenciaSPEI.addProperty("SucDestino", TransferenciaSPEICreacionOpSucDestino);
-		datosTransfarenciaSPEI.addProperty("Modulo", TransferenciaSPEICreacionOpModulo);
-		JsonObject transferenciaSPEICreacionOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransferenciaSPEICreacionOp, datosTransfarenciaSPEI);
+		if(!datosTransferenciaSPEI.has("Trs_SegRef"))
+			datosTransferenciaSPEI.addProperty("Trs_SegRef", "");
+		if(!datosTransferenciaSPEI.has("Trs_RFC"))
+			datosTransferenciaSPEI.addProperty("Trs_RFC", "");
+		if(!datosTransferenciaSPEI.has("Trs_Email"))
+			datosTransferenciaSPEI.addProperty("Trs_Email", "");
+		if(!datosTransferenciaSPEI.has("Trs_TipDur"))
+			datosTransferenciaSPEI.addProperty("Trs_TipDur", "");
+		if(!datosTransferenciaSPEI.has("Trs_IVA"))
+			datosTransferenciaSPEI.addProperty("Trs_IVA", 0);
+		if(!datosTransferenciaSPEI.has("Trs_DurTra"))
+			datosTransferenciaSPEI.addProperty("Trs_DurTra", 0);
+		if(!datosTransferenciaSPEI.has("Trs_DiAnEm"))
+			datosTransferenciaSPEI.addProperty("Trs_DiAnEm", 0);
+		datosTransferenciaSPEI.addProperty("Transaccio", TransferenciaSPEICreacionOpTransaccio);
+		datosTransferenciaSPEI.addProperty("Usuario", TransferenciaSPEICreacionOpUsuario);
+		datosTransferenciaSPEI.addProperty("SucOrigen", TransferenciaSPEICreacionOpSucOrigen);
+		datosTransferenciaSPEI.addProperty("SucDestino", TransferenciaSPEICreacionOpSucDestino);
+		datosTransferenciaSPEI.addProperty("Modulo", TransferenciaSPEICreacionOpModulo);
+		logger.info("-- datosTransfarenciaSPEI" + datosTransferenciaSPEI);
+		JsonObject transferenciaSPEICreacionOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransferenciaSPEICreacionOp, datosTransferenciaSPEI);
 		logger.info("-- transferenciaSPEICreacionOpResultadoObjeto" + transferenciaSPEICreacionOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaSPEICreacion metodo... ");
 		return transferenciaSPEICreacionOpResultadoObjeto;
@@ -278,7 +277,6 @@ public class SPEIServicio extends BaseService {
 	 * 	Trs_TipTra: String,
 	 * 	Trs_ValFir: String,
 	 * 	Ban_Descri: String,
-	 * 	NumTransac: String,
 	 * 	FechaSis: String
 	 * }
 	 * </pre>
@@ -327,6 +325,8 @@ public class SPEIServicio extends BaseService {
 			datosTransferenciaSPEI.addProperty("Trs_DaBeAd", "");
 		if(!datosTransferenciaSPEI.has("Trs_DireIP"))
 			datosTransferenciaSPEI.addProperty("Trs_DireIP", "");
+		if(!datosTransferenciaSPEI.has("NumTransac"))
+			datosTransferenciaSPEI.addProperty("NumTransac", "");
 		datosTransferenciaSPEI.addProperty("Trs_TiCuBe", TransferenciaSPEIProcesarOpTrsCuBe);
 		datosTransferenciaSPEI.addProperty("Trs_TipPag", TransferenciaSPEIProcesarOpTrsTipPag);
 		datosTransferenciaSPEI.addProperty("Transaccio", TransferenciaSPEIProcesarOpTransaccio);
@@ -360,12 +360,12 @@ public class SPEIServicio extends BaseService {
 	 * 		Trn_Consec: String,
 	 * 		Trn_CueOri: String,
 	 * 		Trn_CueDes: String,
-	 * 		Trn_Monto: Duble,
+	 * 		Trn_Monto: Double,
 	 * 		Trn_Banco: String,
 	 * 		Trn_Status: String,
 	 * 		Trn_Descri: String,
 	 * 		Trn_RFC: String,
-	 * 		Trn_IVA: Duble,
+	 * 		Trn_IVA: Double,
 	 * 		Trn_Tipo: String,
 	 * 		Trn_UsuCap: String,
 	 * 		Trn_TipTra: String,
