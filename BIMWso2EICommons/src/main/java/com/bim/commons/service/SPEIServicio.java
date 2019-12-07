@@ -171,7 +171,7 @@ public class SPEIServicio extends BaseService {
 		datosHorariosSPEI.addProperty("SucDestino", HorariosSPEIConsultarOpSucDestino);
 		datosHorariosSPEI.addProperty("Modulo", HorariosSPEIConsultarOpModulo);
 		JsonObject horariosSPEIConsultarOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, HorariosSPEIConsultarOp, datosHorariosSPEI);
-		logger.info("-- horariosSPEIConsultarOpResultadoObjeto" + horariosSPEIConsultarOpResultadoObjeto);
+		logger.debug("-- horariosSPEIConsultarOpResultadoObjeto" + horariosSPEIConsultarOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando horariosSPEIConsultar metodo... ");
 		return horariosSPEIConsultarOpResultadoObjeto;
 	}
@@ -335,7 +335,7 @@ public class SPEIServicio extends BaseService {
 		datosTransferenciaSPEI.addProperty("SucDestino", TransferenciaSPEIProcesarOpSucDestino);
 		datosTransferenciaSPEI.addProperty("Modulo", TransferenciaSPEIProcesarOpModulo);
 		JsonObject transferenciaSPEIProcesarOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransferenciaSPEIProcesarOp, datosTransferenciaSPEI);
-		logger.info("-- transferenciaSPEIProcesarOpResultadoObjeto" + transferenciaSPEIProcesarOpResultadoObjeto);
+		logger.debug("-- transferenciaSPEIProcesarOpResultadoObjeto" + transferenciaSPEIProcesarOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaSPEIProcesar metodo... ");
 		return transferenciaSPEIProcesarOpResultadoObjeto;
 	}
@@ -414,6 +414,7 @@ public class SPEIServicio extends BaseService {
 		datosTransferenciaSPEI.addProperty("SucDestino", TransferenciaSPEIConsultarOpSucDestino);
 		datosTransferenciaSPEI.addProperty("Modulo", TransferenciaSPEIConsultarOpModulo);
 		JsonObject transferenciaSPEIConsultarOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransferenciaSPEIConsultarOp, datosTransferenciaSPEI);
+		logger.debug("-- transferenciaSPEIConsultarOpResultadoObjeto" + transferenciaSPEIConsultarOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaSPEIConsultar metodo... ");
 		return transferenciaSPEIConsultarOpResultadoObjeto;
 	}
@@ -563,7 +564,7 @@ public class SPEIServicio extends BaseService {
 		datosTransferenciaSPEIFirmas.addProperty("SucDestino", TransferenciaSPEIFirmasConsultarOpSucDestino);
 		datosTransferenciaSPEIFirmas.addProperty("Modulo", TransferenciaSPEIFirmasConsultarOpModulo);
 		JsonObject transferenciaSPEIFirmasConsultarResultadoObjeto =  Utilerias.performOperacion(SPEIServicio, TransferenciaSPEIFirmasConsultarOp, datosTransferenciaSPEIFirmas);
-		logger.info("-- transferenciaSPEIFirmasConsultarResultadoObjeto" + transferenciaSPEIFirmasConsultarResultadoObjeto);
+		logger.debug("-- transferenciaSPEIFirmasConsultarResultadoObjeto" + transferenciaSPEIFirmasConsultarResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaSPEIFirmasConsultar metodo... ");
 		return transferenciaSPEIFirmasConsultarResultadoObjeto;
 	} //Cierre de metodo
@@ -620,7 +621,7 @@ public class SPEIServicio extends BaseService {
 		datosTransferenciaSPEIFirmas.addProperty("SucDestino", TransferenciaSPEIFirmasConsultarOpSucDestino);
 		datosTransferenciaSPEIFirmas.addProperty("Modulo", TransferenciaSPEIFirmasConsultarOpModulo);
 		JsonObject transferenciaSPEIFirmasConsultarResultadoObjeto = resultSetDAO.resultSet(datosTransferenciaSPEIFirmas, "NBFITRSPCON", "transferenciasSPEI", "transferenciaSPEI");
-		logger.info("-- transferenciaSPEIFirmasConsultarResultadoObjeto" + transferenciaSPEIFirmasConsultarResultadoObjeto);
+		logger.debug("-- transferenciaSPEIFirmasConsultarResultadoObjeto" + transferenciaSPEIFirmasConsultarResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaSPEIFirmasConsultarResultSet metodo... ");
 		return transferenciaSPEIFirmasConsultarResultadoObjeto;
 	} //Cierre de metodo
