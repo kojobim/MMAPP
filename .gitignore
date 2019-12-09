@@ -69,7 +69,16 @@ BIMWso2EIConnectorExporter/.settings/org.eclipse.m2e.core.prefs
 BIMWso2EIDataService/.settings/org.eclipse.m2e.core.prefs
 BIMWso2EIRegistry/.settings/org.eclipse.m2e.core.prefs
 BIMWso2EIMicroservice/dependency-reduced-pom.xml
+
+BIMWso2EICommons/lib/
+
 BIMWso2EICommons/.factorypath
+
+BIMWso2EICommons/.settings/
+
+*.class
+
+BIMWso2EICommons/bin/.settings/
 BIMWso2EICommons/.settings/org.eclipse.jdt.apt.core.prefs
 BIMWso2EICommons/bin/.gitignore
 BIMWso2EICommons/bin/.settings/org.eclipse.core.resources.prefs
