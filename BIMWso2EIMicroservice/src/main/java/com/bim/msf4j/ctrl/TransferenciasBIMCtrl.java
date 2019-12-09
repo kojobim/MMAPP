@@ -320,8 +320,8 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		 */
 		
 		JsonObject datosTransferenciaBIMCreacion = new JsonObject();
-		datosTransferenciaBIMCreacion.addProperty("Trb_RFC", trbRFC);
-		datosTransferenciaBIMCreacion.addProperty("Trb_IVA", trbIVA);
+		datosTransferenciaBIMCreacion.addProperty("Trb_RFC", trbRFC != null ? trbRFC : "");
+		datosTransferenciaBIMCreacion.addProperty("Trb_IVA", trbIVA != null ? trbIVA : 0);
 		datosTransferenciaBIMCreacion.addProperty("Trb_Client", usuClient);
 		datosTransferenciaBIMCreacion.addProperty("Trb_CueOri", trbCueOri);
 		datosTransferenciaBIMCreacion.addProperty("Trb_CueDes", trbCueDes);
@@ -420,8 +420,8 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		String trbTipTra = Utilerias.obtenerStringPropiedad(transferenciaBIMConsultarResultadoObjeto, "Trb_TipTra");
 		
 		JsonObject datosTransferenciaBIMProcesar = new JsonObject();
-		datosTransferenciaBIMProcesar.addProperty("Trb_RFC", trbRFC);
-		datosTransferenciaBIMProcesar.addProperty("Trb_IVA", trbIVA);
+		datosTransferenciaBIMProcesar.addProperty("Trb_RFC", trbRFC != null ? trbRFC : "");
+		datosTransferenciaBIMProcesar.addProperty("Trb_IVA", trbIVA != null ? trbIVA : 0);
 		datosTransferenciaBIMProcesar.addProperty("Trb_UsuAdm", usuUsuAdm);
 		datosTransferenciaBIMProcesar.addProperty("Trb_Usuari", usuNumero);
 		datosTransferenciaBIMProcesar.addProperty("Trb_Client", usuClient);
