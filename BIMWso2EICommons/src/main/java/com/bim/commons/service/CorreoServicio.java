@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.exceptions.InternalServerException;
-import com.bim.commons.utils.Utilerias;
 
 import java.io.FileInputStream;
 import java.io.IOException;

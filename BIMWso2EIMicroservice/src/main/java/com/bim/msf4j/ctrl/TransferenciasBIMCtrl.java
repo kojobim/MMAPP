@@ -51,6 +51,8 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 	private static String TransferenciaBIMCreacionOpTrbFrecue;
 	private static String TransferenciaBIMCreacionOpTrbMonOri;
 	private static String TransferenciaBIMCreacionOpTrbMonDes;
+	private static String TransferenciaBIMCreacionOpTrbFePrEn;
+	private static String TransferenciaBIMCreacionOpTrbDurFec;
 	private static String TransferenciaBIMBitacoraCreacionOpBitTipOpe;
 
 	static {
@@ -62,6 +64,8 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		TransferenciaBIMCreacionOpTrbFrecue = properties.getProperty("op.transferencia_bim_creacion.trb_frecue");
 		TransferenciaBIMCreacionOpTrbMonOri = properties.getProperty("op.transferencia_bim_creacion.trb_mon_ori");
 		TransferenciaBIMCreacionOpTrbMonDes = properties.getProperty("op.transferencia_bim_creacion.trb_mon_des");
+		TransferenciaBIMCreacionOpTrbFePrEn = properties.getProperty("op.transferencia_bim_creacion.trb_fe_pr_en");
+		TransferenciaBIMCreacionOpTrbDurFec = properties.getProperty("op.transferencia_bim_creacion.trb_dur_fec");
 		TransferenciaBIMBitacoraCreacionOpBitTipOpe = properties.getProperty("op.transferencia_bim.bitacora_creacion.bit_tip_ope");
 	}
 
@@ -314,7 +318,6 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		/**
 		 * Trb_FePrEn y Trb_DurFec se dejan en duro debido a que no se ha contemplado el flujo de transferencias programadas.
 		 */
-		String fechaTransferenciasInmediatas = "1900-01-01 00:00:00";
 		
 		JsonObject datosTransferenciaBIMCreacion = new JsonObject();
 		datosTransferenciaBIMCreacion.addProperty("Trb_RFC", trbRFC);
@@ -328,8 +331,8 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		datosTransferenciaBIMCreacion.addProperty("Trb_Descri", trbDescri);
 		datosTransferenciaBIMCreacion.addProperty("Trb_UsuCap", usuNumero);
 		datosTransferenciaBIMCreacion.addProperty("Trb_FecAut", fechaSis);
-		datosTransferenciaBIMCreacion.addProperty("Trb_FePrEn", fechaTransferenciasInmediatas);
-		datosTransferenciaBIMCreacion.addProperty("Trb_DurFec", fechaTransferenciasInmediatas);
+		datosTransferenciaBIMCreacion.addProperty("Trb_FePrEn", TransferenciaBIMCreacionOpTrbFePrEn);
+		datosTransferenciaBIMCreacion.addProperty("Trb_DurFec", TransferenciaBIMCreacionOpTrbDurFec);
 		datosTransferenciaBIMCreacion.addProperty("Trb_EmaBen", trbEmaBen);
 		datosTransferenciaBIMCreacion.addProperty("NumTransac", folTransa);
 		datosTransferenciaBIMCreacion.addProperty("Trb_TipTra", TransferenciaBIMCreacionOpTrbTipTra);
