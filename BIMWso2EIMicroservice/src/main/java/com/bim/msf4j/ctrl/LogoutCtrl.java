@@ -54,8 +54,8 @@ public class LogoutCtrl extends BimBaseCtrl  {
 		JsonObject principalResultadoObjeto = Utilerias.obtenerPrincipal(bearerToken.toString());
 		
 		String usuNumero = Utilerias.obtenerStringPropiedad(principalResultadoObjeto, "usuNumero");
-		String bitDireIP = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("User-Agent") : "";
-		String bitPriRef = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("X-Forwarded-For") : "";
+		String bitDireIP = solicitud.getHeader("User-Agent") != null ? solicitud.getHeader("User-Agent") : "";
+		String bitPriRef = solicitud.getHeader("X-Forwarded-For") != null ? solicitud.getHeader("X-Forwarded-For") : "";
 		
 		JsonObject folioTransaccionGenerarResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
 		String folTransa = Utilerias.obtenerStringPropiedad(folioTransaccionGenerarResultadoObjeto.get("transaccion").getAsJsonObject(), "Fol_Transa");

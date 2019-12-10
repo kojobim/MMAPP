@@ -530,11 +530,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		String usuClient = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuClient");
 		String usuNombre = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuNombre");
 		String usuEmail = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuEmail");
-		// String usuFolTok = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuFolTok");
-		/**
-		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
-		 */
-		String usuFolTok = "0416218854";
+		String usuFolTok = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuFolTok");
 		
 		JsonObject altaCuentaDestinoBim = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoObjeto, "altaCuentaDestinoNacional");
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cpRSAToken");

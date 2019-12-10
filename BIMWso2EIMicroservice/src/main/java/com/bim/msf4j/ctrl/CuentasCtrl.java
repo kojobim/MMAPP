@@ -330,12 +330,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(datosCorreoMovimientos, "cpRSAToken");
 		logger.info("- claveRSA " + cpRSAToken);
 
-		/**
-		 * Se pone la vairable folTok en duro para fines de prueba
-		 * normalemente se extraeria del principal con la utileria
-		 * Utilerias.getStringProperty(principal, "usuFolTok");
-		 */
-		String folTok = "0416218854";
+		 String folTok = principal.get("usuFolTok").getAsString();
 		logger.info("- folTok " + folTok);
 
 		String bitUsuari = Utilerias.obtenerStringPropiedad(principal, "usuNumero");
