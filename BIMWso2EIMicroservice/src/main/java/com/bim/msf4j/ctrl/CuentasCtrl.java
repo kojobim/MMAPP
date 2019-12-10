@@ -215,7 +215,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		logger.info(">>>>>>>>>principalResultadoObjecto: " + principalResultadoObjecto);
 		logger.info(">>>>>X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
 		
-		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
+		String bitDireIP = solicitud.getHeader("X-Forwarded-For") != null ? solicitud.getHeader("X-Forwarded-For") : "" ;
 		String fechaSis = Utilerias.obtenerFechaSis();
 		
 		logger.info(">>>>>fechaSis " + fechaSis);

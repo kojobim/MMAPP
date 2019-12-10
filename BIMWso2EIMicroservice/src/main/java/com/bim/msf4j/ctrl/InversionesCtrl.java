@@ -1,10 +1,8 @@
 package com.bim.msf4j.ctrl;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -20,8 +18,8 @@ import javax.ws.rs.core.Response;
 import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
 
-import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.dto.BimEmailTemplateDTO;
+import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.enums.InversionesCategoriasEnum;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.ConflictException;
@@ -30,13 +28,13 @@ import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.service.BitacoraServicio;
 import com.bim.commons.service.ClienteServicio;
 import com.bim.commons.service.ConfiguracionServicio;
+import com.bim.commons.service.CorreoServicio;
 import com.bim.commons.service.InversionesServicio;
 import com.bim.commons.service.ReinversionServicio;
 import com.bim.commons.service.TasaServicio;
 import com.bim.commons.service.TokenServicio;
 import com.bim.commons.service.TransaccionServicio;
 import com.bim.commons.service.UsuarioServicio;
-import com.bim.commons.service.CorreoServicio;
 import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
@@ -147,8 +145,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		
 		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
-		String bit_DireIP = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("X-forwarded-For") : "";
-		String bit_PriRef = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("User-Agent") : "";
+		String bit_DireIP = solicitud.getHeader("X-Forwarded-For") != null ? solicitud.getHeader("X-forwarded-For") : "";
+		String bit_PriRef = solicitud.getHeader("User-Agent") != null ? solicitud.getHeader("User-Agent") : "";
 		
 		String usuNumero = principalResultadoObjeto.get("usuNumero").getAsString();
 		String usuClient = principalResultadoObjeto.get("usuClient").getAsString();
@@ -374,8 +372,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 				Date fechaIni = Utilerias.convertirFecha(invFecIni);
 				Date fechaVen = Utilerias.convertirFecha(invFecVen);
 
-				Date horIni = Utilerias.convertirFecha(horHorIni, "yyyy-MM-dd HH:mm:ss");
-				Date horFin = Utilerias.convertirFecha(horHorFin, "yyyy-MM-dd HH:mm:ss");
+
+				Date horIni = Utilerias.convertirFecha(horHorIni);
+				Date horFin = Utilerias.convertirFecha(horHorFin);
 
 				Boolean cpRenInv = Utilerias.calcularVencimiento(fechaVen, horIni, horFin);
 				intBru = Utilerias.redondear(intBru, 2);
