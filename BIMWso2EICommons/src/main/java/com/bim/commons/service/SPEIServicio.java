@@ -1,5 +1,7 @@
 package com.bim.commons.service;
 
+import java.sql.SQLException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -495,8 +497,9 @@ public class SPEIServicio extends BaseService {
 	 * 	}
 	 * }
 	 * </pre>
+	 * @throws SQLException 
 	 */
-	public JsonObject transferenciaSPEIConsultarResultSets(JsonObject datosTransferenciaSPEI) {
+	public JsonObject transferenciaSPEIConsultarResultSets(JsonObject datosTransferenciaSPEI) throws SQLException {
 		logger.info("COMMONS: Comenzando transferenciaSPEIConsultarResultSets metodo... ");
 		if(!datosTransferenciaSPEI.has("Trn_Client"))
 			datosTransferenciaSPEI.addProperty("Trn_Client", "");
@@ -603,8 +606,9 @@ public class SPEIServicio extends BaseService {
 	 * 	}
 	 * }
 	 * </pre>
+	 * @throws SQLException 
 	 */
-	public JsonObject transferenciaSPEIFirmasConsultarResultSet(JsonObject datosTransferenciaSPEIFirmas) {
+	public JsonObject transferenciaSPEIFirmasConsultarResultSet(JsonObject datosTransferenciaSPEIFirmas) throws SQLException {
 		logger.info("COMMONS: Comenzando transferenciaSPEIFirmasConsultarResultSet metodo... ");
 		if(!datosTransferenciaSPEIFirmas.has("Fts_Valida"))
 			datosTransferenciaSPEIFirmas.addProperty("Fts_Valida", "");

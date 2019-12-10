@@ -1,5 +1,6 @@
 package com.bim.msf4j.ctrl;
 
+import java.sql.SQLException;
 import java.util.Date;
 
 import javax.ws.rs.Consumes;
@@ -89,7 +90,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 	@POST()
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response transferenciaNacionalCreacion(JsonObject datosTransferenciaSolicitud, @Context Request solicitud) {
+	public Response transferenciaNacionalCreacion(JsonObject datosTransferenciaSolicitud, @Context Request solicitud) throws SQLException {
 		logger.info("CTRL: Comenzando transferenciaNacionalCreacion metodo");
 		
         //inicia declaracion de variables
@@ -486,20 +487,6 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		Utilerias.verificarError(transferenciaSPEIProcesarResultado);
 		transferenciaSPEIProcesarResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(transferenciaSPEIProcesarResultado, "transferenciaSPEI");
 		
-		errCodigo = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Err_Codigo");
-		trsClaRas = (Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_ClaRas").trim());
-		trsFecAut = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecAut");
-		trsFecCar = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecCar");
-		trsFecApl = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecApl");
-		trsFirma = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_Firma");
-		
-		if(!"000000".equals(errCodigo)) {
-			errMensaj = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Err_Mensaj");			
-			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.31");
-			bimMessageDTO.addMergeVariable("errMensaj", errMensaj);
-			throw new ConflictException(bimMessageDTO.toString());
-		}
-		
 		datosTransferenciaSPEIFirmas = new JsonObject();
 		datosTransferenciaSPEIFirmas.addProperty("Fts_Consec", trsConsec);
 		datosTransferenciaSPEIFirmas.addProperty("FechaSis", fechaSis);
@@ -620,9 +607,14 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 				emailTemplateCliente.addMergeVariable("Trn_ProDes", "Programada Enviada");
 				
 			 	datosTransferenciaSPEI.addProperty("Trs_ValFir", "N");
-				this.speiServicio.transferenciaSPEIProcesar(datosTransferenciaSPEI);
-				transferenciaSPEIFirmasConsultarResultadoObjeto = this.speiServicio.transferenciaSPEIFirmasConsultarResultSet(datosTransferenciaSPEIFirmas);
+			 	transferenciaSPEIProcesarResultado = this.speiServicio.transferenciaSPEIProcesar(datosTransferenciaSPEI);
 				Utilerias.verificarError(transferenciaSPEIProcesarResultado);
+				transferenciaSPEIProcesarResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(transferenciaSPEIProcesarResultado, "transferenciaSPEI");
+				logger.info("@@@@@@@ transferenciaSPEIProcesarResultadoObjeto " + transferenciaSPEIProcesarResultadoObjeto);
+				
+				transferenciaSPEIFirmasConsultarResultadoObjeto = this.speiServicio.transferenciaSPEIFirmasConsultarResultSet(datosTransferenciaSPEIFirmas);
+				logger.info(">>>>>> transferenciaSPEIFirmasConsultarResultadoObjeto " + transferenciaSPEIFirmasConsultarResultadoObjeto);
+				Utilerias.verificarError(transferenciaSPEIFirmasConsultarResultadoObjeto);
 				
 			// valida si la fecha programada es mayor a la fecha actual
 			} else if(fecha.compareTo(fechaActual) > 0) {
@@ -635,15 +627,36 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 			}
 		}
 		
-		transferenciaSPEIFirmasConsultarResultadoArray = transferenciaSPEI.get(1).getAsJsonArray();
+		//propiedades extraidas de SP procesar
+		errCodigo = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Err_Codigo");
+		logger.info(">>>>>>>>>>>>> UTILERIAS " + Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_ClaRas"));
+		trsClaRas = (Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_ClaRas").trim());
+		trsFecAut = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecAut");
+		trsFecCar = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecCar");
+		trsFecApl = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Trs_FecApl");
+		
+		if(!"000000".equals(errCodigo)) {
+			errMensaj = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Err_Mensaj");			
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.31");
+			bimMessageDTO.addMergeVariable("errMensaj", errMensaj);
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		JsonObject transferenciasFirmasConsultarObjeto = Utilerias.obtenerJsonObjectPropiedad(transferenciaSPEIFirmasConsultarResultadoObjeto, "transferenciasSPEI");
+		logger.info(">>>>>>>>>>>>>>>>>>> transferenciasFirmasConsultarObjeto " + transferenciasFirmasConsultarObjeto);
+
+		JsonArray transferenciaFirmasConsultarArray = Utilerias.obtenerJsonArrayResultante(transferenciasFirmasConsultarObjeto, "transferenciaSPEI");
+		logger.info(">>>>>>>>>>>>>>>>>>> transferenciaFirmasConsultarArray " + transferenciaFirmasConsultarArray);
+
+		transferenciaSPEIFirmasConsultarResultadoArray = transferenciaFirmasConsultarArray.get(1).getAsJsonArray();
 		logger.info(">>>>>>>>>>>>>>>>>>> transferenciaSPEIFirmasConsultarResultadoArray " + transferenciaSPEIFirmasConsultarResultadoArray);
 
-		
-		transferenciaSPEIProcesarResultadoObjeto = transferenciaSPEIFirmasConsultarResultadoArray.get(0).getAsJsonObject();
-		if(!transferenciaSPEIProcesarResultadoObjeto.isJsonNull()) {
-			logger.info(">>>>>>>>>>> Fts_UsuNom >>>>>>>>>>>" );
-			firUsuNom = Utilerias.obtenerStringPropiedad(transferenciaSPEIProcesarResultadoObjeto, "Fts_UsuNom");
+		JsonObject transferenciaFirmasConsultarResultadoObjeto = transferenciaSPEIFirmasConsultarResultadoArray.get(0).getAsJsonObject();
+		if(!transferenciaFirmasConsultarResultadoObjeto.isJsonNull()) {
+			firUsuNom = Utilerias.obtenerStringPropiedad(transferenciaFirmasConsultarResultadoObjeto, "Fts_UsuNom");
+			logger.info(">>>>>>>>>>> Fts_UsuNom >>>>>>>>>>>" +firUsuNom);
 		}
+		
 		monto = new StringBuilder()
 			.append("$")
 			.append(trsMonto)
@@ -675,6 +688,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		emailTemplateCliente.addMergeVariable("Str_Verifi5", strVerifi5);
 		cuerpoEmailCliente = Utilerias.obtenerMensajePlantilla(emailTemplateCliente);
 		correoServicio.enviarCorreo(usuEmail, asuntoCliente, cuerpoEmailCliente);
+		logger.info("EMAIL CLI " + usuEmail);
 		
 		// variables de template para envio de email al beneficiario
 		emailTemplateBeneficiario = new BimEmailTemplateDTO(plantillaTransferenciaBeneficiario);
@@ -687,6 +701,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		emailTemplateBeneficiario.addMergeVariable("Trn_FecApl", trsFecApl);
 		cuerpoEmailBeneficiario = Utilerias.obtenerMensajePlantilla(emailTemplateBeneficiario);
 		correoServicio.enviarCorreo(cdeEmaBen, asuntoBeneficiario, cuerpoEmailBeneficiario);
+		logger.info("EMAIL BEN " + cdeEmaBen);
 
 		datosTransferenciaExitosa = new JsonObject();
 		datosTransferenciaExitosa.addProperty("trnCueOri", trsCueOri);

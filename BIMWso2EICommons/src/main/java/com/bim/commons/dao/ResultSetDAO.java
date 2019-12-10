@@ -24,7 +24,7 @@ public class ResultSetDAO {
 
 	private static final Logger logger = LoggerFactory.getLogger(ResultSetDAO.class);
 
-	public JsonObject resultSet(JsonObject datos, String procedureName, String nombreObjeto, String nombreArreglo) {
+	public JsonObject resultSet(JsonObject datos, String procedureName, String nombreObjeto, String nombreArreglo) throws SQLException {
 		logger.info("DAO: Comenzando resultSet metodo...");
 		Map<String, Object> datosMap = null;
 		ArrayList<Object> datosArray = null;
@@ -55,9 +55,13 @@ public class ResultSetDAO {
 			datosArray.add(dato.getValue());
 		}
 		
-		try (Connection conn = DBConnection.getConnection();
-				PreparedStatement statement = conn.prepareStatement(query.toString());) {
-
+		Connection conn = null;
+		PreparedStatement statement = null;
+		
+		try {
+			conn = DBConnection.getConnection();
+			statement = conn.prepareStatement(query.toString());
+			
 			for(int i = 0; i < datosArray.size(); i++) {
 				statement.setObject(i+1, datosArray.get(i));
 			}
@@ -112,6 +116,15 @@ public class ResultSetDAO {
 		} catch (SQLException e) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("COMMONS.500");
 			throw new InternalServerException(bimMessageDTO.toString());
+		} finally {
+			if(conn != null) {
+				try {
+					conn.close();
+					logger.info("CERRANDO CONEXION");
+				} catch (InternalServerException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		logger.info("DAO: Terminando resultSet metodo...");
