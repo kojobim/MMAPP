@@ -147,8 +147,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		
 		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
 		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
-		String bit_DireIP = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("User-Agent") : "";
-		String bit_PriRef = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("X-Forwarded-For") : "";
+		String bit_DireIP = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("X-forwarded-For") : "";
+		String bit_PriRef = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("User-Agent") : "";
 		
 		String usuNumero = principalResultadoObjeto.get("usuNumero").getAsString();
 		String usuClient = principalResultadoObjeto.get("usuClient").getAsString();

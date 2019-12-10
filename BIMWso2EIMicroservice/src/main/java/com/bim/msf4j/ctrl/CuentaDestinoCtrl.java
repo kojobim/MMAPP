@@ -547,8 +547,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 
 		String fechaSis = Utilerias.obtenerFechaSis();
 		
-		String bitPriRef = solicitud.getHeader("User-Agent");
-		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
+		String bitPriRef = solicitud.getHeader("User-Agent") != null ? solicitud.getHeader("User-Agent") : "";
+		String bitDireIP = solicitud.getHeader("X-Forwarded-For") != null ? solicitud.getHeader("X-Forwarded-For") : "";
 
 		StringBuilder scriptName = new StringBuilder()
 				.append(CuentaDestinoCtrl.class.getName())
@@ -576,8 +576,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		JsonObject datosBitacora = new JsonObject();
 		datosBitacora.addProperty("Bit_Usuari", usuNumero);
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
-		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
-		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
+		datosBitacora.addProperty("Bit_PriRef", bitPriRef);
+		datosBitacora.addProperty("Bit_DireIP", bitDireIP);
 		datosBitacora.addProperty("Bit_TipOpe", AltaCuentaDestinoNacionalBitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("NumTransac", numTransac);
 		datosBitacora.addProperty("FechaSis", fechaSis);
@@ -699,8 +699,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		JsonObject principalResultadoObjeto = Utilerias.obtenerPrincipal(bearerToken);
 		logger.info("- principalResultadoObjeto: " + principalResultadoObjeto);
 		
-		String bitPriRef = solicitud.getHeader("User-Agent");
-		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
+		String bitPriRef = solicitud.getHeader("User-Agent") != null ? solicitud.getHeader("User-Agent") : "";
+		String bitDireIP = solicitud.getHeader("X-Forwarded-For") != null ? solicitud.getHeader("X-Forwarded-For") : "";
 		
 		if(tipo == null || tipo.isEmpty()) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.54");
@@ -805,8 +805,8 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
         JsonObject datosBitacora = new JsonObject();
 		datosBitacora.addProperty("Bit_Usuari", usuNumero);
 		datosBitacora.addProperty("Bit_Fecha", fechaSis);
-		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
-		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
+		datosBitacora.addProperty("Bit_PriRef", bitPriRef);
+		datosBitacora.addProperty("Bit_DireIP", bitDireIP);
 		datosBitacora.addProperty("Bit_TipOpe", ActivarCuentasDestinoBitacoraCreacionOpBitTipOpe);
 		datosBitacora.addProperty("NumTransac", numTransac);
         datosBitacora.addProperty("Bit_NumTra", numTransac);

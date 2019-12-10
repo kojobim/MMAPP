@@ -85,7 +85,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		
 		String cueClient = principalResultadoObjecto.get("usuClient").getAsString();
 		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
-		String bitDireIp = solicitud.getHeader("X-Forwarded-For");
+		String bitDireIp = solicitud.getHeader("X-Forwarded-For") != null ? solicitud.getHeader("X-Forwarded-For") : "";
 		
 		JsonObject folioTransaccionGenerarResultadoObjeto =  this.transaccionServicio.folioTransaccionGenerar();
 		
@@ -97,7 +97,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 		JsonObject datosSaldosClienteConsultar = new JsonObject();
 		datosSaldosClienteConsultar.addProperty("Cue_Client", cueClient);
 		datosSaldosClienteConsultar.addProperty("Usu_Numero", usuNumero);
-		datosSaldosClienteConsultar.addProperty("Bit_DireIP", bitDireIp);
+		datosSaldosClienteConsultar.addProperty("Bit_DireIP", bitDireIp );
 		datosSaldosClienteConsultar.addProperty("FechaSis", fechaSis);
 		
 		JsonObject saldosClienteConsultarResultadoObjecto = this.saldoServicio.saldosClienteConsultar(datosSaldosClienteConsultar);
@@ -351,7 +351,7 @@ public class CuentasCtrl extends BimBaseCtrl {
 
 		String fechaSis = Utilerias.obtenerFechaSis();
 		String bitPriRef = Utilerias.obtenerStringPropiedad(principal, "usuClient");
-		String bitDireIp = solicitud.getHeader("X-Forwarded-For");
+		String bitDireIp = solicitud.getHeader("X-Forwarded-For") != null ? solicitud.getHeader("X-Forwarded-For") : "";
 		
 		JsonObject datosBitacoraCreacion = new JsonObject();
 		datosBitacoraCreacion.addProperty("Bit_Usuari", bitUsuari);
