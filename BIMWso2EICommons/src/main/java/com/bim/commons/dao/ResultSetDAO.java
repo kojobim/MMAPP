@@ -124,7 +124,8 @@ public class ResultSetDAO {
 						logger.info("CERRANDO CONEXION");
 					}
 				} catch (SQLException e) {
-					e.printStackTrace();
+					BimMessageDTO bimMessageDTO = new BimMessageDTO("COMMONS.500");
+					throw new InternalServerException(bimMessageDTO.toString());
 				}
 			}
 		}
