@@ -97,7 +97,9 @@ public class Utilerias {
 		Date fechaActual = null;
 
 		Calendar calendario = Calendar.getInstance();
-		
+		calendario.set(Calendar.YEAR, 1900);
+		calendario.set(Calendar.MONTH, Calendar.JANUARY);
+		calendario.set(Calendar.DAY_OF_MONTH, 1);
 		Date horaActual = calendario.getTime();
 
 		try {
