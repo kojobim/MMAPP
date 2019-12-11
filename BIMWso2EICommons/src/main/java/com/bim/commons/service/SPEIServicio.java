@@ -25,6 +25,7 @@ public class SPEIServicio extends BaseService {
 	
 	//operaciones
 	private static String HorariosSPEIConsultarOp;
+	private static String HorarioExtendidoConsultarOp;
 	private static String TransferenciaSPEICreacionOp;
 	private static String TransferenciaSPEIProcesarOp;
 	private static String TransferenciaSPEIConsultarOp;
@@ -39,6 +40,13 @@ public class SPEIServicio extends BaseService {
 	private static String HorariosSPEIConsultarOpSucOrigen;
 	private static String HorariosSPEIConsultarOpSucDestino;
 	private static String HorariosSPEIConsultarOpModulo;
+	
+	//propiedades para consultar horario extendido
+	private static String HorarioExtendidoConsultarOpTransaccio;
+	private static String HorarioExtendidoConsultarOpUsuario;
+	private static String HorarioExtendidoConsultarOpSucOrigen;
+	private static String HorarioExtendidoConsultarOpSucDestino;
+	private static String HorarioExtendidoConsultarOpModulo;
 	
 	//propiedades para creacion de transferencia nacional
 	private static String TransferenciaSPEICreacionOpTransaccio;
@@ -88,6 +96,14 @@ public class SPEIServicio extends BaseService {
 		HorariosSPEIConsultarOpModulo = properties.getProperty("op.horarios_spei_consultar.modulo");
 		HorariosSPEIConsultarOpHorHorIni = properties.getProperty("op.horarios_spei_consultar.hor_hor_ini");
 		HorariosSPEIConsultarOpHorHorFin = properties.getProperty("op.horarios_spei_consultar.hor_hor_fin");
+		
+		//inicializacion de variables para consultar horario extendido
+		HorarioExtendidoConsultarOp = properties.getProperty("spei_servicio.op.horario_extendido_consultar");
+		HorarioExtendidoConsultarOpTransaccio = properties.getProperty("op.horario_extendido_consultar.transaccio");
+		HorarioExtendidoConsultarOpUsuario = properties.getProperty("op.horario_extendido_consultar.usuario");
+		HorarioExtendidoConsultarOpSucOrigen = properties.getProperty("op.horario_extendido_consultar.suc_origen");
+		HorarioExtendidoConsultarOpSucDestino = properties.getProperty("op.horario_extendido_consultar.suc_destino");
+		HorarioExtendidoConsultarOpModulo = properties.getProperty("op.horario_extendido_consultar.modulo");
 		
 		// inicializacion de variables para crear transferencia nacional
 		TransferenciaSPEICreacionOp = properties.getProperty("spei_servicio.op.transferencias_spei_creacion");
@@ -631,4 +647,40 @@ public class SPEIServicio extends BaseService {
 		return transferenciaSPEIFirmasConsultarResultadoObjeto;
 	} //Cierre de metodo
 	
+	/**
+	 * Método para consultar el horario extendido
+	 * ProcedureName: SPHOREXTCON
+	 * @param datosHorarioExtendido
+	 * <pre>
+	 * {
+	 * 	She_Canal: String,
+	 * 	NumTransac?: String,
+	 * 	FechaSis: String
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 *  horarioExtendido: {
+	 *  	She_HorIni: String,
+	 *  	She_HorFin: String,
+	 *  	She_MonEnv: String
+	 *  }
+	 * }
+	 * </pre>
+	 */
+	public JsonObject horarioExtendidoConsultar(JsonObject datosHorarioExtendido) {
+		logger.info("COMMONS: Comenzando horarioExtendidoConsultar metodo... ");
+		if(!datosHorarioExtendido.has("NumTransac"))
+			datosHorarioExtendido.addProperty("NumTransac", "");
+		datosHorarioExtendido.addProperty("Transaccio", HorarioExtendidoConsultarOpTransaccio);
+		datosHorarioExtendido.addProperty("Usuario", HorarioExtendidoConsultarOpUsuario);
+		datosHorarioExtendido.addProperty("SucOrigen", HorarioExtendidoConsultarOpSucOrigen);
+		datosHorarioExtendido.addProperty("SucDestino", HorarioExtendidoConsultarOpSucDestino);
+		datosHorarioExtendido.addProperty("Modulo", HorarioExtendidoConsultarOpModulo);
+		JsonObject horarioExtendidoConsultarResultado = Utilerias.performOperacion(SPEIServicio, HorarioExtendidoConsultarOp, datosHorarioExtendido);
+		logger.debug("-- horarioExtendidoConsultarResultado" + horarioExtendidoConsultarResultado);
+		logger.info("COMMONS: Finalizando horarioExtendidoConsultar metodo... ");
+		return horarioExtendidoConsultarResultado;
+	} //Cierre de metodo	
 }

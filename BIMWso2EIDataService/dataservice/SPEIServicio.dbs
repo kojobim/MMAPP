@@ -402,6 +402,32 @@
             <element column="Trn_DesAdi" name="Trn_DesAdi" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="horarioExtendidoConsultarSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE SPHOREXTCON
+    		@She_Canal = :sheCanal,
+    		@NumTransac	= :numTransac,
+			@Transaccio	= :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo	= :modulo
+		</sql>
+        <param name="sheCanal" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/horarioExtendidoConsultar" element="horarioExtendido">
+            <element column="She_HorIni" name="She_HorIni" xsdType="xs:string" optional="true"/>
+            <element column="She_HorFin" name="She_HorFin" xsdType="xs:string" optional="true"/>
+            <element column="She_MonEnv" name="She_MonEnv" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
     <operation returnRequestStatus="true" name="transferenciaSPEIConsultarOp">
         <call-query href="transferenciaSPEIConsultarSQL">
             <with-param name="trnUsuAdm" query-param="Trn_UsuAdm"/>
@@ -411,6 +437,18 @@
             <with-param name="trnStatus" query-param="Trn_Status"/>
             <with-param name="trnTransf" query-param="Trn_Transf"/>
             <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="horarioExtendidoConsultarOp">
+        <call-query href="horarioExtendidoConsultarSQL">
+            <with-param name="sheCanal" query-param="She_Canal"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
