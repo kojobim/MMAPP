@@ -531,7 +531,7 @@ public class UsuarioCtrl extends BimBaseCtrl {
 		servicioRequest.addProperty("Bit_TipOpe", "120");
 		servicioRequest.addProperty("NumTransac", numTransac);
 		servicioRequest.addProperty("FechaSis", Utilerias.obtenerFechaSis());
-		servicioRequest.addProperty("Bit_DireIP", bitDireIP);
+		servicioRequest.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
 		
 		bitacoraResultado = this.bitacoraServicio.creacionBitacora(servicioRequest);
 

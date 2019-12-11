@@ -1,8 +1,5 @@
 package com.bim.msf4j.ctrl;
 
-import java.sql.SQLException;
-import java.util.Date;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -219,7 +216,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
         //termina declaracion de variables
 		
 		bearerToken = solicitud.getHeader("Authorization");
-		bitDireIP = solicitud.getHeader("X-Forwarded-For");
+		bitDireIP = solicitud.getHeader("X-Forwarded-For") != null ? solicitud.getHeader("X-Forwarded-For") : "";
 		fechaSis = Utilerias.obtenerFechaSis();
 		
 		principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);

@@ -286,8 +286,8 @@ public class LoginCtrl extends BimBaseCtrl {
 			logger.debug("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));			
 		}
 		
-		String bitDireIP = solicitud.getHeader("User-Agent") == null ? solicitud.getHeader("User-Agent") : "";
-		String bitPriRef = solicitud.getHeader("X-Forwarded-For") == null ? solicitud.getHeader("X-Forwarded-For") : "";
+		String bitDireIP = solicitud.getHeader("User-Agent") != null ? solicitud.getHeader("User-Agent") : "";
+		String bitPriRef = solicitud.getHeader("X-Forwarded-For") != null ? solicitud.getHeader("X-Forwarded-For") : "";
 		
 		JsonObject datosBitacoraCreacion = new JsonObject();
 		datosBitacoraCreacion.addProperty("Bit_Usuari", bitUsuari);
