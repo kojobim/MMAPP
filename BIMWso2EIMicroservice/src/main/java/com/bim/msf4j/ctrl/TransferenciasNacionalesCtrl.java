@@ -442,7 +442,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		
 		// Valida que objeto extraer del arreglo
 		transferenciaSPEIConsultarResultadoArreglo = transferenciasSPEIResultado.get(0).getAsJsonArray();
-		logger.info("@@@@@@ RESULT SET CONSULTA Arreglo " + transferenciaSPEIConsultarResultadoArreglo);
+		logger.info("@@@@@@ RESULT SET CONSULTA Arreglo 1" + transferenciaSPEIConsultarResultadoArreglo);
 		for(JsonElement transferencia : transferenciaSPEIConsultarResultadoArreglo) {
 			transferenciaObjeto = transferencia.getAsJsonObject();
 			trnConsecConsulta = Utilerias.obtenerStringPropiedad(transferenciaObjeto, "Trn_Consec");
@@ -450,6 +450,11 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 				transferenciaSPEIObjeto = (JsonObject)transferencia;
 		}		
 		logger.info("@@@@@@ CONSULTA OBJETO ESPECIFICO " + transferenciaSPEIObjeto);
+		
+		JsonArray transferenciaSPEIConsultarResultadoArreglo4 = transferenciasSPEIResultado.get(3).getAsJsonArray();
+		logger.info("@@@@@@ RESULT SET CONSULTA Arreglo 4" + transferenciaSPEIConsultarResultadoArreglo4);
+		JsonObject transferenciaSPEIConsultarResultadoArregloObjeto = transferenciaSPEIConsultarResultadoArreglo4.get(0).getAsJsonObject();
+		String trsFecOpe = Utilerias.obtenerStringPropiedad(transferenciaSPEIConsultarResultadoArregloObjeto, "Trs_FecOpe");
 		
 		// extraccion de propiedades de la consulta
 		trnBanDes = Utilerias.obtenerStringPropiedad(transferenciaSPEIObjeto, "Trn_BanDes");
@@ -543,6 +548,12 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 				throw new BadRequestException(bimMessageDTO.toString());
 			}
 			
+			if("U".equals(TransferenciasProgramadasFrecuenciaEnum.validarFrecuencia(trsFrecue))) {
+				if("F".equals(TransferenciasProgramadasLimiteEnum.validarLimite(trsTipDur))){
+					// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@   validar que no se pueda limitar por fecha por unica vez
+				}
+			}
+			
 			// valida la fecha de inicio de la transferencia
 			if(trsFePrEn == null) {
 				bimMessageDTO = new BimMessageDTO("COMMONS.400");
@@ -633,9 +644,18 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 				emailTemplateCliente = new BimEmailTemplateDTO(plantillaTransferenciaProgramadaCliente);
 			}
 			
+			JsonObject datosHorarioExtendidoConsulta = new JsonObject();
+			datosHorarioExtendidoConsulta.addProperty("She_Canal", "BE");
+			
+			JsonObject horarioExtendidoResultado = this.speiServicio.horarioExtendidoConsultar(datosHorarioExtendidoConsulta);
+			
+			
 			emailTemplateCliente.addMergeVariable("strFrecuencia", strFrecuencia);
 			emailTemplateCliente.addMergeVariable("strDuracion", strDuracion);
 			emailTemplateCliente.addMergeVariable("strRecordatorio", strRecordatorio);
+			emailTemplateCliente.addMergeVariable("Trn_FecOpe", trsFecOpe);
+			emailTemplateCliente.addMergeVariable("She_HorIni", value);
+			
 		}
 		
 		//propiedades extraidas de SP procesar
