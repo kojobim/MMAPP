@@ -2,7 +2,7 @@ package com.bim.commons.enums;
 
 public enum TransferenciasProgramadasFrecuenciaEnum {
 
-	U("Unica vez"),
+	U("Única vez"),
 	D("Diario"),
 	S("Semanal"),
 	C("Cada 2 semanas"),

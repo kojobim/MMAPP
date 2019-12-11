@@ -529,6 +529,7 @@ public class Utilerias {
 		List<String> formatosEntrada = new ArrayList<>();
 		formatosEntrada.add("yyyy-MM-dd'T'HH:mm:ss.SSSX");
 		formatosEntrada.add("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+		formatosEntrada.add("yyyy-MM-dd HH:mm:ss.S");
 		formatosEntrada.add("yyyy-MM-dd HH:mm:ss");
 		formatosEntrada.add("yyyy-MM-dd");
 		formatosEntrada.add("dd-MM-yyyy");
@@ -564,6 +565,7 @@ public class Utilerias {
 		formatosEntrada.add("yyyy-MM-dd");
 		formatosEntrada.add("dd-MM-yyyy");
 		formatosEntrada.add("dd-MM-yyyy HH:mm");
+		formatosEntrada.add("yyyy-MM-dd HH:mm:ss.S");
 		formatosEntrada.add("dd/MM/yyyy");
 		formatosEntrada.add("HH:mm");
 		Date fechaResultado = null;
@@ -584,6 +586,7 @@ public class Utilerias {
 		formatosEntrada.add("yyyy-MM-dd'T'HH:mm:ss.SSSX");
 		formatosEntrada.add("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
 		formatosEntrada.add("yyyy-MM-dd HH:mm:ss");
+		formatosEntrada.add("yyyy-MM-dd HH:mm:ss.S");
 		formatosEntrada.add("yyyy-MM-dd");
 		formatosEntrada.add("dd-MM-yyyy");
 		formatosEntrada.add("dd/MM/yyyy");
