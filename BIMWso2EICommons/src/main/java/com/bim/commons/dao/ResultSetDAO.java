@@ -24,7 +24,7 @@ public class ResultSetDAO {
 
 	private static final Logger logger = LoggerFactory.getLogger(ResultSetDAO.class);
 
-	public JsonObject resultSet(JsonObject datos, String procedureName, String nombreObjeto, String nombreArreglo) throws SQLException {
+	public JsonObject resultSet(JsonObject datos, String procedureName, String nombreObjeto, String nombreArreglo) {
 		logger.info("DAO: Comenzando resultSet metodo...");
 		Map<String, Object> datosMap = null;
 		ArrayList<Object> datosArray = null;
@@ -119,9 +119,11 @@ public class ResultSetDAO {
 		} finally {
 			if(conn != null) {
 				try {
-					conn.close();
-					logger.info("CERRANDO CONEXION");
-				} catch (InternalServerException e) {
+					if(!conn.isClosed()) {
+						conn.close();
+						logger.info("CERRANDO CONEXION");
+					}
+				} catch (SQLException e) {
 					e.printStackTrace();
 				}
 			}

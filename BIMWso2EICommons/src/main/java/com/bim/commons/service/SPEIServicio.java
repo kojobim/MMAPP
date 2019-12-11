@@ -148,6 +148,7 @@ public class SPEIServicio extends BaseService {
 	 * {
 	 *  horarioSPEI:
 	 *  	{
+	 *  	Msj_Error: String,
 	 *  	Hor_HorIni: String,
 	 *  	Hor_HorFin: String
 	 *  }
@@ -499,7 +500,7 @@ public class SPEIServicio extends BaseService {
 	 * </pre>
 	 * @throws SQLException 
 	 */
-	public JsonObject transferenciaSPEIConsultarResultSets(JsonObject datosTransferenciaSPEI) throws SQLException {
+	public JsonObject transferenciaSPEIConsultarResultSets(JsonObject datosTransferenciaSPEI) {
 		logger.info("COMMONS: Comenzando transferenciaSPEIConsultarResultSets metodo... ");
 		if(!datosTransferenciaSPEI.has("Trn_Client"))
 			datosTransferenciaSPEI.addProperty("Trn_Client", "");
@@ -608,7 +609,7 @@ public class SPEIServicio extends BaseService {
 	 * </pre>
 	 * @throws SQLException 
 	 */
-	public JsonObject transferenciaSPEIFirmasConsultarResultSet(JsonObject datosTransferenciaSPEIFirmas) throws SQLException {
+	public JsonObject transferenciaSPEIFirmasConsultarResultSet(JsonObject datosTransferenciaSPEIFirmas) {
 		logger.info("COMMONS: Comenzando transferenciaSPEIFirmasConsultarResultSet metodo... ");
 		if(!datosTransferenciaSPEIFirmas.has("Fts_Valida"))
 			datosTransferenciaSPEIFirmas.addProperty("Fts_Valida", "");
