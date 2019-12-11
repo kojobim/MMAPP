@@ -1,5 +1,7 @@
 package com.bim.msf4j.ctrl;
 
+import java.util.Date;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -86,7 +88,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 	@POST()
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response transferenciaNacionalCreacion(JsonObject datosTransferenciaSolicitud, @Context Request solicitud) throws SQLException {
+	public Response transferenciaNacionalCreacion(JsonObject datosTransferenciaSolicitud, @Context Request solicitud) {
 		logger.info("CTRL: Comenzando transferenciaNacionalCreacion metodo");
 		
         //inicia declaracion de variables
@@ -451,6 +453,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		JsonArray transferenciaSPEIConsultarResultadoArreglo4 = transferenciasSPEIResultado.get(3).getAsJsonArray();
 		logger.info("@@@@@@ RESULT SET CONSULTA Arreglo 4" + transferenciaSPEIConsultarResultadoArreglo4);
 		JsonObject transferenciaSPEIConsultarResultadoArregloObjeto = transferenciaSPEIConsultarResultadoArreglo4.get(0).getAsJsonObject();
+		logger.info("@@@@@@ RESULT SET CONSULTA OBJETO " + transferenciaSPEIConsultarResultadoArreglo4);
+
 		String trsFecOpe = Utilerias.obtenerStringPropiedad(transferenciaSPEIConsultarResultadoArregloObjeto, "Trs_FecOpe");
 		
 		// extraccion de propiedades de la consulta
@@ -645,13 +649,15 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 			datosHorarioExtendidoConsulta.addProperty("She_Canal", "BE");
 			
 			JsonObject horarioExtendidoResultado = this.speiServicio.horarioExtendidoConsultar(datosHorarioExtendidoConsulta);
-			
+			JsonObject horarioExtendidoResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(horarioExtendidoResultado, "horarioExtendido");
+			String sheHorIni = Utilerias.obtenerStringPropiedad(horarioExtendidoResultadoObjeto, "She_HorIni");
+			logger.info("@@@@@ SHE INI "+ sheHorIni);
 			
 			emailTemplateCliente.addMergeVariable("strFrecuencia", strFrecuencia);
 			emailTemplateCliente.addMergeVariable("strDuracion", strDuracion);
 			emailTemplateCliente.addMergeVariable("strRecordatorio", strRecordatorio);
 			emailTemplateCliente.addMergeVariable("Trn_FecOpe", trsFecOpe);
-			emailTemplateCliente.addMergeVariable("She_HorIni", value);
+			emailTemplateCliente.addMergeVariable("She_HorIni", sheHorIni);
 			
 		}
 		

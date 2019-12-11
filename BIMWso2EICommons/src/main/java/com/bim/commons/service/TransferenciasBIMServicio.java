@@ -28,6 +28,8 @@ public class TransferenciasBIMServicio extends BaseService {
 	private static String CuentaDestinoTransferenciaBIMActivacionOpSucDestino;
 	private static String CuentaDestinoTransferenciaBIMActivacionOpModulo;
 	private static String TransferenciaBIMProcesarOp;
+	private static String TransferenciaBIMProcesarOpTrbTipTra;
+	private static String TransferenciaBIMProcesarOpTrbValFir;
 	private static String TransferenciaBIMProcesarOpTransaccio;
 	private static String TransferenciaBIMProcesarOpUsuario;
 	private static String TransferenciaBIMProcesarOpSucOrigen;
@@ -46,7 +48,14 @@ public class TransferenciasBIMServicio extends BaseService {
 	private static String TransferenciaBIMConsultarOpSucOrigen;
 	private static String TransferenciaBIMConsultarOpSucDestino;
 	private static String TransferenciaBIMConsultarOpModulo;
-	
+	private static String TransferenciaBIMFirmasConsultarOp;
+	private static String TransferenciaBIMFirmasConsultarOpTipConsul;
+	private static String TransferenciaBIMFirmasConsultarOpTransaccio;
+	private static String TransferenciaBIMFirmasConsultarOpUsuario;
+	private static String TransferenciaBIMFirmasConsultarOpSucOrigen;
+	private static String TransferenciaBIMFirmasConsultarOpSucDestino;
+	private static String TransferenciaBIMFirmasConsultarOpModulo;
+
 	public TransferenciasBIMServicio() {
 		super();
 		
@@ -59,6 +68,7 @@ public class TransferenciasBIMServicio extends BaseService {
 		TransferenciaBIMProcesarOp = properties.getProperty("transferencias_bim_servicio.op.transferencia_bim_procesar");
 		TransferenciaBIMCreacionOp = properties.getProperty("transferencias_bim_servicio.op.transferencia_bim_creacion");
 		TransferenciaBIMConsultarOp = properties.getProperty("transferencias_bim_servicio.op.transferencia_bim_consultar");
+		TransferenciaBIMFirmasConsultarOp = properties.getProperty("transferencias_bim_servicio.op.transferencia_bim_firmas_consultar");
 		
 		CuentasOrigenConsultarOpTipConsul = properties.getProperty("op.cuentas_origen_consultar.tip_consul");
 		CuentasOrigenConsultarOpTransaccio = properties.getProperty("op.cuentas_origen_consultar.transaccio");
@@ -93,6 +103,14 @@ public class TransferenciasBIMServicio extends BaseService {
 		TransferenciaBIMConsultarOpSucOrigen = properties.getProperty("op.transferencia_bim_consultar.suc_origen");
 		TransferenciaBIMConsultarOpSucDestino = properties.getProperty("op.transferencia_bim_consultar.suc_destino");
 		TransferenciaBIMConsultarOpModulo = properties.getProperty("op.transferencia_bim_consultar.modulo");
+
+		TransferenciaBIMFirmasConsultarOpTipConsul = properties.getProperty("op.transferencia_bim_firmas_consultar.tip_consul");
+		TransferenciaBIMFirmasConsultarOpTransaccio = properties.getProperty("op.transferencia_bim_firmas_consultar.transaccio");
+		TransferenciaBIMFirmasConsultarOpUsuario = properties.getProperty("op.transferencia_bim_firmas_consultar.usuario");
+		TransferenciaBIMFirmasConsultarOpSucOrigen = properties.getProperty("op.transferencia_bim_firmas_consultar.suc_origen");
+		TransferenciaBIMFirmasConsultarOpSucDestino = properties.getProperty("op.transferencia_bim_firmas_consultar.suc_destino");
+		TransferenciaBIMFirmasConsultarOpModulo = properties.getProperty("op.transferencia_bim_firmas_consultar.modulo");
+		
 	}
 	
 	public JsonObject cuentasOrigenConsultar(JsonObject datosCuentasOrigenConsultar) {
