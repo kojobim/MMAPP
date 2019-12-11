@@ -55,8 +55,12 @@ public class ResultSetDAO {
 			datosArray.add(dato.getValue());
 		}
 		
-		try (Connection conn = DBConnection.getConnection();
-				PreparedStatement statement = conn.prepareStatement(query.toString());) {
+		Connection conn = null;
+		PreparedStatement statement = null;
+		
+		try {
+			conn = DBConnection.getConnection();
+			statement = conn.prepareStatement(query.toString());
 
 			for(int i = 0; i < datosArray.size(); i++) {
 				statement.setObject(i+1, datosArray.get(i));
@@ -112,6 +116,15 @@ public class ResultSetDAO {
 		} catch (SQLException e) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("COMMONS.500");
 			throw new InternalServerException(bimMessageDTO.toString());
+		} finally {
+			if(conn != null) {
+				try {
+					if(!conn.isClosed())
+						conn.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 		logger.info("DAO: Terminando resultSet metodo...");
