@@ -61,7 +61,7 @@ public class ResultSetDAO {
 		try {
 			conn = DBConnection.getConnection();
 			statement = conn.prepareStatement(query.toString());
-			
+
 			for(int i = 0; i < datosArray.size(); i++) {
 				statement.setObject(i+1, datosArray.get(i));
 			}
@@ -121,7 +121,6 @@ public class ResultSetDAO {
 				try {
 					if(!conn.isClosed()) {
 						conn.close();
-						logger.info("CERRANDO CONEXION");
 					}
 				} catch (SQLException e) {
 					BimMessageDTO bimMessageDTO = new BimMessageDTO("COMMONS.500");

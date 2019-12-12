@@ -161,13 +161,12 @@ public class TransferenciasBIMServicio extends BaseService {
 	}
 	
 	public JsonObject transferenciaBIMProcesarResultSets(JsonObject datosTransferenciaBIMProcesar) {
-		logger.info("COMMONS: Comenzando transferenciaBIMProcesar metodo... ");
+		logger.info("COMMONS: Comenzando transferenciaBIMProcesarResultSets metodo... ");
 		if(!datosTransferenciaBIMProcesar.has("Trb_RFC") || datosTransferenciaBIMProcesar.get("Trb_RFC") == null)
 			datosTransferenciaBIMProcesar.addProperty("Trb_RFC", "");
 		if(!datosTransferenciaBIMProcesar.has("Trb_IVA") || datosTransferenciaBIMProcesar.get("Trb_IVA") == null)
 			datosTransferenciaBIMProcesar.addProperty("Trb_IVA", 0.000);
 		datosTransferenciaBIMProcesar.addProperty("Trb_DireIP", "");
-		datosTransferenciaBIMProcesar.addProperty("Trb_TipTra", TransferenciaBIMProcesarOpTrbTipTra);
 		datosTransferenciaBIMProcesar.addProperty("Trb_ValFir", TransferenciaBIMProcesarOpTrbValFir);
 		datosTransferenciaBIMProcesar.addProperty("Transaccio", TransferenciaBIMProcesarOpTransaccio);
 		datosTransferenciaBIMProcesar.addProperty("Usuario", TransferenciaBIMProcesarOpUsuario);
@@ -176,7 +175,7 @@ public class TransferenciasBIMServicio extends BaseService {
 		datosTransferenciaBIMProcesar.addProperty("Modulo", TransferenciaBIMProcesarOpModulo);
 		JsonObject datosTransferenciaBIMProcesarOpResultadoObjeto = resultSetDAO.resultSet(datosTransferenciaBIMProcesar, "NBTRABANPRO", "transferenciasBIM", "transferenciaBIM");
 		logger.info("datosTransferenciaBIMProcesarOpResultadoObjeto" + datosTransferenciaBIMProcesarOpResultadoObjeto);
-		logger.info("COMMONS: Finalizando transferenciaBIMProcesar metodo... ");
+		logger.info("COMMONS: Finalizando transferenciaBIMProcesarResultSets metodo... ");
 		return datosTransferenciaBIMProcesarOpResultadoObjeto;
 	}
 
@@ -185,9 +184,6 @@ public class TransferenciasBIMServicio extends BaseService {
 		datosTransferenciaBIMCreacion.addProperty("Trb_RFC", "");
 		datosTransferenciaBIMCreacion.addProperty("Trb_IVA", 0);
 		datosTransferenciaBIMCreacion.addProperty("Trb_UsuAut", "");
-		datosTransferenciaBIMCreacion.addProperty("Trb_TipDur", "");
-		datosTransferenciaBIMCreacion.addProperty("Trb_DurTra", 0);
-		datosTransferenciaBIMCreacion.addProperty("Trb_DiAnEm", 0);
 		datosTransferenciaBIMCreacion.addProperty("Trb_CLABE", "");
 		datosTransferenciaBIMCreacion.addProperty("Transaccio", TransferenciaBIMCreacionOpTransaccio);
 		datosTransferenciaBIMCreacion.addProperty("Usuario", TransferenciaBIMCreacionOpUsuario);
@@ -258,7 +254,7 @@ public class TransferenciasBIMServicio extends BaseService {
 	}
 	
 	public JsonObject transferenciaBIMFirmasConsultarResultSets(JsonObject datosTransferenciaBIMFirmasConsultar) {
-		logger.info("COMMONS: Comenzando transferenciaBIMFirmasConsultar metodo... ");
+		logger.info("COMMONS: Comenzando transferenciaBIMFirmasConsultarResultSets metodo... ");
 		datosTransferenciaBIMFirmasConsultar.addProperty("Ftb_Valida", "");
 		datosTransferenciaBIMFirmasConsultar.addProperty("Ftb_Usuari", "");
 		datosTransferenciaBIMFirmasConsultar.addProperty("Ftb_Client", "");
@@ -271,7 +267,7 @@ public class TransferenciasBIMServicio extends BaseService {
 		datosTransferenciaBIMFirmasConsultar.addProperty("Modulo", TransferenciaBIMFirmasConsultarOpModulo);
 		JsonObject datosTransferenciaBIMFirmasConsultarResultadoObjeto = resultSetDAO.resultSet(datosTransferenciaBIMFirmasConsultar, "NBFITRBRCON", "transferenciasBIMFirmas", "transferenciaBIMFirmas");
 		logger.info("datosTransferenciaBIMFirmasConsultarResultadoObjeto" + datosTransferenciaBIMFirmasConsultarResultadoObjeto);
-		logger.info("COMMONS: Finalizando transferenciaBIMFirmasConsultar metodo... ");
+		logger.info("COMMONS: Finalizando transferenciaBIMFirmasConsultarResultSets metodo... ");
 		return datosTransferenciaBIMFirmasConsultarResultadoObjeto;
 	}
 }

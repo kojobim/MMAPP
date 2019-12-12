@@ -51,7 +51,7 @@ public class Filtrado {
 			if(!elemento.has("Inv_FecVen") || elemento.get("Inv_FecVen").isJsonNull())
 				continue;
 			
-			Boolean cpRenInv = elementosObjeto.has("cpRenInv") ? elementosObjeto.get("cpRenInv").getAsBoolean() : false;
+			Boolean cpRenInv = elemento.has("cpRenInv") ? elemento.get("cpRenInv").getAsBoolean() : false;
 			if(filter_by != null && !filter_by.isEmpty() && filter_by.equals("PROXIMOS_VENCIMIENTOS") && !cpRenInv)
 				continue;
 			
