@@ -146,7 +146,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 			transferenciasProgramadas = new JsonObject(); // inicializamos respuesta
 			transferenciasProgramadas.add("transferenciasProgramadas", new JsonArray()); // inicializamos respuesta vacia por security check
 			transferenciasBIM = transferenciasBIM.get("transferenciasBIM").getAsJsonObject(); // obtenemos objeto transferenciasBIM para manipularlo
-			
+
 			if (transferenciasBIM.has("transferenciaBIM")) { // existe un innerObject con las transferencias?
 
 				// solo transferencias programadas activas

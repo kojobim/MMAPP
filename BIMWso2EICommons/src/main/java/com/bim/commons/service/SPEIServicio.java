@@ -257,9 +257,8 @@ public class SPEIServicio extends BaseService {
 		datosTransferenciaSPEI.addProperty("SucOrigen", TransferenciaSPEICreacionOpSucOrigen);
 		datosTransferenciaSPEI.addProperty("SucDestino", TransferenciaSPEICreacionOpSucDestino);
 		datosTransferenciaSPEI.addProperty("Modulo", TransferenciaSPEICreacionOpModulo);
-		logger.info("-- datosTransfarenciaSPEI" + datosTransferenciaSPEI);
 		JsonObject transferenciaSPEICreacionOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransferenciaSPEICreacionOp, datosTransferenciaSPEI);
-		logger.info("-- transferenciaSPEICreacionOpResultadoObjeto" + transferenciaSPEICreacionOpResultadoObjeto);
+		logger.debug("-- transferenciaSPEICreacionOpResultadoObjeto" + transferenciaSPEICreacionOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaSPEICreacion metodo... ");
 		return transferenciaSPEICreacionOpResultadoObjeto;
 	}
@@ -535,7 +534,7 @@ public class SPEIServicio extends BaseService {
 		datosTransferenciaSPEI.addProperty("Modulo", TransferenciaSPEIConsultarOpModulo);
 
 		JsonObject transferenciaSPEIConsultarOpResultadoObjetoPrueba = resultSetDAO.resultSet(datosTransferenciaSPEI, "NBTRANACCON", "transferenciasSPEI", "transferenciaSPEI");
-		logger.info("-- transferenciaSPEIConsultarOpResultadoObjetoPrueba" + transferenciaSPEIConsultarOpResultadoObjetoPrueba);
+		logger.debug("-- transferenciaSPEIConsultarOpResultadoObjetoPrueba" + transferenciaSPEIConsultarOpResultadoObjetoPrueba);
 		logger.info("COMMONS: Finalizando transferenciaSPEIConsultarResultSets metodo... ");
 		return transferenciaSPEIConsultarOpResultadoObjetoPrueba;
 	}

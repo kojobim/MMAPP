@@ -44,7 +44,6 @@ public class CorreoServicio {
 		}
 	}
 	
-	
 	/**
 	 * Método para envio de correo
 	 * @param destinatario
