@@ -650,6 +650,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 			String sheHorIni = Utilerias.obtenerStringPropiedad(horarioExtendidoResultadoObjeto, "She_HorIni");
 			
 			trsFecOpe = Utilerias.formatearFecha(trsFecOpe, fechaFormato);
+			emailTemplateCliente.addMergeVariable("Trn_ProDes", "PROGRAMADA ENVIADA");
 			emailTemplateCliente.addMergeVariable("strFrecuencia", strFrecuencia);
 			emailTemplateCliente.addMergeVariable("strDuracion", strDuracion);
 			emailTemplateCliente.addMergeVariable("strRecordatorio", strRecordatorio);
