@@ -119,10 +119,12 @@ public class ResultSetDAO {
 		} finally {
 			if(conn != null) {
 				try {
-					if(!conn.isClosed())
+					if(!conn.isClosed()) {
 						conn.close();
+					}
 				} catch (SQLException e) {
-					e.printStackTrace();
+					BimMessageDTO bimMessageDTO = new BimMessageDTO("COMMONS.500");
+					throw new InternalServerException(bimMessageDTO.toString());
 				}
 			}
 		}

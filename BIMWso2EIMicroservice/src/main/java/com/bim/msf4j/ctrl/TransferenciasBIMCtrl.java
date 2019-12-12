@@ -141,12 +141,12 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		datosTransferenciaBIMConsultar.addProperty("Trb_Usuari", usuarioPrincipal.get("usuNumero").getAsString());
 		datosTransferenciaBIMConsultar.addProperty("FechaSis", Utilerias.obtenerFechaSis());
 		transferenciasBIM = this.transferenciasBIMServicio.transferenciasBIMConsultar(datosTransferenciaBIMConsultar);
-
+		
 		if (transferenciasBIM.has("transferenciasBIM")) { // respuesta exitosa por DSS
 			transferenciasProgramadas = new JsonObject(); // inicializamos respuesta
 			transferenciasProgramadas.add("transferenciasProgramadas", new JsonArray()); // inicializamos respuesta vacia por security check
 			transferenciasBIM = transferenciasBIM.get("transferenciasBIM").getAsJsonObject(); // obtenemos objeto transferenciasBIM para manipularlo
-			
+
 			if (transferenciasBIM.has("transferenciaBIM")) { // existe un innerObject con las transferencias?
 
 				// solo transferencias programadas activas

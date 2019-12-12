@@ -1,5 +1,7 @@
 package com.bim.commons.service;
 
+import java.sql.SQLException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,6 +9,12 @@ import com.bim.commons.dao.ResultSetDAO;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonObject;
 
+/**
+ * Esta clase define las operaciones sobre las transferencias nacionales
+ * @author Backend Team MedioMelon
+ * @version BackendMM022019
+ *
+ */
 public class SPEIServicio extends BaseService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SPEIServicio.class);
@@ -50,8 +58,6 @@ public class SPEIServicio extends BaseService {
 	//propiedades para procesar tranferencia nacional
 	private static String TransferenciaSPEIProcesarOpTrsCuBe;
 	private static String TransferenciaSPEIProcesarOpTrsTipPag;
-	private static String TransferenciaSPEIProcesarOpTrsTipTra;
-	private static String TransferenciaSPEIProcesarOpTrsValFir;
 	private static String TransferenciaSPEIProcesarOpTransaccio;
 	private static String TransferenciaSPEIProcesarOpUsuario;
 	private static String TransferenciaSPEIProcesarOpSucOrigen;
@@ -111,8 +117,6 @@ public class SPEIServicio extends BaseService {
 		TransferenciaSPEIProcesarOp = properties.getProperty("spei_servicio.op.transferencias_spei_procesar");
 		TransferenciaSPEIProcesarOpTrsCuBe = properties.getProperty("op.transferencias_spei_procesar.trs_ti_cu_be");
 		TransferenciaSPEIProcesarOpTrsTipPag = properties.getProperty("op.transferencias_spei_procesar.trs_tip_pag");
-		TransferenciaSPEIProcesarOpTrsTipTra = properties.getProperty("op.transferencias_spei_procesar.trs_tip_tra");
-		TransferenciaSPEIProcesarOpTrsValFir = properties.getProperty("op.transferencias_spei_procesar.trs_val_fir");
 		TransferenciaSPEIProcesarOpTransaccio = properties.getProperty("op.transferencias_spei_procesar.transaccio");
 		TransferenciaSPEIProcesarOpUsuario = properties.getProperty("op.transferencias_spei_procesar.usuario");
 		TransferenciaSPEIProcesarOpSucOrigen = properties.getProperty("op.transferencias_spei_procesar.suc_origen");
@@ -160,6 +164,7 @@ public class SPEIServicio extends BaseService {
 	 * {
 	 *  horarioSPEI:
 	 *  	{
+	 *  	Msj_Error: String,
 	 *  	Hor_HorIni: String,
 	 *  	Hor_HorFin: String
 	 *  }
@@ -193,7 +198,7 @@ public class SPEIServicio extends BaseService {
 	/**
 	 * Método para crear transferencias SPEI
 	 * ProcedureName: NBTRASPEALT
-	 * @param datosTransfarenciaSPEI
+	 * @param datosTransferenciaSPEI
 	 * <pre>
 	 * {
 	 *  Trs_Usuari: String,
@@ -223,7 +228,7 @@ public class SPEIServicio extends BaseService {
 	 * @return
 	 * <pre>
 	 * {
-	 * 	transaccionSPEI: {
+	 * 	transferenciaSPEI: {
 	 *		Err_Codigo: String,
 	 *		Err_Mensaj: String,
 	 *		Trs_Consec: String
@@ -231,31 +236,33 @@ public class SPEIServicio extends BaseService {
 	 * }
 	 * </pre>
 	 */
-	public JsonObject transferenciaSPEICreacion(JsonObject datosTransfarenciaSPEI) {
+	public JsonObject transferenciaSPEICreacion(JsonObject datosTransferenciaSPEI) {
 		logger.info("COMMONS: Comenzando transferenciaSPEICreacion metodo... ");
-		if(!datosTransfarenciaSPEI.has("Trs_SegRef"))
-			datosTransfarenciaSPEI.addProperty("Trs_SegRef", "");
-		if(!datosTransfarenciaSPEI.has("Trs_RFC"))
-			datosTransfarenciaSPEI.addProperty("Trs_RFC", "");
-		if(!datosTransfarenciaSPEI.has("Trs_Email"))
-			datosTransfarenciaSPEI.addProperty("Trs_Email", "");
-		if(!datosTransfarenciaSPEI.has("Trs_TipDur"))
-			datosTransfarenciaSPEI.addProperty("Trs_TipDur", "");
-		if(!datosTransfarenciaSPEI.has("Trs_IVA"))
-			datosTransfarenciaSPEI.addProperty("Trs_IVA", 0);
-		datosTransfarenciaSPEI.addProperty("Trs_DurTra", 0);
-		datosTransfarenciaSPEI.addProperty("Trs_DiAnEm", 0);
-		datosTransfarenciaSPEI.addProperty("Transaccio", TransferenciaSPEICreacionOpTransaccio);
-		datosTransfarenciaSPEI.addProperty("Usuario", TransferenciaSPEICreacionOpUsuario);
-		datosTransfarenciaSPEI.addProperty("SucOrigen", TransferenciaSPEICreacionOpSucOrigen);
-		datosTransfarenciaSPEI.addProperty("SucDestino", TransferenciaSPEICreacionOpSucDestino);
-		datosTransfarenciaSPEI.addProperty("Modulo", TransferenciaSPEICreacionOpModulo);
-		JsonObject transferenciaSPEICreacionOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransferenciaSPEICreacionOp, datosTransfarenciaSPEI);
+		if(!datosTransferenciaSPEI.has("Trs_SegRef"))
+			datosTransferenciaSPEI.addProperty("Trs_SegRef", "");
+		if(!datosTransferenciaSPEI.has("Trs_RFC"))
+			datosTransferenciaSPEI.addProperty("Trs_RFC", "");
+		if(!datosTransferenciaSPEI.has("Trs_Email"))
+			datosTransferenciaSPEI.addProperty("Trs_Email", "");
+		if(!datosTransferenciaSPEI.has("Trs_TipDur"))
+			datosTransferenciaSPEI.addProperty("Trs_TipDur", "");
+		if(!datosTransferenciaSPEI.has("Trs_IVA"))
+			datosTransferenciaSPEI.addProperty("Trs_IVA", 0);
+		if(!datosTransferenciaSPEI.has("Trs_DurTra"))
+			datosTransferenciaSPEI.addProperty("Trs_DurTra", 0);
+		if(!datosTransferenciaSPEI.has("Trs_DiAnEm"))
+			datosTransferenciaSPEI.addProperty("Trs_DiAnEm", 0);
+		datosTransferenciaSPEI.addProperty("Transaccio", TransferenciaSPEICreacionOpTransaccio);
+		datosTransferenciaSPEI.addProperty("Usuario", TransferenciaSPEICreacionOpUsuario);
+		datosTransferenciaSPEI.addProperty("SucOrigen", TransferenciaSPEICreacionOpSucOrigen);
+		datosTransferenciaSPEI.addProperty("SucDestino", TransferenciaSPEICreacionOpSucDestino);
+		datosTransferenciaSPEI.addProperty("Modulo", TransferenciaSPEICreacionOpModulo);
+		JsonObject transferenciaSPEICreacionOpResultadoObjeto = Utilerias.performOperacion(SPEIServicio, TransferenciaSPEICreacionOp, datosTransferenciaSPEI);
 		logger.debug("-- transferenciaSPEICreacionOpResultadoObjeto" + transferenciaSPEICreacionOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando transferenciaSPEICreacion metodo... ");
 		return transferenciaSPEICreacionOpResultadoObjeto;
 	}
-	
+
 	/**
 	 * Método para procesar la transferencia SPEI
 	 * ProcedureName: NBTRASPEPRO
@@ -288,7 +295,6 @@ public class SPEIServicio extends BaseService {
 	 * 	Trs_TipTra: String,
 	 * 	Trs_ValFir: String,
 	 * 	Ban_Descri: String,
-	 * 	NumTransac: String,
 	 * 	FechaSis: String
 	 * }
 	 * </pre>
@@ -296,7 +302,7 @@ public class SPEIServicio extends BaseService {
  	 * @return
 	 * <pre>
 	 * {
-	 * 	transaccionSPEI: {
+	 * 	transferenciaSPEI: {
 	 *		Err_Codigo: String,
 	 *		Err_Mensaj: String,
 	 *		NumTransac: String,
@@ -337,10 +343,10 @@ public class SPEIServicio extends BaseService {
 			datosTransferenciaSPEI.addProperty("Trs_DaBeAd", "");
 		if(!datosTransferenciaSPEI.has("Trs_DireIP"))
 			datosTransferenciaSPEI.addProperty("Trs_DireIP", "");
+		if(!datosTransferenciaSPEI.has("NumTransac"))
+			datosTransferenciaSPEI.addProperty("NumTransac", "");
 		datosTransferenciaSPEI.addProperty("Trs_TiCuBe", TransferenciaSPEIProcesarOpTrsCuBe);
 		datosTransferenciaSPEI.addProperty("Trs_TipPag", TransferenciaSPEIProcesarOpTrsTipPag);
-		datosTransferenciaSPEI.addProperty("Trs_TipTra", TransferenciaSPEIProcesarOpTrsTipTra);
-		datosTransferenciaSPEI.addProperty("Trs_ValFir", TransferenciaSPEIProcesarOpTrsValFir);
 		datosTransferenciaSPEI.addProperty("Transaccio", TransferenciaSPEIProcesarOpTransaccio);
 		datosTransferenciaSPEI.addProperty("Usuario", TransferenciaSPEIProcesarOpUsuario);
 		datosTransferenciaSPEI.addProperty("SucOrigen", TransferenciaSPEIProcesarOpSucOrigen);
@@ -367,17 +373,17 @@ public class SPEIServicio extends BaseService {
 	 * @return
 	 * <pre>
 	 * {
-	 * 	transaccionesSPEI: {
+	 * 	transferenciasSPEI: {
 	 * 		Trn_Client: String,
 	 * 		Trn_Consec: String,
 	 * 		Trn_CueOri: String,
 	 * 		Trn_CueDes: String,
-	 * 		Trn_Monto: Duble,
+	 * 		Trn_Monto: Double,
 	 * 		Trn_Banco: String,
 	 * 		Trn_Status: String,
 	 * 		Trn_Descri: String,
 	 * 		Trn_RFC: String,
-	 * 		Trn_IVA: Duble,
+	 * 		Trn_IVA: Double,
 	 * 		Trn_Tipo: String,
 	 * 		Trn_UsuCap: String,
 	 * 		Trn_TipTra: String,
@@ -432,6 +438,108 @@ public class SPEIServicio extends BaseService {
 	}
 
 	/**
+	 * Método para consultar los multiples result set de transferencias SPEI
+	 * ProcedureName: NBTRANACCON
+	 * @param datosTransferenciaSPEI
+	 * <pre>
+	 * {
+	 *	Trn_UsuAdm: String,
+	 *	Trn_Usuari: String,
+	 *	Trn_Client: String,
+	 *	FechaSis: String
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 * 	transferenciasSPEI: {
+	 * 		transferenciasSPEI: [
+	 * 		[{
+	 * 			Trn_Client: String,
+	 * 			Trn_Consec: String,
+	 * 			Trn_CueOri: String,
+	 * 			Trn_CueDes: String,
+	 * 			Trn_Monto: Double,
+	 * 			Trn_Banco: String,
+	 * 			Trn_Status: String,
+	 * 			Trn_Descri: String,
+	 * 			Trn_RFC: String,
+	 * 			Trn_IVA: Double,
+	 * 			Trn_Tipo: String,
+	 * 			Trn_UsuCap: String,
+	 * 			Trn_TipTra: String,
+	 * 			Trn_Frecue: String,
+	 * 			Trn_FePrEn: String,
+	 * 			Trn_TipDur: String,
+	 * 			Trn_DurFec: String,
+	 * 			Trn_DurTra: Integer,
+	 * 			Trn_DiAnEm: Integer,
+	 * 			Trn_FecCap: String,
+	 * 			Cor_Alias: String,
+	 * 			Cde_Alias: String,
+	 * 			Cde_Consec: String,
+	 * 			Cde_EmaBen: String,
+	 * 			Cli_ComOrd: String,
+	 * 			Trn_Transf: String,
+	 * 			Trn_SigSec: Integer,
+	 * 			Trn_Secuen: Integer,
+	 * 			Trn_UsCaNo: String,
+	 * 			Trn_UsAuNo: String,
+	 * 			Trn_BanDes: String,
+	 * 			Trn_MonTot: Double,
+	 * 			Trn_EmaBen: String,
+	 * 			Trn_DeCuOr: String,
+	 * 			Trn_DeCuDe: String,
+	 * 			Trn_DesAdi: String
+	 * 		}],
+	 * 		[{
+	 * 			Fir_Transf: String,
+	 * 			Fir_Consec: String,
+	 * 			Fir_Usuari: String,
+	 * 			Fir_FecFir: String,
+	 * 			Fir_NivFir: String,
+	 * 			Fir_UsuNom: String
+	 * 		}],
+	 * 		[{
+	 * 			Fir_Transf: String,
+	 * 			Fir_Consec: String,
+	 * 			Fir_NivFir: String,
+	 * 			Fir_Cantid: Integer
+	 * 		}],
+	 * 		[{
+	 * 			Trs_TipSPE: String,
+	 * 			Trs_FecOpe: String
+	 * 		}]
+	 * 	}
+	 * }
+	 * </pre>
+	 * @throws SQLException 
+	 */
+	public JsonObject transferenciaSPEIConsultarResultSets(JsonObject datosTransferenciaSPEI) {
+		logger.info("COMMONS: Comenzando transferenciaSPEIConsultarResultSets metodo... ");
+		if(!datosTransferenciaSPEI.has("Trn_Client"))
+			datosTransferenciaSPEI.addProperty("Trn_Client", "");
+		if(!datosTransferenciaSPEI.has("Trn_Consec"))
+			datosTransferenciaSPEI.addProperty("Trn_Consec", "");
+		if(!datosTransferenciaSPEI.has("Trn_Transf"))
+			datosTransferenciaSPEI.addProperty("Trn_Transf", "");
+		if(!datosTransferenciaSPEI.has("NumTransac"))
+			datosTransferenciaSPEI.addProperty("NumTransac", "");
+		datosTransferenciaSPEI.addProperty("Trn_Status", TransferenciaSPEIConsultarOpTrnStatus);
+		datosTransferenciaSPEI.addProperty("Tip_Consul", TransferenciaSPEIConsultarOpTipConsul);
+		datosTransferenciaSPEI.addProperty("Transaccio", TransferenciaSPEIConsultarOpTransaccio);
+		datosTransferenciaSPEI.addProperty("Usuario", TransferenciaSPEIConsultarOpUsuario);
+		datosTransferenciaSPEI.addProperty("SucOrigen", TransferenciaSPEIConsultarOpSucOrigen);
+		datosTransferenciaSPEI.addProperty("SucDestino", TransferenciaSPEIConsultarOpSucDestino);
+		datosTransferenciaSPEI.addProperty("Modulo", TransferenciaSPEIConsultarOpModulo);
+
+		JsonObject transferenciaSPEIConsultarOpResultadoObjetoPrueba = resultSetDAO.resultSet(datosTransferenciaSPEI, "NBTRANACCON", "transferenciasSPEI", "transferenciaSPEI");
+		logger.debug("-- transferenciaSPEIConsultarOpResultadoObjetoPrueba" + transferenciaSPEIConsultarOpResultadoObjetoPrueba);
+		logger.info("COMMONS: Finalizando transferenciaSPEIConsultarResultSets metodo... ");
+		return transferenciaSPEIConsultarOpResultadoObjetoPrueba;
+	}
+
+	/**
 	 * Método para consulta de firmas de transferencias nacionales
 	 * ProcedureName: NBFITRSPCON
 	 * @param datosTransferenciaSPEIFirmas
@@ -481,7 +589,7 @@ public class SPEIServicio extends BaseService {
 	} //Cierre de metodo
 	
 	/**
-	 * Método para consulta de firmas de transferencias nacionales
+	 * Método para consultar los multiples result set de firmas de transferencias nacionales
 	 * ProcedureName: NBFITRSPCON
 	 * @param datosTransferenciaSPEIFirmas
 	 * <pre>
@@ -499,21 +607,22 @@ public class SPEIServicio extends BaseService {
 	 * {
 	 *	transferenciaSPEI: {
 	 *		transferenciasSPEI: [
-	 * 			[
+	 * 			[{
 	 * 				Fts_Consec: String,
 	 * 				Fts_NivFir: String,
 	 * 				Fts_Cantid: Integer
-	 * 			],
-	 * 			[
+	 * 			}],
+	 * 			[{
 	 * 				Fts_Consec: String,
 	 * 				Fts_NivFir: String,
 	 * 				Fts_Usuari: String,
 	 * 				Fts_UsuNom: String
-	 * 			]
+	 * 			}]
 	 * 		]
 	 * 	}
 	 * }
 	 * </pre>
+	 * @throws SQLException 
 	 */
 	public JsonObject transferenciaSPEIFirmasConsultarResultSet(JsonObject datosTransferenciaSPEIFirmas) {
 		logger.info("COMMONS: Comenzando transferenciaSPEIFirmasConsultarResultSet metodo... ");

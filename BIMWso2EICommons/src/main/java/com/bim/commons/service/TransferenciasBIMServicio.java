@@ -55,7 +55,7 @@ public class TransferenciasBIMServicio extends BaseService {
 	private static String TransferenciaBIMFirmasConsultarOpSucOrigen;
 	private static String TransferenciaBIMFirmasConsultarOpSucDestino;
 	private static String TransferenciaBIMFirmasConsultarOpModulo;
-	
+	 
 	public TransferenciasBIMServicio() {
 		super();
 		
