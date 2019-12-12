@@ -64,6 +64,29 @@ public class Utilerias {
 		logger.info("COMMONS: Finalizando paginado metodo");
 		return new Gson().fromJson(new Gson().toJson(listaElementosPaginados), JsonArray.class);
 	}
+	
+	public static Date convertirZonaHoraria(Date fecha, TimeZone zonaHorariaActual, TimeZone zonaHorariaDestino) {
+		logger.info("COMMONS: Comenzando convertirZonaHoraria metodo");
+		logger.debug("FECHA ORIGINAL: "+fecha.toString());
+
+		Calendar calendario = Calendar.getInstance();
+		calendario.setTime(fecha);
+		calendario.setTimeZone(zonaHorariaActual);
+		calendario.add(Calendar.MILLISECOND, zonaHorariaActual.getRawOffset() * -1);
+		if (zonaHorariaActual.inDaylightTime(calendario.getTime())) {
+			calendario.add(Calendar.MILLISECOND, calendario.getTimeZone().getDSTSavings() * -1);
+		}
+
+		calendario.add(Calendar.MILLISECOND, zonaHorariaDestino.getRawOffset());
+		if (zonaHorariaDestino.inDaylightTime(calendario.getTime())) {
+		    calendario.add(Calendar.MILLISECOND, zonaHorariaDestino.getDSTSavings());
+		}
+		
+		logger.debug("FECHA PARSEADA: "+calendario.getTime());	
+
+		logger.info("COMMONS: Finalizando convertirZonaHoraria metodo");
+		return calendario.getTime();
+	}
 	   
 	public static Boolean calcularVencimiento(Date fechaVencimiento, Date horIni, Date horFin) {
 		logger.info("COMMONS: Comenzando calcularVencimiento metodo");
@@ -89,19 +112,20 @@ public class Utilerias {
 		Date calHorIni = null;
 		Date calHorFin = null;
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			calendario.setTime(horIni);
+			
+			calHorIni = convertirZonaHoraria(horIni, TimeZone.getTimeZone("CST6CDT"),TimeZone.getTimeZone("UTC"));
+			calendario.setTime(calHorIni);
 			calendario.add(Calendar.MINUTE, -1);
-			calHorIni = sdf.parse(sdf.format(calendario.getTime()));
+			calHorIni = calendario.getTime();
 		} catch (Exception e) {
 			logger.info("error al formatear calHorIni.");
 		}
 
 		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			calendario.setTime(horFin);
-			calendario.add(Calendar.MINUTE, 1);
-			calHorFin = sdf.parse(sdf.format(calendario.getTime()));
+			calHorFin = convertirZonaHoraria(horFin, TimeZone.getTimeZone("CST6CDT"),TimeZone.getTimeZone("UTC"));
+			calendario.setTime(calHorFin);
+			calendario.add(Calendar.MINUTE, -1);
+			calHorFin = calendario.getTime();
 		} catch (Exception e) {
 			logger.info("error al formatear calHorFin.");
 		}
@@ -516,12 +540,18 @@ public class Utilerias {
 		TimeZone tz = TimeZone.getTimeZone("UTC");
 		sdf.setTimeZone(tz);
 		Date fechaResultado = null;
+		
+		if(fecha == null || fecha.isEmpty() || (fecha = fecha.trim()).length() == 0)
+			return null;
+		
 		try {
 			fechaResultado = sdf.parse(fecha);
 		} catch (ParseException e) {
-			logger.info("Error en el formato de fecha.");
-			e.printStackTrace();
+			logger.warn("Error en el formato de fecha.");
+			logger.debug("[ FECHA: "+fecha+",FORMATO "+formato);
 		}
+		logger.debug("Formato de fecha encontrado");
+		logger.debug("[ FECHA: "+fecha+" == FORMATO "+formato);
 		return fechaResultado;
 	}
 
@@ -536,7 +566,7 @@ public class Utilerias {
 		formatosEntrada.add("HH:mm");
 		Date fechaResultado = null;
 
-		if(fecha == null || fecha.isEmpty())
+		if(fecha == null || fecha.isEmpty() || (fecha = fecha.trim()).length() == 0)
 			return null;
 
 		for(String formatoEntrada : formatosEntrada) {
@@ -546,12 +576,16 @@ public class Utilerias {
 			try {
 				fechaResultado = sdf.parse(fecha);
 			} catch (ParseException e) {
-				logger.info("Error en el formato de fecha.");
-				e.printStackTrace();
+				logger.warn("Error en el formato de fecha.");
+				logger.debug("[ FECHA: "+fecha+" <> FORMATO "+formatoEntrada);
+			}
+			
+			if(fechaResultado != null) {
+				logger.debug("Formato de fecha encontrado");
+				logger.debug("[ FECHA: "+fecha+" == FORMATO "+formatoEntrada);
+				return fechaResultado;				
 			}
 
-			if(fechaResultado != null)
-				return fechaResultado;
 		}
 		return null;
 	}
@@ -568,7 +602,7 @@ public class Utilerias {
 		formatosEntrada.add("HH:mm");
 		Date fechaResultado = null;
 		
-		if(fecha == null || fecha.isEmpty())
+		if(fecha == null || fecha.isEmpty() || (fecha = fecha.trim()).length() == 0)
 			return "";
 		for(String formatoEntrada : formatosEntrada) {
 			fechaResultado = convertirFecha(fecha, formatoEntrada);

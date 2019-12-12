@@ -474,7 +474,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 				.append(trbMonto)
 				.append(" Pesos")
 				.toString();
-		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
+		String bitDireIP = solicitud.getHeader("X-Forwarded-For") != null ? solicitud.getHeader("X-Forwarded-For") : "";
 		
 		JsonObject datosBitacora = new JsonObject();
 		datosBitacora.addProperty("Bit_Usuari", usuNumero);

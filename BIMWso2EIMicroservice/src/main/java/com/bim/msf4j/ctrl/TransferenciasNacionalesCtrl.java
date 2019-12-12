@@ -1,8 +1,5 @@
 package com.bim.msf4j.ctrl;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -28,7 +25,6 @@ import com.bim.commons.service.CuentaDestinoServicio;
 import com.bim.commons.service.SPEIServicio;
 import com.bim.commons.service.TokenServicio;
 import com.bim.commons.service.TransaccionServicio;
-import com.bim.commons.utils.Filtrado;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -169,7 +165,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		JsonArray transaccionSPEI = null;
 		
 		bearerToken = solicitud.getHeader("Authorization");
-		bitDireIP = solicitud.getHeader("X-Forwarded-For");
+		bitDireIP = solicitud.getHeader("X-Forwarded-For") != null ? solicitud.getHeader("X-Forwarded-For") : "";
 		fechaSis = Utilerias.obtenerFechaSis();
 		
 		principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
