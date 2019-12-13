@@ -57,10 +57,23 @@ public class Utilerias {
 	public static JsonArray paginado(JsonArray datos, int page, int per_page) {
 		logger.info("COMMONS: Comenzando paginado metodo");
 		ArrayList<JsonElement> listaElementos = (ArrayList<JsonElement>)new Gson().fromJson(datos.toString(), ArrayList.class);
-		if(per_page > listaElementos.size())
-			return datos; 
+		int totalElementos = 0;
+
 		int numeroDatos = (page - 1) * per_page;
-		List<JsonElement> listaElementosPaginados = listaElementos.subList(numeroDatos, numeroDatos + per_page);
+		
+		if(numeroDatos >= listaElementos.size()) {
+			return new JsonArray();
+		}
+
+		if(per_page > listaElementos.size()) {
+			return datos;
+		}
+		
+		if((totalElementos = numeroDatos + per_page) > listaElementos.size()) {
+			totalElementos = listaElementos.size();
+		}
+		
+		List<JsonElement> listaElementosPaginados = listaElementos.subList(numeroDatos, totalElementos);
 		logger.info("COMMONS: Finalizando paginado metodo");
 		return new Gson().fromJson(new Gson().toJson(listaElementosPaginados), JsonArray.class);
 	}
@@ -384,6 +397,7 @@ public class Utilerias {
 		logger.info("COMMONS: Comenzando getFechaSis metodo");
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss");
 		Date fecha = new Date();
+		fecha = convertirZonaHoraria(fecha, TimeZone.getTimeZone("UTC"), TimeZone.getTimeZone("CST6CDT"));
 		logger.info("COMMONS: Finalizando getFechaSis metodo");
 		return simpleDateFormat.format(fecha);	
 	}
