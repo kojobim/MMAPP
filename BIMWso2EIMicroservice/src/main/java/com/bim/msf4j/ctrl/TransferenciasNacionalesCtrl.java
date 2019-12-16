@@ -300,10 +300,6 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 	            bimMessageDTO = new BimMessageDTO("COMMONS.400");
 	            bimMessageDTO.addMergeVariable("propiedad", "trsTipDur");
 	            throw new BadRequestException(bimMessageDTO.toString());
-		    } else if(Strings.isNullOrEmpty(trsDurFec)) {
-	            bimMessageDTO = new BimMessageDTO("COMMONS.400");
-	            bimMessageDTO.addMergeVariable("propiedad", "trsDurFec");
-	            throw new BadRequestException(bimMessageDTO.toString());
 		    }
 		    
 		} else {
@@ -396,16 +392,19 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		
 		transferenciaCreacionResultado = this.speiServicio.transferenciaSPEICreacion(datosTransferenciaCreacion);
 		Utilerias.verificarError(transferenciaCreacionResultado);
-		transferenciaCreacionResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(transferenciaCreacionResultado, "transferenciaSPEI");
-
-		errCodigo = Utilerias.obtenerStringPropiedad(transferenciaCreacionResultadoObjeto, "Err_Codigo");
-		trsConsec = Utilerias.obtenerStringPropiedad(transferenciaCreacionResultadoObjeto, "Trs_Consec");
 		
-		if(!"000000".equals(errCodigo)) {
-			errMensaj = Utilerias.obtenerStringPropiedad(transferenciaCreacionResultadoObjeto, "Err_Mensaj");			
-			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.31");
-			bimMessageDTO.addMergeVariable("errMensaj", errMensaj);
-			throw new ConflictException(bimMessageDTO.toString());
+		if(transferenciaCreacionResultado.has("transferenciaSPEI")) {
+			transferenciaCreacionResultadoObjeto = Utilerias.obtenerJsonObjectPropiedad(transferenciaCreacionResultado, "transferenciaSPEI");
+	
+			errCodigo = Utilerias.obtenerStringPropiedad(transferenciaCreacionResultadoObjeto, "Err_Codigo");
+			trsConsec = Utilerias.obtenerStringPropiedad(transferenciaCreacionResultadoObjeto, "Trs_Consec");
+			
+			if(!"000000".equals(errCodigo)) {
+				errMensaj = Utilerias.obtenerStringPropiedad(transferenciaCreacionResultadoObjeto, "Err_Mensaj");			
+				bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.31");
+				bimMessageDTO.addMergeVariable("errMensaj", errMensaj);
+				throw new ConflictException(bimMessageDTO.toString());
+			}
 		}
 
 		// creacion de registro en bitacora
