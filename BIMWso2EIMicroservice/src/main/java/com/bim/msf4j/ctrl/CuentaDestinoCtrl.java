@@ -262,11 +262,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
 		
 		String usuNumero = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuNumero");
-		// String usuFolTok = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuFolTok");
-		/**
-		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
-		 */
-		String usuFolTok = "0416218854";
+		String usuFolTok = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuFolTok");
 		
 		JsonObject altaCuentaDestinoBim = Utilerias.obtenerJsonObjectPropiedad(cuentaDestinoObjeto, "altaCuentaDestinoBim");
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(altaCuentaDestinoBim, "cpRSAToken");
@@ -715,12 +711,7 @@ public class CuentaDestinoCtrl extends BimBaseCtrl {
 		String cpCodigo = Utilerias.obtenerStringPropiedad(activarCuentaDestino, "cpCodigo");		
 		String usuNumero = Utilerias.obtenerStringPropiedad(principalResultadoObjeto, "usuNumero");
 		String usuUsuAdm = Utilerias.obtenerStringPropiedad(principalResultadoObjeto, "usuUsuAdm");
-
-		/**
-		 * Se utiliza usuFolTok en duro debido a que todavia no se puede obtener del principal
-		 */
-		// String usuFolTok = Utilerias.obtenerStringPropiedad(principalResultadoObjecto, "usuFolTok");
-		String usuFolTok = "0416218854";
+		String usuFolTok = Utilerias.obtenerStringPropiedad(principalResultadoObjeto, "usuFolTok");
 		String fechaSis = Utilerias.obtenerFechaSis();
 		
 		JsonObject folioTransaccionGenerarResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
