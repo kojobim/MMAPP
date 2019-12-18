@@ -60,6 +60,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 	private static String TransferenciaBIMCreacionOpTrbFePrEn;
 	private static String TransferenciaBIMCreacionOpTrbDurFec;
 	private static String TransferenciaBIMBitacoraCreacionOpBitTipOpe;
+	private static String TransferenciaBIMConsultarOpTipConsulL3;
 
 	static {
 		transferenciasBIMMaximoPagina = Integer
@@ -74,6 +75,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		TransferenciaBIMCreacionOpTrbFePrEn = properties.getProperty("op.transferencia_bim_creacion.trb_fe_pr_en");
 		TransferenciaBIMCreacionOpTrbDurFec = properties.getProperty("op.transferencia_bim_creacion.trb_dur_fec");
 		TransferenciaBIMBitacoraCreacionOpBitTipOpe = properties.getProperty("op.transferencia_bim.bitacora_creacion.bit_tip_ope");
+		TransferenciaBIMConsultarOpTipConsulL3 = properties.getProperty("op.transferencia_bim_consultar.tip_consul.l3");
 	}
 
 	public TransferenciasBIMCtrl() {
@@ -139,6 +141,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		datosTransferenciaBIMConsultar = new JsonObject();
 		datosTransferenciaBIMConsultar.addProperty("Trb_UsuAdm", usuarioPrincipal.get("usuUsuAdm").getAsString());
 		datosTransferenciaBIMConsultar.addProperty("Trb_Usuari", usuarioPrincipal.get("usuNumero").getAsString());
+		datosTransferenciaBIMConsultar.addProperty("Tip_Consul", TransferenciaBIMConsultarOpTipConsulL3);
 		datosTransferenciaBIMConsultar.addProperty("FechaSis", Utilerias.obtenerFechaSis());
 		transferenciasBIM = this.transferenciasBIMServicio.transferenciasBIMConsultar(datosTransferenciaBIMConsultar);
 		
@@ -169,7 +172,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 				JsonArray transferenciasProgramadasActivas = Utilerias.filtrarPropiedadesArray(
 						datosTransferenciaListado,
 						jsonObject -> jsonObject.get("Trb_TipTra").getAsString().equals("P")
-								&& jsonObject.get("Trb_Status").getAsString().equals("A"));
+								&& jsonObject.get("Trb_Status").getAsString().equals("E"));
 				
 				totalElementos = transferenciasProgramadasActivas != null ? transferenciasProgramadasActivas.size() : 0;
 				transferenciasProgramadasActivas = Utilerias.paginado(transferenciasProgramadasActivas, page, perPage);

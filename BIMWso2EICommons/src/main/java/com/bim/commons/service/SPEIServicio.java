@@ -424,8 +424,10 @@ public class SPEIServicio extends BaseService {
 			datosTransferenciaSPEI.addProperty("Trn_Transf", "");
 		if(!datosTransferenciaSPEI.has("NumTransac"))
 			datosTransferenciaSPEI.addProperty("NumTransac", "");
-		datosTransferenciaSPEI.addProperty("Trn_Status", TransferenciaSPEIConsultarOpTrnStatus);
-		datosTransferenciaSPEI.addProperty("Tip_Consul", TransferenciaSPEIConsultarOpTipConsul);
+		if(!datosTransferenciaSPEI.has("Trn_Status"))
+			datosTransferenciaSPEI.addProperty("Trn_Status", TransferenciaSPEIConsultarOpTrnStatus);
+		if(!datosTransferenciaSPEI.has("Tip_Consul"))
+			datosTransferenciaSPEI.addProperty("Tip_Consul", TransferenciaSPEIConsultarOpTipConsul);
 		datosTransferenciaSPEI.addProperty("Transaccio", TransferenciaSPEIConsultarOpTransaccio);
 		datosTransferenciaSPEI.addProperty("Usuario", TransferenciaSPEIConsultarOpUsuario);
 		datosTransferenciaSPEI.addProperty("SucOrigen", TransferenciaSPEIConsultarOpSucOrigen);
