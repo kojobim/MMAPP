@@ -940,7 +940,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 			JsonObject transaccionObjeto = (JsonObject) transaccionElemento;
 			//asignación de variables
 			trnDeCuOr = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_DeCuOr");
-			trnDeCuDe = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_CueOri");
+			trnDeCuDe = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_DeCuDe");
 			trnBanDes = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_BanDes");
 			trnDescri = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_Descri");
 			trnfecha = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_FePrEn");
