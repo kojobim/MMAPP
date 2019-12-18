@@ -232,7 +232,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/transferenciasBIMConsultarNE" element="transferenciasBIM">
+        <result defaultNamespace="http://bem.com/transferenciasBIMConsultarNE" element="transferenciasBIM" rowName="transferenciaBIM">
             <element column="Trb_Client" name="Trb_Client" xsdType="xs:string" optional="true"/>
             <element column="Trb_Consec" name="Trb_Consec" xsdType="xs:string" optional="true"/>
             <element column="Trb_CueOri" name="Trb_CueOri" xsdType="xs:string" optional="true"/>

@@ -59,6 +59,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 	private static String CuentaDestinoSPEIConsultarOpTipConsulL1; 
 	private static String TransferenciaNacionalProgramada;
 	private static String TransferenciaNacionalInmediata;
+	private static String TransferenciaSPEIConsultarOpTrnStatusE;
+	private static String TransferenciaSPEIConsultarOpTipConsulL2;
 	
 	
 	static {		
@@ -70,6 +72,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		TransferenciaNacionalDuracion = properties.getProperty("transferencias_spei.duracion");
 		TransferenciaNacionalProgramada = properties.getProperty("transferencias_spei.programada");
 		TransferenciaNacionalInmediata = properties.getProperty("transferencias_spei.inmediata");
+		TransferenciaSPEIConsultarOpTrnStatusE = properties.getProperty("op.transferencias_spei_consultar.trn_status.e");
+		TransferenciaSPEIConsultarOpTipConsulL2 = properties.getProperty("op.transferencias_spei_consultar.tip_consul.l2");
 	}
 	
 	public TransferenciasNacionalesCtrl() {
@@ -823,7 +827,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		JsonArray datosTransferenciaListado = null;
 		JsonArray transaccionElementoArray = null;
 		JsonArray transferenciasProgramadasActivas = null;
-		JsonArray transferenciasProgramadas = null;
+		JsonObject transferenciasProgramadas = null;
 		JsonObject principalResultadoObjeto = null;
 		JsonObject folioTransaccionGenerarOpResultadoObjeto = null;
 		JsonObject datosTransferenciaSPEIConsultar = null;
@@ -888,6 +892,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosTransferenciaSPEIConsultar.addProperty("Trn_UsuAdm", usuUsuAdm);
 		datosTransferenciaSPEIConsultar.addProperty("Trn_Usuari", usuNumero);
 		datosTransferenciaSPEIConsultar.addProperty("Trn_Client", usuClient);
+		datosTransferenciaSPEIConsultar.addProperty("Trn_Status", TransferenciaSPEIConsultarOpTrnStatusE);
+		datosTransferenciaSPEIConsultar.addProperty("Tip_Consul", TransferenciaSPEIConsultarOpTipConsulL2);
 		datosTransferenciaSPEIConsultar.addProperty("FechaSis", fechaSis);
 		datosTransferenciaSPEIConsultar.addProperty("NumTransac", numTransac);
 		
@@ -897,10 +903,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		transaccionesSPEI = Utilerias.obtenerJsonObjectPropiedad(datosTransferenciaSPEIConsultarResultado, "transferenciasSPEI");
 		transaccionElementoArray = Utilerias.obtenerJsonArrayPropiedad(transaccionesSPEI, "transferenciaSPEI");
 		
-		if(transaccionesSPEI.entrySet().isEmpty()) {
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.58");
-			throw new ConflictException(bimMessageDTO.toString());
-		}
+		datosTransferenciaListado = new JsonArray();
 		
 		if (transaccionesSPEI.has("transferenciaSPEI")) { // existe un innerObject con las transferencias?
 
@@ -912,7 +915,6 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 					logger.debug("resultset is a JsonObject: " + transaccionesSPEI.get("transferenciaSPEI").getAsJsonObject());
 				}
 				
-				datosTransferenciaListado = new JsonArray();
 				datosTransferenciaListado.add(transaccionesSPEI.get("transferenciaSPEI").getAsJsonObject());
 				logger.info("datos trasnferencias listado del if   " + datosTransferenciaListado);
 			}else{
@@ -926,18 +928,19 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		transferenciasProgramadasActivas = Utilerias.filtrarPropiedadesArray(
 				datosTransferenciaListado,
 				jsonObject -> jsonObject.get("Trn_TipTra").getAsString().equals("P")
-						&& jsonObject.get("Trn_Status").getAsString().equals("A"));
+						&& jsonObject.get("Trn_Status").getAsString().equals("E"));
 
 
 		totalElementos = transferenciasProgramadasActivas.size();
 		transferenciasProgramadasActivas = Utilerias.paginado(transferenciasProgramadasActivas, pageValue, perPageValue);
 		
-		transferenciasProgramadas = new JsonArray();
+		transferenciasProgramadas = new JsonObject();
+		transferenciasProgramadas.add("transferenciasProgramadas", new JsonArray());
 		for(JsonElement transaccionElemento : transferenciasProgramadasActivas) {
 			JsonObject transaccionObjeto = (JsonObject) transaccionElemento;
 			//asignación de variables
 			trnDeCuOr = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_DeCuOr");
-			trnDeCuDe = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_CueOri");
+			trnDeCuDe = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_DeCuDe");
 			trnBanDes = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_BanDes");
 			trnDescri = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_Descri");
 			trnfecha = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_FePrEn");
@@ -980,7 +983,9 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 			datosTransaccionNacionalObjeto.addProperty("trnFrecue", trnFrecue);
 			datosTransaccionNacionalObjeto.addProperty("cpTrnSecue", cpTrnSecue);
 			datosTransaccionNacionalObjeto.addProperty("trnDiAnEm", trnDiAnEm);
-			transferenciasProgramadas.add(datosTransaccionNacionalObjeto);
+			
+			transferenciasProgramadas.get("transferenciasProgramadas")
+				.getAsJsonArray().add(datosTransaccionNacionalObjeto);
 			
 		}		
 		
