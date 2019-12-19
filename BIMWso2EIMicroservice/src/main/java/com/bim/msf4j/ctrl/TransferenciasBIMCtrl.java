@@ -100,7 +100,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 		// inicia declaracion de variables
 		String trbDeCuOr = null;
 		String trbDeCuDe = null;
-		Double trbTotPes = null;
+		String trbTotPes = null;
 		String trbFeSiEj = null;
 		String cpTrnSec = null;
 		String trbEmaBen = null;
@@ -183,7 +183,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 					//asignaci�n de variables
 					trbDeCuOr = Utilerias.obtenerStringPropiedad(elemento.getAsJsonObject(), "Trb_DeCuOr");
 					trbDeCuDe = Utilerias.obtenerStringPropiedad(elemento.getAsJsonObject(), "Trb_DeCuDe");
-					trbTotPes = Utilerias.obtenerDoublePropiedad(elemento.getAsJsonObject(), "Trb_TotPes");
+					trbTotPes = Utilerias.obtenerStringPropiedad(elemento.getAsJsonObject(), "Trb_TotPes");
 					trbFeSiEj = Utilerias.obtenerStringPropiedad(elemento.getAsJsonObject(), "Trb_FeSiEj");
 					trbEmaBen = Utilerias.obtenerStringPropiedad(elemento.getAsJsonObject(), "Trb_EmaBen");
 					trbFrecue = Utilerias.obtenerStringPropiedad(elemento.getAsJsonObject(),"Trb_Frecue");
