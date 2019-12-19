@@ -803,6 +803,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		String cpTrnTransf = null;
 		String trnDeCuOr =  null;
 		String trnDeCuDe =  null;
+		String trnMonto =  null;
 		String trnBanDes =  null;
 		String trnDescri =  null;
 		String trnFePrEn =  null;
@@ -941,6 +942,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 			//asignación de variables
 			trnDeCuOr = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_DeCuOr");
 			trnDeCuDe = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_DeCuDe");
+			trnMonto = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_Monto");
 			trnBanDes = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_BanDes");
 			trnDescri = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_Descri");
 			trnfecha = Utilerias.obtenerStringPropiedad(transaccionObjeto, "Trn_FePrEn");
@@ -975,6 +977,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 			datosTransaccionNacionalObjeto.addProperty("cpTrnTransf", cpTrnTransf);
 			datosTransaccionNacionalObjeto.addProperty("trnDeCuOr", trnDeCuOr);
 			datosTransaccionNacionalObjeto.addProperty("trnDeCuDe", trnDeCuDe);
+			datosTransaccionNacionalObjeto.addProperty("trnMonto", trnMonto);
 			datosTransaccionNacionalObjeto.addProperty("trnBanDes", trnBanDes);
 			datosTransaccionNacionalObjeto.addProperty("trnDescri", trnDescri);
 			datosTransaccionNacionalObjeto.addProperty("trnFePrEn", trnFePrEn);
