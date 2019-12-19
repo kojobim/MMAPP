@@ -114,6 +114,16 @@ public class ResultSetDAO {
 			statement.close();
 
 		} catch (SQLException e) {
+			if(conn != null) {
+				try {
+					if(!conn.isClosed()) {
+						conn.close();
+					}
+				} catch (SQLException ex) {
+					BimMessageDTO bimMessageDTO = new BimMessageDTO("COMMONS.500");
+					throw new InternalServerException(bimMessageDTO.toString());
+				}
+			}
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("COMMONS.500");
 			throw new InternalServerException(bimMessageDTO.toString());
 		} finally {
