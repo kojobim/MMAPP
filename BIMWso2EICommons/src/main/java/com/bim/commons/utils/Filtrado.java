@@ -62,7 +62,7 @@ public class Filtrado {
 			if(elemento.has("Inv_FecVen"))
 				invFecVen = elemento.get("Inv_FecVen").getAsString();
 			if(invFecVen != null && !invFecVen.contains("Proximo Vencimiento ")) {
-				elementosObjeto.addProperty("Inv_FecVen", Utilerias.formatearFecha(invFecVen, "dd-MM-yyyy HH:mm:ss"));
+				elementosObjeto.addProperty("invFecVen", Utilerias.formatearFecha(invFecVen, "dd-MM-yyyy HH:mm:ss"));
 			}
 			elementosObjeto.addProperty("cpRenInv", cpRenInv);
 			
