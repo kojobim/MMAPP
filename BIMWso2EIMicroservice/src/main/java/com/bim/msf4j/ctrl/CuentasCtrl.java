@@ -46,6 +46,8 @@ public class CuentasCtrl extends BimBaseCtrl {
 	private static String CuentasListadoBitacoraCreacionOpBitTipOpe;
 	private static String MovimientosListadoBitacoraCreacionOpBitTipOpe;
 	private static String MovimientosRegistroBitacoraCreacionOpBitTipOpe;
+	private static String MovimientosListadoOpTipConsulC1;
+	private static String MovimientosListadoOpTipConsulC2;
 	
 	public CuentasCtrl() {
 		super();
@@ -63,7 +65,9 @@ public class CuentasCtrl extends BimBaseCtrl {
 		CuentasListadoBitacoraCreacionOpBitTipOpe = properties.getProperty("op.cuentas_listado.bitacora_creacion.bit_tip_ope");
 		MovimientosListadoBitacoraCreacionOpBitTipOpe = properties.getProperty("op.movimientos_listado.bitacora_creacion.bit_tip_ope");
 		MovimientosRegistroBitacoraCreacionOpBitTipOpe = properties.getProperty("op.movimientos_registro.bitacora_creacion.bit_tip_ope");
-
+		MovimientosListadoOpTipConsulC1 = properties.getProperty("op.movimientos_listado.tip_consul.c1");
+		MovimientosListadoOpTipConsulC2 = properties.getProperty("op.movimientos_listado.tip_consul.c2");
+		
 	}
 	
 	@Path("/")
@@ -232,6 +236,13 @@ public class CuentasCtrl extends BimBaseCtrl {
 		datosMovimientos.addProperty("Fec_Inicia", fecIni);
 		datosMovimientos.addProperty("Fec_Final", fecFin);
 		datosMovimientos.addProperty("FechaSis", fechaSis);
+		
+		if(Utilerias.esMesActual(fecIni)){
+			datosMovimientos.addProperty("Tip_Consul", MovimientosListadoOpTipConsulC1);			
+		}else {
+			datosMovimientos.addProperty("Tip_Consul", MovimientosListadoOpTipConsulC2);
+		}
+
 		
 		JsonObject movimientosListadoResultadoObjeto = this.movimientosServicio.movimientosListado(datosMovimientos);
 		
