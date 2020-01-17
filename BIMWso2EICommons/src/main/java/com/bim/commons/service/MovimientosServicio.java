@@ -18,7 +18,6 @@ public class MovimientosServicio extends BaseService {
 
 	private static String MovimientosServicio;
 	private static String MovimientosListadoOp;
-	private static String MovimientosListadoOpTipConsul;
 	private static String MovimientosListadoOpTransaccio;
 	private static String MovimientosListadoOpUsuario;
 	private static String MovimientosListadoOpSucOrigen;
@@ -31,8 +30,7 @@ public class MovimientosServicio extends BaseService {
 		MovimientosServicio = properties.getProperty("data_service.movimientos_servicio");
 		
 		MovimientosListadoOp = properties.getProperty("movimientos_servicio.op.movimientos_listado");
-
-		MovimientosListadoOpTipConsul = properties.getProperty("op.movimientos_listado.tip_consul");
+		
 		MovimientosListadoOpModulo = properties.getProperty("op.movimientos_listado.modulo");
 		MovimientosListadoOpSucDestino = properties.getProperty("op.movimientos_listado.suc_destino");
 		MovimientosListadoOpSucOrigen = properties.getProperty("op.movimientos_listado.suc_origen");
@@ -92,7 +90,6 @@ public class MovimientosServicio extends BaseService {
 		datosMovimientosListado.addProperty("Mov_MonFin", 0);
 		if(!datosMovimientosListado.has("Mov_Clasif"))
 			datosMovimientosListado.addProperty("Mov_Clasif", "");
-		datosMovimientosListado.addProperty("Tip_Consul", MovimientosListadoOpTipConsul);
 		if(!datosMovimientosListado.has("NumTransac"))
 			datosMovimientosListado.addProperty("NumTransac", "");
 		datosMovimientosListado.addProperty("Transaccio", MovimientosListadoOpTransaccio);

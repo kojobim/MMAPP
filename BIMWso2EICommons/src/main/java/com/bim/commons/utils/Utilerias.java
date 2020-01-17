@@ -16,6 +16,8 @@ import java.util.Properties;
 import java.util.TimeZone;
 import java.util.function.Predicate;
 import java.util.Map.Entry;
+
+import org.apache.http.client.utils.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -567,6 +569,19 @@ public class Utilerias {
 		logger.debug("Formato de fecha encontrado");
 		logger.debug("[ FECHA: "+fecha+" == FORMATO "+formato);
 		return fechaResultado;
+	}
+	
+	public static boolean esMesActual(String fecha){
+		Date hoy = new Date();
+		Date fechaParseada = convertirFecha(fecha);
+		Calendar calendario1 = Calendar.getInstance();
+		Calendar calendario2 = Calendar.getInstance();
+		
+		calendario1.setTime(hoy);
+		calendario2.setTime(fechaParseada);
+		return calendario1.get(Calendar.YEAR) == calendario2.get(Calendar.YEAR) &&
+				calendario1.get(Calendar.MONTH) == calendario2.get(Calendar.MONTH);
+		
 	}
 
 	public static Date convertirFecha(String fecha) {
