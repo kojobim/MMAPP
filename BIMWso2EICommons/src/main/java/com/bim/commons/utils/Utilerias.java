@@ -583,6 +583,62 @@ public class Utilerias {
 				calendario1.get(Calendar.MONTH) == calendario2.get(Calendar.MONTH);
 		
 	}
+	
+	public static String obtenerHora(Date fecha) {
+		Calendar cHora = Calendar.getInstance();
+		cHora.setTime(fecha);
+		StringBuilder hora = new StringBuilder()
+				.append((cHora.get(Calendar.HOUR_OF_DAY)< 10 ? "0" : ""))
+				.append(cHora.get(Calendar.HOUR_OF_DAY))
+				.append(":")
+				.append((cHora.get(Calendar.MINUTE)< 10 ? "0" : ""))
+				.append(cHora.get(Calendar.MINUTE))
+				.append(":")
+				.append(cHora.get(Calendar.SECOND)< 10 ? 0 : "")
+				.append(cHora.get(Calendar.SECOND));
+		
+		return hora.toString();
+		
+	}
+	
+	public static boolean esHoraHabil(Date horaActual, Date horaInicio, Date horaFin) {
+
+		Calendar cHoraActual = Calendar.getInstance();
+		Calendar cHoraInicio = Calendar.getInstance();
+		Calendar cHoraFin = Calendar.getInstance();
+
+		cHoraActual.setTime(horaActual);
+		cHoraInicio.setTime(horaInicio);
+		cHoraFin.setTime(horaFin);
+
+		logger.info(cHoraActual.get(Calendar.HOUR_OF_DAY) + ":" + cHoraActual.get(Calendar.MINUTE));
+		logger.info(cHoraInicio.get(Calendar.HOUR_OF_DAY) + ":" + cHoraInicio.get(Calendar.MINUTE));
+		logger.info(cHoraFin.get(Calendar.HOUR_OF_DAY) + ":" + cHoraFin.get(Calendar.MINUTE));
+
+		if (cHoraActual.get(Calendar.HOUR_OF_DAY) == cHoraInicio.get(Calendar.HOUR_OF_DAY)
+				&& cHoraActual.get(Calendar.MINUTE) >= cHoraInicio.get(Calendar.MINUTE)) {
+			return true;
+
+		} else {
+			if (cHoraActual.get(Calendar.HOUR_OF_DAY) > cHoraInicio.get(Calendar.HOUR_OF_DAY)) {
+
+				if (cHoraActual.get(Calendar.HOUR_OF_DAY) == cHoraFin.get(Calendar.HOUR_OF_DAY)
+						&& cHoraActual.get(Calendar.MINUTE) <= (cHoraFin.get(Calendar.MINUTE) - 1)) {
+					return true;
+				} else {
+					if (cHoraActual.get(Calendar.HOUR_OF_DAY) < cHoraFin.get(Calendar.HOUR_OF_DAY)) {
+						return true;
+					} else {
+						return false;
+					}
+				}
+
+			} else {
+				return false;
+			}
+		}
+
+	}
 
 	public static Date convertirFecha(String fecha) {
 		List<String> formatosEntrada = new ArrayList<>();

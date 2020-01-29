@@ -1,6 +1,8 @@
 package com.bim.msf4j.ctrl;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -1005,6 +1007,77 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 				.header("X-Total-Count", totalElementos)
 				.build();
 	}	
+	
+	
+	@Path("/horarios-disponibilidad")
+	@GET()
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response consultaHorariosDisponibilidadSPEI() {
+		logger.info("CTRL: Comenzandos consultaHorariosDisponibilidadSPEI metodo");
+		//inicia declaracion de variables
+		boolean       cpDisponible               = false;
+		String        horHorIni                  = null;
+		String        horHorFin                  = null;
+		String        errMensaj                  = null;
+		Date          fechaInicio                = null;
+		Date          fechaFin                   = null;
+		Date          fechaSistema               = null;
+		//terminada declaracion de variables
+		
+		//declaracion de objetos
+		JsonObject    respuesta                  = null;
+		JsonObject    horariosDisponibilidadSPEI = null;
+		JsonObject    horariosSPEIResultado      = null;		
+		JsonObject    datosHorariosSPEI          = null;
+		BimMessageDTO bimMessageDTO              = null;
+		//terminada declaracion de objetos
+		
+		
+		//construir objeto para solicitar horarios de disponibilidad SPEI
+		datosHorariosSPEI = new JsonObject();
+		datosHorariosSPEI.addProperty("FechaSis", Utilerias.obtenerFechaSis());
+		
+		//solicitar horarios de disponibilidad SPEI
+		horariosSPEIResultado = speiServicio.horariosSPEIConsultar(datosHorariosSPEI);
+		
+		//obtener inner object
+		horariosSPEIResultado = Utilerias.obtenerJsonObjectPropiedad(horariosSPEIResultado, "horarioSPEI");
+		
+		//obteniendo propiedades de objecto horariosSPEIResultado
+		horHorIni = Utilerias.obtenerStringPropiedad(horariosSPEIResultado, "Hor_HorIni");
+		horHorFin = Utilerias.obtenerStringPropiedad(horariosSPEIResultado, "Hor_HorFin");
+
+		//propiedades calculadas
+		fechaInicio = Utilerias.convertirFecha(horHorIni);
+		fechaFin = Utilerias.convertirFecha(horHorFin);
+		fechaSistema = Utilerias.convertirZonaHoraria(new Date(), TimeZone.getTimeZone("UTC"), TimeZone.getTimeZone("CST6CDT"));
+		cpDisponible = Utilerias.esHoraHabil(fechaSistema, fechaInicio, fechaFin);
+		
+		horHorIni = Utilerias.obtenerHora(fechaInicio);
+		horHorFin = Utilerias.obtenerHora(fechaFin);
+		
+		//error desde SP proveniente del servidor
+		if(horariosSPEIResultado.has("Msj_Error")) {
+			errMensaj = Utilerias.obtenerStringPropiedad(horariosSPEIResultado, "Msj_Error");
+			bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.31");
+			bimMessageDTO.addMergeVariable("errMensaj", errMensaj);
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		
+		horariosDisponibilidadSPEI = new JsonObject();
+		horariosDisponibilidadSPEI.addProperty("horHorIni", horHorIni);
+		horariosDisponibilidadSPEI.addProperty("horHorFin", horHorFin);
+		horariosDisponibilidadSPEI.addProperty("cpDisponible", cpDisponible);
+		
+		respuesta = new JsonObject();
+		respuesta.add("horariosDisponibilidadSPEI", horariosDisponibilidadSPEI);
+		
+		logger.info("CTRL: Terminando consultaHorariosDisponibilidadSPEI metodo");
+		return Response.ok(respuesta.toString(), MediaType.APPLICATION_JSON)
+				.build();
+
+	}
 
 	
 }
