@@ -61,6 +61,8 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 	private static String TransferenciaNacionalInmediata;
 	private static String TransferenciaSPEIConsultarOpTrnStatusE;
 	private static String TransferenciaSPEIConsultarOpTipConsulL2;
+	private static String TransferenciaSPEICreacionOpFrecuenciaUnica;
+	
 	
 	
 	static {		
@@ -74,6 +76,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		TransferenciaNacionalInmediata = properties.getProperty("transferencias_spei.inmediata");
 		TransferenciaSPEIConsultarOpTrnStatusE = properties.getProperty("op.transferencias_spei_consultar.trn_status.e");
 		TransferenciaSPEIConsultarOpTipConsulL2 = properties.getProperty("op.transferencias_spei_consultar.tip_consul.l2");
+		TransferenciaSPEICreacionOpFrecuenciaUnica = properties.getProperty("op.transferencias_spei_creacion.frecuencia.unica");
 	}
 	
 	public TransferenciasNacionalesCtrl() {
@@ -385,7 +388,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosTransferenciaCreacion.addProperty("Trs_Tipo", "I");
 		datosTransferenciaCreacion.addProperty("Trs_UsuCap", usuNumero);
 		datosTransferenciaCreacion.addProperty("Trs_TipTra", trnTipTra);
-		datosTransferenciaCreacion.addProperty("Trs_Frecue", trsFrecue != null ? trsFrecue : "");
+		datosTransferenciaCreacion.addProperty("Trs_Frecue", trsFrecue != null ? trsFrecue : TransferenciaSPEICreacionOpFrecuenciaUnica);
 		datosTransferenciaCreacion.addProperty("Trs_FePrEn", trsFePrEn != null ? trsFePrEn : "");
 		datosTransferenciaCreacion.addProperty("Trs_TipDur", trsTipDur != null ? trsTipDur : "");
 		datosTransferenciaCreacion.addProperty("Trs_DurFec", trsDurFec != null ? trsDurFec : "");
@@ -505,6 +508,7 @@ public class TransferenciasNacionalesCtrl extends BimBaseCtrl {
 		datosTransferenciaSPEI.addProperty("Trs_DaBeAd", trsDaBeAd);
 		datosTransferenciaSPEI.addProperty("Ban_Descri", trnBanDes);
 		datosTransferenciaSPEI.addProperty("FechaSis", fechaSis);
+		datosTransferenciaSPEI.addProperty("NumTransac", numTransac);	
 
 		transferenciaSPEIProcesarResultado = this.speiServicio.transferenciaSPEIProcesar(datosTransferenciaSPEI);
 		Utilerias.verificarError(transferenciaSPEIProcesarResultado);
