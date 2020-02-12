@@ -186,4 +186,29 @@ public class InversionesServicioTest {
 		
 		logger.info("TEST: Finalizando inversionesImportesDeInversionFinalizadaActualizarTestDeberiaSerExitoso metodo...");
 	}
+	
+	@Test
+	public void inversionesCedeDiasDePagoConsultarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando inversionesCedeDiasDePagoConsultarTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosInversionesCedeDiasDePago = new JsonObject();
+		datosInversionesCedeDiasDePago.addProperty("FechaSis", fechaSis);
+		
+		JsonObject resultado = inversionesServicio.inversionesCedeDiasDePagoConsultar(datosInversionesCedeDiasDePago);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad diasDePago", resultado.has("diasDePago"));
+		assertTrue("La propiedad diasDePago no es un JsonObject", resultado.get("diasDePago").isJsonObject());
+		
+		JsonObject diasDePago = Utilerias.obtenerJsonObjectPropiedad(resultado, "diasDePago");
+		
+		if(!diasDePago.isJsonNull()) {
+			assertTrue("No viene  la propiedad diaDePago", diasDePago.has("diaDePago"));
+			assertTrue("La propiedad diaDePago no es un JsonArray", diasDePago.get("diaDePago").isJsonArray());
+		} else {
+			assertNotNull("la propiedad diasDePago es nula", diasDePago);
+		}
+		
+		logger.info("TEST: Finalizando inversionesCedeDiasDePagoConsultarTestDeberiaSerExitoso metodo...");
+	}
 }
