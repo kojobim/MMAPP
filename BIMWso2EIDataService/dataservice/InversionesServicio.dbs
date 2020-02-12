@@ -254,6 +254,43 @@
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
     </query>
+    <query id="inversionesCedePlazosConsultarSQL" useConfig="BIMDB">
+        <sql>EXEC CEPLAZOSCON
+        	@Pla_Numero = :plaNumero,
+        	@Pla_Moneda = :plaMoneda,
+        	@Pla_Produc = :plaProduc,
+        	@Fec_Inicio = :fecInicio,
+        	@Fec_Final = :fecFinal,
+        	@Tip_Consul = :tipConsul,
+        	@NumTransac = :numTransac,
+        	@Transaccio = :transaccio,
+        	@Usuario = :usuario,
+        	@FechaSis = :fechaSis,
+        	@SucOrigen = :sucOrigen,
+        	@SucDestino = :sucDestino,
+        	@Modulo = :modulo
+        </sql>
+        <param name="plaNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="plaMoneda" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="plaProduc" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fecInicio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fecFinal" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/inversionesCedePlazosNE" element="plazos" rowName="plazo">
+            <element column="Pla_Numero" name="Pla_Numero" xsdType="xs:string"/>
+            <element column="Pla_Moneda" name="Pla_Moneda" xsdType="xs:string"/>
+            <element column="Pla_Plazo" name="Pla_Plazo" xsdType="xs:integer"/>
+            <element column="Pla_Produc" name="Pla_Produc" xsdType="xs:string"/>
+            <element column="Pla_Descri" name="Pla_Descri" xsdType="xs:string"/>
+        </result>
+    </query>
     <operation name="inversionesObtenerOp">
         <call-query href="inversionesObtenerSQL">
             <with-param name="invClient" query-param="Inv_Client"/>
@@ -349,6 +386,23 @@
             <with-param name="corCliUsu" query-param="Cor_CliUsu"/>
             <with-param name="corAlias" query-param="Cor_Alias"/>
             <with-param name="tipActual" query-param="Tip_Actual"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation name="inversionesCedePlazosConsultarOp">
+        <call-query href="inversionesCedePlazosConsultarSQL">
+            <with-param name="plaNumero" query-param="Pla_Numero"/>
+            <with-param name="plaMoneda" query-param="Pla_Moneda"/>
+            <with-param name="plaProduc" query-param="Pla_Produc"/>
+            <with-param name="fecInicio" query-param="Fec_Inicio"/>
+            <with-param name="fecFinal" query-param="Fec_Final"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>

@@ -62,6 +62,13 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesContraEstadoCuentaActualizarOpSucOrigen;
 	private static String InversionesContraEstadoCuentaActualizarOpSucDestino;
 	private static String InversionesContraEstadoCuentaActualizarOpModulo;
+	private static String InversionesCedePlazosConsultarOp;
+	private static String InversionesCedePlazosConsultarOpTipConsulL1;
+	private static String InversionesCedePlazosConsultarOpTransaccio;
+	private static String InversionesCedePlazosConsultarOpUsuario;
+	private static String InversionesCedePlazosConsultarOpSucOrigen;
+	private static String InversionesCedePlazosConsultarOpSucDestino;
+	private static String InversionesCedePlazosConsultarOpModulo;
 	
 	
 	public InversionesServicio() {
@@ -74,7 +81,8 @@ public class InversionesServicio extends BaseService {
 		InversionesImportesDeInversionFinalizadaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_importes_de_inversion_finalizada_actualizar");
 		InversionesStatusActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_status_actualizar");
 		InversionesProcesoLiquidacionGenerarOp = properties.getProperty("inversiones_servicio.op.inversiones_proceso_liquidacion_generar");
-		InversionesContraEstadoCuentaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_contra_estado_cuenta_actualizar");		
+		InversionesContraEstadoCuentaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_contra_estado_cuenta_actualizar");
+		InversionesCedePlazosConsultarOp = properties.getProperty("inversiones_servicio.op.inversiones_cede_plazos_consultar");
 
 		InversionesObtenerOpInvMoneda = properties.getProperty("op.inversiones_obtener.inv_moneda");
 		InversionesObtenerOpTransaccio = properties.getProperty("op.inversiones_obtener.transaccio");
@@ -120,6 +128,13 @@ public class InversionesServicio extends BaseService {
 		InversionesContraEstadoCuentaActualizarOpSucOrigen = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.suc_origen");
 		InversionesContraEstadoCuentaActualizarOpSucDestino = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.suc_destino");		
 		InversionesContraEstadoCuentaActualizarOpModulo = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.modulo");
+		
+		InversionesCedePlazosConsultarOpTipConsulL1 = properties.getProperty("op.inversiones_cede_plazos_consultar.tip_consul_l1");
+		InversionesCedePlazosConsultarOpTransaccio = properties.getProperty("op.inversiones_cede_plazos_consultar.transaccio");
+		InversionesCedePlazosConsultarOpUsuario = properties.getProperty("op.inversiones_cede_plazos_consultar.usuario");
+		InversionesCedePlazosConsultarOpSucOrigen = properties.getProperty("op.inversiones_cede_plazos_consultar.suc_origen");
+		InversionesCedePlazosConsultarOpSucDestino = properties.getProperty("op.inversiones_cede_plazos_consultar.suc_destino");
+		InversionesCedePlazosConsultarOpModulo = properties.getProperty("op.inversiones_cede_plazos_consultar.modulo");
 
 	}
 
@@ -419,5 +434,56 @@ public class InversionesServicio extends BaseService {
 		JsonObject inversionesContraEstadoCuentaActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesContraEstadoCuentaActualizarOp, datosIversionVsEstadoCuenta);
 		logger.info("COMMONS: Finalizando inversionesContraEstadoCuentaActualizar metodo... ");
 		return inversionesContraEstadoCuentaActualizarOpResultadoObjeto;
+	}//Cierre del método
+	
+	/**
+	 * Método para consultar el listado de plazos para nueva inversión CEDE VALOR
+	 * ProcedureName: CEPLAZOSCON
+	 * @param datosInversionesCedePlazos
+	 * <pre>
+	 * {
+	 *	Pla_Moneda: String,
+	 *	Pla_Produc: String,
+	 *	Tip_Consul?: String,
+	 *	FechaSis: String
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 * 	plazos: {
+	 * 		plazo: [
+	 * 			{
+	 * 				Pla_Numero: String,
+	 * 				Pla_Moneda: String,
+	 * 				Pla_Plazo: Integer,
+	 * 				Pla_Produc: String,
+	 * 				Pla_Descri: String
+	 * 			}
+	 * 		]
+	 * 	}
+	 * }
+	 * </pre>
+	 */
+	public JsonObject inversionesCedePlazosConsultar(JsonObject datosInversionesCedePlazos) {
+		logger.info("COMMONS: Comenzando inversionesCedePlazosConsultar metodo... ");
+		if(!datosInversionesCedePlazos.has("Pla_Numero"))
+			datosInversionesCedePlazos.addProperty("Pla_Numero", "");
+		if(!datosInversionesCedePlazos.has("Fec_Inicio"))
+			datosInversionesCedePlazos.addProperty("Fec_Inicio", "");
+		if(!datosInversionesCedePlazos.has("Fec_Final"))
+			datosInversionesCedePlazos.addProperty("Fec_Final", "");
+		if(!datosInversionesCedePlazos.has("NumTransac"))
+			datosInversionesCedePlazos.addProperty("NumTransac", "");
+		if(!datosInversionesCedePlazos.has("Tip_Consul"))
+			datosInversionesCedePlazos.addProperty("Tip_Consul", InversionesCedePlazosConsultarOpTipConsulL1);
+		datosInversionesCedePlazos.addProperty("Transaccio", InversionesCedePlazosConsultarOpTransaccio);
+		datosInversionesCedePlazos.addProperty("Usuario", InversionesCedePlazosConsultarOpUsuario);
+		datosInversionesCedePlazos.addProperty("SucOrigen", InversionesCedePlazosConsultarOpSucOrigen);
+		datosInversionesCedePlazos.addProperty("SucDestino", InversionesCedePlazosConsultarOpSucDestino);
+		datosInversionesCedePlazos.addProperty("Modulo", InversionesCedePlazosConsultarOpModulo);
+		JsonObject inversionesCedePlazosConsultarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesCedePlazosConsultarOp, datosInversionesCedePlazos);
+		logger.info("COMMONS: Finalizando inversionesCedePlazosConsultar metodo... ");
+		return inversionesCedePlazosConsultarOpResultadoObjeto;
 	}//Cierre del método
 }
