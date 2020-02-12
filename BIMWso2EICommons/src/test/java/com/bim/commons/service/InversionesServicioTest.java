@@ -186,4 +186,62 @@ public class InversionesServicioTest {
 		
 		logger.info("TEST: Finalizando inversionesImportesDeInversionFinalizadaActualizarTestDeberiaSerExitoso metodo...");
 	}
+	
+	@Test
+	public void inversionesAltaTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando inversionesAltaTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosInversionesAlta = new JsonObject();
+		datosInversionesAlta.addProperty("Inv_FecIni", "2019-09-24 00:00:00");
+		datosInversionesAlta.addProperty("Inv_FecVen", "2019-09-25 00:00:00");
+		datosInversionesAlta.addProperty("Inv_Cantid", 6000);
+		datosInversionesAlta.addProperty("Inv_Tasa", 2.45);
+		datosInversionesAlta.addProperty("Inv_Autori", "000100");
+		datosInversionesAlta.addProperty("Inv_Moneda", "01");
+		datosInversionesAlta.addProperty("Inv_ISR", 1.45);
+		datosInversionesAlta.addProperty("Inv_Cuenta", "001953830040");
+		datosInversionesAlta.addProperty("Inv_TipImp", "V");
+		datosInversionesAlta.addProperty("Inv_InvAnt", "");
+		datosInversionesAlta.addProperty("Inv_TBruta", 3.9);
+		datosInversionesAlta.addProperty("Inv_CveSeg", "");
+		datosInversionesAlta.addProperty("Inv_Origen", "IN");
+		datosInversionesAlta.addProperty("Inv_ClaInv", "001");
+		datosInversionesAlta.addProperty("Inv_MonRef", 0);
+		datosInversionesAlta.addProperty("Inv_CanPer", 1);
+		datosInversionesAlta.addProperty("Inv_CanPer", "");
+		datosInversionesAlta.addProperty("I_Numero", "");
+		datosInversionesAlta.addProperty("NumTransac", "57838271");
+		datosInversionesAlta.addProperty("Transaccio", "AII");
+		datosInversionesAlta.addProperty("Usuario", "000100");
+		datosInversionesAlta.addProperty("FechaSis", fechaSis);
+		datosInversionesAlta.addProperty("SucOrigen", "001");
+		datosInversionesAlta.addProperty("SucDestino", "001");
+		datosInversionesAlta.addProperty("Modulo", "NB");
+		
+		/**
+		 * Mock
+		 * String json = "{\"altaDeInversion\":{\"Err_Codigo\":\"String\",\"Err_Mensaj\":\"String\",\"Err_Variab\":\"String\"}}";
+		 * JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+		
+		/**
+		 * Test
+		 */
+		
+		JsonObject resultado = inversionesServicio.inversionesAlta(datosInversionesAlta);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad importesDeInversionFinalizada", resultado.has("importesDeInversionFinalizada"));
+		assertTrue("La propiedad importesDeInversionFinalizada no es un JsonObject", resultado.get("importesDeInversionFinalizada").isJsonObject());
+		
+		JsonObject importesDeInversionFinalizada = Utilerias.obtenerJsonObjectPropiedad(resultado, "importesDeInversionFinalizada");
+		
+		if(!resultado.get("importesDeInversionFinalizada").isJsonNull()) {
+			assertTrue("La propiedad Err_Codigo no se encuentra en importesDeInversionFinalizada", importesDeInversionFinalizada.has("Err_Codigo"));
+			assertTrue("La propiedad Err_Mensaj no se encuentra en importesDeInversionFinalizada", importesDeInversionFinalizada.has("Err_Mensaj"));
+		} else
+			assertNotNull("la propiedad importesDeInversionFinalizada es nula", importesDeInversionFinalizada);
+		
+		logger.info("TEST: Finalizando inversionesAltaTestDeberiaSerExitoso metodo...");
+	}
 }

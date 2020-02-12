@@ -62,6 +62,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesContraEstadoCuentaActualizarOpSucOrigen;
 	private static String InversionesContraEstadoCuentaActualizarOpSucDestino;
 	private static String InversionesContraEstadoCuentaActualizarOpModulo;
+	private static String InversionesAlta;
 	
 	
 	public InversionesServicio() {
@@ -120,6 +121,8 @@ public class InversionesServicio extends BaseService {
 		InversionesContraEstadoCuentaActualizarOpSucOrigen = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.suc_origen");
 		InversionesContraEstadoCuentaActualizarOpSucDestino = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.suc_destino");		
 		InversionesContraEstadoCuentaActualizarOpModulo = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.modulo");
+		
+		InversionesAltaOp
 
 	}
 
@@ -419,5 +422,63 @@ public class InversionesServicio extends BaseService {
 		JsonObject inversionesContraEstadoCuentaActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesContraEstadoCuentaActualizarOp, datosIversionVsEstadoCuenta);
 		logger.info("COMMONS: Finalizando inversionesContraEstadoCuentaActualizar metodo... ");
 		return inversionesContraEstadoCuentaActualizarOpResultadoObjeto;
+	}//Cierre del método
+	
+	/**
+	 * Método para dar de alta una inversión 
+	 * ProcedureName: ININVERSALT
+	 * @param datosInversionesAltaObtener
+	 * <pre>
+	 * {
+	 *	Inv_FecIni String,
+     *  Inv_FecVen String,
+     *  Inv_Cantid Integer,
+     *  Inv_Tasa Double,
+     *  Inv_Autori String,
+     *  Inv_Moneda String,
+     *  Inv_ISR Double,
+     *  Inv_Cuenta String,
+     *  Inv_TipImp String,
+     *  Inv_InvAnt String,
+     *  Inv_TBruta Double,
+     *  Inv_CveSeg String,
+     *  Inv_Origen String,
+     *  Inv_ClaInv String,
+     *  Inv_MonRef integer,
+     *  Inv_CanPer Double,
+     *  Inv_CanPer String,
+     *  I_Numero String,
+	 * 	NumTransac?: String,
+	 *	FechaSis: String
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 *	alta: {
+	 *         Err_Codigo: String,
+	 *         Err_Mensaj: String,
+	 *         Inv_Nueva: String
+	 *     }
+	 * }
+	 * </pre>
+	 */
+	public JsonObject inversionesAlta(JsonObject datosInversionesAlta) {
+		logger.info("COMMONS: Comenzando inversionesPagareNumeroUsuarioObtener metodo... ");
+		if(!datosInversionesAlta.has("Inv_Numero"))
+			datosInversionesAlta.addProperty("Inv_Numero", "");
+		if(!datosInversionesAlta.has("Inv_Usuari"))
+			datosInversionesAlta.addProperty("Inv_Usuari", "");
+		datosInversionesAlta.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
+		if(!datosInversionesAlta.has("NumTransac"))
+			datosInversionesAlta.addProperty("NumTransac", "");
+		datosInversionesAlta.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
+		datosInversionesAlta.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);
+		datosInversionesAlta.addProperty("SucOrigen", InversionesPagareNumeroUsuarioObtenerOpSucOrigen);
+		datosInversionesAlta.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
+		datosInversionesAlta.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
+		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = Utilerias.performOperacion(InversionesServicio, InversionesPagareNumeroUsuarioObtenerOp, datosInversionesPagareNumeroUsuarioObtener);
+		logger.info("COMMONS: Finalizando inversionesPagareNumeroUsuarioObtener metodo... ");
+		return inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto;
 	}//Cierre del método
 }
