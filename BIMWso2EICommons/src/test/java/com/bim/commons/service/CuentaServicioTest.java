@@ -33,16 +33,16 @@ public class CuentaServicioTest {
 	public void cuentaOrigenConsultarTestDeberiaSerExitoso() {
 		logger.info("TEST: Comenzando cuentaOrigenConsultarTestDeberiaSerExitoso metodo...");
 		/*
-		 * CONSULTA LC
+		 * CONSULTA C1
 		 */
 		String fechaSis = Utilerias.obtenerFechaSis();
 		JsonObject datosCuentaOrigenConsultar = new JsonObject();
 		datosCuentaOrigenConsultar.addProperty("Cor_Usuari", "000014");
-		datosCuentaOrigenConsultar.addProperty("Cor_Cuenta", "");
+		datosCuentaOrigenConsultar.addProperty("Cor_Cuenta", "001953830040");
 		datosCuentaOrigenConsultar.addProperty("Cor_Moneda", "");
 		datosCuentaOrigenConsultar.addProperty("Cor_CliUsu", "");
 		datosCuentaOrigenConsultar.addProperty("Usu_SucMod", "");
-		datosCuentaOrigenConsultar.addProperty("Tip_Consul", "LC");
+		datosCuentaOrigenConsultar.addProperty("Tip_Consul", "C1");
 		datosCuentaOrigenConsultar.addProperty("NumTransac", "");
 		datosCuentaOrigenConsultar.addProperty("Transaccio", "HKT");
 		datosCuentaOrigenConsultar.addProperty("Usuario", "000100");
@@ -52,6 +52,32 @@ public class CuentaServicioTest {
 		datosCuentaOrigenConsultar.addProperty("Modulo", "NB");
 		
 		JsonObject resultado = cuentaServicio.cuentaOrigenConsultar(datosCuentaOrigenConsultar);
+		logger.info("- resultado: "+ resultado);
+		
+		assertTrue("No viene la propiedad cuenta", resultado.has("cuenta"));
+		assertTrue("La propiedad cuenta no es un JsonObject", resultado.get("cuenta").isJsonObject());
+		
+		JsonObject cuenta = Utilerias.obtenerJsonObjectPropiedad(resultado, "cuenta");
+		
+		if(!cuenta.isJsonNull()) {
+			assertTrue("La propiedad Cor_Cuenta no se encuentra en cuentaDestino", cuenta.has("Cor_Cuenta"));
+			assertTrue("La propiedad Cor_Status no se encuentra en cuentaDestino", cuenta.has("Cor_Status"));
+			assertTrue("La propiedad Cor_Alias no se encuentra en cuentaDestino", cuenta.has("Cor_Alias"));
+			assertTrue("La propiedad Cor_MoLiDi no se encuentra en cuentaDestino", cuenta.has("Cor_MoLiDi"));
+			assertTrue("La propiedad Cor_MonDia no se encuentra en cuentaDestino", cuenta.has("Cor_MonDia"));
+			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentaDestino", cuenta.has("Cue_Moneda"));
+			assertTrue("La propiedad Cli_Tipo no se encuentra en cuentaDestino", cuenta.has("Cli_Tipo"));
+		} else {
+			assertNotNull("El elemento cuenta es nulo", cuenta);
+		}
+		
+		logger.info("TEST: Finalizando cuentaDestinoSPEIConsultarTestDeberiaSerExitoso metodo...");
+		
+		/*
+		 * CONSULTA LC
+		 */
+		datosCuentaOrigenConsultar.addProperty("Tip_Consul", "");
+		resultado = cuentaServicio.cuentaOrigenConsultar(datosCuentaOrigenConsultar);
 		logger.info("- resultado: "+ resultado);
 		
 		assertTrue("No viene la propiedad cuentas", resultado.has("cuentas"));
@@ -84,33 +110,5 @@ public class CuentaServicioTest {
 		} else {
 			assertNotNull("El elemento cuenta es nulo", cuentasArray);
 		}
-		
-		/*
-		 * CONSULTA C1
-		 */
-		datosCuentaOrigenConsultar.addProperty("Cor_Cuenta", "001953830040");
-		datosCuentaOrigenConsultar.addProperty("Tip_Consul", "C1");
-		
-		resultado = cuentaServicio.cuentaOrigenConsultar(datosCuentaOrigenConsultar);
-		logger.info("- resultado: "+ resultado);
-		
-		assertTrue("No viene la propiedad cuenta", resultado.has("cuenta"));
-		assertTrue("La propiedad cuenta no es un JsonObject", resultado.get("cuenta").isJsonObject());
-		
-		JsonObject cuenta = Utilerias.obtenerJsonObjectPropiedad(resultado, "cuenta");
-		
-		if(!cuenta.isJsonNull()) {
-			assertTrue("La propiedad Cor_Cuenta no se encuentra en cuentaDestino", cuenta.has("Cor_Cuenta"));
-			assertTrue("La propiedad Cor_Status no se encuentra en cuentaDestino", cuenta.has("Cor_Status"));
-			assertTrue("La propiedad Cor_Alias no se encuentra en cuentaDestino", cuenta.has("Cor_Alias"));
-			assertTrue("La propiedad Cor_MoLiDi no se encuentra en cuentaDestino", cuenta.has("Cor_MoLiDi"));
-			assertTrue("La propiedad Cor_MonDia no se encuentra en cuentaDestino", cuenta.has("Cor_MonDia"));
-			assertTrue("La propiedad Cue_Moneda no se encuentra en cuentaDestino", cuenta.has("Cue_Moneda"));
-			assertTrue("La propiedad Cli_Tipo no se encuentra en cuentaDestino", cuenta.has("Cli_Tipo"));
-		} else {
-			assertNotNull("El elemento cuenta es nulo", cuenta);
-		}
-		
-		logger.info("TEST: Finalizando cuentaDestinoSPEIConsultarTestDeberiaSerExitoso metodo...");
 	}
 }

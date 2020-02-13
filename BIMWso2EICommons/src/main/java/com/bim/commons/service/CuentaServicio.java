@@ -13,7 +13,7 @@ public class CuentaServicio extends BaseService {
 	private static String CuentaServicio;
 	private static String CuentaOrigenConsultarOp;
 	private static String CuentaOrigenConsultarC1Op;
-	private static String CuentaOrigenConsultarOpTipConsul;
+	private static String CuentaOrigenConsultarOpTipConsulLC;
 	private static String CuentaOrigenConsultarOpTransaccio;
 	private static String CuentaOrigenConsultarOpUsuario;
 	private static String CuentaOrigenConsultarOpSucOrigen;
@@ -28,7 +28,7 @@ public class CuentaServicio extends BaseService {
 		CuentaOrigenConsultarOp = properties.getProperty("cuenta_servicio.op.cuenta_origen_consultar");
 		CuentaOrigenConsultarC1Op = properties.getProperty("cuenta_servicio.op.cuenta_origen_consultar_c1");
 		
-		CuentaOrigenConsultarOpTipConsul = properties.getProperty("op.cuenta_origen_consultar.tip_consul");
+		CuentaOrigenConsultarOpTipConsulLC = properties.getProperty("op.cuenta_origen_consultar.tip_consul_lc");
 		CuentaOrigenConsultarOpTransaccio = properties.getProperty("op.cuenta_origen_consultar.transaccio");
 		CuentaOrigenConsultarOpUsuario = properties.getProperty("op.cuenta_origen_consultar.usuario");
 		CuentaOrigenConsultarOpSucOrigen = properties.getProperty("op.cuenta_origen_consultar.suc_origen");
@@ -98,18 +98,22 @@ public class CuentaServicio extends BaseService {
 			datosCuentaOrigenConsultar.addProperty("Usu_SucMod", "");
 		if(!datosCuentaOrigenConsultar.has("NumTransac"))
 			datosCuentaOrigenConsultar.addProperty("NumTransac", "");
-		if(!datosCuentaOrigenConsultar.has("Tip_Consul"))
-			datosCuentaOrigenConsultar.addProperty("Tip_Consul", CuentaOrigenConsultarOpTipConsul);
+		if(!datosCuentaOrigenConsultar.has("Tip_Consul") || datosCuentaOrigenConsultar.get("Tip_Consul").getAsString().isEmpty())
+			datosCuentaOrigenConsultar.addProperty("Tip_Consul", CuentaOrigenConsultarOpTipConsulLC);
 		datosCuentaOrigenConsultar.addProperty("Transaccio", CuentaOrigenConsultarOpTransaccio);
 		datosCuentaOrigenConsultar.addProperty("Usuario", CuentaOrigenConsultarOpUsuario);
 		datosCuentaOrigenConsultar.addProperty("SucOrigen", CuentaOrigenConsultarOpSucOrigen);
 		datosCuentaOrigenConsultar.addProperty("SucDestino", CuentaOrigenConsultarOpSucDestino);
 		datosCuentaOrigenConsultar.addProperty("Modulo", CuentaOrigenConsultarOpModulo);
 		
-		if(datosCuentaOrigenConsultar.get("Tip_Consul").getAsString().equals("C1"))
-			CuentaOrigenConsultarOp = CuentaOrigenConsultarC1Op;
+		String cuentaOrigenConsultarOperacion = "";
 		
-		JsonObject cuentaOrigenConsultarOpResultadoObjeto = Utilerias.performOperacion(CuentaServicio, CuentaOrigenConsultarOp, datosCuentaOrigenConsultar);
+		if(datosCuentaOrigenConsultar.get("Tip_Consul").getAsString().equals("C1"))
+			cuentaOrigenConsultarOperacion = CuentaOrigenConsultarC1Op;
+		else
+			cuentaOrigenConsultarOperacion = CuentaOrigenConsultarOp;
+		
+		JsonObject cuentaOrigenConsultarOpResultadoObjeto = Utilerias.performOperacion(CuentaServicio, cuentaOrigenConsultarOperacion, datosCuentaOrigenConsultar);
 		logger.info("cuentaOrigenConsultarOpResultadoObjeto" + cuentaOrigenConsultarOpResultadoObjeto);
 		logger.info("COMMONS: Finalizando cuentaOrigenConsultar metodo... ");
 		return cuentaOrigenConsultarOpResultadoObjeto;
