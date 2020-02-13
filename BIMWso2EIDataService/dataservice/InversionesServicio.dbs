@@ -301,6 +301,13 @@
             @SucDestino = :sucDestino,
             @Modulo = :modulo
         </sql>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <result defaultNamespace="http://bem.com/inversionesCedeDiasDePagoConsultarNE" element="diasDePago" rowName="diaDePago">
             <element column="DiaP_Id" name="DiaP_Id" xsdType="xs:integer" optional="true"/>
             <element column="DiaP_Desc" name="DiaP_Desc" xsdType="xs:string" optional="true"/>
