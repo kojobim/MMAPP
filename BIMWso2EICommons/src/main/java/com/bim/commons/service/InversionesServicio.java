@@ -62,7 +62,12 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesContraEstadoCuentaActualizarOpSucOrigen;
 	private static String InversionesContraEstadoCuentaActualizarOpSucDestino;
 	private static String InversionesContraEstadoCuentaActualizarOpModulo;
-	private static String InversionesAlta;
+	private static String InversionesAltaOp;
+	private static String InversionesAltaOptransaccio;
+	private static String InversionesAltaOpUsuari;
+	private static String InversionesAltaOpSucOrigen;
+	private static String InversionesAltaOpSucDestino;
+	private static String InversionesAltaOpModulo;
 	
 	
 	public InversionesServicio() {
@@ -122,7 +127,12 @@ public class InversionesServicio extends BaseService {
 		InversionesContraEstadoCuentaActualizarOpSucDestino = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.suc_destino");		
 		InversionesContraEstadoCuentaActualizarOpModulo = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.modulo");
 		
-		InversionesAltaOp
+		InversionesAltaOptransaccio = properties.getProperty("op.inversiones_alta.transaccio");
+		InversionesAltaOpUsuari = properties.getProperty("op.inversiones_alta.usuari");
+		InversionesAltaOpSucOrigen = properties.getProperty("op.inversiones_alta.suc_origen");
+		InversionesAltaOpSucDestino = properties.getProperty("op.inversiones_alta.suc_destino");
+		InversionesAltaOpModulo = properties.getProperty("op.inversiones_alta.modulo");
+		
 
 	}
 
@@ -458,27 +468,23 @@ public class InversionesServicio extends BaseService {
 	 *	alta: {
 	 *         Err_Codigo: String,
 	 *         Err_Mensaj: String,
-	 *         Inv_Nueva: String
+	 *         Err_Variab: String,
+	 *         Inv_Numero: String
 	 *     }
 	 * }
 	 * </pre>
 	 */
 	public JsonObject inversionesAlta(JsonObject datosInversionesAlta) {
-		logger.info("COMMONS: Comenzando inversionesPagareNumeroUsuarioObtener metodo... ");
-		if(!datosInversionesAlta.has("Inv_Numero"))
-			datosInversionesAlta.addProperty("Inv_Numero", "");
-		if(!datosInversionesAlta.has("Inv_Usuari"))
-			datosInversionesAlta.addProperty("Inv_Usuari", "");
-		datosInversionesAlta.addProperty("Tip_Consul", InversionesPagareNumeroUsuarioObtenerOpTipConsul);
+		logger.info("COMMONS: Comenzando inversionesAlta metodo... ");
 		if(!datosInversionesAlta.has("NumTransac"))
 			datosInversionesAlta.addProperty("NumTransac", "");
-		datosInversionesAlta.addProperty("Transaccio", InversionesPagareNumeroUsuarioObtenerOpTransaccio);
-		datosInversionesAlta.addProperty("Usuario", InversionesPagareNumeroUsuarioObtenerOpUsuario);
-		datosInversionesAlta.addProperty("SucOrigen", InversionesPagareNumeroUsuarioObtenerOpSucOrigen);
-		datosInversionesAlta.addProperty("SucDestino", InversionesPagareNumeroUsuarioObtenerOpSucDestino);
-		datosInversionesAlta.addProperty("Modulo", InversionesPagareNumeroUsuarioObtenerOpModulo);
-		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = Utilerias.performOperacion(InversionesServicio, InversionesPagareNumeroUsuarioObtenerOp, datosInversionesPagareNumeroUsuarioObtener);
-		logger.info("COMMONS: Finalizando inversionesPagareNumeroUsuarioObtener metodo... ");
+		datosInversionesAlta.addProperty("Transaccio", InversionesAltaOptransaccio);
+		datosInversionesAlta.addProperty("Usuario", InversionesAltaOpUsuari);
+		datosInversionesAlta.addProperty("SucOrigen", InversionesAltaOpSucOrigen);
+		datosInversionesAlta.addProperty("SucDestino", InversionesAltaOpSucDestino);
+		datosInversionesAlta.addProperty("Modulo", InversionesAltaOpModulo);
+		JsonObject inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto = Utilerias.performOperacion(InversionesServicio, InversionesAltaOp, datosInversionesAlta);
+		logger.info("COMMONS: Finalizando inversionesAlta metodo... ");
 		return inversionesPagareNumeroUsuarioObtenerOpResultadoObjecto;
 	}//Cierre del método
 }

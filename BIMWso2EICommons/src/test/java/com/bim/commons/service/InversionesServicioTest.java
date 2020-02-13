@@ -192,8 +192,8 @@ public class InversionesServicioTest {
 		logger.info("TEST: Comenzando inversionesAltaTestDeberiaSerExitoso metodo...");
 		String fechaSis = Utilerias.obtenerFechaSis();
 		JsonObject datosInversionesAlta = new JsonObject();
-		datosInversionesAlta.addProperty("Inv_FecIni", "2019-09-24 00:00:00");
-		datosInversionesAlta.addProperty("Inv_FecVen", "2019-09-25 00:00:00");
+		datosInversionesAlta.addProperty("Inv_FecIni", "2020-02-06 00:00:00");
+		datosInversionesAlta.addProperty("Inv_FecVen", "2020-02-10 00:00:00");
 		datosInversionesAlta.addProperty("Inv_Cantid", 6000);
 		datosInversionesAlta.addProperty("Inv_Tasa", 2.45);
 		datosInversionesAlta.addProperty("Inv_Autori", "000100");
@@ -231,16 +231,18 @@ public class InversionesServicioTest {
 		JsonObject resultado = inversionesServicio.inversionesAlta(datosInversionesAlta);
 		logger.info("resultado: " + resultado);
 		
-		assertTrue("No viene la propiedad importesDeInversionFinalizada", resultado.has("importesDeInversionFinalizada"));
-		assertTrue("La propiedad importesDeInversionFinalizada no es un JsonObject", resultado.get("importesDeInversionFinalizada").isJsonObject());
+		assertTrue("No viene la propiedad Alta", resultado.has("alta"));
+		assertTrue("La propiedad importesDeInversionFinalizada no es un JsonObject", resultado.get("alta").isJsonObject());
 		
-		JsonObject importesDeInversionFinalizada = Utilerias.obtenerJsonObjectPropiedad(resultado, "importesDeInversionFinalizada");
+		JsonObject alta = Utilerias.obtenerJsonObjectPropiedad(resultado, "alta");
 		
-		if(!resultado.get("importesDeInversionFinalizada").isJsonNull()) {
-			assertTrue("La propiedad Err_Codigo no se encuentra en importesDeInversionFinalizada", importesDeInversionFinalizada.has("Err_Codigo"));
-			assertTrue("La propiedad Err_Mensaj no se encuentra en importesDeInversionFinalizada", importesDeInversionFinalizada.has("Err_Mensaj"));
+		if(!resultado.get("alta").isJsonNull()) {
+			assertTrue("La propiedad Err_Codigo no se encuentra en alta de inversion", alta.has("Err_Codigo"));
+			assertTrue("La propiedad Err_Mensaj no se encuentra en alta de inversion", alta.has("Err_Mensaj"));
+			assertTrue("la propiedad Err_Variab no se encuentra en alta de inversion", alta.has("Err_Variab"));
+			
 		} else
-			assertNotNull("la propiedad importesDeInversionFinalizada es nula", importesDeInversionFinalizada);
+			assertNotNull("la propiedad alta es nula", alta);
 		
 		logger.info("TEST: Finalizando inversionesAltaTestDeberiaSerExitoso metodo...");
 	}

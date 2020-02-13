@@ -421,18 +421,24 @@
     </operation>
     <operation name="inversionesAltaOp">
         <call-query href="inversionesAltaSQL">
-            <with-param name="invNumero" query-param="Inv_Numero"/>
-            <with-param name="invrFecIn" query-param="Inv_rFecIn"/>
-            <with-param name="invrFecVe" query-param="Inv_rFecVe"/>
-            <with-param name="invrCanti" query-param="Inv_rCanti"/>
-            <with-param name="invrTasa" query-param="Inv_rTasa"/>
-            <with-param name="invrAutor" query-param="Inv_rAutor"/>
-            <with-param name="invrISR" query-param="Inv_rISR"/>
-            <with-param name="invrCuent" query-param="Inv_rCuent"/>
-            <with-param name="diasBase" query-param="Dias_Base"/>
-            <with-param name="invFecha" query-param="Inv_Fecha"/>
-            <with-param name="invrTBrut" query-param="Inv_rTBrut"/>
+            <with-param name="invFecIni" query-param="Inv_FecIni"/>
+            <with-param name="invFecVen" query-param="Inv_rFecVen"/>
+            <with-param name="invCantid" query-param="Inv_rCantid"/>
+            <with-param name="invTasa" query-param="Inv_Tasa"/>
+            <with-param name="invAutori" query-param="Inv_Autori"/>
+            <with-param name="invMoneda" query-param="Inv_Moneda"/>
+            <with-param name="invISR" query-param="Inv_ISR"/>
+            <with-param name="invCuenta" query-param="Inv_Cuenta"/>
+            <with-param name="invTipImp" query-param="Inv_TipImp"/>
+            <with-param name="invInvAnt" query-param="Inv_InvAnt"/>
+            <with-param name="invTBruta" query-param="Inv_TBruta"/>
+            <with-param name="invCveSeg" query-param="Inv_CveSeg"/>
+            <with-param name="invOrigen" query-param="Inv_Origen"/>
+            <with-param name="invClaInv" query-param="Inv_ClaInv"/>
             <with-param name="invMonRef" query-param="Inv_MonRef"/>
+            <with-param name="invCanPer" query-param="Inv_CanPer"/>
+            <with-param name="invOpcTas" query-param="Inv_OpcTas"/>
+            <with-param name="iNumero" query-param="I_Numero"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
