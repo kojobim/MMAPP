@@ -291,6 +291,21 @@
             <element column="Pla_Descri" name="Pla_Descri" xsdType="xs:string"/>
         </result>
     </query>
+    <query id="inversionesCedeDiasDePagoConsultarSQL" useConfig="BIMDB">
+        <sql>EXEC CEDIAPAGCON
+            @NumTransac = :numTransac,
+            @Transaccio = :transaccio,
+            @Usuario = :usuario,
+            @FechaSis = :fechaSis,
+            @SucOrigen = :sucOrigen,
+            @SucDestino = :sucDestino,
+            @Modulo = :modulo
+        </sql>
+        <result defaultNamespace="http://bem.com/inversionesCedeDiasDePagoConsultarNE" element="diasDePago" rowName="diaDePago">
+            <element column="DiaP_Id" name="DiaP_Id" xsdType="xs:integer" optional="true"/>
+            <element column="DiaP_Desc" name="DiaP_Desc" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
     <operation name="inversionesObtenerOp">
         <call-query href="inversionesObtenerSQL">
             <with-param name="invClient" query-param="Inv_Client"/>
@@ -403,6 +418,17 @@
             <with-param name="fecInicio" query-param="Fec_Inicio"/>
             <with-param name="fecFinal" query-param="Fec_Final"/>
             <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation name="inversionesCedeDiasDePagoConsultarOp">
+        <call-query href="inversionesCedeDiasDePagoConsultarSQL">
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>

@@ -70,6 +70,12 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesCedePlazosConsultarOpSucDestino;
 	private static String InversionesCedePlazosConsultarOpModulo;
 	
+	private static String InversionesCedeDiasDePagoConsultarOp;		
+	private static String InversionesCedeDiasDePagoConsultarOpTransaccio;
+	private static String InversionesCedeDiasDePagoConsultarOpUsuario;
+	private static String InversionesCedeDiasDePagoConsultarOpSucOrigen;
+	private static String InversionesCedeDiasDePagoConsultarOpSucDestino;
+	private static String InversionesCedeDiasDePagoConsultarOpModulo;
 	
 	public InversionesServicio() {
 		super();
@@ -82,6 +88,7 @@ public class InversionesServicio extends BaseService {
 		InversionesStatusActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_status_actualizar");
 		InversionesProcesoLiquidacionGenerarOp = properties.getProperty("inversiones_servicio.op.inversiones_proceso_liquidacion_generar");
 		InversionesContraEstadoCuentaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_contra_estado_cuenta_actualizar");
+		InversionesCedeDiasDePagoConsultarOp = properties.getProperty("inversiones_servicio.op.inversiones_cede_dias_de_pago_consultar");
 		InversionesCedePlazosConsultarOp = properties.getProperty("inversiones_servicio.op.inversiones_cede_plazos_consultar");
 
 		InversionesObtenerOpInvMoneda = properties.getProperty("op.inversiones_obtener.inv_moneda");
@@ -128,6 +135,12 @@ public class InversionesServicio extends BaseService {
 		InversionesContraEstadoCuentaActualizarOpSucOrigen = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.suc_origen");
 		InversionesContraEstadoCuentaActualizarOpSucDestino = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.suc_destino");		
 		InversionesContraEstadoCuentaActualizarOpModulo = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.modulo");
+		
+		InversionesCedeDiasDePagoConsultarOpTransaccio = properties.getProperty("op.inversiones_cede_dias_de_pago_consultar.transaccio");
+		InversionesCedeDiasDePagoConsultarOpUsuario = properties.getProperty("op.inversiones_cede_dias_de_pago_consultar.usuario");
+		InversionesCedeDiasDePagoConsultarOpSucOrigen = properties.getProperty("op.inversiones_cede_dias_de_pago_consultar.suc_origen");
+		InversionesCedeDiasDePagoConsultarOpSucDestino = properties.getProperty("op.inversiones_cede_dias_de_pago_consultar.suc_destino");
+		InversionesCedeDiasDePagoConsultarOpModulo = properties.getProperty("op.inversiones_cede_dias_de_pago_consultar.modulo");
 		
 		InversionesCedePlazosConsultarOpTipConsulL1 = properties.getProperty("op.inversiones_cede_plazos_consultar.tip_consul_l1");
 		InversionesCedePlazosConsultarOpTransaccio = properties.getProperty("op.inversiones_cede_plazos_consultar.transaccio");
@@ -485,5 +498,42 @@ public class InversionesServicio extends BaseService {
 		JsonObject inversionesCedePlazosConsultarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesCedePlazosConsultarOp, datosInversionesCedePlazos);
 		logger.info("COMMONS: Finalizando inversionesCedePlazosConsultar metodo... ");
 		return inversionesCedePlazosConsultarOpResultadoObjeto;
+	}//Cierre del método
+
+	/**
+	* Método para consultar el listado de días de pago para nueva inversión CEDE
+	* ProcedureName: CEDIAPAGCON
+	* @param datosInversionesCedeDiasDePago
+	* <pre>
+	* {
+	*	FechaSis: String
+	* }
+	* </pre>
+	* @return
+	* <pre>
+	* {
+	*     diasDePago: {
+	*         diaDePago: [
+	*             {
+	*                 DiaP_Id: Integer,
+	*                 DiaP_Desc: String
+	*             }
+	*         ]
+	*     }
+	* }
+	* </pre>
+	*/
+	public JsonObject inversionesCedeDiasDePagoConsultar(JsonObject datosInversionesCedeDiasDePago) {
+		logger.info("COMMONS: Comenzando inversionesCedeDiasDePagoConsultar metodo... ");
+		if(!datosInversionesCedeDiasDePago.has("NumTransac"))
+			datosInversionesCedeDiasDePago.addProperty("NumTransac", "");
+		datosInversionesCedeDiasDePago.addProperty("Transaccio", InversionesCedeDiasDePagoConsultarOpTransaccio);
+		datosInversionesCedeDiasDePago.addProperty("Usuario", InversionesCedeDiasDePagoConsultarOpUsuario);
+		datosInversionesCedeDiasDePago.addProperty("SucOrigen", InversionesCedeDiasDePagoConsultarOpSucOrigen);
+		datosInversionesCedeDiasDePago.addProperty("SucDestino", InversionesCedeDiasDePagoConsultarOpSucDestino);
+		datosInversionesCedeDiasDePago.addProperty("Modulo", InversionesCedeDiasDePagoConsultarOpModulo);
+		JsonObject inversionesCedeDiasDePagoConsultarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesCedeDiasDePagoConsultarOp, datosInversionesCedeDiasDePago);
+		logger.info("COMMONS: Finalizando inversionesCedeDiasDePagoConsultar metodo... ");
+		return inversionesCedeDiasDePagoConsultarOpResultadoObjeto;
 	}//Cierre del método
 }
