@@ -191,13 +191,43 @@ public class InversionesServicioTest {
 	public void inversionesCedePlazosConsultarTestDeberiaSerExitoso() {
 		logger.info("TEST: Comenzando inversionesCedePlazosConsultarTestDeberiaSerExitoso metodo...");
 		String fechaSis = Utilerias.obtenerFechaSis();
+		/*
+		 * CONSULTA L1
+		 */
 		JsonObject datosInversionesCedePlazos = new JsonObject();
-		datosInversionesCedePlazos.addProperty("Pla_Moneda", "01");
+		datosInversionesCedePlazos.addProperty("Pla_Numero", "19");
 		datosInversionesCedePlazos.addProperty("Pla_Produc", "07");
-		datosInversionesCedePlazos.addProperty("Tip_Consul", "L1");
+		datosInversionesCedePlazos.addProperty("Tip_Consul", "C4");
 		datosInversionesCedePlazos.addProperty("FechaSis", fechaSis);
 		
 		JsonObject resultado = inversionesServicio.inversionesCedePlazosConsultar(datosInversionesCedePlazos);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad plazo", resultado.has("plazo"));
+		assertTrue("La propiedad plazo no es un JsonObject", resultado.get("plazo").isJsonObject());
+		
+		JsonObject plazo = Utilerias.obtenerJsonObjectPropiedad(resultado, "plazo");
+		
+		if (!plazo.isJsonNull()) {
+			assertTrue("No viene  la propiedad Pla_Numero", plazo.has("Pla_Numero"));
+			assertTrue("No viene  la propiedad Pla_Moneda", plazo.has("Pla_Moneda"));
+			assertTrue("No viene  la propiedad Pla_Plazo", plazo.has("Pla_Plazo"));
+			assertTrue("No viene  la propiedad Pla_Produc", plazo.has("Pla_Produc"));
+			assertTrue("No viene  la propiedad Pro_Descri", plazo.has("Pro_Descri"));
+			assertTrue("No viene  la propiedad Pla_Descri", plazo.has("Pla_Descri"));
+			assertTrue("No viene  la propiedad Pla_Dias", plazo.has("Pla_Dias"));
+		} else {
+			assertNotNull("la propiedad plazo es nula", plazo);
+		}
+		
+		/*
+		 * CONSULTA C4
+		 */
+		datosInversionesCedePlazos.remove("Pla_Numero");
+		datosInversionesCedePlazos.addProperty("Pla_Moneda", "01");
+		datosInversionesCedePlazos.remove("Tip_Consul");
+		
+		resultado = inversionesServicio.inversionesCedePlazosConsultar(datosInversionesCedePlazos);
 		logger.info("resultado: " + resultado);
 		
 		assertTrue("No viene la propiedad plazos", resultado.has("plazos"));
@@ -205,7 +235,7 @@ public class InversionesServicioTest {
 		
 		JsonObject plazos = Utilerias.obtenerJsonObjectPropiedad(resultado, "plazos");
 		
-		if(!plazos.isJsonNull()) {
+		if (!plazos.isJsonNull()) {
 			assertTrue("No viene  la propiedad plazo", plazos.has("plazo"));
 			assertTrue("La propiedad plazo no es un JsonArray", plazos.get("plazo").isJsonArray());
 		} else {
