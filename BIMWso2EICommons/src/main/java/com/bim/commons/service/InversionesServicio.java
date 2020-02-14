@@ -63,7 +63,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesContraEstadoCuentaActualizarOpSucDestino;
 	private static String InversionesContraEstadoCuentaActualizarOpModulo;
 	private static String InversionesAltaOp;
-	private static String InversionesAltaOptransaccio;
+	private static String InversionesAltaOpTransaccio;
 	private static String InversionesAltaOpUsuari;
 	private static String InversionesAltaOpSucOrigen;
 	private static String InversionesAltaOpSucDestino;
@@ -80,7 +80,8 @@ public class InversionesServicio extends BaseService {
 		InversionesImportesDeInversionFinalizadaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_importes_de_inversion_finalizada_actualizar");
 		InversionesStatusActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_status_actualizar");
 		InversionesProcesoLiquidacionGenerarOp = properties.getProperty("inversiones_servicio.op.inversiones_proceso_liquidacion_generar");
-		InversionesContraEstadoCuentaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_contra_estado_cuenta_actualizar");		
+		InversionesContraEstadoCuentaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_contra_estado_cuenta_actualizar");
+		InversionesAltaOp = properties.getProperty("inversiones_servicio.op.inversiones_alta");
 
 		InversionesObtenerOpInvMoneda = properties.getProperty("op.inversiones_obtener.inv_moneda");
 		InversionesObtenerOpTransaccio = properties.getProperty("op.inversiones_obtener.transaccio");
@@ -127,7 +128,7 @@ public class InversionesServicio extends BaseService {
 		InversionesContraEstadoCuentaActualizarOpSucDestino = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.suc_destino");		
 		InversionesContraEstadoCuentaActualizarOpModulo = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.modulo");
 		
-		InversionesAltaOptransaccio = properties.getProperty("op.inversiones_alta.transaccio");
+		InversionesAltaOpTransaccio = properties.getProperty("op.inversiones_alta.transaccio");
 		InversionesAltaOpUsuari = properties.getProperty("op.inversiones_alta.usuari");
 		InversionesAltaOpSucOrigen = properties.getProperty("op.inversiones_alta.suc_origen");
 		InversionesAltaOpSucDestino = properties.getProperty("op.inversiones_alta.suc_destino");
@@ -437,7 +438,7 @@ public class InversionesServicio extends BaseService {
 	/**
 	 * Método para dar de alta una inversión 
 	 * ProcedureName: ININVERSALT
-	 * @param datosInversionesAltaObtener
+	 * @param datosInversionesAlta
 	 * <pre>
 	 * {
 	 *	Inv_FecIni String,
@@ -478,7 +479,7 @@ public class InversionesServicio extends BaseService {
 		logger.info("COMMONS: Comenzando inversionesAlta metodo... ");
 		if(!datosInversionesAlta.has("NumTransac"))
 			datosInversionesAlta.addProperty("NumTransac", "");
-		datosInversionesAlta.addProperty("Transaccio", InversionesAltaOptransaccio);
+		datosInversionesAlta.addProperty("Transaccio", InversionesAltaOpTransaccio);
 		datosInversionesAlta.addProperty("Usuario", InversionesAltaOpUsuari);
 		datosInversionesAlta.addProperty("SucOrigen", InversionesAltaOpSucOrigen);
 		datosInversionesAlta.addProperty("SucDestino", InversionesAltaOpSucDestino);

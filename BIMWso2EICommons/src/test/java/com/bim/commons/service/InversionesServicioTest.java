@@ -208,15 +208,10 @@ public class InversionesServicioTest {
 		datosInversionesAlta.addProperty("Inv_ClaInv", "001");
 		datosInversionesAlta.addProperty("Inv_MonRef", 0);
 		datosInversionesAlta.addProperty("Inv_CanPer", 1);
-		datosInversionesAlta.addProperty("Inv_CanPer", "");
+		datosInversionesAlta.addProperty("Inv_OpcTas", "");
 		datosInversionesAlta.addProperty("I_Numero", "");
-		datosInversionesAlta.addProperty("NumTransac", "57838271");
-		datosInversionesAlta.addProperty("Transaccio", "AII");
-		datosInversionesAlta.addProperty("Usuario", "000100");
+		datosInversionesAlta.addProperty("NumTransac", "");
 		datosInversionesAlta.addProperty("FechaSis", fechaSis);
-		datosInversionesAlta.addProperty("SucOrigen", "001");
-		datosInversionesAlta.addProperty("SucDestino", "001");
-		datosInversionesAlta.addProperty("Modulo", "NB");
 		
 		/**
 		 * Mock

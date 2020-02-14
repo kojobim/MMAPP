@@ -285,7 +285,7 @@
     	</sql>
         <param name="invFecIni" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="invFecVen" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <param name="invCantid" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invCantid" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
         <param name="invTasa" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
         <param name="invAutori" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="invMoneda" paramType="SCALAR" sqlType="STRING" type="IN"/>
@@ -312,7 +312,6 @@
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
             <element column="Err_Variab" name="Err_Variab" xsdType="xs:string" optional="true"/>
-            <element column="Inv_Numero" name="Inv_Numero" xsdType="xs:string" optional="true"/>
         </result>
     </query>
     <operation name="inversionesObtenerOp">
@@ -422,8 +421,8 @@
     <operation name="inversionesAltaOp">
         <call-query href="inversionesAltaSQL">
             <with-param name="invFecIni" query-param="Inv_FecIni"/>
-            <with-param name="invFecVen" query-param="Inv_rFecVen"/>
-            <with-param name="invCantid" query-param="Inv_rCantid"/>
+            <with-param name="invFecVen" query-param="Inv_FecVen"/>
+            <with-param name="invCantid" query-param="Inv_Cantid"/>
             <with-param name="invTasa" query-param="Inv_Tasa"/>
             <with-param name="invAutori" query-param="Inv_Autori"/>
             <with-param name="invMoneda" query-param="Inv_Moneda"/>
