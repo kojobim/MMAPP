@@ -239,37 +239,4 @@ public class InversionesServicioTest {
 		
 		logger.info("TEST: Finalizando inversionesCedeDiasDePagoConsultarTestDeberiaSerExitoso metodo...");
 	}
-	
-	@Test
-	public void inversionesCedeTasasConsultarTestDeberiaSerExitoso() {
-		logger.info("TEST: Comenzando inversionesCedeTasasConsultarTestDeberiaSerExitoso metodo...");
-		String fechaSis = Utilerias.obtenerFechaSis();
-		JsonObject datosInversionesCedeTasas = new JsonObject();
-		datosInversionesCedeTasas.addProperty("Tas_Plazo", "19");
-		datosInversionesCedeTasas.addProperty("Tas_Cantid", 6000);
-		datosInversionesCedeTasas.addProperty("Tas_Formul", "002");
-		datosInversionesCedeTasas.addProperty("Tas_Fecha", fechaSis);
-		datosInversionesCedeTasas.addProperty("Cli_Numero", "00195383");
-		datosInversionesCedeTasas.addProperty("FechaSis", fechaSis);
-		
-		JsonObject resultado = inversionesServicio.inversionesCedeTasasConsultar(datosInversionesCedeTasas);
-		logger.info("resultado: " + resultado);
-		
-		assertTrue("No viene la propiedad tasa", resultado.has("tasa"));
-		assertTrue("La propiedad tasa no es un JsonObject", resultado.get("tasa").isJsonObject());
-		
-		JsonObject tasa = Utilerias.obtenerJsonObjectPropiedad(resultado, "tasa");
-		
-		if(!tasa.isJsonNull()) {
-			assertTrue("No viene  la propiedad Tas_Tasa", tasa.has("Tas_Tasa"));
-			assertTrue("No viene  la propiedad Tas_PorBas", tasa.has("Tas_PorBas"));
-			assertTrue("No viene  la propiedad Tas_Puntos", tasa.has("Tas_Puntos"));
-			assertTrue("No viene  la propiedad Tas_Esquema", tasa.has("Tas_Esquema"));
-			assertTrue("No viene  la propiedad Tas_VarRea", tasa.has("Tas_VarRea"));
-		} else {
-			assertNotNull("la propiedad tasa es nula", tasa);
-		}
-		
-		logger.info("TEST: Finalizando inversionesCedeTasasConsultarTestDeberiaSerExitoso metodo...");
-	}
 }
