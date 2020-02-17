@@ -167,6 +167,42 @@
             <element column="Inv_GATRea" name="Inv_GATRea" xsdType="xs:double" optional="true"/>
         </result>
     </query>
+    <query id="tasaGATCedeConsultaCalcularSQL" useConfig="BIMDB">
+        <sql>
+        	EXEC CECALGATPRO
+            @Inv_Dias = :invDias,
+            @Inv_TasInt = :invTasInt,
+            @Inv_GAT = :invGAT,
+            @Cal_Opcion = :calOpcion,
+            @Cue_MonInv = :cueMonInv,
+            @Mon_Comisi = :monComisi,
+			@NumTransac = :numTransac,
+			@Transaccio = :transaccio,
+			@Usuario = :usuario,
+			@FechaSis = :fechaSis,
+			@SucOrigen = :sucOrigen,
+			@SucDestino = :sucDestino,
+			@Modulo = :modulo
+		</sql>
+        <param name="invDias" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="invTasInt" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="invGAT" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="calOpcion" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cueMonInv" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="monComisi" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/tasaGATCedeConsultaCalcularNE" element="tasaGATCede">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+            <element column="Inv_GAT" name="Inv_GAT" xsdType="xs:double" optional="true"/>
+        </result>
+    </query>
     <operation returnRequestStatus="true" name="tasaClienteConsultarOp">
         <call-query href="tasaClienteConsultarSQL">
             <with-param name="cliNumero" query-param="Cli_Numero"/>
@@ -224,6 +260,23 @@
         <call-query href="tasaGATRealConsultaCalcularSQL">
             <with-param name="invGAT" query-param="Inv_GAT"/>
             <with-param name="invGATRea" query-param="Inv_GATRea"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="tasaGATCedeConsultaCalcularOp">
+        <call-query href="tasaGATCedeConsultaCalcularSQL">
+            <with-param name="invDias" query-param="Inv_Dias"/>
+            <with-param name="invTasInt" query-param="Inv_TasInt"/>
+            <with-param name="invGAT" query-param="Inv_GAT"/>
+            <with-param name="calOpcion" query-param="Cal_Opcion"/>
+            <with-param name="cueMonInv" query-param="Cue_MonInv"/>
+            <with-param name="monComisi" query-param="Mon_Comisi"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>

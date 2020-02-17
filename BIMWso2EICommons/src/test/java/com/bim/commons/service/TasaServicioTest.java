@@ -209,5 +209,34 @@ public class TasaServicioTest {
 		
 		logger.info("TEST: Finalizando tasaGATRealConsultaCalcularTestDeberiaSerExitoso metodo...");
 	}
+	
+	@Test
+	public void tasaGATCedeConsultaCalcularTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando tasaGATCedeConsultaCalcularTestDeberiaSerExitoso metodo...");
+		
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosGATCede = new JsonObject();
+		datosGATCede.addProperty("Inv_Dias", 180);
+		datosGATCede.addProperty("Inv_TasInt", 7.49);
+		datosGATCede.addProperty("Cue_MonInv", 6000);
+		datosGATCede.addProperty("FechaSis", fechaSis);
+		
+		JsonObject resultado = tasaServicio.tasaGATCedeConsultaCalcular(datosGATCede);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad tasaGATCede", resultado.has("tasaGATCede"));
+		assertTrue("La propiedad tasaGATCede no es un JsonObject", resultado.get("tasaGATCede").isJsonObject());
+		
+		JsonObject tasaGATCede = Utilerias.obtenerJsonObjectPropiedad(resultado, "tasaGATCede");
+		
+		if(!tasaGATCede.isJsonNull()) {
+			assertTrue("La propiedad Err_Codigo no se encuentra en tasaGATCede", tasaGATCede.has("Err_Codigo"));
+			assertTrue("La propiedad Err_Mensaj no se encuentra en tasaGATCede", tasaGATCede.has("Err_Mensaj"));
+			assertTrue("La propiedad Inv_GAT no se encuentra en tasaGATCede", tasaGATCede.has("Inv_GAT"));
+		} else
+			assertNotNull("la propiedad tasaGATCede es nula", tasaGATCede);
+		
+		logger.info("TEST: Finalizando tasaGATCedeConsultaCalcularTestDeberiaSerExitoso metodo...");
+	}
 
 }

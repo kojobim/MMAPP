@@ -48,6 +48,14 @@ public class TasaServicio extends BaseService {
 	private static String TasaGATReaConsultaCalcularOpSucOrigen;
 	private static String TasaGATReaConsultaCalcularOpSucDestino;
 	private static String TasaGATReaConsultaCalcularOpModulo;
+	private static String TasaGATCedeConsultaCalcularOp;
+	private static String TasaGATCedeConsultaCalcularOpInvGAT;
+	private static String TasaGATCedeConsultaCalcularOpMonComisi;
+	private static String TasaGATCedeConsultaCalcularOpTransaccio;
+	private static String TasaGATCedeConsultaCalcularOpUsuari;
+	private static String TasaGATCedeConsultaCalcularOpSucOrigen;
+	private static String TasaGATCedeConsultaCalcularOpSucDestino;
+	private static String TasaGATCedeConsultaCalcularOpModulo;
 	
 	public TasaServicio() {
 		super();
@@ -58,6 +66,7 @@ public class TasaServicio extends BaseService {
 		TasaMonedaConsultarOp = properties.getProperty("tasa_servicio.op.tasa_moneda_consultar");
 		TasaGATConsultaCalcularOp = properties.getProperty("tasa_servicio.op.tasa_gat_consulta_calcular");
 		TasaGATRealConsultaCalcularOp = properties.getProperty("tasa_servicio.op.tasa_gat_rea_consulta_calcular");
+		TasaGATCedeConsultaCalcularOp = properties.getProperty("tasa_servicio.op.tasa_gat_cede_consulta_calcular");
 		
 		TasaClienteConsultarOpTasa  = properties.getProperty("op.tasa_cliente_consultar.tasa");
 		TasaClienteConsultarOpTransaccio  = properties.getProperty("op.tasa_cliente_consultar.transaccio");
@@ -88,6 +97,14 @@ public class TasaServicio extends BaseService {
 		TasaGATReaConsultaCalcularOpSucDestino = properties.getProperty("op.tasa_gat_rea_consulta_calcular.suc_destino");
 		TasaGATReaConsultaCalcularOpModulo = properties.getProperty("op.tasa_gat_rea_consulta_calcular.modulo");	
 		TasaGATReaConsultaCalcualrOpInvGATRea = properties.getProperty("op.tasa_gat_rea_consulta_calcular.inv_gat_rea");
+		
+		TasaGATCedeConsultaCalcularOpInvGAT  = properties.getProperty("op.tasa_gat_rea_consulta_calcular.inv_gat");
+		TasaGATCedeConsultaCalcularOpMonComisi  = properties.getProperty("op.tasa_gat_rea_consulta_calcular.mon_comisi");
+		TasaGATCedeConsultaCalcularOpTransaccio  = properties.getProperty("op.tasa_gat_rea_consulta_calcular.transaccio");
+		TasaGATCedeConsultaCalcularOpUsuari = properties.getProperty("op.tasa_gat_rea_consulta_calcular.usuario");
+		TasaGATCedeConsultaCalcularOpSucOrigen = properties.getProperty("op.tasa_gat_rea_consulta_calcular.suc_origen");
+		TasaGATCedeConsultaCalcularOpSucDestino = properties.getProperty("op.tasa_gat_rea_consulta_calcular.suc_destino");
+		TasaGATCedeConsultaCalcularOpModulo = properties.getProperty("op.tasa_gat_rea_consulta_calcular.modulo");
 	}
 
 	/**
@@ -288,5 +305,47 @@ public class TasaServicio extends BaseService {
 		JsonObject tasaGATRealConsultaCalcularOpResultadoObjeto = Utilerias.performOperacion(TasaServicio, TasaGATRealConsultaCalcularOp, datosGATReal);
 		logger.info("COMMONS: Finalizando tasaGATRealConsultaCalcular metodo...");
 		return tasaGATRealConsultaCalcularOpResultadoObjeto;
+	}//Cierre del método
+	
+	/**
+	 * Método para consultar el GAT de inversiones CEDE
+	 * ProcedureName: CECALGATPRO
+	 * @param datosGAT
+	 * <pre>
+	 * {
+	 * 	Inv_Dias: Double,
+	 * 	Inv_TasInt: Double,
+	 * 	Cue_MonInv: Double,
+	 *	NumTransac?: String,
+	 *	FechaSis: String
+	 * }
+	 * </pre>
+	 * @return
+	 * <pre>
+	 * {
+	 *     tasaGATCede: {
+	 *         Err_Codigo: String,
+	 *         Err_Mensaj: String,
+	 *         Inv_GAT: Double
+	 *     }
+	 * }
+	 * </pre>
+	 */
+	public JsonObject tasaGATCedeConsultaCalcular(JsonObject datosGATCede) {
+		logger.info("COMMONS: Comenzando tasaGATCedeConsultaCalcular metodo...");
+		if(!datosGATCede.has("Cal_Opcion"))
+			datosGATCede.addProperty("Cal_Opcion", "");
+		if(!datosGATCede.has("NumTransac"))
+			datosGATCede.addProperty("NumTransac", "");
+		datosGATCede.addProperty("Inv_GAT", Integer.parseInt(TasaGATCedeConsultaCalcularOpInvGAT));
+		datosGATCede.addProperty("Mon_Comisi", Integer.parseInt(TasaGATCedeConsultaCalcularOpMonComisi));
+		datosGATCede.addProperty("Transaccio", TasaGATCedeConsultaCalcularOpTransaccio);
+		datosGATCede.addProperty("Usuario", TasaGATCedeConsultaCalcularOpUsuari);
+		datosGATCede.addProperty("SucOrigen", TasaGATCedeConsultaCalcularOpSucOrigen);
+		datosGATCede.addProperty("SucDestino", TasaGATCedeConsultaCalcularOpSucDestino);
+		datosGATCede.addProperty("Modulo", TasaGATCedeConsultaCalcularOpModulo);
+		JsonObject tasaGATCedeConsultaCalcularOpResultadoObjeto = Utilerias.performOperacion(TasaServicio, TasaGATCedeConsultaCalcularOp, datosGATCede);
+		logger.info("COMMONS: Finalizando tasaGATCedeConsultaCalcular metodo...");
+		return tasaGATCedeConsultaCalcularOpResultadoObjeto;
 	}//Cierre del método
 }
