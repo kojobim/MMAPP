@@ -69,6 +69,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesCedePlazosConsultarOpSucOrigen;
 	private static String InversionesCedePlazosConsultarOpSucDestino;
 	private static String InversionesCedePlazosConsultarOpModulo;
+	
 	private static String InversionesCedeDiasDePagoConsultarOp;		
 	private static String InversionesCedeDiasDePagoConsultarOpTransaccio;
 	private static String InversionesCedeDiasDePagoConsultarOpUsuario;
