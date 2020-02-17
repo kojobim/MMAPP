@@ -574,13 +574,15 @@ public class InversionesServicio extends BaseService {
      *  Inv_CanPer Double,
      *  Inv_CanPer String,
      *  I_Numero String,
-	 * 	NumTransac?: String,
-	 *  *	alta: {
+	 * 	NumTransac?: String,	 
+	 * </pre>
+	 * @return
+	 *  alta: {
 	 *         Err_Codigo: String,
 	 *         Err_Mensaj: String,
 	 *         Err_Variab: String,
 	 *         Inv_Numero: String
-	 *     }
+	 *   }
 	 * }
 	 * </pre>
 	 */
