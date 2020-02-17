@@ -313,6 +313,55 @@
             <element column="DiaP_Desc" name="DiaP_Desc" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="inversionesCedeTasasConsultarSQL" useConfig="BIMDB">
+        <sql>EXEC CETASASCON
+            @Tas_Plazo = :tasPlazo,
+            @Tas_Monto = :tasMonto,
+            @Tas_Cantid = :tasCantid,
+            @Tas_Formul = :tasFormul,
+            @Tas_TasBas = :tasTasBas,
+            @Tas_PorBas = :tasPorBas,
+            @Tas_Puntos = :tasPuntos,
+            @Tas_Fecha = :tasFecha,
+            @Tasa = :tasa,
+            @Tip_Consul = :tipConsul,
+            @Cli_Numero = :cliNumero,
+            @Tas_TipPer = :tasTipPer,            
+            @NumTransac = :numTransac,
+            @Transaccio = :transaccio,
+            @Usuario = :usuario,
+            @FechaSis = :fechaSis,
+            @SucOrigen = :sucOrigen,
+            @SucDestino = :sucDestino,
+            @Modulo = :modulo
+        </sql>
+        <param name="tasPlazo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tasMonto" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tasCantid" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="tasFormul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tasTasBas" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tasPorBas" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="tasPuntos" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="tasFecha" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tasa" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cliNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tasTipPer" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/inversionesCedeTasasConsultarNE" element="tasa">
+            <element column="Tas_Tasa" name="Tas_Tasa" xsdType="xs:double"/>
+            <element column="Tas_PorBas" name="Tas_PorBas" xsdType="xs:double"/>
+            <element column="Tas_Puntos" name="Tas_Puntos" xsdType="xs:double"/>
+            <element column="Tas_Esquema" name="Tas_Esquema" xsdType="xs:string"/>
+            <element column="Tas_VarRea" name="Tas_VarRea" xsdType="xs:double"/>
+        </result>
+    </query>
     <operation name="inversionesObtenerOp">
         <call-query href="inversionesObtenerSQL">
             <with-param name="invClient" query-param="Inv_Client"/>
@@ -436,6 +485,29 @@
     </operation>
     <operation name="inversionesCedeDiasDePagoConsultarOp">
         <call-query href="inversionesCedeDiasDePagoConsultarSQL">
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation name="inversionesCedeTasasConsultarOp">
+        <call-query href="inversionesCedeTasasConsultarSQL">
+            <with-param name="tasPlazo" query-param="Tas_Plazo"/>
+            <with-param name="tasMonto" query-param="Tas_Monto"/>
+            <with-param name="tasCantid" query-param="Tas_Cantid"/>
+            <with-param name="tasFormul" query-param="Tas_Formul"/>
+            <with-param name="tasTasBas" query-param="Tas_TasBas"/>
+            <with-param name="tasPorBas" query-param="Tas_PorBas"/>
+            <with-param name="tasPuntos" query-param="Tas_Puntos"/>
+            <with-param name="tasFecha" query-param="Tas_Fecha"/>
+            <with-param name="tasa" query-param="Tasa"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="cliNumero" query-param="Cli_Numero"/>
+            <with-param name="tasTipPer" query-param="Tas_TipPer"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>

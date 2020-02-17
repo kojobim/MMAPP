@@ -17,6 +17,7 @@ public class InversionesServicio extends BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(InversionesServicio.class);
 
 	private static String InversionesServicio;
+	
 	private static String InversionesObtenerOp;
 	private static String InversionesObtenerOpInvMoneda;
 	private static String InversionesObtenerOpTransaccio;
@@ -24,6 +25,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesObtenerOpSucOrigen;
 	private static String InversionesObtenerOpSucDestino;
 	private static String InversionesObtenerOpModulo;
+	
 	private static String InversionesPagareNumeroUsuarioObtenerOp;
 	private static String InversionesPagareNumeroUsuarioObtenerOpTipConsul;
 	private static String InversionesPagareNumeroUsuarioObtenerOpTransaccio;
@@ -31,6 +33,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesPagareNumeroUsuarioObtenerOpSucOrigen;
 	private static String InversionesPagareNumeroUsuarioObtenerOpSucDestino;
 	private static String InversionesPagareNumeroUsuarioObtenerOpModulo;
+	
 	private static String InversionesImportesDeInversionFinalizadaActualizarOp;
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpInvrAutor;		
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpTransaccio;
@@ -38,6 +41,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpSucOrigen;
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpSucDestino;
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpModulo;
+	
 	private static String InversionesStatusActualizarOp;
 	private static String InversionesStatusActualizarOpAdiInsLiq;
 	private static String InversionesStatusActualizarOpAdiMoReGr;
@@ -46,6 +50,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesStatusActualizarOpSucOrigen;
 	private static String InversionesStatusActualizarOpSucDestino;
 	private static String InversionesStatusActualizarOpModulo;
+	
 	private static String InversionesProcesoLiquidacionGenerarOp;
 	private static String InversionesProcesoLiquidacionGenerarOpInvrAutor;
 	private static String InversionesProcesoLiquidacionGenerarOpInvMonRef;
@@ -54,6 +59,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesProcesoLiquidacionGenerarOpSucOrigen;
 	private static String InversionesProcesoLiquidacionGenerarOpSucDestino;
 	private static String InversionesProcesoLiquidacionGenerarOpModulo;
+	
 	private static String InversionesContraEstadoCuentaActualizarOp;
 	private static String InversionesContraEstadoCuentaActualizarOpCorMoLiDi;
 	private static String InversionesContraEstadoCuentaActualizarOpTipActual;		
@@ -62,6 +68,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesContraEstadoCuentaActualizarOpSucOrigen;
 	private static String InversionesContraEstadoCuentaActualizarOpSucDestino;
 	private static String InversionesContraEstadoCuentaActualizarOpModulo;
+	
 	private static String InversionesCedePlazosConsultarOp;
 	private static String InversionesCedePlazosConsultarOpTipConsulL1;
 	private static String InversionesCedePlazosConsultarOpTransaccio;
@@ -76,6 +83,17 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesCedeDiasDePagoConsultarOpSucOrigen;
 	private static String InversionesCedeDiasDePagoConsultarOpSucDestino;
 	private static String InversionesCedeDiasDePagoConsultarOpModulo;
+	
+	private static String InversionesCedeTasasConsultarOp;
+	private static String InversionesCedeTasasConsultarOpTasPorBas;
+	private static String InversionesCedeTasasConsultarOpTasPuntos;
+	private static String InversionesCedeTasasConsultarOpTasa;
+	private static String InversionesCedeTasasConsultarOpTipConsul;
+	private static String InversionesCedeTasasConsultarOpTransaccio;
+	private static String InversionesCedeTasasConsultarOpUsuario;
+	private static String InversionesCedeTasasConsultarOpSucOrigen;
+	private static String InversionesCedeTasasConsultarOpSucDestino;
+	private static String InversionesCedeTasasConsultarOpModulo;
 	
 	public InversionesServicio() {
 		super();
@@ -148,6 +166,17 @@ public class InversionesServicio extends BaseService {
 		InversionesCedePlazosConsultarOpSucOrigen = properties.getProperty("op.inversiones_cede_plazos_consultar.suc_origen");
 		InversionesCedePlazosConsultarOpSucDestino = properties.getProperty("op.inversiones_cede_plazos_consultar.suc_destino");
 		InversionesCedePlazosConsultarOpModulo = properties.getProperty("op.inversiones_cede_plazos_consultar.modulo");
+		
+		InversionesCedeTasasConsultarOp = properties.getProperty("inversiones_servicio.op.inversiones_cede_tasas_consultar");
+		InversionesCedeTasasConsultarOpTasPorBas = properties.getProperty("op.inversiones_cede_tasas_consultar.tas_por_bas");
+		InversionesCedeTasasConsultarOpTasPuntos = properties.getProperty("op.inversiones_cede_tasas_consultar.tas_puntos");
+		InversionesCedeTasasConsultarOpTasa = properties.getProperty("op.inversiones_cede_tasas_consultar.tasa");
+		InversionesCedeTasasConsultarOpTipConsul = properties.getProperty("op.inversiones_cede_tasas_consultar.tip_consul");
+		InversionesCedeTasasConsultarOpTransaccio = properties.getProperty("op.inversiones_cede_tasas_consultar.transaccio");
+		InversionesCedeTasasConsultarOpUsuario = properties.getProperty("op.inversiones_cede_tasas_consultar.usuario");
+		InversionesCedeTasasConsultarOpSucOrigen = properties.getProperty("op.inversiones_cede_tasas_consultar.suc_origen");
+		InversionesCedeTasasConsultarOpSucDestino = properties.getProperty("op.inversiones_cede_tasas_consultar.suc_destino");
+		InversionesCedeTasasConsultarOpModulo = properties.getProperty("op.inversiones_cede_tasas_consultar.modulo");
 
 	}
 
@@ -535,5 +564,56 @@ public class InversionesServicio extends BaseService {
 		JsonObject inversionesCedeDiasDePagoConsultarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesCedeDiasDePagoConsultarOp, datosInversionesCedeDiasDePago);
 		logger.info("COMMONS: Finalizando inversionesCedeDiasDePagoConsultar metodo... ");
 		return inversionesCedeDiasDePagoConsultarOpResultadoObjeto;
+	}//Cierre del método
+	
+	/**
+	* Método para consultar la tasa de una inversión en base a un plazo y cantidad invertida
+	* ProcedureName: CETASASCON
+	* @param datosInversionesCedeTasas
+	* <pre>
+	* {
+	* 	Tas_Plazo: String,
+	* 	Tas_Cantid: String,
+	* 	Tas_Formul: String,
+	* 	Tas_Fecha: String,
+	* 	Cli_Numero: String,
+	*	FechaSis: String
+	* }
+	* </pre>
+	* @return
+	* <pre>
+	* {
+	* 	tasa: {
+	* 		Tas_Tasa: Double,
+	* 		Tas_PorBas: Double,
+	* 		Tas_Puntos: Double,
+	* 		Tas_Esquema: String,
+	* 		Tas_VarRea: Double
+	* 	}
+	* }
+	* </pre>
+	*/
+	public JsonObject inversionesCedeTasasConsultar(JsonObject datosInversionesCedeTasas) {
+		logger.info("COMMONS: Comenzando inversionesCedeTasasConsultar metodo... ");
+		if(!datosInversionesCedeTasas.has("Tas_Monto"))
+			datosInversionesCedeTasas.addProperty("Tas_Monto", "");
+		if(!datosInversionesCedeTasas.has("Tas_TasBas"))
+			datosInversionesCedeTasas.addProperty("Tas_TasBas", "");
+		if(!datosInversionesCedeTasas.has("Tas_TipPer"))
+			datosInversionesCedeTasas.addProperty("Tas_TipPer", "");
+		if(!datosInversionesCedeTasas.has("NumTransac"))
+			datosInversionesCedeTasas.addProperty("NumTransac", "");
+		datosInversionesCedeTasas.addProperty("Tas_PorBas", Double.parseDouble(InversionesCedeTasasConsultarOpTasPorBas));
+		datosInversionesCedeTasas.addProperty("Tas_Puntos", Double.parseDouble(InversionesCedeTasasConsultarOpTasPuntos));
+		datosInversionesCedeTasas.addProperty("Tasa", Double.parseDouble(InversionesCedeTasasConsultarOpTasa));
+		datosInversionesCedeTasas.addProperty("Tip_Consul", InversionesCedeTasasConsultarOpTipConsul);
+		datosInversionesCedeTasas.addProperty("Transaccio", InversionesCedeTasasConsultarOpTransaccio);
+		datosInversionesCedeTasas.addProperty("Usuario", InversionesCedeTasasConsultarOpUsuario);
+		datosInversionesCedeTasas.addProperty("SucOrigen", InversionesCedeTasasConsultarOpSucOrigen);
+		datosInversionesCedeTasas.addProperty("SucDestino", InversionesCedeTasasConsultarOpSucDestino);
+		datosInversionesCedeTasas.addProperty("Modulo", InversionesCedeTasasConsultarOpModulo);
+		JsonObject inversionesCedeTasasConsultarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesCedeTasasConsultarOp, datosInversionesCedeTasas);
+		logger.info("COMMONS: Finalizando inversionesCedeTasasConsultar metodo... ");
+		return inversionesCedeTasasConsultarOpResultadoObjeto;
 	}//Cierre del método
 }
