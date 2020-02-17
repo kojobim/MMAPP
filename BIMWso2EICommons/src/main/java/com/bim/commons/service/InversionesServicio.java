@@ -17,7 +17,6 @@ public class InversionesServicio extends BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(InversionesServicio.class);
 
 	private static String InversionesServicio;
-	
 	private static String InversionesObtenerOp;
 	private static String InversionesObtenerOpInvMoneda;
 	private static String InversionesObtenerOpTransaccio;
@@ -25,7 +24,6 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesObtenerOpSucOrigen;
 	private static String InversionesObtenerOpSucDestino;
 	private static String InversionesObtenerOpModulo;
-	
 	private static String InversionesPagareNumeroUsuarioObtenerOp;
 	private static String InversionesPagareNumeroUsuarioObtenerOpTipConsul;
 	private static String InversionesPagareNumeroUsuarioObtenerOpTransaccio;
@@ -33,7 +31,6 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesPagareNumeroUsuarioObtenerOpSucOrigen;
 	private static String InversionesPagareNumeroUsuarioObtenerOpSucDestino;
 	private static String InversionesPagareNumeroUsuarioObtenerOpModulo;
-	
 	private static String InversionesImportesDeInversionFinalizadaActualizarOp;
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpInvrAutor;		
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpTransaccio;
@@ -41,7 +38,6 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpSucOrigen;
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpSucDestino;
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpModulo;
-	
 	private static String InversionesStatusActualizarOp;
 	private static String InversionesStatusActualizarOpAdiInsLiq;
 	private static String InversionesStatusActualizarOpAdiMoReGr;
@@ -50,7 +46,6 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesStatusActualizarOpSucOrigen;
 	private static String InversionesStatusActualizarOpSucDestino;
 	private static String InversionesStatusActualizarOpModulo;
-	
 	private static String InversionesProcesoLiquidacionGenerarOp;
 	private static String InversionesProcesoLiquidacionGenerarOpInvrAutor;
 	private static String InversionesProcesoLiquidacionGenerarOpInvMonRef;
@@ -59,7 +54,6 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesProcesoLiquidacionGenerarOpSucOrigen;
 	private static String InversionesProcesoLiquidacionGenerarOpSucDestino;
 	private static String InversionesProcesoLiquidacionGenerarOpModulo;
-	
 	private static String InversionesContraEstadoCuentaActualizarOp;
 	private static String InversionesContraEstadoCuentaActualizarOpCorMoLiDi;
 	private static String InversionesContraEstadoCuentaActualizarOpTipActual;		
@@ -68,7 +62,6 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesContraEstadoCuentaActualizarOpSucOrigen;
 	private static String InversionesContraEstadoCuentaActualizarOpSucDestino;
 	private static String InversionesContraEstadoCuentaActualizarOpModulo;
-	
 	private static String InversionesCedePlazosConsultarL1Op;
 	private static String InversionesCedePlazosConsultarC4Op;
 	private static String InversionesCedePlazosConsultarOpTipConsulL1;
