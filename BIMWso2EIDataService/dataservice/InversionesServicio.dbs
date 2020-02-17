@@ -312,6 +312,7 @@
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
             <element column="Err_Variab" name="Err_Variab" xsdType="xs:string" optional="true"/>
+            <element column="Inv_Numero" name="Inv_Numero" xsdType="xs:string" optional="true"/>
         </result>
     </query>
     <operation name="inversionesObtenerOp">

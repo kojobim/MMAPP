@@ -192,9 +192,9 @@ public class InversionesServicioTest {
 		logger.info("TEST: Comenzando inversionesAltaTestDeberiaSerExitoso metodo...");
 		String fechaSis = Utilerias.obtenerFechaSis();
 		JsonObject datosInversionesAlta = new JsonObject();
-		datosInversionesAlta.addProperty("Inv_FecIni", "2020-02-06 00:00:00");
-		datosInversionesAlta.addProperty("Inv_FecVen", "2020-02-10 00:00:00");
-		datosInversionesAlta.addProperty("Inv_Cantid", 6000);
+		datosInversionesAlta.addProperty("Inv_FecIni", "2020-02-17 00:00:00");
+		datosInversionesAlta.addProperty("Inv_FecVen", "2020-02-19 00:00:00");
+		datosInversionesAlta.addProperty("Inv_Cantid", 5000);
 		datosInversionesAlta.addProperty("Inv_Tasa", 2.45);
 		datosInversionesAlta.addProperty("Inv_Autori", "000100");
 		datosInversionesAlta.addProperty("Inv_Moneda", "01");

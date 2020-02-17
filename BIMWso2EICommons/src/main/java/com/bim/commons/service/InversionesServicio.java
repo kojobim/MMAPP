@@ -64,7 +64,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesContraEstadoCuentaActualizarOpModulo;
 	private static String InversionesAltaOp;
 	private static String InversionesAltaOpTransaccio;
-	private static String InversionesAltaOpUsuari;
+	private static String InversionesAltaOpUsuario;
 	private static String InversionesAltaOpSucOrigen;
 	private static String InversionesAltaOpSucDestino;
 	private static String InversionesAltaOpModulo;
@@ -129,7 +129,7 @@ public class InversionesServicio extends BaseService {
 		InversionesContraEstadoCuentaActualizarOpModulo = properties.getProperty("op.inversiones_contra_estado_cuenta_actualizar.modulo");
 		
 		InversionesAltaOpTransaccio = properties.getProperty("op.inversiones_alta.transaccio");
-		InversionesAltaOpUsuari = properties.getProperty("op.inversiones_alta.usuari");
+		InversionesAltaOpUsuario = properties.getProperty("op.inversiones_alta.usuario");
 		InversionesAltaOpSucOrigen = properties.getProperty("op.inversiones_alta.suc_origen");
 		InversionesAltaOpSucDestino = properties.getProperty("op.inversiones_alta.suc_destino");
 		InversionesAltaOpModulo = properties.getProperty("op.inversiones_alta.modulo");
@@ -480,7 +480,7 @@ public class InversionesServicio extends BaseService {
 		if(!datosInversionesAlta.has("NumTransac"))
 			datosInversionesAlta.addProperty("NumTransac", "");
 		datosInversionesAlta.addProperty("Transaccio", InversionesAltaOpTransaccio);
-		datosInversionesAlta.addProperty("Usuario", InversionesAltaOpUsuari);
+		datosInversionesAlta.addProperty("Usuario", InversionesAltaOpUsuario);
 		datosInversionesAlta.addProperty("SucOrigen", InversionesAltaOpSucOrigen);
 		datosInversionesAlta.addProperty("SucDestino", InversionesAltaOpSucDestino);
 		datosInversionesAlta.addProperty("Modulo", InversionesAltaOpModulo);
