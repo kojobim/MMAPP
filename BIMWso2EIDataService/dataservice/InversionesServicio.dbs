@@ -269,7 +269,7 @@
         	@SucOrigen = :sucOrigen,
         	@SucDestino = :sucDestino,
         	@Modulo = :modulo
-        </sql>
+    	</sql>
         <param name="plaNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="plaMoneda" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="plaProduc" paramType="SCALAR" sqlType="STRING" type="IN"/>
@@ -293,13 +293,13 @@
     </query>
     <query id="inversionesCedeDiasDePagoConsultarSQL" useConfig="BIMDB">
         <sql>EXEC CEDIAPAGCON
-            @NumTransac = :numTransac,
-            @Transaccio = :transaccio,
-            @Usuario = :usuario,
-            @FechaSis = :fechaSis,
-            @SucOrigen = :sucOrigen,
-            @SucDestino = :sucDestino,
-            @Modulo = :modulo
+        	@NumTransac = :numTransac,
+        	@Transaccio = :transaccio,
+        	@Usuario = :usuario,
+        	@FechaSis = :fechaSis,
+        	@SucOrigen = :sucOrigen,
+        	@SucDestino = :sucDestino,
+        	@Modulo = :modulo
         </sql>
         <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
@@ -313,6 +313,149 @@
             <element column="DiaP_Desc" name="DiaP_Desc" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="inversionesAltaSQL" useConfig="BIMDB">
+        <sql>
+    		EXEC ININVERSALT
+	    	@Inv_FecIni	= :invFecIni,
+	        @Inv_FecVen	= :invFecVen,
+	        @Inv_Cantid	= :invCantid,
+	        @Inv_Tasa	= :invTasa,
+	        @Inv_Autori	= :invAutori,
+	        @Inv_Moneda	= :invMoneda,
+	        @Inv_ISR	= :invISR,
+	        @Inv_Cuenta	= :invCuenta,
+	        @Inv_TipImp	= :invTipImp,
+	        @Inv_InvAnt	= :invInvAnt,
+	        @Inv_TBruta	= :invTBruta,
+	        @Inv_CveSeg	= :invCveSeg,
+	        @Inv_Origen	= :invOrigen,
+	        @Inv_ClaInv	= :invClaInv,
+	        @Inv_MonRef	= :invMonRef,
+	        @Inv_CanPer	= :invCanPer,
+	        @Inv_OpcTas	= :invOpcTas,
+	        @I_Numero	= :iNumero,
+        	@NumTransac = :numTransac,
+        	@Transaccio = :transaccio,
+        	@Usuario = :usuario,
+        	@FechaSis = :fechaSis,
+        	@SucOrigen = :sucOrigen,
+        	@SucDestino = :sucDestino,
+        	@Modulo = :modulo
+    	</sql>
+        <param name="invFecIni" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invFecVen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invCantid" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="invTasa" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="invAutori" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invMoneda" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invISR" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="invCuenta" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invTipImp" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invInvAnt" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invTBruta" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="invCveSeg" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invClaInv" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invMonRef" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="invCanPer" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
+        <param name="invOpcTas" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="iNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/inversionesAltaNE" element="alta">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+            <element column="Err_Variab" name="Err_Variab" xsdType="xs:string" optional="true"/>
+            <element column="Inv_Numero" name="Inv_Numero" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <query id="inversionesAltaPagarSQL" useConfig="BIMDB">
+        <sql>
+    		EXEC ININVERSCAR
+    		@Inv_Numero	= :invNumero,
+        	@Inv_FecIni	= :invFecIni,
+        	@Inv_Cantid	= :invCantid,
+        	@Inv_Status	= :invStatus,
+        	@Inv_Cuenta	= :invCuenta,
+        	@Fecha	= :fecha,
+        	@NumTransac = :numTransac,
+        	@Transaccio = :transaccio,
+        	@Usuario = :usuario,
+        	@FechaSis = :fechaSis,
+        	@SucOrigen = :sucOrigen,
+        	@SucDestino = :sucDestino,
+        	@Modulo = :modulo
+        </sql>
+        <param name="invNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invFecIni" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invCantid" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="invStatus" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="invCuenta" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fecha" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/inversionesAltaPagarNE" element="cargo">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+            <element column="Err_Variab" name="Err_Variab" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation name="inversionesAltaPagarOp">
+        <call-query href="inversionesAltaPagarSQL">
+            <with-param name="invNumero" query-param="Inv_Numero"/>
+            <with-param name="invFecIni" query-param="Inv_FecIni"/>
+            <with-param name="invCantid" query-param="Inv_Cantid"/>
+            <with-param name="invStatus" query-param="Inv_Status"/>
+            <with-param name="invCuenta" query-param="Inv_Cuenta"/>
+            <with-param name="fecha" query-param="Fecha"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+	<operation name="inversionesAltaOp">
+        <call-query href="inversionesAltaSQL">
+            <with-param name="invFecIni" query-param="Inv_FecIni"/>
+            <with-param name="invFecVen" query-param="Inv_FecVen"/>
+            <with-param name="invCantid" query-param="Inv_Cantid"/>
+            <with-param name="invTasa" query-param="Inv_Tasa"/>
+            <with-param name="invAutori" query-param="Inv_Autori"/>
+            <with-param name="invMoneda" query-param="Inv_Moneda"/>
+            <with-param name="invISR" query-param="Inv_ISR"/>
+            <with-param name="invCuenta" query-param="Inv_Cuenta"/>
+            <with-param name="invTipImp" query-param="Inv_TipImp"/>
+            <with-param name="invInvAnt" query-param="Inv_InvAnt"/>
+            <with-param name="invTBruta" query-param="Inv_TBruta"/>
+            <with-param name="invCveSeg" query-param="Inv_CveSeg"/>
+            <with-param name="invOrigen" query-param="Inv_Origen"/>
+            <with-param name="invClaInv" query-param="Inv_ClaInv"/>
+            <with-param name="invMonRef" query-param="Inv_MonRef"/>
+            <with-param name="invCanPer" query-param="Inv_CanPer"/>
+            <with-param name="invOpcTas" query-param="Inv_OpcTas"/>
+            <with-param name="iNumero" query-param="I_Numero"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
     <operation name="inversionesObtenerOp">
         <call-query href="inversionesObtenerSQL">
             <with-param name="invClient" query-param="Inv_Client"/>
