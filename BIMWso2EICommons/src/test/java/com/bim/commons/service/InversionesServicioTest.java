@@ -239,4 +239,32 @@ public class InversionesServicioTest {
 		
 		logger.info("TEST: Finalizando inversionesCedeDiasDePagoConsultarTestDeberiaSerExitoso metodo...");
 	}
+	
+	@Test
+	public void inversionesPagareInformacionGuardarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando inversionesPagareInformacionGuardarTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosInversionesPagareInformacionGuardar = new JsonObject();
+		datosInversionesPagareInformacionGuardar.addProperty("Adi_Invers", "001953830058015");
+		datosInversionesPagareInformacionGuardar.addProperty("Adi_InsLiq", "07");
+		datosInversionesPagareInformacionGuardar.addProperty("Adi_MoReGr", "0");
+		datosInversionesPagareInformacionGuardar.addProperty("FechaSis", fechaSis);
+		
+		JsonObject resultado = inversionesServicio.inversionesPagareInformacionGuardar(datosInversionesPagareInformacionGuardar);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad informacionGuardar", resultado.has("informacionGuardar"));
+		assertTrue("La propiedad informacionGuardar no es un JsonObject", resultado.get("informacionGuardar").isJsonObject());
+		
+		JsonObject informacionGuardar = Utilerias.obtenerJsonObjectPropiedad(resultado, "informacionGuardar");
+		
+		if(!resultado.get("informacionGuardar").isJsonNull()) {
+			assertTrue("La propiedad Err_Codigo no se encuentra en informacionGuardar", informacionGuardar.has("Err_Codigo"));
+			assertTrue("La propiedad Err_Mensaj no se encuentra en informacionGuardar", informacionGuardar.has("Err_Mensaj"));
+		} else
+			assertNotNull("la propiedad informacionGuardar es nula", informacionGuardar);
+		
+		
+		logger.info("TEST: Finalizando inversionesPagareInformacionGuardarTestDeberiaSerExitoso metodo...");
+	}
 }
