@@ -77,12 +77,12 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesCedeDiasDePagoConsultarOpSucDestino;
 	private static String InversionesCedeDiasDePagoConsultarOpModulo;
 	
-	private static String InversionesPagareInformacionGuardarOP;
-	private static String InversionesPagareInformacionGuardarOPTransaccio;
-	private static String InversionesPagareInformacionGuardarOPUsuario;
-	private static String InversionesPagareInformacionGuardarOPSucOrigen;
-	private static String InversionesPagareInformacionGuardarOPSucDestino;
-	private static String InversionesPagareInformacionGuardarOPModulo;
+	private static String InversionesPagareInformacionGuardarOp;
+	private static String InversionesPagareInformacionGuardarOpTransaccio;
+	private static String InversionesPagareInformacionGuardarOpUsuario;
+	private static String InversionesPagareInformacionGuardarOpSucOrigen;
+	private static String InversionesPagareInformacionGuardarOpSucDestino;
+	private static String InversionesPagareInformacionGuardarOpModulo;
 	
 	public InversionesServicio() {
 		super();
@@ -97,7 +97,7 @@ public class InversionesServicio extends BaseService {
 		InversionesContraEstadoCuentaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_contra_estado_cuenta_actualizar");
 		InversionesCedeDiasDePagoConsultarOp = properties.getProperty("inversiones_servicio.op.inversiones_cede_dias_de_pago_consultar");
 		InversionesCedePlazosConsultarOp = properties.getProperty("inversiones_servicio.op.inversiones_cede_plazos_consultar");
-		InversionesPagareInformacionGuardarOP = properties.getProperty("inversiones_servicio.op.inversiones_pagare_informacion_guardar");
+		InversionesPagareInformacionGuardarOp = properties.getProperty("inversiones_servicio.op.inversiones_pagare_informacion_guardar");
 
 		InversionesObtenerOpInvMoneda = properties.getProperty("op.inversiones_obtener.inv_moneda");
 		InversionesObtenerOpTransaccio = properties.getProperty("op.inversiones_obtener.transaccio");
@@ -157,11 +157,11 @@ public class InversionesServicio extends BaseService {
 		InversionesCedePlazosConsultarOpSucDestino = properties.getProperty("op.inversiones_cede_plazos_consultar.suc_destino");
 		InversionesCedePlazosConsultarOpModulo = properties.getProperty("op.inversiones_cede_plazos_consultar.modulo");		
 		
-		InversionesPagareInformacionGuardarOPTransaccio = properties.getProperty("op.inversiones_pagare_informacion_guardar.transaccio");
-		InversionesPagareInformacionGuardarOPUsuario = properties.getProperty("op.inversiones_pagare_informacion_guardar.usuario");
-		InversionesPagareInformacionGuardarOPSucOrigen = properties.getProperty("op.inversiones_pagare_informacion_guardar.suc_origen");
-		InversionesPagareInformacionGuardarOPSucDestino = properties.getProperty("op.inversiones_pagare_informacion_guardar.suc_destino");
-		InversionesPagareInformacionGuardarOPModulo = properties.getProperty("op.inversiones_pagare_informacion_guardar.modulo");
+		InversionesPagareInformacionGuardarOpTransaccio = properties.getProperty("op.inversiones_pagare_informacion_guardar.transaccio");
+		InversionesPagareInformacionGuardarOpUsuario = properties.getProperty("op.inversiones_pagare_informacion_guardar.usuario");
+		InversionesPagareInformacionGuardarOpSucOrigen = properties.getProperty("op.inversiones_pagare_informacion_guardar.suc_origen");
+		InversionesPagareInformacionGuardarOpSucDestino = properties.getProperty("op.inversiones_pagare_informacion_guardar.suc_destino");
+		InversionesPagareInformacionGuardarOpModulo = properties.getProperty("op.inversiones_pagare_informacion_guardar.modulo");
 
 	}
 
@@ -554,7 +554,7 @@ public class InversionesServicio extends BaseService {
 	/**
 	* Método para guardar informacion adicional de nueva inversion Pagare
 	* ProcedureName: INADICIOALT
-	* @param datosInversionesCedeDiasDePago
+	* @param inversionesPagareInformacionGuardar
 	* <pre>
 	* {
 	*	Adi_Invers: String,
@@ -576,12 +576,12 @@ public class InversionesServicio extends BaseService {
 		logger.info("COMMONS: Comenzando inversionesPagareInformacionGuardar metodo... ");
 		if(!datosInversionesPagareInformacionGuardar.has("NumTransac"))
 			datosInversionesPagareInformacionGuardar.addProperty("NumTransac", "");
-		datosInversionesPagareInformacionGuardar.addProperty("Transaccio", InversionesPagareInformacionGuardarOPTransaccio);
-		datosInversionesPagareInformacionGuardar.addProperty("Usuario", InversionesPagareInformacionGuardarOPUsuario);
-		datosInversionesPagareInformacionGuardar.addProperty("SucOrigen", InversionesPagareInformacionGuardarOPSucOrigen);
-		datosInversionesPagareInformacionGuardar.addProperty("SucDestino", InversionesPagareInformacionGuardarOPSucDestino);
-		datosInversionesPagareInformacionGuardar.addProperty("Modulo", InversionesPagareInformacionGuardarOPModulo);
-		JsonObject inversionesPagareInformacionGuardarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesPagareInformacionGuardarOP, datosInversionesPagareInformacionGuardar);
+		datosInversionesPagareInformacionGuardar.addProperty("Transaccio", InversionesPagareInformacionGuardarOpTransaccio);
+		datosInversionesPagareInformacionGuardar.addProperty("Usuario", InversionesPagareInformacionGuardarOpUsuario);
+		datosInversionesPagareInformacionGuardar.addProperty("SucOrigen", InversionesPagareInformacionGuardarOpSucOrigen);
+		datosInversionesPagareInformacionGuardar.addProperty("SucDestino", InversionesPagareInformacionGuardarOpSucDestino);
+		datosInversionesPagareInformacionGuardar.addProperty("Modulo", InversionesPagareInformacionGuardarOpModulo);
+		JsonObject inversionesPagareInformacionGuardarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesPagareInformacionGuardarOp, datosInversionesPagareInformacionGuardar);
 		logger.info("COMMONS: Finalizando inversionesPagareInformacionGuardar metodo... ");
 		return inversionesPagareInformacionGuardarOpResultadoObjeto;
 	}//Cierre del método

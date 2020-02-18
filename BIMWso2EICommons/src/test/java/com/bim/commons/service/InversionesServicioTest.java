@@ -261,9 +261,9 @@ public class InversionesServicioTest {
 		if(!resultado.get("informacionGuardar").isJsonNull()) {
 			assertTrue("La propiedad Err_Codigo no se encuentra en informacionGuardar", informacionGuardar.has("Err_Codigo"));
 			assertTrue("La propiedad Err_Mensaj no se encuentra en informacionGuardar", informacionGuardar.has("Err_Mensaj"));
-		} else
+		} else{
 			assertNotNull("la propiedad informacionGuardar es nula", informacionGuardar);
-		
+		}
 		
 		logger.info("TEST: Finalizando inversionesPagareInformacionGuardarTestDeberiaSerExitoso metodo...");
 	}
