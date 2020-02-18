@@ -474,7 +474,7 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
-    <operation name="inversionesPagareInformacionGuardarOP">
+    <operation name="inversionesPagareInformacionGuardarOp">
         <call-query href="inversionesPagareInformacionGuardarSQL">
             <with-param name="adiInvers" query-param="Adi_Invers"/>
             <with-param name="adiInsLiq" query-param="Adi_InsLiq"/>

@@ -158,7 +158,7 @@ public class InversionesServicio extends BaseService {
 		InversionesCedePlazosConsultarOpModulo = properties.getProperty("op.inversiones_cede_plazos_consultar.modulo");		
 		
 		InversionesPagareInformacionGuardarOPTransaccio = properties.getProperty("op.inversiones_pagare_informacion_guardar.transaccio");
-		InversionesPagareInformacionGuardarOPUsuario = properties.getProperty("op.op.inversiones_pagare_informacion_guardar.usuario");
+		InversionesPagareInformacionGuardarOPUsuario = properties.getProperty("op.inversiones_pagare_informacion_guardar.usuario");
 		InversionesPagareInformacionGuardarOPSucOrigen = properties.getProperty("op.inversiones_pagare_informacion_guardar.suc_origen");
 		InversionesPagareInformacionGuardarOPSucDestino = properties.getProperty("op.inversiones_pagare_informacion_guardar.suc_destino");
 		InversionesPagareInformacionGuardarOPModulo = properties.getProperty("op.inversiones_pagare_informacion_guardar.modulo");

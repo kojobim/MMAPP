@@ -247,7 +247,7 @@ public class InversionesServicioTest {
 		JsonObject datosInversionesPagareInformacionGuardar = new JsonObject();
 		datosInversionesPagareInformacionGuardar.addProperty("Adi_Invers", "001953830058015");
 		datosInversionesPagareInformacionGuardar.addProperty("Adi_InsLiq", "07");
-		datosInversionesPagareInformacionGuardar.addProperty("Adi_MoReGr", "0");
+		datosInversionesPagareInformacionGuardar.addProperty("Adi_MoReGr", 0);
 		datosInversionesPagareInformacionGuardar.addProperty("FechaSis", fechaSis);
 		
 		JsonObject resultado = inversionesServicio.inversionesPagareInformacionGuardar(datosInversionesPagareInformacionGuardar);
