@@ -313,6 +313,35 @@
             <element column="DiaP_Desc" name="DiaP_Desc" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="inversionesPagareInformacionGuardarSQL" useConfig="BIMDB">
+        <sql>
+    		EXEC INADICIOALT
+    		@Adi_Invers = :adiInvers,
+			@Adi_InsLiq = :adiInsLiq,
+			@Adi_MoReGr = :adiMoReGr,
+        	@NumTransac = :numTransac,
+        	@Transaccio = :transaccio,
+        	@Usuario = :usuario,
+        	@FechaSis = :fechaSis,
+        	@SucOrigen = :sucOrigen,
+        	@SucDestino = :sucDestino,
+        	@Modulo = :modulo
+    	</sql>
+        <param name="adiInvers" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="adiInsLiq" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="adiMoReGr" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/inversionesPagareInformacionGuardarNE" element="informacionGuardar">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
     <query id="inversionesAltaSQL" useConfig="BIMDB">
         <sql>
     		EXEC ININVERSALT
@@ -335,13 +364,13 @@
 	        @Inv_OpcTas	= :invOpcTas,
 	        @I_Numero	= :iNumero,
             @NumTransac = :numTransac,
-        	@Transaccio = :transaccio,
+			@Transaccio = :transaccio,
         	@Usuario = :usuario,
         	@FechaSis = :fechaSis,
         	@SucOrigen = :sucOrigen,
         	@SucDestino = :sucDestino,
         	@Modulo = :modulo
-        </sql>
+		</sql>
         <param name="invFecIni" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="invFecVen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="invCantid" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
@@ -360,19 +389,19 @@
         <param name="invCanPer" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
         <param name="invOpcTas" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="iNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+		<param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/inversionesAltaNE" element="alta">
+		<result defaultNamespace="http://bem.com/inversionesAltaNE" element="alta">
             <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
             <element column="Err_Variab" name="Err_Variab" xsdType="xs:string" optional="true"/>
             <element column="Inv_Numero" name="Inv_Numero" xsdType="xs:string" optional="true"/>
-        </result>
+		</result>
     </query>
     <operation name="inversionesObtenerOp">
         <call-query href="inversionesObtenerSQL">
@@ -506,6 +535,20 @@
             <with-param name="modulo" query-param="Modulo"/>
         </call-query>
     </operation>
+    <operation name="inversionesPagareInformacionGuardarOp">
+        <call-query href="inversionesPagareInformacionGuardarSQL">
+            <with-param name="adiInvers" query-param="Adi_Invers"/>
+            <with-param name="adiInsLiq" query-param="Adi_InsLiq"/>
+            <with-param name="adiMoReGr" query-param="Adi_MoReGr"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
     <operation name="inversionesAltaOp">
         <call-query href="inversionesAltaSQL">
             <with-param name="invFecIni" query-param="Inv_FecIni"/>
@@ -526,7 +569,7 @@
             <with-param name="invCanPer" query-param="Inv_CanPer"/>
             <with-param name="invOpcTas" query-param="Inv_OpcTas"/>
             <with-param name="iNumero" query-param="I_Numero"/>
-            <with-param name="numTransac" query-param="NumTransac"/>
+			<with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
             <with-param name="fechaSis" query-param="FechaSis"/>
