@@ -211,6 +211,39 @@ public class TasaServicioTest {
 	}
 	
 	@Test
+	public void tasaInversionesCedeConsultarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando tasaInversionesCedeConsultarTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosTasaInversionesCede = new JsonObject();
+		datosTasaInversionesCede.addProperty("Tas_Plazo", "19");
+		datosTasaInversionesCede.addProperty("Tas_Cantid", 6000);
+		datosTasaInversionesCede.addProperty("Tas_Formul", "002");
+		datosTasaInversionesCede.addProperty("Tas_Fecha", fechaSis);
+		datosTasaInversionesCede.addProperty("Cli_Numero", "00195383");
+		datosTasaInversionesCede.addProperty("FechaSis", fechaSis);
+		
+		JsonObject resultado = tasaServicio.tasaInversionesCedeConsultar(datosTasaInversionesCede);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad tasaCede", resultado.has("tasaCede"));
+		assertTrue("La propiedad tasaCede no es un JsonObject", resultado.get("tasaCede").isJsonObject());
+		
+		JsonObject tasaCede = Utilerias.obtenerJsonObjectPropiedad(resultado, "tasaCede");
+		
+		if(!tasaCede.isJsonNull()) {
+			assertTrue("No viene  la propiedad Tas_Tasa", tasaCede.has("Tas_Tasa"));
+			assertTrue("No viene  la propiedad Tas_PorBas", tasaCede.has("Tas_PorBas"));
+			assertTrue("No viene  la propiedad Tas_Puntos", tasaCede.has("Tas_Puntos"));
+			assertTrue("No viene  la propiedad Tas_Esquema", tasaCede.has("Tas_Esquema"));
+			assertTrue("No viene  la propiedad Tas_VarRea", tasaCede.has("Tas_VarRea"));
+		} else {
+			assertNotNull("la propiedad tasaCede es nula", tasaCede);
+		}
+		
+		logger.info("TEST: Finalizando tasaInversionesCedeConsultarTestDeberiaSerExitoso metodo...");
+	}
+
+	@Test
 	public void tasaGATCedeConsultaCalcularTestDeberiaSerExitoso() {
 		logger.info("TEST: Comenzando tasaGATCedeConsultaCalcularTestDeberiaSerExitoso metodo...");
 		
@@ -233,8 +266,9 @@ public class TasaServicioTest {
 			assertTrue("La propiedad Err_Codigo no se encuentra en tasaGATCede", tasaGATCede.has("Err_Codigo"));
 			assertTrue("La propiedad Err_Mensaj no se encuentra en tasaGATCede", tasaGATCede.has("Err_Mensaj"));
 			assertTrue("La propiedad Inv_GAT no se encuentra en tasaGATCede", tasaGATCede.has("Inv_GAT"));
-		} else
+		} else {
 			assertNotNull("la propiedad tasaGATCede es nula", tasaGATCede);
+		}
 		
 		logger.info("TEST: Finalizando tasaGATCedeConsultaCalcularTestDeberiaSerExitoso metodo...");
 	}

@@ -167,23 +167,72 @@
             <element column="Inv_GATRea" name="Inv_GATRea" xsdType="xs:double" optional="true"/>
         </result>
     </query>
+    <query id="tasaInversionesCedeConsultarSQL" useConfig="BIMDB">
+        <sql>EXEC CETASASCON
+            @Tas_Plazo = :tasPlazo,
+            @Tas_Monto = :tasMonto,
+            @Tas_Cantid = :tasCantid,
+            @Tas_Formul = :tasFormul,
+            @Tas_TasBas = :tasTasBas,
+            @Tas_PorBas = :tasPorBas,
+            @Tas_Puntos = :tasPuntos,
+            @Tas_Fecha = :tasFecha,
+            @Tasa = :tasa,
+            @Tip_Consul = :tipConsul,
+            @Cli_Numero = :cliNumero,
+            @Tas_TipPer = :tasTipPer,            
+            @NumTransac = :numTransac,
+            @Transaccio = :transaccio,
+            @Usuario = :usuario,
+            @FechaSis = :fechaSis,
+            @SucOrigen = :sucOrigen,
+            @SucDestino = :sucDestino,
+            @Modulo = :modulo
+        </sql>
+        <param name="tasPlazo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tasMonto" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tasCantid" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="tasFormul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tasTasBas" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tasPorBas" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="tasPuntos" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="tasFecha" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tasa" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cliNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tasTipPer" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/tasaInversionesCedeConsultarNE" element="tasaCede">
+            <element column="Tas_Tasa" name="Tas_Tasa" xsdType="xs:double"/>
+            <element column="Tas_PorBas" name="Tas_PorBas" xsdType="xs:double"/>
+            <element column="Tas_Puntos" name="Tas_Puntos" xsdType="xs:double"/>
+            <element column="Tas_Esquema" name="Tas_Esquema" xsdType="xs:string"/>
+            <element column="Tas_VarRea" name="Tas_VarRea" xsdType="xs:double"/>
+        </result>
+    </query>
     <query id="tasaGATCedeConsultaCalcularSQL" useConfig="BIMDB">
         <sql>
-        	EXEC CECALGATPRO
+            EXEC CECALGATPRO
             @Inv_Dias = :invDias,
             @Inv_TasInt = :invTasInt,
             @Inv_GAT = :invGAT,
             @Cal_Opcion = :calOpcion,
             @Cue_MonInv = :cueMonInv,
             @Mon_Comisi = :monComisi,
-			@NumTransac = :numTransac,
-			@Transaccio = :transaccio,
-			@Usuario = :usuario,
-			@FechaSis = :fechaSis,
-			@SucOrigen = :sucOrigen,
-			@SucDestino = :sucDestino,
-			@Modulo = :modulo
-		</sql>
+            @NumTransac = :numTransac,
+            @Transaccio = :transaccio,
+            @Usuario = :usuario,
+            @FechaSis = :fechaSis,
+            @SucOrigen = :sucOrigen,
+            @SucDestino = :sucDestino,
+            @Modulo = :modulo
+        </sql>
         <param name="invDias" paramType="SCALAR" sqlType="INTEGER" type="IN"/>
         <param name="invTasInt" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
         <param name="invGAT" paramType="SCALAR" sqlType="DOUBLE" type="IN"/>
@@ -260,6 +309,29 @@
         <call-query href="tasaGATRealConsultaCalcularSQL">
             <with-param name="invGAT" query-param="Inv_GAT"/>
             <with-param name="invGATRea" query-param="Inv_GATRea"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation name="tasaInversionesCedeConsultarOp">
+        <call-query href="tasaInversionesCedeConsultarSQL">
+            <with-param name="tasPlazo" query-param="Tas_Plazo"/>
+            <with-param name="tasMonto" query-param="Tas_Monto"/>
+            <with-param name="tasCantid" query-param="Tas_Cantid"/>
+            <with-param name="tasFormul" query-param="Tas_Formul"/>
+            <with-param name="tasTasBas" query-param="Tas_TasBas"/>
+            <with-param name="tasPorBas" query-param="Tas_PorBas"/>
+            <with-param name="tasPuntos" query-param="Tas_Puntos"/>
+            <with-param name="tasFecha" query-param="Tas_Fecha"/>
+            <with-param name="tasa" query-param="Tasa"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="cliNumero" query-param="Cli_Numero"/>
+            <with-param name="tasTipPer" query-param="Tas_TipPer"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
