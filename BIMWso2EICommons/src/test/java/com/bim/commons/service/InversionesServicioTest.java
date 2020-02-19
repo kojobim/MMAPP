@@ -188,6 +188,61 @@ public class InversionesServicioTest {
 	}
 	
 	@Test
+	public void inversionesAltaTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando inversionesAltaTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosInversionesAlta = new JsonObject();
+		datosInversionesAlta.addProperty("Inv_FecIni", "2020-02-19 00:00:00");
+		datosInversionesAlta.addProperty("Inv_FecVen", "2020-02-21 00:00:00");
+		datosInversionesAlta.addProperty("Inv_Cantid", 5000);
+		datosInversionesAlta.addProperty("Inv_Tasa", 2.45);
+		datosInversionesAlta.addProperty("Inv_Autori", "000100");
+		datosInversionesAlta.addProperty("Inv_Moneda", "01");
+		datosInversionesAlta.addProperty("Inv_ISR", 1.45);
+		datosInversionesAlta.addProperty("Inv_Cuenta", "001953830040");
+		datosInversionesAlta.addProperty("Inv_TipImp", "V");
+		datosInversionesAlta.addProperty("Inv_InvAnt", "");
+		datosInversionesAlta.addProperty("Inv_TBruta", 3.9);
+		datosInversionesAlta.addProperty("Inv_CveSeg", "");
+		datosInversionesAlta.addProperty("Inv_Origen", "IN");
+		datosInversionesAlta.addProperty("Inv_ClaInv", "001");
+		datosInversionesAlta.addProperty("Inv_MonRef", 0);
+		datosInversionesAlta.addProperty("Inv_CanPer", 1);
+		datosInversionesAlta.addProperty("Inv_OpcTas", "");
+		datosInversionesAlta.addProperty("I_Numero", "");
+		datosInversionesAlta.addProperty("NumTransac", "");
+		datosInversionesAlta.addProperty("FechaSis", fechaSis);
+		
+		/**
+		 * Mock
+		 * String json = "{\"altaDeInversion\":{\"Err_Codigo\":\"String\",\"Err_Mensaj\":\"String\",\"Err_Variab\":\"String\"}}";
+		 * JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+		
+		/**
+		 * Test
+		 */
+		
+		JsonObject resultado = inversionesServicio.inversionesAlta(datosInversionesAlta);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad alta", resultado.has("alta"));
+		assertTrue("La propiedad alta no es un JsonObject", resultado.get("alta").isJsonObject());
+		
+		JsonObject alta = Utilerias.obtenerJsonObjectPropiedad(resultado, "alta");
+		
+		if(!resultado.get("alta").isJsonNull()) {
+			assertTrue("La propiedad Err_Codigo no se encuentra en alta de inversion", alta.has("Err_Codigo"));
+			assertTrue("La propiedad Err_Mensaj no se encuentra en alta de inversion", alta.has("Err_Mensaj"));
+			assertTrue("la propiedad Err_Variab no se encuentra en alta de inversion", alta.has("Err_Variab"));
+			
+		} else{
+			assertNotNull("la propiedad alta es nula", alta);
+		}
+		logger.info("TEST: Finalizando inversionesAltaTestDeberiaSerExitoso metodo...");
+	}
+	
+	@Test
 	public void inversionesCedePlazosConsultarTestDeberiaSerExitoso() {
 		logger.info("TEST: Comenzando inversionesCedePlazosConsultarTestDeberiaSerExitoso metodo...");
 		String fechaSis = Utilerias.obtenerFechaSis();
@@ -268,5 +323,73 @@ public class InversionesServicioTest {
 		}
 		
 		logger.info("TEST: Finalizando inversionesCedeDiasDePagoConsultarTestDeberiaSerExitoso metodo...");
+	}
+	
+	@Test
+	public void inversionesAltaPagarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando inversionesAltaPagarTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosInversionAltaPagar = new JsonObject();
+		datosInversionAltaPagar.addProperty("Inv_Numero", "001953830058010");
+		datosInversionAltaPagar.addProperty("Inv_FecIni", "2020-02-19 00:00:00");
+		datosInversionAltaPagar.addProperty("Inv_Cantid", 5000);
+		datosInversionAltaPagar.addProperty("Inv_Status", "A");
+		datosInversionAltaPagar.addProperty("Inv_Cuenta", "001953830040");
+		datosInversionAltaPagar.addProperty("Fecha", "2020-02-19 00:00:00");
+		datosInversionAltaPagar.addProperty("NumTransac", "58728926");
+		datosInversionAltaPagar.addProperty("FechaSis", fechaSis);
+		
+		/**
+		 * Mock
+		 * String json = "{\"importesDeInversionFinalizada\":{\"Err_Codigo\":\"String\",\"Err_Mensaj\":\"String\",\"Err_Variab\":\"String\"}}";
+		 * JsonObject resultado = new Gson().fromJson(json, JsonObject.class);
+		 */
+		
+		/**
+		 * Test
+		 */
+		
+		JsonObject resultado = inversionesServicio.inversionesAltaPagar(datosInversionAltaPagar);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad cargo", resultado.has("cargo"));
+		assertTrue("La propiedad cargo no es un JsonObject", resultado.get("cargo").isJsonObject());
+		
+		JsonObject cargo = Utilerias.obtenerJsonObjectPropiedad(resultado, "cargo");
+		
+		if(!resultado.get("importesDeInversionFinalizada").isJsonNull()) {
+			assertTrue("La propiedad Err_Codigo no se encuentra en importesDeInversionFinalizada", cargo.has("Err_Codigo"));
+			assertTrue("La propiedad Err_Mensaj no se encuentra en importesDeInversionFinalizada", cargo.has("Err_Mensaj"));
+		} else{
+			assertNotNull("la propiedad importesDeInversionFinalizada es nula", cargo);
+		}
+		logger.info("TEST: Finalizando inversionesAltaPagarTestDeberiaSerExitoso metodo...");
+	}
+	
+	public void inversionesPagareInformacionGuardarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando inversionesPagareInformacionGuardarTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosInversionesPagareInformacionGuardar = new JsonObject();
+		datosInversionesPagareInformacionGuardar.addProperty("Adi_Invers", "001953830058015");
+		datosInversionesPagareInformacionGuardar.addProperty("Adi_InsLiq", "07");
+		datosInversionesPagareInformacionGuardar.addProperty("Adi_MoReGr", 0);
+		datosInversionesPagareInformacionGuardar.addProperty("FechaSis", fechaSis);
+		
+		JsonObject resultado = inversionesServicio.inversionesPagareInformacionGuardar(datosInversionesPagareInformacionGuardar);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad informacionGuardar", resultado.has("informacionGuardar"));
+		assertTrue("La propiedad informacionGuardar no es un JsonObject", resultado.get("informacionGuardar").isJsonObject());
+		
+		JsonObject informacionGuardar = Utilerias.obtenerJsonObjectPropiedad(resultado, "informacionGuardar");
+		
+		if(!resultado.get("informacionGuardar").isJsonNull()) {
+			assertTrue("La propiedad Err_Codigo no se encuentra en informacionGuardar", informacionGuardar.has("Err_Codigo"));
+			assertTrue("La propiedad Err_Mensaj no se encuentra en informacionGuardar", informacionGuardar.has("Err_Mensaj"));
+		} else{
+			assertNotNull("la propiedad informacionGuardar es nula", informacionGuardar);
+		}
+		
+		logger.info("TEST: Finalizando inversionesPagareInformacionGuardarTestDeberiaSerExitoso metodo...");
 	}
 }
