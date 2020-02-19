@@ -226,8 +226,8 @@ public class InversionesServicioTest {
 		JsonObject resultado = inversionesServicio.inversionesAlta(datosInversionesAlta);
 		logger.info("resultado: " + resultado);
 		
-		assertTrue("No viene la propiedad Alta", resultado.has("alta"));
-		assertTrue("La propiedad importesDeInversionFinalizada no es un JsonObject", resultado.get("alta").isJsonObject());
+		assertTrue("No viene la propiedad alta", resultado.has("alta"));
+		assertTrue("La propiedad alta no es un JsonObject", resultado.get("alta").isJsonObject());
 		
 		JsonObject alta = Utilerias.obtenerJsonObjectPropiedad(resultado, "alta");
 		
@@ -236,9 +236,9 @@ public class InversionesServicioTest {
 			assertTrue("La propiedad Err_Mensaj no se encuentra en alta de inversion", alta.has("Err_Mensaj"));
 			assertTrue("la propiedad Err_Variab no se encuentra en alta de inversion", alta.has("Err_Variab"));
 			
-		} else
+		} else{
 			assertNotNull("la propiedad alta es nula", alta);
-		
+		}
 		logger.info("TEST: Finalizando inversionesAltaTestDeberiaSerExitoso metodo...");
 	}
 	
