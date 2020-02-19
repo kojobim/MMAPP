@@ -330,9 +330,9 @@ public class InversionesServicioTest {
 		if(!resultado.get("importesDeInversionFinalizada").isJsonNull()) {
 			assertTrue("La propiedad Err_Codigo no se encuentra en importesDeInversionFinalizada", cargo.has("Err_Codigo"));
 			assertTrue("La propiedad Err_Mensaj no se encuentra en importesDeInversionFinalizada", cargo.has("Err_Mensaj"));
-		} else
+		} else{
 			assertNotNull("la propiedad importesDeInversionFinalizada es nula", cargo);
-		
+		}
 		logger.info("TEST: Finalizando inversionesAltaPagarTestDeberiaSerExitoso metodo...");
 	}
 	
