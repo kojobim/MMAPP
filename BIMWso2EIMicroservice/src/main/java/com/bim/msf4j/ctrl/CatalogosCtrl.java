@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.wso2.msf4j.Request;
 
 import com.bim.commons.service.CuentaDestinoServicio;
+import com.bim.commons.service.InversionesServicio;
 import com.bim.commons.utils.Utilerias;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -23,11 +24,13 @@ public class CatalogosCtrl extends BimBaseCtrl {
 	private static final Logger logger = Logger.getLogger(CatalogosCtrl.class);
 
 	private CuentaDestinoServicio cuentaDestinoServicio;
+	private InversionesServicio inversionesServicio;
 	
 	public CatalogosCtrl() {
 		super();
 		logger.info("CTRL: Comenzando metodo init...");
 		this.cuentaDestinoServicio = new CuentaDestinoServicio();
+		this.inversionesServicio = new InversionesServicio();
 		logger.info("CTRL: Finalizando metodo init...");		
 	}
 	
@@ -72,6 +75,57 @@ public class CatalogosCtrl extends BimBaseCtrl {
 		logger.info("CTRL: Terminando catalogoInstitucionesConsultar metodo...");
 		return Response
 				.ok(catalogoInstitucionesResultado.toString(), MediaType.APPLICATION_JSON)
+				.build();
+	}
+	
+	@Path("/dias-de-pago")
+	@GET()
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response obtenerDiasDePago(@Context final Request solicitud) {
+		logger.info("CTRL: Comenzando obtenerDiasDePago metodo");
+		
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjeto = Utilerias.obtenerPrincipal(bearerToken);
+		Utilerias.verificarError(principalResultadoObjeto);
+		
+		String fechaSis = Utilerias.obtenerFechaSis();
+
+		JsonObject datosInversionesCedeDiasDePago = new JsonObject();
+		datosInversionesCedeDiasDePago.addProperty("FechaSis", fechaSis);
+				
+		JsonObject inversionesCedeDiasDePagoConsultarOpResultado = this.inversionesServicio.inversionesCedeDiasDePagoConsultar(datosInversionesCedeDiasDePago);
+		logger.info("inversionesCedeDiasDePagoConsultarOpResultado" + inversionesCedeDiasDePagoConsultarOpResultado);
+		
+		Utilerias.verificarError(inversionesCedeDiasDePagoConsultarOpResultado);
+		
+		JsonObject inversionesCedeDiasDePagoObjeto = Utilerias.obtenerJsonObjectPropiedad(inversionesCedeDiasDePagoConsultarOpResultado, "diasDePago");		
+		
+		JsonArray inversionesCedeDiasDePagoArreglo;
+		
+		if (!inversionesCedeDiasDePagoObjeto.isJsonNull()) {
+			inversionesCedeDiasDePagoArreglo = Utilerias.obtenerJsonArrayPropiedad(inversionesCedeDiasDePagoObjeto, "diaDePago");
+		} else {
+			inversionesCedeDiasDePagoArreglo = new JsonArray();
+		}
+		
+		JsonObject resultado = new JsonObject();
+		JsonArray diasDePago = new JsonArray();
+		
+		for (JsonElement diaDePagoElemento : inversionesCedeDiasDePagoArreglo) {
+			JsonObject diaDePagoObjeto = diaDePagoElemento.getAsJsonObject();
+			
+			if (!diaDePagoObjeto.isJsonNull()) {
+				JsonObject diaDePago = new JsonObject();
+				diaDePago.addProperty("diaPId", Utilerias.obtenerIntPropiedad(diaDePagoObjeto, "DiaP_Id"));
+				diaDePago.addProperty("diaPDesc", Utilerias.obtenerStringPropiedad(diaDePagoObjeto, "DiaP_Desc"));
+				diasDePago.add(diaDePago);
+			}
+		}
+		
+		resultado.add("diasDePago", diasDePago);
+		
+		logger.info("CTRL: Terminando obtenerDiasDePago metodo");
+		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
 	}
 }
