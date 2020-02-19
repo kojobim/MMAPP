@@ -609,9 +609,9 @@ public class InversionesServicio extends BaseService {
 		datosInversionesAlta.addProperty("SucOrigen", InversionesAltaOpSucOrigen);
 		datosInversionesAlta.addProperty("SucDestino", InversionesAltaOpSucDestino);
 		datosInversionesAlta.addProperty("Modulo", InversionesAltaOpModulo);
-		JsonObject inversionesPagareAltatadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesAltaOp, datosInversionesAlta);
+		JsonObject inversionesPagareAltadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesAltaOp, datosInversionesAlta);
 		logger.info("COMMONS: Finalizando inversionesAlta metodo... ");
-		return inversionesPagareAltatadoObjeto;
+		return inversionesPagareAltadoObjeto;
 	}//Cierre del método
 	
 	/**
