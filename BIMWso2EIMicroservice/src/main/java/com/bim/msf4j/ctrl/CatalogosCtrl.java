@@ -30,7 +30,7 @@ public class CatalogosCtrl extends BimBaseCtrl {
 		super();
 		logger.info("CTRL: Comenzando metodo init...");
 		this.cuentaDestinoServicio = new CuentaDestinoServicio();
-		inversionesServicio = new InversionesServicio();
+		this.inversionesServicio = new InversionesServicio();
 		logger.info("CTRL: Finalizando metodo init...");		
 	}
 	
@@ -78,7 +78,7 @@ public class CatalogosCtrl extends BimBaseCtrl {
 				.build();
 	}
 	
-	@Path("dias-de-pago")
+	@Path("/dias-de-pago")
 	@GET()
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response obtenerDiasDePago(@Context final Request solicitud) {
