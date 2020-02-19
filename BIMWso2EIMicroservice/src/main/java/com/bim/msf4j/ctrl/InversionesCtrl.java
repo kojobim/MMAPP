@@ -21,6 +21,7 @@ import org.wso2.msf4j.Request;
 import com.bim.commons.dto.BimEmailTemplateDTO;
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.enums.InversionesCategoriasEnum;
+import com.bim.commons.enums.InversionesCedeTiposEnum;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.exceptions.ForbiddenException;
@@ -62,6 +63,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 	private static String ClienteConsultarOpTipConsul;
 	private static String ConsultaInversionBitacoraCreacionOpBitTipOpe;
 	private static String ReinversionBitacoraCreacionOpBitTipOpe;
+	private static String InversionesCedePlazosConsultarOpPlaMoneda;
 		
 	public InversionesCtrl() {
 		super();
@@ -83,6 +85,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		ClienteConsultarOpTipConsul = properties.getProperty("op.cliente_consultar.tip_consul");
 		ConsultaInversionBitacoraCreacionOpBitTipOpe = properties.getProperty("op.consulta_inversion.bitacora_creacion.bit_tip_ope");
 		ReinversionBitacoraCreacionOpBitTipOpe = properties.getProperty("op.reinversion.bitacora_creacion.bit_tip_ope");
+		InversionesCedePlazosConsultarOpPlaMoneda = properties.getProperty("op.inversiones_cede_plazos_consultar.pla_moneda");
 		
 		logger.info("CTRL: Terminando metodo init...");
 	}
@@ -906,6 +909,67 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		correoServicio.enviarCorreo(usuEmail, asunto, cuerpo);
 
+		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
+				.build();
+	}
+	
+	@Path("plazos")
+	@GET()
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response obtenerPlazosInversion(@QueryParam("producto") String producto,
+			@Context final Request solicitud) {
+		logger.info("CTRL: Comenzando inversionesPlazosListado metodo");
+		
+		String plaProduc= InversionesCedeTiposEnum.validarProducto(producto);
+		
+		if (plaProduc == null) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.71");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjeto = Utilerias.obtenerPrincipal(bearerToken);
+		Utilerias.verificarError(principalResultadoObjeto);
+		
+		String fechaSis = Utilerias.obtenerFechaSis();
+
+		JsonObject datosInversionesCedePlazos = new JsonObject();
+		datosInversionesCedePlazos.addProperty("Pla_Moneda", InversionesCedePlazosConsultarOpPlaMoneda);
+		datosInversionesCedePlazos.addProperty("Pla_Produc", plaProduc);
+		datosInversionesCedePlazos.addProperty("FechaSis", fechaSis);
+				
+		JsonObject inversionesCedePlazosConsultarOpResultado = this.inversionesServicio.inversionesCedePlazosConsultar(datosInversionesCedePlazos);
+		logger.info("inversionesCedePlazosConsultarOpResultado" + inversionesCedePlazosConsultarOpResultado);
+		
+		Utilerias.verificarError(inversionesCedePlazosConsultarOpResultado);
+		
+		JsonObject inversionesCedePlazosObjeto = Utilerias.obtenerJsonObjectPropiedad(inversionesCedePlazosConsultarOpResultado, "plazos");		
+		
+		JsonArray inversionesCedePlazosArreglo;
+		
+		if (!inversionesCedePlazosObjeto.isJsonNull()) {
+			inversionesCedePlazosArreglo = Utilerias.obtenerJsonArrayPropiedad(inversionesCedePlazosObjeto, "plazo");
+		} else {
+			inversionesCedePlazosArreglo = new JsonArray();
+		}
+		
+		JsonObject resultado = new JsonObject();
+		JsonArray plazosDeInversion = new JsonArray();
+		
+		for (JsonElement invPlazoElemento : inversionesCedePlazosArreglo) {
+			JsonObject invPlazoObjeto = invPlazoElemento.getAsJsonObject();
+			
+			if (!invPlazoObjeto.isJsonNull()) {
+				JsonObject invPlazo = new JsonObject();
+				invPlazo.addProperty("plaDescri", Utilerias.obtenerStringPropiedad(invPlazoObjeto, "Pla_Descri"));
+				invPlazo.addProperty("plaNumero", Utilerias.obtenerStringPropiedad(invPlazoObjeto, "Pla_Numero"));
+				plazosDeInversion.add(invPlazo);
+			}
+		}
+		
+		resultado.add("plazosDeInversion", plazosDeInversion);
+		
+		logger.info("CTRL: Terminando inversionesPlazosListado metodo");
 		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
 	}
