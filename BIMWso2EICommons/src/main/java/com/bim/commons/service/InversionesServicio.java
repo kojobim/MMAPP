@@ -24,6 +24,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesObtenerOpSucOrigen;
 	private static String InversionesObtenerOpSucDestino;
 	private static String InversionesObtenerOpModulo;
+	
 	private static String InversionesPagareNumeroUsuarioObtenerOp;
 	private static String InversionesPagareNumeroUsuarioObtenerOpTipConsul;
 	private static String InversionesPagareNumeroUsuarioObtenerOpTransaccio;
@@ -31,6 +32,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesPagareNumeroUsuarioObtenerOpSucOrigen;
 	private static String InversionesPagareNumeroUsuarioObtenerOpSucDestino;
 	private static String InversionesPagareNumeroUsuarioObtenerOpModulo;
+
 	private static String InversionesImportesDeInversionFinalizadaActualizarOp;
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpInvrAutor;		
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpTransaccio;
@@ -38,6 +40,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpSucOrigen;
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpSucDestino;
 	private static String InversionesImportesDeInversionFinalizadaActualizarOpModulo;
+
 	private static String InversionesStatusActualizarOp;
 	private static String InversionesStatusActualizarOpAdiInsLiq;
 	private static String InversionesStatusActualizarOpAdiMoReGr;
@@ -46,6 +49,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesStatusActualizarOpSucOrigen;
 	private static String InversionesStatusActualizarOpSucDestino;
 	private static String InversionesStatusActualizarOpModulo;
+
 	private static String InversionesProcesoLiquidacionGenerarOp;
 	private static String InversionesProcesoLiquidacionGenerarOpInvrAutor;
 	private static String InversionesProcesoLiquidacionGenerarOpInvMonRef;
@@ -54,6 +58,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesProcesoLiquidacionGenerarOpSucOrigen;
 	private static String InversionesProcesoLiquidacionGenerarOpSucDestino;
 	private static String InversionesProcesoLiquidacionGenerarOpModulo;
+
 	private static String InversionesContraEstadoCuentaActualizarOp;
 	private static String InversionesContraEstadoCuentaActualizarOpCorMoLiDi;
 	private static String InversionesContraEstadoCuentaActualizarOpTipActual;		
@@ -62,13 +67,16 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesContraEstadoCuentaActualizarOpSucOrigen;
 	private static String InversionesContraEstadoCuentaActualizarOpSucDestino;
 	private static String InversionesContraEstadoCuentaActualizarOpModulo;
+
 	private static String InversionesAltaOp;
 	private static String InversionesAltaOpTransaccio;
 	private static String InversionesAltaOpUsuario;
 	private static String InversionesAltaOpSucOrigen;
 	private static String InversionesAltaOpSucDestino;
 	private static String InversionesAltaOpModulo;
-	private static String InversionesCedePlazosConsultarOp;
+
+	private static String InversionesCedePlazosConsultarL1Op;
+	private static String InversionesCedePlazosConsultarC4Op;
 	private static String InversionesCedePlazosConsultarOpTipConsulL1;
 	private static String InversionesCedePlazosConsultarOpTransaccio;
 	private static String InversionesCedePlazosConsultarOpUsuario;
@@ -110,7 +118,8 @@ public class InversionesServicio extends BaseService {
 		InversionesContraEstadoCuentaActualizarOp = properties.getProperty("inversiones_servicio.op.inversiones_contra_estado_cuenta_actualizar");
 		InversionesAltaOp = properties.getProperty("inversiones_servicio.op.inversiones_alta");
 		InversionesCedeDiasDePagoConsultarOp = properties.getProperty("inversiones_servicio.op.inversiones_cede_dias_de_pago_consultar");
-		InversionesCedePlazosConsultarOp = properties.getProperty("inversiones_servicio.op.inversiones_cede_plazos_consultar");
+		InversionesCedePlazosConsultarL1Op = properties.getProperty("inversiones_servicio.op.inversiones_cede_plazos_consultar_l1");
+		InversionesCedePlazosConsultarC4Op = properties.getProperty("inversiones_servicio.op.inversiones_cede_plazos_consultar_c4");
 		InversionesAltaPagarOp = properties.getProperty("inversiones_servicio.op.inversiones_alta_pagar");
 		InversionesPagareInformacionGuardarOp = properties.getProperty("inversiones_servicio.op.inversiones_pagare_informacion_guardar");
 
@@ -491,7 +500,7 @@ public class InversionesServicio extends BaseService {
 	}//Cierre del método
 	
 	/**
-	 * Método para consultar el listado de plazos para nueva inversión CEDE VALOR
+	 * Método para consultar los plazos para nueva inversión CEDE VALOR
 	 * ProcedureName: CEPLAZOSCON
 	 * @param datosInversionesCedePlazos
 	 * <pre>
@@ -518,25 +527,50 @@ public class InversionesServicio extends BaseService {
 	 * 	}
 	 * }
 	 * </pre>
+	 * or
+	 * <pre>
+	 * {
+	 * 	plazo: {
+	 * 		Pla_Numero: String,
+	 * 		Pla_Moneda: String,
+	 * 		Pla_Plazo: Integer,
+	 * 		Pla_Produc: String,
+	 * 		Pro_Descri: String,
+	 * 		Pla_Descri: String,
+	 * 		Pla_Dias: Integer
+	 * 	}
+	 * }
+	 * </pre>
 	 */
 	public JsonObject inversionesCedePlazosConsultar(JsonObject datosInversionesCedePlazos) {
 		logger.info("COMMONS: Comenzando inversionesCedePlazosConsultar metodo... ");
 		if(!datosInversionesCedePlazos.has("Pla_Numero"))
 			datosInversionesCedePlazos.addProperty("Pla_Numero", "");
+		if(!datosInversionesCedePlazos.has("Pla_Moneda"))
+			datosInversionesCedePlazos.addProperty("Pla_Moneda", "");
 		if(!datosInversionesCedePlazos.has("Fec_Inicio"))
 			datosInversionesCedePlazos.addProperty("Fec_Inicio", "");
 		if(!datosInversionesCedePlazos.has("Fec_Final"))
 			datosInversionesCedePlazos.addProperty("Fec_Final", "");
 		if(!datosInversionesCedePlazos.has("NumTransac"))
 			datosInversionesCedePlazos.addProperty("NumTransac", "");
-		if(!datosInversionesCedePlazos.has("Tip_Consul"))
+		if(!datosInversionesCedePlazos.has("Tip_Consul") || datosInversionesCedePlazos.get("Tip_Consul").getAsString().isEmpty())
 			datosInversionesCedePlazos.addProperty("Tip_Consul", InversionesCedePlazosConsultarOpTipConsulL1);
 		datosInversionesCedePlazos.addProperty("Transaccio", InversionesCedePlazosConsultarOpTransaccio);
 		datosInversionesCedePlazos.addProperty("Usuario", InversionesCedePlazosConsultarOpUsuario);
 		datosInversionesCedePlazos.addProperty("SucOrigen", InversionesCedePlazosConsultarOpSucOrigen);
 		datosInversionesCedePlazos.addProperty("SucDestino", InversionesCedePlazosConsultarOpSucDestino);
 		datosInversionesCedePlazos.addProperty("Modulo", InversionesCedePlazosConsultarOpModulo);
-		JsonObject inversionesCedePlazosConsultarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesCedePlazosConsultarOp, datosInversionesCedePlazos);
+		
+		String inversionesCedePlazosConsultarOp;
+		
+		if (datosInversionesCedePlazos.get("Tip_Consul").getAsString().equals("C4")) {
+			inversionesCedePlazosConsultarOp = InversionesCedePlazosConsultarC4Op;
+		} else {
+			inversionesCedePlazosConsultarOp = InversionesCedePlazosConsultarL1Op;
+		}
+		
+		JsonObject inversionesCedePlazosConsultarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, inversionesCedePlazosConsultarOp, datosInversionesCedePlazos);
 		logger.info("COMMONS: Finalizando inversionesCedePlazosConsultar metodo... ");
 		return inversionesCedePlazosConsultarOpResultadoObjeto;
 	}//Cierre del método
