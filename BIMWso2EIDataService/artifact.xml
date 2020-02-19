@@ -65,4 +65,7 @@
     <artifact name="PasswordServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/PasswordServicio.dbs</file>
     </artifact>
+    <artifact name="AmortizacionServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/AmortizacionServicio.dbs</file>
+    </artifact>
 </artifacts>
