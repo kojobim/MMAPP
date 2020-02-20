@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -973,5 +974,181 @@ public class InversionesCtrl extends BimBaseCtrl {
 		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
 	}
+	
+	@Path("/pagare/calculadora")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response calculadora(@QueryParam("monto") Integer monto, 
+			@QueryParam("plazo") String plazo,
+			@QueryParam("fec_ven") String fec_Ven,
+			@HeaderParam("Authorization") String token,
+			@Context final Request solicitud) {
+		logger.info("CTRL: Empezando calculadora Method...");
+
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
+
+		if(!Utilerias.validaNumero(plazo)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.23");
+			bimMessageDTO.addMergeVariable("invNumero", plazo);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		if(InversionesCategoriasEnum.validarCategoria(categoria) == null) {
+				BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.24");
+				bimMessageDTO.addMergeVariable("categoria", categoria);
+				throw new BadRequestException(bimMessageDTO.toString());
+		}
+
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
+		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
+
+		String FolioTransaccionGenerarOpFolTransa = folioTransaccionGenerarOpResultadoObjeto.get("transaccion").getAsJsonObject().get("Fol_Transa").getAsString();
+
+		String fechaSis = Utilerias.obtenerFechaSis();
+
+		logger.info("User-Agent: " + solicitud.getHeader("User-Agent"));
+		logger.info("X-Forwarded-For: " + solicitud.getHeader("X-Forwarded-For"));
+		String bitPriRef = solicitud.getHeader("User-Agent");
+		String bitDireIP = solicitud.getHeader("X-Forwarded-For");
+		
+		String usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
+		String usuClient = principalResultadoObjecto.get("usuClient").getAsString();
+
+		JsonObject datosBitacora = new JsonObject();
+		datosBitacora.addProperty("Bit_Usuari", usuNumero);
+		datosBitacora.addProperty("Bit_Fecha", fechaSis);
+		datosBitacora.addProperty("Bit_PriRef", bitPriRef != null ? bitPriRef : "");
+		datosBitacora.addProperty("Bit_DireIP", bitDireIP != null ? bitDireIP : "");
+		datosBitacora.addProperty("Bit_TipOpe", ConsultaInversionBitacoraCreacionOpBitTipOpe);
+		datosBitacora.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
+		datosBitacora.addProperty("FechaSis", fechaSis);
+
+		logger.info("datosBitacora" + datosBitacora);
+		JsonObject bitacoraCreacionOpResultadoObjeto = this.bitacoraServicio.creacionBitacora(datosBitacora);
+		logger.info("bitacoraCreacionOpResultadoObjeto" + bitacoraCreacionOpResultadoObjeto);
+		
+		JsonObject datosInversion = new JsonObject();
+		datosInversion.addProperty("FechaSis", fechaSis);
+
+
+		JsonObject inversionConsultarOpResultadoObjeto = null;
+		if (categoria.equals(InversionesCategoriasEnum.PAGARE.toString())) {
+			datosInversion.addProperty("Inv_Usuari", usuNumero);
+			datosInversion.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
+
+			inversionConsultarOpResultadoObjeto = this.inversionesServicio.inversionesPagareNumeroUsuarioObtener(datosInversion);
+		} else {
+			datosInversion.addProperty("Inv_Client", usuClient);
+			datosInversion.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
+			inversionConsultarOpResultadoObjeto = this.inversionesServicio.inversionesObtener(datosInversion);
+		}
+
+		logger.info("datosInversion" + datosInversion);
+		logger.info("inversionConsultarOpResultadoObjeto" + inversionConsultarOpResultadoObjeto);
+
+		JsonObject inversionesObjecto = inversionConsultarOpResultadoObjeto.get("inversiones").getAsJsonObject();
+		JsonArray inversionesArreglo = inversionesObjecto.has("inversion") ? inversionesObjecto.get("inversion").getAsJsonArray() : new JsonArray();
+
+		JsonObject datosHorario = new JsonObject();
+		datosHorario.addProperty("NumTransac", FolioTransaccionGenerarOpFolTransa);
+		datosHorario.addProperty("FechaSis", fechaSis);
+
+		logger.info("datosHorario" + datosHorario);
+		JsonObject horarioInversionOpResultadoObjecto  = this.configuracionServicio.horariosConsultar(datosHorario);
+		logger.info("horarioInversionOpResultadoObjecto" + horarioInversionOpResultadoObjecto);
+
+		JsonObject horariosObjecto = horarioInversionOpResultadoObjecto.get("horariosInversion").getAsJsonObject();
+		JsonArray horariosArreglo = horariosObjecto.has("horarioInversion") ? horariosObjecto.get("horarioInversion").getAsJsonArray() : new JsonArray();
+
+		String horHorIni = null;
+		String horHorFin = null;
+
+		for (JsonElement horElemento : horariosArreglo) {
+			JsonObject horarioObj = horElemento.getAsJsonObject();
+			if("PAGARE".equals(categoria) && "IN".equals(horarioObj.get("Hor_TipMod").getAsString())) {
+				horHorIni = horarioObj.has("Hor_HorIni") ? horarioObj.get("Hor_HorIni").getAsString() : "";
+				horHorFin = horarioObj.has("Hor_HorFin") ? horarioObj.get("Hor_HorFin").getAsString() : "";
+			} else if("CE".equals(horarioObj.get("Hor_TipMod").getAsString())) {
+				horHorIni = horarioObj.has("Hor_HorIni") ? horarioObj.get("Hor_HorIni").getAsString() : "";
+				horHorFin = horarioObj.has("Hor_HorFin") ? horarioObj.get("Hor_HorFin").getAsString() : "";
+			}
+		}
+		
+		JsonObject resultado = null;
+		for (JsonElement invElemento : inversionesArreglo) {
+			JsonObject inversionObj = invElemento.getAsJsonObject();
+			Boolean fotDescri = inversionObj.has("Fot_Descri") ? inversionObj.get("Fot_Descri").getAsString().equals(categoria) : true;
+			Boolean invTipo = inversionObj.has("Inv_Tipo") ? inversionObj.get("Inv_Tipo").getAsString().equals("V") : true;
+
+			if (inversionObj.get("Inv_Numero").getAsString().equals(invNumero) && fotDescri && invTipo) {
+				String invFecIni = inversionObj.has("Inv_FecIni") ? inversionObj.get("Inv_FecIni").getAsString() :  "";
+				String invFecVen = inversionObj.has("Inv_FecVen") ? inversionObj.get("Inv_FecVen").getAsString() : "";
+				int plazo = 0;
+				double intBru = 0;
+				double invIntNet = 0;
+				double invISRTot = 0;
+				double invGat = 0;
+				double invGatRea = 0;
+
+				if (categoria.equals(InversionesCategoriasEnum.PAGARE.toString())) {
+					invGat = inversionObj.has("Inv_GAT") ? inversionObj.get("Inv_GAT").getAsDouble() : 0;
+					invGatRea = inversionObj.has("Inv_GATRea") ? inversionObj.get("Inv_GATRea").getAsDouble() : 0;
+					plazo = inversionObj.has("Inv_Plazo") ? inversionObj.get("Inv_Plazo").getAsInt() : 0;
+					intBru = inversionObj.has("Inv_TBruta") ? inversionObj.get("Inv_TBruta").getAsDouble() : 0;
+					invIntNet = inversionObj.has("Imp_Intere") ? inversionObj.get("Imp_Intere").getAsDouble() : 0;
+					invISRTot = inversionObj.has("Inv_ISR") ? inversionObj.get("Inv_ISR").getAsDouble() : 0;
+				} else {
+					invGat = inversionObj.has("Inv_Gat") ? inversionObj.get("Inv_Gat").getAsDouble() : 0;
+					invGatRea = inversionObj.has("Inv_GatRea") ? inversionObj.get("Inv_GatRea").getAsDouble() : 0;
+					plazo = inversionObj.has("Plazo") ? inversionObj.get("Plazo").getAsInt() : 0;
+
+					double amoTasa = inversionObj.has("Amo_Tasa") ? inversionObj.get("Amo_Tasa").getAsDouble() : 0;
+					double amoISR = inversionObj.has("Amo_ISR") ? inversionObj.get("Amo_ISR").getAsDouble() : 0;					
+					intBru = amoTasa + amoISR / 10;
+
+					invIntNet = inversionObj.has("Inv_IntNet") ? inversionObj.get("Inv_IntNet").getAsDouble() : 0;
+					invISRTot = inversionObj.has("Inv_ISRTot") ? inversionObj.get("Inv_ISRTot").getAsDouble() : 0;
+				}
+
+				Date fechaIni = Utilerias.convertirFecha(invFecIni);
+				Date fechaVen = Utilerias.convertirFecha(invFecVen);
+
+
+				Date horIni = Utilerias.convertirFecha(horHorIni);
+				Date horFin = Utilerias.convertirFecha(horHorFin);
+
+				Boolean cpRenInv = Utilerias.calcularVencimiento(fechaVen, horIni, horFin);
+				intBru = Utilerias.redondear(intBru, 2);
+
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+				resultado = new JsonObject();
+				JsonObject inversion = new JsonObject();
+				inversion.addProperty("invFecIni", fechaIni != null ? simpleDateFormat.format(fechaIni) : "");
+				inversion.addProperty("invFecVen", fechaVen != null ? simpleDateFormat.format(fechaVen) : "");
+				inversion.addProperty("invCuenta", inversionObj.has("Inv_Cuenta") ? inversionObj.get("Inv_Cuenta").getAsString() : "");
+				inversion.addProperty("invGat", invGat);
+				inversion.addProperty("invGatRea", invGatRea);
+				inversion.addProperty("plazo", plazo);
+				inversion.addProperty("intBru", intBru);
+				inversion.addProperty("invIntNet", invIntNet);
+				inversion.addProperty("invISRTot", invISRTot);
+				inversion.addProperty("invTotal", inversionObj.has("Inv_Total") ? inversionObj.get("Inv_Total").getAsDouble() : 0);
+				inversion.addProperty("cpRenInv", cpRenInv);
+				resultado.add("inversion", inversion);
+			}
+		}
+
+		if(resultado == null) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.25");
+			bimMessageDTO.addMergeVariable("invNumero", invNumero);
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+
+		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
+				.build();
+	}
+
 	
 }
