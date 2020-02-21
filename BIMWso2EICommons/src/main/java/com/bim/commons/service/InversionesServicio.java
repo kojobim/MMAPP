@@ -488,7 +488,7 @@ public class InversionesServicio extends BaseService {
 	/**
 	 * Método para actualizar el estado de la cuenta contra la inversión realizada 
 	 * ProcedureName: NBCUEORIACT
-	 * @param datosIversionVsEstadoCuenta
+	 * @param datosInversionVsEstadoCuenta
 	 * <pre>
 	 * {
 	 *	Cor_Usuari: String,
@@ -508,22 +508,23 @@ public class InversionesServicio extends BaseService {
 	 * }
 	 * </pre>
 	 */
-	public JsonObject inversionesContraEstadoCuentaActualizar(JsonObject datosIversionVsEstadoCuenta) {
+	public JsonObject inversionesContraEstadoCuentaActualizar(JsonObject datosInversionVsEstadoCuenta) {
 		logger.info("COMMONS: Comenzando inversionesContraEstadoCuentaActualizar metodo... ");
-		if(!datosIversionVsEstadoCuenta.has("Cor_Status"))
-			datosIversionVsEstadoCuenta.addProperty("Cor_Status", "");
-		if(!datosIversionVsEstadoCuenta.has("Cor_CliUsu"))
-			datosIversionVsEstadoCuenta.addProperty("Cor_CliUsu", "");
-		if(!datosIversionVsEstadoCuenta.has("Cor_Alias"))
-			datosIversionVsEstadoCuenta.addProperty("Cor_Alias", "");
-		datosIversionVsEstadoCuenta.addProperty("Cor_MoLiDi", Double.parseDouble(InversionesContraEstadoCuentaActualizarOpCorMoLiDi));
-		datosIversionVsEstadoCuenta.addProperty("Tip_Actual", InversionesContraEstadoCuentaActualizarOpTipActual);		
-		datosIversionVsEstadoCuenta.addProperty("Transaccio", InversionesContraEstadoCuentaActualizarOpTransaccio);
-		datosIversionVsEstadoCuenta.addProperty("Usuario", InversionesContraEstadoCuentaActualizarOpUsuari);
-		datosIversionVsEstadoCuenta.addProperty("SucOrigen", InversionesContraEstadoCuentaActualizarOpSucOrigen);
-		datosIversionVsEstadoCuenta.addProperty("SucDestino", InversionesContraEstadoCuentaActualizarOpSucDestino);
-		datosIversionVsEstadoCuenta.addProperty("Modulo", InversionesContraEstadoCuentaActualizarOpModulo);
-		JsonObject inversionesContraEstadoCuentaActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesContraEstadoCuentaActualizarOp, datosIversionVsEstadoCuenta);
+		if(!datosInversionVsEstadoCuenta.has("Cor_Status"))
+			datosInversionVsEstadoCuenta.addProperty("Cor_Status", "");
+		if(!datosInversionVsEstadoCuenta.has("Cor_CliUsu"))
+			datosInversionVsEstadoCuenta.addProperty("Cor_CliUsu", "");
+		if(!datosInversionVsEstadoCuenta.has("Cor_Alias"))
+			datosInversionVsEstadoCuenta.addProperty("Cor_Alias", "");
+		if(!datosInversionVsEstadoCuenta.has("Cor_MoLiDi"))
+			datosInversionVsEstadoCuenta.addProperty("Cor_MoLiDi", Double.parseDouble(InversionesContraEstadoCuentaActualizarOpCorMoLiDi));
+		datosInversionVsEstadoCuenta.addProperty("Tip_Actual", InversionesContraEstadoCuentaActualizarOpTipActual);		
+		datosInversionVsEstadoCuenta.addProperty("Transaccio", InversionesContraEstadoCuentaActualizarOpTransaccio);
+		datosInversionVsEstadoCuenta.addProperty("Usuario", InversionesContraEstadoCuentaActualizarOpUsuari);
+		datosInversionVsEstadoCuenta.addProperty("SucOrigen", InversionesContraEstadoCuentaActualizarOpSucOrigen);
+		datosInversionVsEstadoCuenta.addProperty("SucDestino", InversionesContraEstadoCuentaActualizarOpSucDestino);
+		datosInversionVsEstadoCuenta.addProperty("Modulo", InversionesContraEstadoCuentaActualizarOpModulo);
+		JsonObject inversionesContraEstadoCuentaActualizarOpResultadoObjeto = Utilerias.performOperacion(InversionesServicio, InversionesContraEstadoCuentaActualizarOp, datosInversionVsEstadoCuenta);
 		logger.info("COMMONS: Finalizando inversionesContraEstadoCuentaActualizar metodo... ");
 		return inversionesContraEstadoCuentaActualizarOpResultadoObjeto;
 	}//Cierre del método
