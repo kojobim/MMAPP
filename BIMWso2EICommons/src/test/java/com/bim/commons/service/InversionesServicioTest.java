@@ -2,6 +2,7 @@ package com.bim.commons.service;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -458,5 +459,30 @@ public class InversionesServicioTest {
 		}
 		
 		logger.info("TEST: Finalizando inversionesCedePagarTestDeberiaSerExitoso metodo...");
+	}
+	
+	@Test
+	public void inversionesContraEstadoCuentaActualizarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando inversionesContraEstadoCuentaActualizarTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosInversionVsEstadoCuenta = new JsonObject();
+		datosInversionVsEstadoCuenta.addProperty("Cor_Usuari", "000014");
+		datosInversionVsEstadoCuenta.addProperty("Cor_Cuenta", "001953830023");
+		datosInversionVsEstadoCuenta.addProperty("Cor_MonDia", "6000");
+		datosInversionVsEstadoCuenta.addProperty("NumTransac", "58138429");
+		datosInversionVsEstadoCuenta.addProperty("FechaSis", fechaSis);
+		
+		JsonObject resultado = inversionesServicio.inversionesContraEstadoCuentaActualizar(datosInversionVsEstadoCuenta);
+		logger.info("resultado: " + resultado);
+		
+		if(resultado == null) {
+			assertNotNull("la propiedad resultado es nula", resultado);
+		}
+		
+		if(resultado.has("Fault")) {
+			assertFalse("Ocurrio un error en la operación", resultado.has("Fault"));
+		}
+		
+		logger.info("TEST: Finalizando inversionesContraEstadoCuentaActualizarTestDeberiaSerExitoso metodo...");
 	}
 }
