@@ -432,4 +432,31 @@ public class InversionesServicioTest {
 		
 		logger.info("TEST: Finalizando inversionesCedeAltaTestDeberiaSerExitoso metodo...");
 	}
+	
+	@Test
+	public void inversionesCedePagarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando inversionesCedePagarTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosInversionesCedePagar = new JsonObject();
+		datosInversionesCedePagar.addProperty("Inv_Numero", "001953830066001");
+		datosInversionesCedePagar.addProperty("NumTransac", "58138428");
+		datosInversionesCedePagar.addProperty("FechaSis", fechaSis);
+		
+		JsonObject resultado = inversionesServicio.inversionesCedePagar(datosInversionesCedePagar);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad cargo", resultado.has("cargo"));
+		assertTrue("La propiedad cargo no es un JsonObject", resultado.get("cargo").isJsonObject());
+		
+		JsonObject cargo = Utilerias.obtenerJsonObjectPropiedad(resultado, "cargo");
+		
+		if(cargo.isJsonNull()) {
+			assertTrue("La propiedad Err_Codigo no se encuentra en cargo", cargo.has("Err_Codigo"));
+			assertTrue("La propiedad Err_Mensaj no se encuentra en cargo", cargo.has("Err_Mensaj"));
+		} else{
+			assertNotNull("la propiedad cargo es nula", cargo);
+		}
+		
+		logger.info("TEST: Finalizando inversionesCedePagarTestDeberiaSerExitoso metodo...");
+	}
 }
