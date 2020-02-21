@@ -2,6 +2,7 @@ package com.bim.commons.service;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -47,7 +48,7 @@ public class AmortizacionServicioTest {
 		datosAmortizacionGenerar.addProperty("FechaSis", fechaSis);
 		datosAmortizacionGenerar.addProperty("SucOrigen", "001");
 		datosAmortizacionGenerar.addProperty("SucDestino", "001");
-		datosAmortizacionGenerar.addProperty("Modulo", "BM");
+		datosAmortizacionGenerar.addProperty("Modulo", "NB");
 		
 		JsonObject resultado = amortizacionServicio.amortizacionGenerar(datosAmortizacionGenerar);
 		logger.info("- resultado: "+ resultado);
@@ -79,6 +80,45 @@ public class AmortizacionServicioTest {
 		}
 		
 		logger.info("TEST: Finalizando amortizacionGenerarTestDeberiaSerExitoso metodo...");
+	}
+	
+	@Test
+	public void amortizacionAltaTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando amortizacionAltaTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosAltaGenerar = new JsonObject();
+		datosAltaGenerar.addProperty("Amo_Invers", "001953830066004");
+		datosAltaGenerar.addProperty("Amo_Numero", "005");
+		datosAltaGenerar.addProperty("Amo_FecIni", "2020-03-31 00:00:00");
+		datosAltaGenerar.addProperty("Amo_FecVen", "2020-04-28 00:00:00");
+		datosAltaGenerar.addProperty("Amo_Cantid", 0.0000);
+		datosAltaGenerar.addProperty("Amo_Tasa", 6.04);
+		datosAltaGenerar.addProperty("Amo_TasBru", 7.49);
+		datosAltaGenerar.addProperty("Amo_ISR", 14.5);
+		datosAltaGenerar.addProperty("NumTransac", "58138428");
+		datosAltaGenerar.addProperty("Transaccio", "AMZ");
+		datosAltaGenerar.addProperty("Usuario", "000100");
+		datosAltaGenerar.addProperty("FechaSis", fechaSis);
+		datosAltaGenerar.addProperty("SucOrigen", "001");
+		datosAltaGenerar.addProperty("SucDestino", "001");
+		datosAltaGenerar.addProperty("Modulo", "NB");
+		
+		JsonObject resultado = amortizacionServicio.amortizacionAlta(datosAltaGenerar);
+		logger.info("- resultado: "+ resultado);
+		
+		assertTrue("No viene la propiedad amortizacion", resultado.has("amortizacion"));
+		assertTrue("La propiedad amortizacion no es un JsonObject", resultado.get("amortizacion").isJsonObject());
+		
+		JsonObject amortizacion = Utilerias.obtenerJsonObjectPropiedad(resultado, "amortizacion");
+		
+		if(!amortizacion.isJsonNull()) {
+			assertFalse("Se halló la propiedad Err_Codigo en el objeto amortizacion", amortizacion.has("Err_Codigo"));
+			assertFalse("Se halló la propiedad Err_Mensaj en el objeto amortizacion", amortizacion.has("Err_Mensaj"));
+		}else {
+			assertNotNull("la propiedad amortizacion es nula", amortizacion);
+		}
+		
+		logger.info("TEST: Finalizando amortizacionAltaTestDeberiaSerExitoso metodo...");
 	}
 
 }

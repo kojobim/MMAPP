@@ -19,6 +19,7 @@ public class AmortizacionServicio extends BaseService {
     private static String AmortizacionServicio;
     
     private static String AmortizacionGenerarOp;
+    private static String AmortizacionAltaOp;
 
 	private static String AmortizacionGenerarOpTransaccio;
 	private static String AmortizacionGenerarOpUsuario;
@@ -26,18 +27,31 @@ public class AmortizacionServicio extends BaseService {
 	private static String AmortizacionGenerarOpSucDestino;
     private static String AmortizacionGenerarOpModulo;
     
+    private static String AmortizacionAltaOpTransaccio;
+	private static String AmortizacionAltaOpUsuario;
+	private static String AmortizacionAltaOpSucOrigen;
+	private static String AmortizacionAltaOpSucDestino;
+    private static String AmortizacionAltaOpModulo;
+    
 	public AmortizacionServicio() {
 		super();
 
 		AmortizacionServicio = properties.getProperty("data_service.amortizacion_servicio");
 
 		AmortizacionGenerarOp = properties.getProperty("amortizacion_servicio.op.amortizacion_generar");
+		AmortizacionAltaOp = properties.getProperty("amortizacion_servicio.op.amortizacion_alta");
     
 		AmortizacionGenerarOpTransaccio = properties.getProperty("op.amortizacion_generar.transaccio");
 		AmortizacionGenerarOpUsuario = properties.getProperty("op.amortizacion_generar.usuario");
 		AmortizacionGenerarOpSucOrigen = properties.getProperty("op.amortizacion_generar.suc_origen");
 		AmortizacionGenerarOpSucDestino = properties.getProperty("op.amortizacion_generar.suc_destino");
 		AmortizacionGenerarOpModulo = properties.getProperty("op.amortizacion_generar.modulo");
+		
+		AmortizacionAltaOpTransaccio = properties.getProperty("op.amortizacion_alta.transaccio");
+		AmortizacionAltaOpUsuario = properties.getProperty("op.amortizacion_alta.usuario");
+		AmortizacionAltaOpSucOrigen = properties.getProperty("op.amortizacion_alta.suc_origen");
+		AmortizacionAltaOpSucDestino = properties.getProperty("op.amortizacion_alta.suc_destino");
+		AmortizacionAltaOpModulo = properties.getProperty("op.amortizacion_alta.modulo");
     }
 	
 	/**
@@ -93,6 +107,43 @@ public class AmortizacionServicio extends BaseService {
 		JsonObject amortizacionGenerarOpResultadoObjeto = Utilerias.performOperacion(AmortizacionServicio, AmortizacionGenerarOp, datosAmortizacionGenerar);
 		logger.info("COMMONS: Finalizando amortizacionGenerar...");
 		return amortizacionGenerarOpResultadoObjeto;
+    }//Cierre del método
+	
+	/**
+     * Método para guardar una amortización de nueva inversión CEDE
+     * ProcedureName: CEAMORTIALT
+     * @param datosAmortizacionAlta
+     * <pre>
+     * {
+     *	Amo_Invers: String,
+     *	Amo_Numero: String,
+     *	Amo_FecIni: String,
+     *	Amo_FecVen: String,
+     *	Amo_Cantid: Double,
+     *	Amo_Tasa: Double,
+     *	Amo_TasBru: Double,
+     *	Amo_ISR: Double,
+     *	NumTransac: String,
+     *	FechaSis: String
+     * }
+     * </pre>
+     * @return
+     * <pre>
+     * {
+     * 	REQUEST_STATUS: String
+     * }
+     * </pre>
+     */
+	public JsonObject amortizacionAlta(JsonObject datosAmortizacionAlta) {
+		logger.info("COMMONS: Comenzando amortizacionAlta...");
+		datosAmortizacionAlta.addProperty("Transaccio", AmortizacionAltaOpTransaccio);
+		datosAmortizacionAlta.addProperty("Usuario", AmortizacionAltaOpUsuario);
+		datosAmortizacionAlta.addProperty("SucOrigen", AmortizacionAltaOpSucOrigen);
+		datosAmortizacionAlta.addProperty("SucDestino", AmortizacionAltaOpSucDestino);
+		datosAmortizacionAlta.addProperty("Modulo", AmortizacionAltaOpModulo);
+		JsonObject amortizacionAltaOpResultadoObjeto = Utilerias.performOperacion(AmortizacionServicio, AmortizacionAltaOp, datosAmortizacionAlta);
+		logger.info("COMMONS: Finalizando amortizacionAlta...");
+		return amortizacionAltaOpResultadoObjeto;
     }//Cierre del método
     
 }
