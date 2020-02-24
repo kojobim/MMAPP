@@ -1017,7 +1017,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		JsonObject inversionesCedePlazoObjeto = Utilerias.obtenerJsonObjectPropiedad(inversionesCedePlazosConsultarOpResultado, "plazo");
 		
 		if(inversionesCedePlazoObjeto.isJsonNull() || inversionesCedePlazoObjeto.entrySet().size() == 0) {
-			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.72");
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.74");
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 		
