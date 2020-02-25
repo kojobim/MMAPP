@@ -67,6 +67,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 	private static String ReinversionBitacoraCreacionOpBitTipOpe;
 	private static String InversionesCedePlazosConsultarOpPlaMoneda;
 	private static String InversionesCedePlazosConsultarOpTipConsulC4;
+	private static Double InversionesPagareMonTotUDI;
 		
 	public InversionesCtrl() {
 		super();
@@ -90,6 +91,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		ReinversionBitacoraCreacionOpBitTipOpe = properties.getProperty("op.reinversion.bitacora_creacion.bit_tip_ope");
 		InversionesCedePlazosConsultarOpPlaMoneda = properties.getProperty("op.inversiones_cede_plazos_consultar.pla_moneda");
 		InversionesCedePlazosConsultarOpTipConsulC4 = properties.getProperty("op.inversiones_cede_plazos_consultar.tip_consul_c4");
+		InversionesPagareMonTotUDI = Double.parseDouble(properties.getProperty("op.inversiones_pagare.mon_tot_udi"));
 		
 		logger.info("CTRL: Terminando metodo init...");
 	}
@@ -1004,6 +1006,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		String cliCobISR = null;
 		String numTransac = null;
 		String fecVenI = null;
+		String invGATStr = "N.A.";
+		String invGATReaStr = "N.A.";
 		Double invCanBru = null;
 		Double invCanTot = null;
 		Double invTasa = null;
@@ -1013,7 +1017,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 		Double invCanNet = null;
 		Double cliTasISR = null;	
 		Double monFixCom = null;
-		Double MonTotUDI = null;
 		Double invGAT = null;
 		Double invGATRea = null;
 		Double invTasInt = null;
@@ -1154,14 +1157,13 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		monedaConsultar = Utilerias.obtenerJsonObjectPropiedad(tasaMonedaConsultarOpResultadoObjeto, "tasaMoneda");
 		monFixCom = Utilerias.obtenerDoublePropiedad(monedaConsultar, "Mon_FixCom");
-		MonTotUDI = 400000.00;
 		invGAT = 0.00;
 		invGATRea = 0.00;
 
 		clienteConsultar = Utilerias.obtenerJsonObjectPropiedad(tasaClienteConsultarOpResultadoObjeto, "tasaCliente");
 		invTasInt = Utilerias.obtenerDoublePropiedad(clienteConsultar, "TasInv");
 
-		if((montoInt / monFixCom) < MonTotUDI) {
+		if((montoInt / monFixCom) < InversionesPagareMonTotUDI) {
 
 			datosGAT = new JsonObject();
 			datosGAT.addProperty("Inv_Dias",  plazoInt);
@@ -1229,14 +1231,14 @@ public class InversionesCtrl extends BimBaseCtrl {
 		invCanISR = Utilerias.obtenerDoublePropiedad(resultadoCalculaTasa, "Inv_CanISR");
 		invCapita = Utilerias.obtenerDoublePropiedad(resultadoCalculaTasa, "Inv_Capita");
 		invCanNet = Utilerias.obtenerDoublePropiedad(resultadoCalculaTasa, "Inv_CanNet");
-		
+				
 		resultado = new JsonObject();
 		calcularora = new JsonObject();
 		calcularora.addProperty("invCantidad", invCapita);	
 		calcularora.addProperty("invTBruta",  invTasInt);
 		calcularora.addProperty("invCanBru", Utilerias.redondear(invCanBru, 2));
-		calcularora.addProperty("invGat", invGAT);
-		calcularora.addProperty("invGatRea", invGATRea);
+		calcularora.addProperty("invGat", invGAT == 0 ? invGATStr : invGAT.toString());
+		calcularora.addProperty("invGatRea", invGATRea == 0 ? invGATReaStr : invGATRea.toString());
 		calcularora.addProperty("invISR", invISR);
 		calcularora.addProperty("invCanISR", Utilerias.redondear(invCanISR, 2));
 		calcularora.addProperty("invTasa", invTasa);
