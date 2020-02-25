@@ -1021,12 +1021,12 @@ public class InversionesCtrl extends BimBaseCtrl {
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 		
-		int plaDias = Utilerias.obtenerIntPropiedad(inversionesCedePlazoObjeto, "Pla_Dias");
-		String cpFechaIni = Utilerias.formatearFecha(fechaSis, "yyyy-MM-dd");
-		Date fechaIni = Utilerias.convertirZonaHoraria(Utilerias.convertirFecha(cpFechaIni, "yyyy-MM-dd"), TimeZone.getTimeZone("CST6CDT"), TimeZone.getTimeZone("UTC"));
-		Date fechaFin = Utilerias.agregarDiasAFecha(fechaIni, plaDias);
-		
 		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+		
+		int plaDias = Utilerias.obtenerIntPropiedad(inversionesCedePlazoObjeto, "Pla_Dias");
+		Date fechaIni = Utilerias.convertirZonaHoraria(Utilerias.convertirFecha(fechaSis), TimeZone.getTimeZone("CST6CDT"), TimeZone.getTimeZone("UTC"));
+		String cpFechaIni = sdf.format(fechaIni);
+		Date fechaFin = Utilerias.agregarDiasAFecha(fechaIni, plaDias);
 		
 		JsonObject datosFechaHabil = new JsonObject();
 		datosFechaHabil.addProperty("Fecha", sdf.format(fechaFin));
