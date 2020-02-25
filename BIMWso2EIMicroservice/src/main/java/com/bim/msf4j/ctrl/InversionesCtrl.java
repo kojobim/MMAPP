@@ -3,6 +3,7 @@ package com.bim.msf4j.ctrl;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -64,6 +65,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 	private static String ConsultaInversionBitacoraCreacionOpBitTipOpe;
 	private static String ReinversionBitacoraCreacionOpBitTipOpe;
 	private static String InversionesCedePlazosConsultarOpPlaMoneda;
+	private static String InversionesCedePlazosConsultarOpTipConsulC4;
 		
 	public InversionesCtrl() {
 		super();
@@ -86,6 +88,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		ConsultaInversionBitacoraCreacionOpBitTipOpe = properties.getProperty("op.consulta_inversion.bitacora_creacion.bit_tip_ope");
 		ReinversionBitacoraCreacionOpBitTipOpe = properties.getProperty("op.reinversion.bitacora_creacion.bit_tip_ope");
 		InversionesCedePlazosConsultarOpPlaMoneda = properties.getProperty("op.inversiones_cede_plazos_consultar.pla_moneda");
+		InversionesCedePlazosConsultarOpTipConsulC4 = properties.getProperty("op.inversiones_cede_plazos_consultar.tip_consul_c4");
 		
 		logger.info("CTRL: Terminando metodo init...");
 	}
@@ -970,6 +973,85 @@ public class InversionesCtrl extends BimBaseCtrl {
 		resultado.add("plazosDeInversion", plazosDeInversion);
 		
 		logger.info("CTRL: Terminando inversionesPlazosListado metodo");
+		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
+				.build();
+	}
+	
+	@Path("duracion")
+	@GET()
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response obtenerPeriodoDuracion(@QueryParam("pla_numero") String plaNumero,
+			@QueryParam("producto") String producto, @Context final Request solicitud) {
+		logger.info("CTRL: Comenzando obtenerPeriodoDuracion metodo");
+		
+		if(plaNumero == null || plaNumero.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.68");
+			bimMessageDTO.addMergeVariable("nombrePropiedad", "pla_numero");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		String plaProduc= InversionesCedeTiposEnum.validarProducto(producto);
+		
+		if (plaProduc == null) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.71");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjeto = Utilerias.obtenerPrincipal(bearerToken);
+		Utilerias.verificarError(principalResultadoObjeto);
+		
+		String fechaSis = Utilerias.obtenerFechaSis();
+		
+		JsonObject datosInversionesCedePlazos = new JsonObject();
+		datosInversionesCedePlazos.addProperty("Pla_Numero", plaNumero);
+		datosInversionesCedePlazos.addProperty("Pla_Produc", plaProduc);
+		datosInversionesCedePlazos.addProperty("Tip_Consul", InversionesCedePlazosConsultarOpTipConsulC4);
+		datosInversionesCedePlazos.addProperty("FechaSis", fechaSis);
+		
+		JsonObject inversionesCedePlazosConsultarOpResultado = this.inversionesServicio.inversionesCedePlazosConsultar(datosInversionesCedePlazos);
+		logger.debug("inversionesCedePlazosConsultarOpResultado" + inversionesCedePlazosConsultarOpResultado);
+		
+		Utilerias.verificarError(inversionesCedePlazosConsultarOpResultado);
+		
+		JsonObject inversionesCedePlazoObjeto = Utilerias.obtenerJsonObjectPropiedad(inversionesCedePlazosConsultarOpResultado, "plazo");
+		
+		if(inversionesCedePlazoObjeto.isJsonNull() || inversionesCedePlazoObjeto.entrySet().size() == 0) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.74");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+		
+		int plaDias = Utilerias.obtenerIntPropiedad(inversionesCedePlazoObjeto, "Pla_Dias");
+		Date fechaIni = Utilerias.convertirZonaHoraria(Utilerias.convertirFecha(fechaSis), TimeZone.getTimeZone("CST6CDT"), TimeZone.getTimeZone("UTC"));
+		String cpFechaIni = sdf.format(fechaIni);
+		Date fechaFin = Utilerias.agregarDiasAFecha(fechaIni, plaDias);
+		
+		JsonObject datosFechaHabil = new JsonObject();
+		datosFechaHabil.addProperty("Fecha", sdf.format(fechaFin));
+		datosFechaHabil.addProperty("FechaSis", fechaSis);
+		
+		JsonObject fechaHabilConsultarOpResultado = this.reinversionServicio.fechaHabilConsultar(datosFechaHabil);
+		logger.debug("fechaHabilConsultarOpResultado" + fechaHabilConsultarOpResultado);
+		
+		Utilerias.verificarError(fechaHabilConsultarOpResultado);
+		
+		JsonObject fechaHabilConsultarObjeto = Utilerias.obtenerJsonObjectPropiedad(fechaHabilConsultarOpResultado, "fechaHabil");
+		
+		JsonObject resultado = new JsonObject();
+		JsonObject duracionInversion = new JsonObject();
+		
+		String fecha = Utilerias.obtenerStringPropiedad(fechaHabilConsultarObjeto, "Fecha");
+		fechaFin = Utilerias.convertirZonaHoraria(Utilerias.convertirFecha(fecha), TimeZone.getTimeZone("CST6CDT"), TimeZone.getTimeZone("UTC"));	
+		String cpFechaFin = sdf.format(fechaFin);
+		
+		duracionInversion.addProperty("cpFechaIni", cpFechaIni);
+		duracionInversion.addProperty("cpFechaFin", cpFechaFin);
+		
+		resultado.add("duracionInversion", duracionInversion);
+		
+		logger.info("CTRL: Terminando obtenerPeriodoDuracion metodo");
 		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
 	}
