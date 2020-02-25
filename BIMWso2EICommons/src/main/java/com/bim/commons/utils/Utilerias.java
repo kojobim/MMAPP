@@ -779,4 +779,16 @@ public class Utilerias {
 		logger.info("COMMONS: Finalizando filtrarPropiedadesArray metodo");
 		return resultante;
 	}
+	
+	public static Date agregarDiasAFecha(Date fecha, int dias) {		
+		Calendar calendario = Calendar.getInstance();
+		try {
+			calendario.setTime(fecha);
+			calendario.add(Calendar.DATE, dias);
+			return calendario.getTime();
+		} catch (Exception e) {
+			logger.info("error al formatear fecha.");
+		}		
+		return null;
+	}
 }

@@ -18,6 +18,7 @@ public class ReinversionServicio extends BaseService {
 
 	private static String ReinversionServicio;
 	private static String FechaHabilConsultarOp;
+	private static String FechaHabilConsultarOpNumDia;
 	private static String FechaHabilConsultarOpFinSem;
 	private static String FechaHabilConsultarOpTransaccio;
 	private static String FechaHabilConsultarOpUsuari;
@@ -32,6 +33,7 @@ public class ReinversionServicio extends BaseService {
 		
 		FechaHabilConsultarOp = properties.getProperty("reinversion_servicio.op.fecha_habil_consultar");
 		
+		FechaHabilConsultarOpNumDia = properties.getProperty("op.fecha_habil_consultar.num_dia");
 		FechaHabilConsultarOpFinSem  = properties.getProperty("op.fecha_habil_consultar.fin_sem");
 		FechaHabilConsultarOpTransaccio  = properties.getProperty("op.fecha_habil_consultar.transaccio");
 		FechaHabilConsultarOpUsuari = properties.getProperty("op.fecha_habil_consultar.usuario");
@@ -64,7 +66,10 @@ public class ReinversionServicio extends BaseService {
 	 */
 	public JsonObject fechaHabilConsultar(JsonObject datosFechaHabil) {
 		logger.info("COMMONS: Comenzando fechaHabilConsultar metodo...");
-		datosFechaHabil.addProperty("FinSem", FechaHabilConsultarOpFinSem);
+		if(!datosFechaHabil.has("NumDia"))
+			datosFechaHabil.addProperty("NumDia", Integer.parseInt(FechaHabilConsultarOpNumDia));
+		if(!datosFechaHabil.has("FinSem"))
+			datosFechaHabil.addProperty("FinSem", FechaHabilConsultarOpFinSem);
 		if(!datosFechaHabil.has("NumTransac"))
 			datosFechaHabil.addProperty("NumTransac", "");
 		datosFechaHabil.addProperty("Transaccio", FechaHabilConsultarOpTransaccio);

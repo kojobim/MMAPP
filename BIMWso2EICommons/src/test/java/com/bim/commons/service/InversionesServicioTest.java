@@ -2,6 +2,7 @@ package com.bim.commons.service;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -246,13 +247,43 @@ public class InversionesServicioTest {
 	public void inversionesCedePlazosConsultarTestDeberiaSerExitoso() {
 		logger.info("TEST: Comenzando inversionesCedePlazosConsultarTestDeberiaSerExitoso metodo...");
 		String fechaSis = Utilerias.obtenerFechaSis();
+		/*
+		 * CONSULTA L1
+		 */
 		JsonObject datosInversionesCedePlazos = new JsonObject();
-		datosInversionesCedePlazos.addProperty("Pla_Moneda", "01");
+		datosInversionesCedePlazos.addProperty("Pla_Numero", "19");
 		datosInversionesCedePlazos.addProperty("Pla_Produc", "07");
-		datosInversionesCedePlazos.addProperty("Tip_Consul", "L1");
+		datosInversionesCedePlazos.addProperty("Tip_Consul", "C4");
 		datosInversionesCedePlazos.addProperty("FechaSis", fechaSis);
 		
 		JsonObject resultado = inversionesServicio.inversionesCedePlazosConsultar(datosInversionesCedePlazos);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad plazo", resultado.has("plazo"));
+		assertTrue("La propiedad plazo no es un JsonObject", resultado.get("plazo").isJsonObject());
+		
+		JsonObject plazo = Utilerias.obtenerJsonObjectPropiedad(resultado, "plazo");
+		
+		if (!plazo.isJsonNull()) {
+			assertTrue("No viene  la propiedad Pla_Numero", plazo.has("Pla_Numero"));
+			assertTrue("No viene  la propiedad Pla_Moneda", plazo.has("Pla_Moneda"));
+			assertTrue("No viene  la propiedad Pla_Plazo", plazo.has("Pla_Plazo"));
+			assertTrue("No viene  la propiedad Pla_Produc", plazo.has("Pla_Produc"));
+			assertTrue("No viene  la propiedad Pro_Descri", plazo.has("Pro_Descri"));
+			assertTrue("No viene  la propiedad Pla_Descri", plazo.has("Pla_Descri"));
+			assertTrue("No viene  la propiedad Pla_Dias", plazo.has("Pla_Dias"));
+		} else {
+			assertNotNull("la propiedad plazo es nula", plazo);
+		}
+		
+		/*
+		 * CONSULTA C4
+		 */
+		datosInversionesCedePlazos.remove("Pla_Numero");
+		datosInversionesCedePlazos.addProperty("Pla_Moneda", "01");
+		datosInversionesCedePlazos.remove("Tip_Consul");
+		
+		resultado = inversionesServicio.inversionesCedePlazosConsultar(datosInversionesCedePlazos);
 		logger.info("resultado: " + resultado);
 		
 		assertTrue("No viene la propiedad plazos", resultado.has("plazos"));
@@ -260,7 +291,7 @@ public class InversionesServicioTest {
 		
 		JsonObject plazos = Utilerias.obtenerJsonObjectPropiedad(resultado, "plazos");
 		
-		if(!plazos.isJsonNull()) {
+		if (!plazos.isJsonNull()) {
 			assertTrue("No viene  la propiedad plazo", plazos.has("plazo"));
 			assertTrue("La propiedad plazo no es un JsonArray", plazos.get("plazo").isJsonArray());
 		} else {
@@ -336,6 +367,7 @@ public class InversionesServicioTest {
 		logger.info("TEST: Finalizando inversionesAltaPagarTestDeberiaSerExitoso metodo...");
 	}
 	
+	@Test
 	public void inversionesPagareInformacionGuardarTestDeberiaSerExitoso() {
 		logger.info("TEST: Comenzando inversionesPagareInformacionGuardarTestDeberiaSerExitoso metodo...");
 		String fechaSis = Utilerias.obtenerFechaSis();
@@ -361,5 +393,96 @@ public class InversionesServicioTest {
 		}
 		
 		logger.info("TEST: Finalizando inversionesPagareInformacionGuardarTestDeberiaSerExitoso metodo...");
+	}
+	
+	@Test
+	public void inversionesCedeAltaTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando inversionesCedeAltaTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosInversionesCedeAlta = new JsonObject();
+		datosInversionesCedeAlta.addProperty("Inv_Cuenta", "001953830023");
+		datosInversionesCedeAlta.addProperty("Inv_Plazo", "19");
+		datosInversionesCedeAlta.addProperty("Inv_OriInv", "I");
+		datosInversionesCedeAlta.addProperty("Inv_FecVen", "2020-05-07 00:00:00");
+		datosInversionesCedeAlta.addProperty("Inv_Cantid", 6000);
+		datosInversionesCedeAlta.addProperty("Inv_Tasa", 6.04);
+		datosInversionesCedeAlta.addProperty("Inv_ForTas", "002");
+		datosInversionesCedeAlta.addProperty("Inv_TasBas", "02");
+		datosInversionesCedeAlta.addProperty("Inv_Produc", "07");
+		datosInversionesCedeAlta.addProperty("Inv_PorBas", 100.0);
+		datosInversionesCedeAlta.addProperty("Inv_Puntos", -0.9700);
+		datosInversionesCedeAlta.addProperty("Inv_TBruta", 7.49);
+		datosInversionesCedeAlta.addProperty("NumTransac", "58138428");
+		datosInversionesCedeAlta.addProperty("FechaSis", fechaSis);
+		
+		JsonObject resultado = inversionesServicio.inversionesCedeAlta(datosInversionesCedeAlta);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad inversion", resultado.has("inversion"));
+		assertTrue("La propiedad inversion no es un JsonObject", resultado.get("inversion").isJsonObject());
+		
+		JsonObject inversion = Utilerias.obtenerJsonObjectPropiedad(resultado, "inversion");
+		
+		if(inversion.isJsonNull()) {
+			assertTrue("La propiedad Err_Codigo no se encuentra en inversion", inversion.has("Err_Codigo"));
+			assertTrue("La propiedad Err_Mensaj no se encuentra en inversion", inversion.has("Err_Mensaj"));
+			assertTrue("La propiedad Inv_Numero no se encuentra en inversion", inversion.has("Inv_Numero"));
+		} else{
+			assertNotNull("la propiedad inversion es nula", inversion);
+		}
+		
+		logger.info("TEST: Finalizando inversionesCedeAltaTestDeberiaSerExitoso metodo...");
+	}
+	
+	@Test
+	public void inversionesCedePagarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando inversionesCedePagarTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosInversionesCedePagar = new JsonObject();
+		datosInversionesCedePagar.addProperty("Inv_Numero", "001953830066001");
+		datosInversionesCedePagar.addProperty("NumTransac", "58138428");
+		datosInversionesCedePagar.addProperty("FechaSis", fechaSis);
+		
+		JsonObject resultado = inversionesServicio.inversionesCedePagar(datosInversionesCedePagar);
+		logger.info("resultado: " + resultado);
+		
+		assertTrue("No viene la propiedad cargo", resultado.has("cargo"));
+		assertTrue("La propiedad cargo no es un JsonObject", resultado.get("cargo").isJsonObject());
+		
+		JsonObject cargo = Utilerias.obtenerJsonObjectPropiedad(resultado, "cargo");
+		
+		if(cargo.isJsonNull()) {
+			assertTrue("La propiedad Err_Codigo no se encuentra en cargo", cargo.has("Err_Codigo"));
+			assertTrue("La propiedad Err_Mensaj no se encuentra en cargo", cargo.has("Err_Mensaj"));
+		} else{
+			assertNotNull("la propiedad cargo es nula", cargo);
+		}
+		
+		logger.info("TEST: Finalizando inversionesCedePagarTestDeberiaSerExitoso metodo...");
+	}
+	
+	@Test
+	public void inversionesContraEstadoCuentaActualizarTestDeberiaSerExitoso() {
+		logger.info("TEST: Comenzando inversionesContraEstadoCuentaActualizarTestDeberiaSerExitoso metodo...");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		JsonObject datosInversionVsEstadoCuenta = new JsonObject();
+		datosInversionVsEstadoCuenta.addProperty("Cor_Usuari", "000014");
+		datosInversionVsEstadoCuenta.addProperty("Cor_Cuenta", "001953830023");
+		datosInversionVsEstadoCuenta.addProperty("Cor_MonDia", "6000");
+		datosInversionVsEstadoCuenta.addProperty("NumTransac", "58138429");
+		datosInversionVsEstadoCuenta.addProperty("FechaSis", fechaSis);
+		
+		JsonObject resultado = inversionesServicio.inversionesContraEstadoCuentaActualizar(datosInversionVsEstadoCuenta);
+		logger.info("resultado: " + resultado);
+		
+		if(resultado == null) {
+			assertNotNull("la propiedad resultado es nula", resultado);
+		}
+		
+		if(resultado.has("Fault")) {
+			assertFalse("Ocurrio un error en la operación", resultado.has("Fault"));
+		}
+		
+		logger.info("TEST: Finalizando inversionesContraEstadoCuentaActualizarTestDeberiaSerExitoso metodo...");
 	}
 }

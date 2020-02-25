@@ -54,6 +54,45 @@
             <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
         </result>
     </query>
+    <query id="amortizacionAltaSQL" useConfig="BIMDB">
+        <sql>EXEC CEAMORTIALT
+            @Amo_Invers = :amoInvers,
+            @Amo_Numero = :amoNumero,
+            @Amo_FecIni = :amoFecIni,
+            @Amo_FecVen = :amoFecVen,
+            @Amo_Cantid = :amoCantid,
+            @Amo_Tasa = :amoTasa,
+            @Amo_TasBru = :amoTasBru,
+            @Amo_ISR = :amoISR,
+            @NumTransac = :numTransac,
+            @Transaccio = :transaccio,
+            @Usuario = :usuario,
+            @FechaSis = :fechaSis,
+            @SucOrigen = :sucOrigen,
+            @SucDestino = :sucDestino,
+            @Modulo = :modulo
+		</sql>
+        <param name="amoInvers" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="amoNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="amoFecIni" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="amoFecVen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="amoCantid" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="amoTasa" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="amoTasBru" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="amoISR" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/amortizacionAltaNE" element="amortizacion">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+            <element column="Err_Variab" name="Err_Variab" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
     <operation name="amortizacionGenerarOp">
         <call-query href="amortizacionGenerarSQL">
             <with-param name="cedCantid" query-param="Ced_Cantid"/>
@@ -65,6 +104,25 @@
             <with-param name="cedTasBru" query-param="Ced_TasBru"/>
             <with-param name="cedTasNet" query-param="Ced_TasNet"/>
             <with-param name="cedProduc" query-param="Ced_Produc"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation returnRequestStatus="true" name="amortizacionAltaOp">
+        <call-query href="amortizacionAltaSQL">
+            <with-param name="amoInvers" query-param="Amo_Invers"/>
+            <with-param name="amoNumero" query-param="Amo_Numero"/>
+            <with-param name="amoFecIni" query-param="Amo_FecIni"/>
+            <with-param name="amoFecVen" query-param="Amo_FecVen"/>
+            <with-param name="amoCantid" query-param="Amo_Cantid"/>
+            <with-param name="amoTasa" query-param="Amo_Tasa"/>
+            <with-param name="amoTasBru" query-param="Amo_TasBru"/>
+            <with-param name="amoISR" query-param="Amo_ISR"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>
             <with-param name="usuario" query-param="Usuario"/>
