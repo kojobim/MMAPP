@@ -1327,5 +1327,54 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("CTRL: Terminando obtenerPeriodoDuracion metodo");
 		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
-	}	
+	}
+	
+	@Path("fecha-habil")
+	@GET()
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response siguienteFechaHabil(@QueryParam("plazo") String plazo,
+			@Context final Request solicitud) {
+		logger.info("CTRL: Comenzando siguenteFechaHabil metodo");
+		
+		if(plazo == null || plazo.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.68");
+			bimMessageDTO.addMergeVariable("nombrePropiedad", "plazo");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjeto = Utilerias.obtenerPrincipal(bearerToken);
+		Utilerias.verificarError(principalResultadoObjeto);
+		
+		String fechaSis = Utilerias.obtenerFechaSis();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");
+		
+		JsonObject datosFechaHabil = new JsonObject();
+		datosFechaHabil.addProperty("Fecha", sdf.format(fechaFin));
+		datosFechaHabil.addProperty("FechaSis", fechaSis);
+		
+		JsonObject fechaHabilConsultarOpResultado = this.reinversionServicio.fechaHabilConsultar(datosFechaHabil);
+		logger.debug("fechaHabilConsultarOpResultado" + fechaHabilConsultarOpResultado);
+		
+		Utilerias.verificarError(fechaHabilConsultarOpResultado);
+		
+		JsonObject fechaHabilConsultarObjeto = Utilerias.obtenerJsonObjectPropiedad(fechaHabilConsultarOpResultado, "fechaHabil");
+		
+		JsonObject resultado = new JsonObject();
+		JsonObject fechaHabil = new JsonObject();
+		
+		String fecha = Utilerias.obtenerStringPropiedad(fechaHabilConsultarObjeto, "Fecha");
+		fechaFin = Utilerias.convertirZonaHoraria(Utilerias.convertirFecha(fecha), TimeZone.getTimeZone("CST6CDT"), TimeZone.getTimeZone("UTC"));	
+		String cpFechaFin = sdf.format(fechaFin);
+		
+		fechaHabil.addProperty("plazo", cpFechaIni);
+		fechaHabil.addProperty("invFecVen", cpFechaFin);
+		
+		resultado.add("duracionInversion", fechaHabil);
+		
+		logger.info("CTRL: Terminando siguenteFechaHabil metodo");
+		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
+				.build();
+	}
 }
