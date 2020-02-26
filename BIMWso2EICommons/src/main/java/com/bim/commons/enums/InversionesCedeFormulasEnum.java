@@ -1,9 +1,9 @@
 package com.bim.commons.enums;
 
-public enum InversionesCedeTiposEnum {
+public enum InversionesCedeFormulasEnum {
     
-    CEDE_VALOR("07"),
-    CEDE_FIJA("01");
+    CEDE_VALOR("002"),
+    CEDE_FIJA("001");
 	
 	private final String producto;
 
@@ -13,17 +13,17 @@ public enum InversionesCedeTiposEnum {
     	
         switch(producto) {
             case "CEDE_VALOR":
-                return InversionesCedeTiposEnum.CEDE_VALOR.getProducto();
+                return InversionesCedeFormulasEnum.CEDE_VALOR.getProducto();
 
             case "CEDE_FIJA":
-                return InversionesCedeTiposEnum.CEDE_FIJA.getProducto();
+                return InversionesCedeFormulasEnum.CEDE_FIJA.getProducto();
 
             default:
                 return null;
         }
     }
     
-    private InversionesCedeTiposEnum(String producto) {
+    private InversionesCedeFormulasEnum(String producto) {
 		this.producto = producto;
 	}
 	

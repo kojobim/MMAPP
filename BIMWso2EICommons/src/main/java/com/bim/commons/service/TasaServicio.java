@@ -235,6 +235,8 @@ public class TasaServicio extends BaseService {
 			datosMoneda.addProperty("Mon_Fecha", "");
 		if(!datosMoneda.has("Tip_Consul"))
 			datosMoneda.addProperty("Tip_Consul", "");
+		if(!datosMoneda.has("NumTransac"))
+			datosMoneda.addProperty("NumTransac", "");
 		datosMoneda.addProperty("Mon_Numero", TasaMonedaConsultarOpMonNumero);
 		datosMoneda.addProperty("Transaccio", TasaMonedaConsultarOpTransaccio);
 		datosMoneda.addProperty("Usuario", TasaMonedaConsultarOpUsuari);

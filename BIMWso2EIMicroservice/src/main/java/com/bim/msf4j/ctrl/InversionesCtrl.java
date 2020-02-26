@@ -22,6 +22,8 @@ import org.wso2.msf4j.Request;
 import com.bim.commons.dto.BimEmailTemplateDTO;
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.enums.InversionesCategoriasEnum;
+import com.bim.commons.enums.InversionesCedeCantidadInversionEnum;
+import com.bim.commons.enums.InversionesCedeFormulasEnum;
 import com.bim.commons.enums.InversionesCedeTiposEnum;
 import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.ConflictException;
@@ -66,6 +68,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 	private static String ReinversionBitacoraCreacionOpBitTipOpe;
 	private static String InversionesCedePlazosConsultarOpPlaMoneda;
 	private static String InversionesCedePlazosConsultarOpTipConsulC4;
+	private static String InversionesCedeMonTotUDI;
 		
 	public InversionesCtrl() {
 		super();
@@ -89,6 +92,7 @@ public class InversionesCtrl extends BimBaseCtrl {
 		ReinversionBitacoraCreacionOpBitTipOpe = properties.getProperty("op.reinversion.bitacora_creacion.bit_tip_ope");
 		InversionesCedePlazosConsultarOpPlaMoneda = properties.getProperty("op.inversiones_cede_plazos_consultar.pla_moneda");
 		InversionesCedePlazosConsultarOpTipConsulC4 = properties.getProperty("op.inversiones_cede_plazos_consultar.tip_consul_c4");
+		InversionesCedeMonTotUDI = properties.getProperty("op.inversiones_cede_alta.mon_tot_udi");
 		
 		logger.info("CTRL: Terminando metodo init...");
 	}
@@ -1056,4 +1060,210 @@ public class InversionesCtrl extends BimBaseCtrl {
 				.build();
 	}
 	
+	@Path("cede/calculadora")
+	@GET()
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response obtenerCalculosInversionCede(@QueryParam("producto") String producto,
+			@QueryParam("pla_numero") String plaNumero, @QueryParam("fec_ini") String fecIni,
+			@QueryParam("monto") Double monto, @Context final Request solicitud) {
+		logger.info("CTRL: Comenzando obtenerCalculosInversionCede metodo");
+		
+		String plaProduc = InversionesCedeTiposEnum.validarProducto(producto);
+		
+		if (plaProduc == null) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.71");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		if(plaNumero == null || plaNumero.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.68");
+			bimMessageDTO.addMergeVariable("nombrePropiedad", "pla_numero");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		if(fecIni == null || fecIni.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.68");
+			bimMessageDTO.addMergeVariable("nombrePropiedad", "fecIni");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+
+		if(Utilerias.formatearFecha(fecIni) == null) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.43");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+
+		Double cantidadInversion = InversionesCedeCantidadInversionEnum.validarCantidadInversion(producto);
+		
+		if(monto == null || monto < cantidadInversion) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.75");
+			bimMessageDTO.addMergeVariable("invCantid", cantidadInversion.toString());
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		String bearerToken = solicitud.getHeader("Authorization");
+		JsonObject principalResultadoObjeto = Utilerias.obtenerPrincipal(bearerToken);
+		Utilerias.verificarError(principalResultadoObjeto);
+		
+		String usuClient = principalResultadoObjeto.get("usuClient").getAsString();
+		
+		String fechaSis = Utilerias.obtenerFechaSis();
+		
+		JsonObject datosClienteConsultar = new JsonObject();
+		datosClienteConsultar.addProperty("Cli_Numero", usuClient);
+		datosClienteConsultar.addProperty("Tip_Consul", ClienteConsultarOpTipConsul);
+		datosClienteConsultar.addProperty("FechaSis", fechaSis);
+		
+		JsonObject clienteConsultarOpResultado = this.clienteServicio.clienteConsultar(datosClienteConsultar);
+		logger.debug("clienteConsultarOpResultado" + clienteConsultarOpResultado);
+		
+		Utilerias.verificarError(clienteConsultarOpResultado);
+		
+		JsonObject clienteConsultarObjeto = Utilerias.obtenerJsonObjectPropiedad(clienteConsultarOpResultado, "cliente");
+		String cliSucurs = Utilerias.obtenerStringPropiedad(clienteConsultarObjeto, "Cli_Sucurs");
+		Double cliTasISR = Utilerias.obtenerDoublePropiedad(clienteConsultarObjeto, "Cli_TasISR");
+		String cliCobISR = Utilerias.obtenerStringPropiedad(clienteConsultarObjeto, "Cli_CobISR");
+
+		JsonObject datosSucursal = new JsonObject();
+		datosSucursal.addProperty("Par_Sucurs", cliSucurs);
+		datosSucursal.addProperty("FechaSis", fechaSis);
+
+		logger.debug("datosSucursal" + datosSucursal);
+		JsonObject informacionSucursalObtenerOpResultado = this.configuracionServicio.informacionSucursalObtener(datosSucursal);
+		logger.debug("informacionSucursalObtenerOpResultado" + informacionSucursalObtenerOpResultado);
+		
+		Utilerias.verificarError(informacionSucursalObtenerOpResultado);
+		
+		JsonObject informacionSucursalObtenerObjeto = Utilerias.obtenerJsonObjectPropiedad(informacionSucursalObtenerOpResultado, "informacionSucursal");
+		Integer parDiBaIn = Utilerias.obtenerIntPropiedad(informacionSucursalObtenerObjeto, "Par_DiBaIn");
+		
+		JsonObject datosInversionesCedePlazos = new JsonObject();
+		datosInversionesCedePlazos.addProperty("Pla_Numero", plaNumero);
+		datosInversionesCedePlazos.addProperty("Pla_Produc", plaProduc);
+		datosInversionesCedePlazos.addProperty("Tip_Consul", InversionesCedePlazosConsultarOpTipConsulC4);
+		datosInversionesCedePlazos.addProperty("FechaSis", fechaSis);
+		
+		JsonObject inversionesCedePlazosConsultarOpResultado = this.inversionesServicio.inversionesCedePlazosConsultar(datosInversionesCedePlazos);
+		logger.debug("inversionesCedePlazosConsultarOpResultado" + inversionesCedePlazosConsultarOpResultado);
+		
+		Utilerias.verificarError(inversionesCedePlazosConsultarOpResultado);
+		
+		JsonObject inversionesCedePlazoObjeto = Utilerias.obtenerJsonObjectPropiedad(inversionesCedePlazosConsultarOpResultado, "plazo");
+		
+		if(inversionesCedePlazoObjeto.isJsonNull() || inversionesCedePlazoObjeto.entrySet().size() == 0) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.74");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		Integer plaDias = Utilerias.obtenerIntPropiedad(inversionesCedePlazoObjeto, "Pla_Dias");
+		String fotNumero = InversionesCedeFormulasEnum.validarProducto(producto);
+		
+		JsonObject datosTasaInversionesCedeConsultar = new JsonObject();
+		datosTasaInversionesCedeConsultar.addProperty("Tas_Plazo", plaNumero);
+		datosTasaInversionesCedeConsultar.addProperty("Tas_Cantid", monto);
+		datosTasaInversionesCedeConsultar.addProperty("Tas_Formul", fotNumero);
+		datosTasaInversionesCedeConsultar.addProperty("Tas_Fecha", fecIni);
+		datosTasaInversionesCedeConsultar.addProperty("Cli_Numero", usuClient);
+		datosTasaInversionesCedeConsultar.addProperty("FechaSis", fechaSis);
+		
+		JsonObject tasaInversionesCedeConsultarOpResultado = this.tasaServicio.tasaInversionesCedeConsultar(datosTasaInversionesCedeConsultar);
+		logger.debug("tasaInversionesCedeConsultarOpResultado" + tasaInversionesCedeConsultarOpResultado);
+		
+		Utilerias.verificarError(tasaInversionesCedeConsultarOpResultado);
+		
+		JsonObject tasaInversionesCedeConsultarObjeto = Utilerias.obtenerJsonObjectPropiedad(tasaInversionesCedeConsultarOpResultado, "tasaCede");
+		Double tasTasa = Utilerias.obtenerDoublePropiedad(tasaInversionesCedeConsultarObjeto, "Tas_Tasa");
+		Double tasPorBas = Utilerias.obtenerDoublePropiedad(tasaInversionesCedeConsultarObjeto, "Tas_PorBas");
+		Double tasPuntos = Utilerias.obtenerDoublePropiedad(tasaInversionesCedeConsultarObjeto, "Tas_Puntos");
+		Double tasVarRea = Utilerias.obtenerDoublePropiedad(tasaInversionesCedeConsultarObjeto, "Tas_VarRea");
+		
+		JsonObject datosMoneda = new JsonObject();
+		datosMoneda.addProperty("FechaSis", fechaSis);
+		
+		JsonObject tasaMonedaConsultarOpResultado = this.tasaServicio.tasaMonedaConsultar(datosMoneda);
+		logger.debug("tasaMonedaConsultarOpResultado" + tasaMonedaConsultarOpResultado);
+		
+		Utilerias.verificarError(tasaMonedaConsultarOpResultado);
+		
+		JsonObject tasaMonedaConsultarObjeto = Utilerias.obtenerJsonObjectPropiedad(tasaMonedaConsultarOpResultado, "tasaMoneda");
+		Double monFixCom = Utilerias.obtenerDoublePropiedad(tasaMonedaConsultarObjeto, "Mon_FixCom");
+		
+		/**
+		 * REGLA DE NEGOCIO: validar que el monto de la inversion en UDIS sea menor a 40,000,000.00 para calcular GAT y GATReal
+		 */
+		
+		Double invGAT = null;
+		Double invGATRea = null;
+
+		if((monto / monFixCom) < Double.parseDouble(InversionesCedeMonTotUDI)) {
+			JsonObject datosGATCede = new JsonObject();
+			datosGATCede.addProperty("Inv_Dias", plaDias);
+			datosGATCede.addProperty("Inv_TasInt", tasTasa);
+			datosGATCede.addProperty("Cue_MonInv", monto);
+			datosGATCede.addProperty("FechaSis", fechaSis);
+			
+			JsonObject tasaGATCedeConsultaCalcularOpResultado = this.tasaServicio.tasaGATCedeConsultaCalcular(datosGATCede);
+			logger.debug("tasaGATCedeConsultaCalcularOpResultado" + tasaGATCedeConsultaCalcularOpResultado);
+			
+			Utilerias.verificarError(tasaGATCedeConsultaCalcularOpResultado);
+			
+			JsonObject tasaGATCedeConsultaCalcularObjeto = Utilerias.obtenerJsonObjectPropiedad(tasaGATCedeConsultaCalcularOpResultado, "tasaGATCede");
+			invGAT = Utilerias.obtenerDoublePropiedad(tasaGATCedeConsultaCalcularObjeto, "Inv_GAT");
+			
+			JsonObject datosGATReal = new JsonObject();
+			datosGATReal.addProperty("Inv_GAT", invGAT);
+			datosGATReal.addProperty("FechaSis", fechaSis);
+			
+			JsonObject tasaGATRealConsultaCalcularOpResultado = this.tasaServicio.tasaGATRealConsultaCalcular(datosGATReal);
+			logger.debug("tasaGATRealConsultaCalcularOpResultado" + tasaGATRealConsultaCalcularOpResultado);
+			
+			Utilerias.verificarError(tasaGATRealConsultaCalcularOpResultado);
+			
+			JsonObject tasaGATRealConsultaCalcularObjeto = Utilerias.obtenerJsonObjectPropiedad(tasaGATRealConsultaCalcularOpResultado, "tasaGATReal");
+			invGATRea = Utilerias.obtenerDoublePropiedad(tasaGATRealConsultaCalcularObjeto, "Inv_GATRea");
+		}
+		
+		JsonObject calculaTasa = new JsonObject();
+		calculaTasa.addProperty("Inv_Plazo", plaDias);
+		calculaTasa.addProperty("Inv_Cantid", monto);
+		calculaTasa.addProperty("TasInv", tasTasa);
+		calculaTasa.addProperty("Par_DiBaIn", parDiBaIn);
+		calculaTasa.addProperty("Par_ISR", cliTasISR);
+		calculaTasa.addProperty("Cli_CobISR", cliCobISR);
+
+		JsonObject resultadoCalculaTasa = Utilerias.calculaTasa(calculaTasa);
+		logger.debug("resultadoCalculaTasa" + resultadoCalculaTasa);
+		
+		Double invCanBru = Utilerias.obtenerDoublePropiedad(resultadoCalculaTasa, "Inv_CanBru");
+		Double invISR = Utilerias.obtenerDoublePropiedad(resultadoCalculaTasa, "Inv_ISR");
+		Double invCanISR = Utilerias.obtenerDoublePropiedad(resultadoCalculaTasa, "Inv_CanISR");
+		Double invTasa = Utilerias.obtenerDoublePropiedad(resultadoCalculaTasa, "Inv_Tasa");
+		Double invCanNet = Utilerias.obtenerDoublePropiedad(resultadoCalculaTasa, "Inv_CanNet");
+		Double invCanTot = Utilerias.obtenerDoublePropiedad(resultadoCalculaTasa, "Inv_CanTot");
+		
+		StringBuilder cpTasReferencia = new StringBuilder()
+				.append("Cetes 28 D\u00edas ")
+				.append(Utilerias.redondear(tasVarRea, 2));
+		
+		JsonObject resultado = new JsonObject();
+		JsonObject calculadora = new JsonObject();
+		
+		calculadora.addProperty("invPts", Utilerias.redondear(tasPorBas/100, 2));
+		calculadora.addProperty("invPuntos", Utilerias.redondear(tasPuntos, 2));
+		calculadora.addProperty("invTBruta", Utilerias.redondear(tasTasa, 2));
+		calculadora.addProperty("invCanBru", Utilerias.redondear(invCanBru, 2));
+		calculadora.addProperty("cpInvISR", invISR);
+		calculadora.addProperty("invCanISR", Utilerias.redondear(invCanISR, 2));
+		calculadora.addProperty("cpInvTasa", invTasa);
+		calculadora.addProperty("invCanNet", Utilerias.redondear(invCanNet, 2));
+		calculadora.addProperty("invCanTot", Utilerias.redondear(invCanTot, 2));
+		calculadora.addProperty("invGat", invGAT != null ? invGAT.toString() : "N.A.");
+		calculadora.addProperty("invGatRea", invGATRea != null ? invGATRea.toString() : "N.A.");
+		calculadora.addProperty("cpTasReferencia", cpTasReferencia.toString());
+		
+		resultado.add("calculadora", calculadora);
+		
+		logger.info("CTRL: Terminando obtenerCalculosInversionCede metodo");
+		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
+				.build();
+	}
 }
