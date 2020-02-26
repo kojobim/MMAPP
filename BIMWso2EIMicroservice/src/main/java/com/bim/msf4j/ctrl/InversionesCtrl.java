@@ -989,9 +989,6 @@ public class InversionesCtrl extends BimBaseCtrl {
 			@HeaderParam("Authorization") String token,
 			@Context final Request solicitud) {
 		logger.info("CTRL: Empezando calculadora Method...");
-		logger.info("plazo"+plazo);
-		logger.info("fec_ven"+invFecVen);
-		logger.info("monto"+monto);
 
 		String bearerToken = solicitud.getHeader("Authorization");
 		JsonObject principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
@@ -1327,5 +1324,87 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("CTRL: Terminando obtenerPeriodoDuracion metodo");
 		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 				.build();
-	}	
+	}
+	
+	@Path("fecha-habil")
+	@GET()
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response siguienteFechaHabil(@QueryParam("plazo") String plazo,
+			@Context final Request solicitud) {
+		logger.info("CTRL: Comenzando siguenteFechaHabil metodo");
+
+		String formato = "yyyy-MM-dd";
+		String bearerToken = null;
+		String fechaSis = null;
+		String Fecha = null;
+		String invFecVen = null;
+		String fechaFinStr = null;
+		Integer dias = null;
+		Integer plazoFin = null;
+		Integer plazoInt = null;
+		JsonObject datosFechaHabil = null;
+		JsonObject principalResultadoObjeto = null;
+		JsonObject FechaHabil = null;
+		JsonObject resultado = null;
+		JsonObject fechaHabilConsultarOpResultado = null;
+		JsonObject fechaHabilConsultarObjeto = null;
+		Date fechaIni = null;
+		Date fechaFin = null;
+		
+		bearerToken = solicitud.getHeader("Authorization");
+		principalResultadoObjeto = Utilerias.obtenerPrincipal(bearerToken);
+		Utilerias.verificarError(principalResultadoObjeto);
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("YYYY-MM-dd");	
+		
+		if(plazo == null || plazo.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.68");
+			bimMessageDTO.addMergeVariable("nombrePropiedad", "plazo");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		if(!Utilerias.validaNumero(plazo)) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.59");
+			bimMessageDTO.addMergeVariable("nombreParametro", "plazo");
+			bimMessageDTO.addMergeVariable("valor", plazo);
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+
+		plazoInt = Integer.parseInt(plazo);
+		if(plazoInt <= 0){
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.73");
+			bimMessageDTO.addMergeVariable("nombreParametro", "plazo");
+			throw new ConflictException(bimMessageDTO.toString());
+		}
+		
+		fechaSis = Utilerias.obtenerFechaSis();	
+		fechaIni = Utilerias.convertirZonaHoraria(Utilerias.convertirFecha(fechaSis), TimeZone.getTimeZone("CST6CDT"), TimeZone.getTimeZone("UTC"));
+		fechaFin = Utilerias.agregarDiasAFecha(fechaIni, plazoInt);
+		fechaFinStr = sdf.format(fechaFin);
+		datosFechaHabil = new JsonObject();
+		datosFechaHabil.addProperty("Fecha", fechaFinStr);
+		datosFechaHabil.addProperty("FechaSis", fechaSis);
+		
+		fechaHabilConsultarOpResultado = this.reinversionServicio.fechaHabilConsultar(datosFechaHabil);
+		if(logger.isDebugEnabled()) {
+		logger.debug("fechaHabilConsultarOpResultado" + fechaHabilConsultarOpResultado);
+		}
+		Utilerias.verificarError(fechaHabilConsultarOpResultado);		
+		fechaHabilConsultarObjeto = Utilerias.obtenerJsonObjectPropiedad(fechaHabilConsultarOpResultado, "fechaHabil");
+
+		Fecha = Utilerias.obtenerStringPropiedad(fechaHabilConsultarObjeto, "Fecha");
+		dias = Utilerias.obtenerIntPropiedad(fechaHabilConsultarObjeto, "Dias");
+		invFecVen = Utilerias.formatearFecha(Fecha, formato);		
+		plazoFin = plazoInt + dias;
+		
+		resultado = new JsonObject();				
+		FechaHabil = new JsonObject();
+		FechaHabil.addProperty("plazo", plazoFin);
+		FechaHabil.addProperty("invFecVen", invFecVen);
+		
+		resultado.add("siguienteFechaHabil", FechaHabil);
+		
+		logger.info("CTRL: Terminando siguenteFechaHabil metodo");
+		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
+				.build();
+	}
 }
