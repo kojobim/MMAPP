@@ -791,4 +791,38 @@ public class Utilerias {
 		}		
 		return null;
 	}
+	
+	public static Date calcularAmortizacionDiaDePago(Integer diaPId, Date invFecIni, Integer diaAmo) {
+		Calendar calendario = Calendar.getInstance();
+		calendario.setTime(invFecIni);
+		
+		switch(diaPId) {
+			case 1:
+				calendario.add(Calendar.DATE, 28);
+				return calendario.getTime();
+				
+			case 2:
+				calendario.set(Calendar.DAY_OF_MONTH, 1);
+				calendario.add(Calendar.MONTH, 1);
+				return calendario.getTime();
+				
+			case 3:
+				calendario.set(Calendar.DAY_OF_MONTH, 1);
+				calendario.add(Calendar.MONTH, 1);
+				calendario.add(Calendar.DATE, -1);
+				if(calendario.getTime().compareTo(invFecIni) == 0)
+					calendario.add(Calendar.MONTH, 1);
+				return calendario.getTime();
+				
+			case 4:
+				calendario.set(Calendar.DAY_OF_MONTH, diaAmo);
+				if(calendario.getTime().compareTo(invFecIni) < 0)
+					calendario.add(Calendar.MONTH, 1);
+				return calendario.getTime();
+				
+			default:
+				calendario.add(Calendar.DATE, 30);
+				return calendario.getTime();
+		}
+	}
 }
