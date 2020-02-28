@@ -283,7 +283,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/inversionesCedePlazosNE" element="plazos" rowName="plazo">
+        <result defaultNamespace="http://bem.com/inversionesCedePlazosConsultarL1NE" element="plazos" rowName="plazo">
             <element column="Pla_Numero" name="Pla_Numero" xsdType="xs:string"/>
             <element column="Pla_Moneda" name="Pla_Moneda" xsdType="xs:string"/>
             <element column="Pla_Plazo" name="Pla_Plazo" xsdType="xs:integer"/>
@@ -320,7 +320,7 @@
         <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
         <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
-        <result defaultNamespace="http://bem.com/inversionesCedePlazosNE" element="plazo">
+        <result defaultNamespace="http://bem.com/inversionesCedePlazosConsultarC4NE" element="plazo">
             <element column="Pla_Numero" name="Pla_Numero" xsdType="xs:string"/>
             <element column="Pla_Moneda" name="Pla_Moneda" xsdType="xs:string"/>
             <element column="Pla_Plazo" name="Pla_Plazo" xsdType="xs:integer"/>
