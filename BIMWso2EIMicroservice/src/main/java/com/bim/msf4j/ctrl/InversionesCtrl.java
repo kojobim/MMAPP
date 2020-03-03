@@ -2,12 +2,16 @@ package com.bim.msf4j.ctrl;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.TimeZone;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -1617,5 +1621,132 @@ public class InversionesCtrl extends BimBaseCtrl {
 		logger.info("CTRL: Terminando obtenerCalculosInversionCede metodo");
 		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
 					.build();
+	}
+	
+	@Path("pagare")
+	@POST()
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response nuevaInversionPagare(JsonObject inversionesObjeto,
+			@Context final Request solicitud) {
+		logger.info("CTRL: Comenzando nueva inversion pagare metodo");
+		
+		String cpRSAToken = null;
+		String invCuenta = null;
+		String invFecVen = null;
+		String bearerToken = null;
+		String usuNumero = null;
+		String usuClient = null;
+		String usuEmail = null;		
+		String usuFolTok = null;		
+		String bitPriRef = null;
+		String bitDireIP = null;
+		String fechaSis = null;
+		String invInvAnt = "";
+		String invCveSeg = "";
+		Double invTasa = null;
+		Double invTBruta = null;
+		Double invISR = null;
+		Double adiInsliq = null;
+		Double invDeposi = null;
+		
+		JsonObject resultado = null;
+		JsonObject requesBodyPagare = null;
+		JsonObject principalResultadoObjecto = null;
+		JsonObject folioTransaccionGenerarOpResultadoObjeto = null;
+		JsonObject nuevaInversion = null;
+		JsonArray requesBodyArreglo = null;
+
+		
+		requesBodyPagare = inversionesObjeto.getAsJsonObject("nuevaInversion");
+		Utilerias.verificarError(requesBodyPagare);		
+		
+		bearerToken = solicitud.getHeader("Authorization");
+		principalResultadoObjecto = Utilerias.obtenerPrincipal(bearerToken);
+		
+		cpRSAToken = Utilerias.obtenerStringPropiedad(requesBodyPagare, "cpRSAToken");
+		invCuenta = Utilerias.obtenerStringPropiedad(requesBodyPagare, "invCuenta");
+		invFecVen = Utilerias.obtenerStringPropiedad(requesBodyPagare, "invFecVen");
+		invTasa = Utilerias.obtenerDoublePropiedad(requesBodyPagare, "invTasa");
+		invTBruta = Utilerias.obtenerDoublePropiedad(requesBodyPagare, "invTBruta");
+		invISR = Utilerias.obtenerDoublePropiedad(requesBodyPagare, "invISR");
+		adiInsliq = Utilerias.obtenerDoublePropiedad(requesBodyPagare, "adiInsliq");
+		invDeposi = Utilerias.obtenerDoublePropiedad(requesBodyPagare, "invDeposi");
+		
+		usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
+		usuClient = principalResultadoObjecto.get("usuClient").getAsString();
+		usuEmail = principalResultadoObjecto.get("usuEmail").getAsString();		
+		usuFolTok = principalResultadoObjecto.get("usuFolTok").getAsString();
+		
+		bitPriRef = solicitud.getHeader("User-Agent");
+		bitDireIP = solicitud.getHeader("X-Forwarded-For");
+		fechaSis = Utilerias.obtenerFechaSis();
+		
+		folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
+		if(logger.isDebugEnabled()) {
+		logger.info("folioTransaccionGenerarOpResultadoObjeto" + folioTransaccionGenerarOpResultadoObjeto);
+		}
+		Utilerias.verificarError(folioTransaccionGenerarOpResultadoObjeto);
+
+		JsonObject transaccion = Utilerias.obtenerJsonObjectPropiedad(folioTransaccionGenerarOpResultadoObjeto, "transaccion");
+		String numTransac = Utilerias.obtenerStringPropiedad(transaccion, "Fol_Transa");
+//
+//		StringBuilder scriptName = new StringBuilder()
+//				.append(InversionesCtrl.class.getName())
+//				.append(".nuevaInversionPagare");
+//
+//		String validarToken = this.tokenServicio.validarTokenOperacion(usuFolTok, cpRSAToken, usuNumero, numTransac, scriptName.toString());
+//
+//		if ("B".equals(validarToken)) {
+//			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.30");
+//			throw new ForbiddenException(bimMessageDTO.toString());
+//		}
+//		if ("C".equals(validarToken)) {
+//			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.28");
+//			throw new ForbiddenException(bimMessageDTO.toString());
+//		}
+		
+//		List<String> propiedadesRequesBody = new ArrayList<>();
+//		propiedadesRequesBody.add(cpRSAToken);
+//		propiedadesRequesBody.add(invCuenta);
+//		propiedadesRequesBody.add(invFecVen);
+//		propiedadesRequesBody.add(invTasa.toString());
+//		propiedadesRequesBody.add(invTBruta.toString());
+//		propiedadesRequesBody.add(invISR.toString());
+//		propiedadesRequesBody.add(adiInsliq.toString());
+//		propiedadesRequesBody.add(invDeposi.toString());
+//		
+//		for(String elemento : propiedadesRequesBody) {
+//			if(elemento == null || elemento.isEmpty()) {
+//				BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.76");
+//				throw new BadRequestException(bimMessageDTO.toString());
+//			}
+//		}
+		
+		JsonObject datosInversionesAlta = new JsonObject();
+		datosInversionesAlta.addProperty("Inv_FecIni", fechaSis);
+		datosInversionesAlta.addProperty("Inv_FecVen", invFecVen);
+		datosInversionesAlta.addProperty("Inv_Cantid", invDeposi);
+		datosInversionesAlta.addProperty("Inv_Tasa", invTasa);
+		datosInversionesAlta.addProperty("Inv_ISR", invISR);
+		datosInversionesAlta.addProperty("Inv_Cuenta", invCuenta);
+		datosInversionesAlta.addProperty("Inv_InvAnt", invInvAnt);
+		datosInversionesAlta.addProperty("Inv_TBruta", invTBruta);
+		datosInversionesAlta.addProperty("Inv_CveSeg", invCveSeg);
+		datosInversionesAlta.addProperty("I_Numero", );
+		datosInversionesAlta.addProperty("NumTransac", numTransac);
+		
+		JsonObject tasaInversionesCedeConsultarOpResultado = this.inversionesServicio.inversionesAlta(datosInversionesAlta);
+		logger.debug("tasaInversionesCedeConsultarOpResultado" + tasaInversionesCedeConsultarOpResultado);
+		
+		resultado = new JsonObject();
+		nuevaInversion = new JsonObject();
+		
+		nuevaInversion.addProperty("holaMundo", "hola mundo");
+		resultado.add("Hola mundo", nuevaInversion);
+
+		logger.info("CTRL: Finalizando nueva inversion pagare metodo");
+		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
+				.build();
 	}
 }
