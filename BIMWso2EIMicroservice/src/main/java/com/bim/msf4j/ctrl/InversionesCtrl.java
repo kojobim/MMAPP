@@ -1733,11 +1733,31 @@ public class InversionesCtrl extends BimBaseCtrl {
 		datosInversionesAlta.addProperty("Inv_InvAnt", invInvAnt);
 		datosInversionesAlta.addProperty("Inv_TBruta", invTBruta);
 		datosInversionesAlta.addProperty("Inv_CveSeg", invCveSeg);
-		datosInversionesAlta.addProperty("I_Numero", );
+		datosInversionesAlta.addProperty("I_Numero", "pendiente");
 		datosInversionesAlta.addProperty("NumTransac", numTransac);
 		
-		JsonObject tasaInversionesCedeConsultarOpResultado = this.inversionesServicio.inversionesAlta(datosInversionesAlta);
-		logger.debug("tasaInversionesCedeConsultarOpResultado" + tasaInversionesCedeConsultarOpResultado);
+		JsonObject inversionesPagareAltaOpResultado = this.inversionesServicio.inversionesAlta(datosInversionesAlta);
+		if(logger.isDebugEnabled()) {
+		logger.debug("inversionesPagareAltaOpResultado" + inversionesPagareAltaOpResultado);
+		}
+		Utilerias.verificarError(inversionesPagareAltaOpResultado);
+		
+		JsonObject alta = Utilerias.obtenerJsonObjectPropiedad(inversionesPagareAltaOpResultado, "alta");
+		String invNumero = Utilerias.obtenerStringPropiedad(alta, "Inv_Numero");
+		
+		JsonObject datosInversionesAltaPagar = new JsonObject();
+		datosInversionesAltaPagar.addProperty("Inv_Numero", invNumero);
+		datosInversionesAltaPagar.addProperty("Inv_FecIni", "fechaSis");
+		datosInversionesAltaPagar.addProperty("Inv_Cantid", "invDeposi");
+		datosInversionesAltaPagar.addProperty("Inv_Cuenta", "invCuenta");
+		datosInversionesAltaPagar.addProperty("Fecha", "fechaSis");
+		datosInversionesAltaPagar.addProperty("NumTransac", "numTransac");
+		
+		JsonObject cobroPagareAltaOpResultado = this.inversionesServicio.inversionesAltaPagar(datosInversionesAltaPagar);
+		if(logger.isDebugEnabled()) {
+			logger.debug("cobroPagareAltaOpResultado" + cobroPagareAltaOpResultado);
+			}
+		Utilerias.verificarError(cobroPagareAltaOpResultado);
 		
 		resultado = new JsonObject();
 		nuevaInversion = new JsonObject();

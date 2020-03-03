@@ -99,6 +99,7 @@ public class InversionesServicio extends BaseService {
 	private static String InversionesCedeDiasDePagoConsultarOpModulo;
 	
 	private static String InversionesAltaPagarOp;
+	private static String InversionesAltaPagarOpInvStatus;
 	private static String InversionesAltaPagarOpTransaccio;
 	private static String InversionesAltaPagarOpUsuario;
 	private static String InversionesAltaPagarOpSucOrigen;
@@ -218,6 +219,7 @@ public class InversionesServicio extends BaseService {
 		InversionesCedePlazosConsultarOpSucDestino = properties.getProperty("op.inversiones_cede_plazos_consultar.suc_destino");
 		InversionesCedePlazosConsultarOpModulo = properties.getProperty("op.inversiones_cede_plazos_consultar.modulo");	
 		
+		InversionesAltaPagarOpInvStatus = properties.getProperty("op.inversiones_alta_pagar.inv_status");
 		InversionesAltaPagarOpTransaccio = properties.getProperty("op.inversiones_alta_pagar.transaccio");
 		InversionesAltaPagarOpUsuario = properties.getProperty("op.inversiones_alta_pagar.usuario");
 		InversionesAltaPagarOpSucOrigen = properties.getProperty("op.inversiones_alta_pagar.suc_origen");
@@ -776,6 +778,7 @@ public class InversionesServicio extends BaseService {
 	*/
 	public JsonObject inversionesAltaPagar(JsonObject datosInversionesAltaPagar) {
 		logger.info("COMMONS: Comenzando datosInversionesAltaPagar metodo... ");		
+		datosInversionesAltaPagar.addProperty("Inv_Status", InversionesAltaPagarOpInvStatus);		
 		datosInversionesAltaPagar.addProperty("Transaccio", InversionesAltaPagarOpTransaccio);
 		datosInversionesAltaPagar.addProperty("Usuario", InversionesAltaPagarOpUsuario);
 		datosInversionesAltaPagar.addProperty("SucOrigen", InversionesAltaPagarOpSucOrigen);
