@@ -1683,7 +1683,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 		
 		usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
 		usuClient = principalResultadoObjecto.get("usuClient").getAsString();
-		usuEmail = principalResultadoObjecto.get("usuEmail").getAsString();		
+//		usuEmail = principalResultadoObjecto.get("usuEmail").getAsString();	
+		usuEmail = "oramirez@mediomelon.mx";
 		usuFolTok = principalResultadoObjecto.get("usuFolTok").getAsString();
 		
 		bitPriRef = solicitud.getHeader("User-Agent");
