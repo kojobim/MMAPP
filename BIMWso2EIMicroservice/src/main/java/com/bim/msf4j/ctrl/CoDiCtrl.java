@@ -172,7 +172,7 @@ public class CoDiCtrl extends BimBaseCtrl{
 		autorizacion.addProperty("claveCifrado", usuPasCif);
 		resultadoObjeto.add("autorizacion", autorizacion);
 		
-		logger.info("CTRL: Terminando autorizaCoDi metodo");
+		LOGGER.info("CTRL: Terminando autorizaCoDi metodo");
 		return Response.ok(resultadoObjeto.toString(), MediaType.APPLICATION_JSON).build();
 		
 	}
