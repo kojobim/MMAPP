@@ -115,6 +115,7 @@ public class InversionesServicio extends BaseService {
 	
 	private static String InversionesCedeAltaOp;
 	private static String InversionesCedeAltaOpInvMoneda;
+	private static String InversionesCedeAltaOpInvOriInv;
 	private static String InversionesCedeAltaOpTransaccio;
 	private static String InversionesCedeAltaOpUsuario;
 	private static String InversionesCedeAltaOpSucOrigen;
@@ -233,6 +234,7 @@ public class InversionesServicio extends BaseService {
 		InversionesPagareInformacionGuardarOpModulo = properties.getProperty("op.inversiones_pagare_informacion_guardar.modulo");
 		
 		InversionesCedeAltaOpInvMoneda = properties.getProperty("op.inversiones_cede_alta.inv_moneda");
+		InversionesCedeAltaOpInvOriInv = properties.getProperty("op.inversiones_cede_alta.inv_ori_inv");
 		InversionesCedeAltaOpTransaccio = properties.getProperty("op.inversiones_cede_alta.transaccio");
 		InversionesCedeAltaOpUsuario = properties.getProperty("op.inversiones_cede_alta.usuario");
 		InversionesCedeAltaOpSucOrigen = properties.getProperty("op.inversiones_cede_alta.suc_origen");
@@ -803,7 +805,6 @@ public class InversionesServicio extends BaseService {
 	* {
 	* 	Inv_Cuenta: String,
     *   Inv_Plazo: String,
-    *   Inv_OriInv: String,
     *   Inv_FecVen: String,
     *   Inv_Cantid: Double,
     *   Inv_Tasa: Double,
@@ -829,6 +830,7 @@ public class InversionesServicio extends BaseService {
 	* </pre>
 	*/
 	public JsonObject inversionesCedeAlta(JsonObject datosInversionesCedeAlta) {
+		logger.info("COMMONS: Comenzando inversionesCedeAlta metodo... ");
 		if(!datosInversionesCedeAlta.has("Inv_Numero"))
 			datosInversionesCedeAlta.addProperty("Inv_Numero", "");
 		if(!datosInversionesCedeAlta.has("Inv_Autori"))
@@ -837,8 +839,8 @@ public class InversionesServicio extends BaseService {
 			datosInversionesCedeAlta.addProperty("Con_Origen", "");
 		if(!datosInversionesCedeAlta.has("Inv_TasBas"))
 			datosInversionesCedeAlta.addProperty("Inv_TasBas", "");
-		logger.info("COMMONS: Comenzando inversionesCedeAlta metodo... ");
 		datosInversionesCedeAlta.addProperty("Inv_Moneda", InversionesCedeAltaOpInvMoneda);
+		datosInversionesCedeAlta.addProperty("Inv_OriInv", InversionesCedeAltaOpInvOriInv);
 		datosInversionesCedeAlta.addProperty("Transaccio", InversionesCedeAltaOpTransaccio);
 		datosInversionesCedeAlta.addProperty("Usuario", InversionesCedeAltaOpUsuario);
 		datosInversionesCedeAlta.addProperty("SucOrigen", InversionesCedeAltaOpSucOrigen);

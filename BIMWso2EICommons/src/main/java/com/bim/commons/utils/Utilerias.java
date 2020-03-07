@@ -228,7 +228,7 @@ public class Utilerias {
 	
 	public static Boolean validaNumero(String valor) {
 		logger.info("COMMONS: Comenzando validaNumero metodo...");
-		String regex = "\\d+";
+		String regex = "\\d+$|\\d+\\.\\d+$";
 		logger.info("COMMONS: Finalizando validaNumero metodo...");
 		return valor.matches(regex);
 	}
