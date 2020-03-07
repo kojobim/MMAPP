@@ -1729,23 +1729,81 @@ public class InversionesCtrl extends BimBaseCtrl {
 		invCuenta = Utilerias.obtenerStringPropiedad(requestBodyPagare, "invCuenta");
 		invFecVen = Utilerias.obtenerStringPropiedad(requestBodyPagare, "invFecVen");
 		adiInsliq = Utilerias.obtenerStringPropiedad(requestBodyPagare, "adiInsliq");
+		plazo = Utilerias.obtenerStringPropiedad(requestBodyPagare, "plazo");
 		invTasa = Utilerias.obtenerDoublePropiedad(requestBodyPagare, "invTasa");
 		invTBruta = Utilerias.obtenerDoublePropiedad(requestBodyPagare, "invTBruta");
 		invISR = Utilerias.obtenerDoublePropiedad(requestBodyPagare, "invISR");
 		invDeposi = Utilerias.obtenerDoublePropiedad(requestBodyPagare, "invDeposi");
 		invCanNet = Utilerias.obtenerDoublePropiedad(requestBodyPagare, "invCanNet");
-		plazo = Utilerias.obtenerStringPropiedad(requestBodyPagare, "plazo");
-		
-		logger.info("adiInsliq^^^^^^^^^^^^^^^^^"+adiInsliq);
 		
 		usuNumero = principalResultadoObjecto.get("usuNumero").getAsString();
-//		usuEmail = principalResultadoObjecto.get("usuEmail").getAsString();	
-		usuEmail = "oramirez@mediomelon.mx";
+		usuEmail = principalResultadoObjecto.get("usuEmail").getAsString();
 		usuFolTok = principalResultadoObjecto.get("usuFolTok").getAsString();
 		usuNombre = principalResultadoObjecto.get("usuNombre").getAsString();
 		
 		bitDireIP = solicitud.getHeader("X-Forwarded-For");
 		fechaSis = Utilerias.obtenerFechaSis();
+		
+		if(!Utilerias.validaNumero(invTasa.toString())) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.59");
+			bimMessageDTO.addMergeVariable("nombreParametro", "invTasa");
+			bimMessageDTO.addMergeVariable("valor", invTasa.toString());
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		if(!Utilerias.validaNumero(invTBruta.toString())) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.59");
+			bimMessageDTO.addMergeVariable("nombreParametro", "invTBruta");
+			bimMessageDTO.addMergeVariable("valor", invTBruta.toString());
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		if(!Utilerias.validaNumero(invISR.toString())) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.59");
+			bimMessageDTO.addMergeVariable("nombreParametro", "invISR");
+			bimMessageDTO.addMergeVariable("valor", invISR.toString());
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		if(!Utilerias.validaNumero(invDeposi.toString())) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.59");
+			bimMessageDTO.addMergeVariable("nombreParametro", "invDeposi");
+			bimMessageDTO.addMergeVariable("valor", invDeposi.toString());
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		if(!Utilerias.validaNumero(invCanNet.toString())) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.59");
+			bimMessageDTO.addMergeVariable("nombreParametro", "invCanNet");
+			bimMessageDTO.addMergeVariable("valor", invCanNet.toString());
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		
+		if(cpRSAToken == null || cpRSAToken.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.72");
+			bimMessageDTO.addMergeVariable("nombreParametro", "cpRSAToken");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+
+		if(plazo == null || plazo.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.72");
+			bimMessageDTO.addMergeVariable("nombreParametro", "plazo");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+
+		if(invCuenta == null || invCuenta.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.72");
+			bimMessageDTO.addMergeVariable("nombreParametro", "invCuenta");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+
+		if(invFecVen == null || invFecVen.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.72");
+			bimMessageDTO.addMergeVariable("nombreParametro", "invFecVen");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+
+		if(adiInsliq == null || adiInsliq.isEmpty()) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.72");
+			bimMessageDTO.addMergeVariable("nombreParametro", "adiInsliq");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
 		
 		folioTransaccionGenerarOpResultadoObjeto = this.transaccionServicio.folioTransaccionGenerar();
 		if(logger.isDebugEnabled()) {
