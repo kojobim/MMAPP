@@ -698,13 +698,19 @@ public class InversionesServicio extends BaseService {
 		logger.info("COMMONS: Comenzando inversionesAlta metodo... ");
 		if(!datosInversionesAlta.has("NumTransac"))
 			datosInversionesAlta.addProperty("NumTransac", "");
+		if(!datosInversionesAlta.has("Inv_InvAnt"))
+			datosInversionesAlta.addProperty("Inv_InvAnt", "");
+		if(!datosInversionesAlta.has("Inv_CveSeg"))
+			datosInversionesAlta.addProperty("Inv_CveSeg", "");
+		if(!datosInversionesAlta.has("I_Numero"))
+			datosInversionesAlta.addProperty("I_Numero", "");
 		datosInversionesAlta.addProperty("Inv_Autori", InversionesAltaOpAutori);
 		datosInversionesAlta.addProperty("Inv_Moneda", InversionesAltaOpMoneda);
 		datosInversionesAlta.addProperty("Inv_TipImp", InversionesAltaOpTipImp);
 		datosInversionesAlta.addProperty("Inv_Origen", InversionesAltaOpInvOrigen);
 		datosInversionesAlta.addProperty("Inv_ClaInv", InversionesAltaOpInvClaInv);
-		datosInversionesAlta.addProperty("Inv_CanPer", InversionesAltaOpInvCanPer);
-		datosInversionesAlta.addProperty("Inv_MonRef", InversionesAltaOpInvMonRef);
+		datosInversionesAlta.addProperty("Inv_MonRef", Integer.parseInt(InversionesAltaOpInvMonRef));
+		datosInversionesAlta.addProperty("Inv_CanPer", Integer.parseInt(InversionesAltaOpInvCanPer));
 		datosInversionesAlta.addProperty("Transaccio", InversionesAltaOpTransaccio);
 		datosInversionesAlta.addProperty("Usuario", InversionesAltaOpUsuario);
 		datosInversionesAlta.addProperty("SucOrigen", InversionesAltaOpSucOrigen);
