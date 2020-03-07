@@ -25,6 +25,7 @@ import org.stringtemplate.v4.ST;
 import com.bim.commons.dto.BimMessageDTO;
 import com.bim.commons.dto.BimEmailTemplateDTO;
 import com.bim.commons.dto.RequestDTO;
+import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.exceptions.UnauthorizedException;
 import com.google.gson.Gson;
