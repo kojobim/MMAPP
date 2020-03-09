@@ -2079,9 +2079,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 		emailTemplateDTO.addMergeVariable("Inv_Nueva", invNuevaOcu.toString());
 		emailTemplateDTO.addMergeVariable("Inv_Cuenta", invCuentaOcu.toString());
 		emailTemplateDTO.addMergeVariable("Inv_Cantid", String.valueOf(formatter.format(InvCantid)));
-		emailTemplateDTO.addMergeVariable("Inv_Deposi", String.valueOf(formatter.format(invDeposi)));
 		emailTemplateDTO.addMergeVariable("Inv_Plazo", String.valueOf(Plazo));
 		emailTemplateDTO.addMergeVariable("Inv_InfGAT", String.valueOf(formatter.format(objInvGAT)));
+		emailTemplateDTO.addMergeVariable("Inv_InfGATRea", String.valueOf(formatter.format(objInvGATRea)));
 		emailTemplateDTO.addMergeVariable("Inv_FecIni", fecIni != null ? fecIni : "");
 		emailTemplateDTO.addMergeVariable("Inv_FecVen", fecVen != null ? fecVen : "");
 		emailTemplateDTO.addMergeVariable("Str_InsLiq", strInsLiq);
