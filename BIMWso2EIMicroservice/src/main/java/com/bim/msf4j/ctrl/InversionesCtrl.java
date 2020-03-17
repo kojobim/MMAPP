@@ -1843,6 +1843,11 @@ public class InversionesCtrl extends BimBaseCtrl {
 		cuenta = Utilerias.obtenerJsonObjectPropiedad(consultaCuentaOrigenOpResultado, "cuenta");
 		corMonDia = Utilerias.obtenerDoublePropiedad(cuenta, "Cor_MonDia");
 		corMoLiDi = Utilerias.obtenerDoublePropiedad(cuenta, "Cor_MoLiDi");	
+		if(corMoLiDi == null || "0".equals(corMoLiDi.toString())){
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.78");
+			throw new ForbiddenException(bimMessageDTO.toString());
+		}
+
 		montoAcumulado = corMonDia + invDeposi;		
 		
 		/**
