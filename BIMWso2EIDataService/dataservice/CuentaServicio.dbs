@@ -3,6 +3,42 @@
     <config id="BIMDB">
         <property name="carbon_datasource_name">bim_db</property>
     </config>
+    <query id="cuentaDatosConsultarSQL" useConfig="BIMDB">
+        <sql>
+    		EXEC CHCUENTACON
+    		@Cue_Numero = :cueNumero,
+    		@Cue_Client = :cueClient,
+    		@Tip_Consul = :tipConsul,
+    		@NumTransac = :numTransac,
+    		@Transaccio = :transaccio,
+    		@Usuario = :usuario,
+    		@FechaSis = :fechaSis,
+    		@SucOrigen = :sucOrigen,
+    		@SucDestino = :sucDestino,
+    		@Modulo = :modulo
+    	</sql>
+        <param name="cueNumero" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="cueClient" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="tipConsul" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransac" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/cuentaDatosConsultarNE" element="cuenta">
+            <element column="Cue_Numero" name="Cue_Numero" xsdType="xs:string" optional="true"/>
+            <element column="Cue_Moneda" name="Cue_Moneda" xsdType="xs:string" optional="true"/>
+            <element column="Mon_Descri" name="Mon_Descri" xsdType="xs:string" optional="true"/>
+            <element column="Mon_Abrevi" name="Mon_Abrevi" xsdType="xs:string" optional="true"/>
+            <element column="Tip_Descri" name="Tip_Descri" xsdType="xs:string" optional="true"/>
+            <element column="Cue_Dispon" name="Cue_Dispon" xsdType="xs:decimal" optional="true"/>
+            <element column="Cue_Clabe" name="Cue_Clabe" xsdType="xs:string" optional="true"/>
+            <element column="Cue_Tipo" name="Cue_Tipo" xsdType="xs:string" optional="true"/>
+            <element column="Cue_Reteni" name="Cue_Reteni" xsdType="xs:decimal" optional="true"/>
+        </result>
+    </query>
     <query id="cuentaOrigenConsultarSQL" useConfig="BIMDB">
         <sql>
         	EXEC NBCUEORICON
@@ -111,6 +147,20 @@
             <with-param name="corMoneda" query-param="Cor_Moneda"/>
             <with-param name="corCliUsu" query-param="Cor_CliUsu"/>
             <with-param name="usuSucMod" query-param="Usu_SucMod"/>
+            <with-param name="tipConsul" query-param="Tip_Consul"/>
+            <with-param name="numTransac" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="SucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+    <operation name="cuentaDatosConsultarOp">
+        <call-query href="cuentaDatosConsultarSQL">
+            <with-param name="cueNumero" query-param="Cue_Numero"/>
+            <with-param name="cueClient" query-param="Cue_Client"/>
             <with-param name="tipConsul" query-param="Tip_Consul"/>
             <with-param name="numTransac" query-param="NumTransac"/>
             <with-param name="transaccio" query-param="Transaccio"/>

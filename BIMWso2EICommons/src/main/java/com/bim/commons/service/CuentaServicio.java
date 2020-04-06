@@ -11,6 +11,7 @@ public class CuentaServicio extends BaseService {
 	private static final Logger logger = LoggerFactory.getLogger(SPEIServicio.class);
 	
 	private static String CuentaServicio;
+	
 	private static String CuentaOrigenConsultarOp;
 	private static String CuentaOrigenConsultarC1Op;
 	private static String CuentaOrigenConsultarOpTipConsulLC;
@@ -20,13 +21,26 @@ public class CuentaServicio extends BaseService {
 	private static String CuentaOrigenConsultarOpSucDestino;
 	private static String CuentaOrigenConsultarOpModulo;
 	
+	private static String CuentaDatosConsultarOp;
+	private static String CuentaDatosConsultarTipConsul;
+	private static String CuentaDatosConsultarTransaccio;
+	private static String CuentaDatosConsultarUsuario;
+	private static String CuentaDatosConsultarSucOrigen;
+	private static String CuentaDatosConsultarSucDestino;
+	private static String CuentaDatosConsultarOpModulo;
+	
+	
 	public CuentaServicio() {
 		super();
 		
 		CuentaServicio = properties.getProperty("data_service.cuenta_servicio");
 		
+		
 		CuentaOrigenConsultarOp = properties.getProperty("cuenta_servicio.op.cuenta_origen_consultar");
 		CuentaOrigenConsultarC1Op = properties.getProperty("cuenta_servicio.op.cuenta_origen_consultar_c1");
+		
+		CuentaDatosConsultarOp = properties.getProperty("cuenta_datos_servicio.op.cuenta_datos_consultar");
+		
 		
 		CuentaOrigenConsultarOpTipConsulLC = properties.getProperty("op.cuenta_origen_consultar.tip_consul_lc");
 		CuentaOrigenConsultarOpTransaccio = properties.getProperty("op.cuenta_origen_consultar.transaccio");
@@ -34,6 +48,65 @@ public class CuentaServicio extends BaseService {
 		CuentaOrigenConsultarOpSucOrigen = properties.getProperty("op.cuenta_origen_consultar.suc_origen");
 		CuentaOrigenConsultarOpSucDestino = properties.getProperty("op.cuenta_origen_consultar.suc_destino");
 		CuentaOrigenConsultarOpModulo = properties.getProperty("op.cuenta_origen_consultar.modulo");
+		
+		CuentaDatosConsultarTransaccio = properties.getProperty("op.cuenta_datos_consultar.transaccio");
+		CuentaDatosConsultarUsuario = properties.getProperty("op.cuenta_datos_consultar.usuario");
+		CuentaDatosConsultarSucOrigen = properties.getProperty("op.cuenta_datos_consultar.suc_origen");
+		CuentaDatosConsultarSucDestino = properties.getProperty("op.cuenta_datos_consultar.suc_destino");
+		CuentaDatosConsultarOpModulo = properties.getProperty("op.cuenta_datos_consultar.modulo");
+		CuentaDatosConsultarTipConsul = properties.getProperty("op.cuenta_datos_consultar.tip_consul");
+	}
+	
+	/**
+     * Método para obtener las cuentas origen de un usuario 
+     * ProcedureName: CHCUENTACON
+     * @param cuentaDatosConsultar
+     * <pre>
+     * {
+     * 	Cue_Numero: String,
+     * 	Cue_Client: String
+     * 	Tip_Consul: String
+     *  NumTransac: String,
+     *	FechaSis: String
+     * }
+     * </pre>
+     * @return
+	 * <pre>
+	 * { 
+	 * 	cuenta: {
+	 * 		Cue_Numero: String,
+	 * 		Cue_Moneda: String,
+	 * 		Mon_Descri: String,
+	 * 		Mon_Abrevi: String,
+	 * 		Tip_Descri: String,
+	 * 		Cue_Dispon: Double,
+	 * 		Cue_Clabe: String,
+	 * 		Cue_Tipo: String,
+	 * 		Cue_Reteni: Double	
+	 * 	}
+	 * }
+	 */
+	
+	
+	public JsonObject cuentaDatosConsultar(JsonObject cuentaDatosConsultar) {
+		logger.info("COMMONS: Comenzando cuentaDatosConsultar metodo... ");
+		
+		if(!cuentaDatosConsultar.has("NumTransac")) {
+			cuentaDatosConsultar.addProperty("NumTransac", "");
+		} 
+		
+		cuentaDatosConsultar.addProperty("Tip_Consul", CuentaDatosConsultarTipConsul);
+		cuentaDatosConsultar.addProperty("Transaccio", CuentaDatosConsultarTransaccio);
+		cuentaDatosConsultar.addProperty("Usuario", CuentaDatosConsultarUsuario);
+		cuentaDatosConsultar.addProperty("SucOrigen", CuentaDatosConsultarSucOrigen);
+		cuentaDatosConsultar.addProperty("SucDestino", CuentaDatosConsultarSucDestino);
+		cuentaDatosConsultar.addProperty("Modulo", CuentaDatosConsultarOpModulo);
+		
+		JsonObject cuentaDatosConsultarOpResultadoObjeto = Utilerias.performOperacion(CuentaServicio, CuentaDatosConsultarOp, cuentaDatosConsultar);
+		logger.debug("cuentaDatosConsultarOpResultadoObjeto" + cuentaDatosConsultarOpResultadoObjeto);
+		logger.info("COMMONS: Finalizando cuentaDatosConsultar metodo... ");
+		
+		return cuentaDatosConsultarOpResultadoObjeto;
 	}
 
 	/**

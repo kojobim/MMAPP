@@ -1,6 +1,7 @@
 package com.bim.msf4j.ctrl;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -15,7 +16,7 @@ import com.bim.commons.exceptions.BadRequestException;
 import com.bim.commons.exceptions.ConflictException;
 import com.bim.commons.exceptions.InternalServerException;
 import com.bim.commons.exceptions.UnauthorizedException;
-import com.bim.commons.service.TokenServicio;
+import com.bim.commons.service.CuentaServicio;
 import com.bim.commons.service.UsuarioServicio;
 import com.bim.commons.utils.Racal;
 import com.bim.commons.utils.Utilerias;
@@ -27,13 +28,62 @@ public class CoDiCtrl extends BimBaseCtrl{
 	private static final Logger LOGGER = Logger.getLogger(CoDiCtrl.class);
 	
 	private UsuarioServicio usuarioServicio;
+	private CuentaServicio cuentaServicio;
 			
 	public CoDiCtrl() {
 		super();
 		
 		this.usuarioServicio = new UsuarioServicio();
+		this.cuentaServicio = new CuentaServicio();
+				
+	}
+	
+	@Path("/cuenta-principal")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response obtenerCuentaPrincipal(@HeaderParam("Authorization") String token) {
+		LOGGER.info("CTRL: Comenzando obtenerCuentaPrincipal metodo");
+		JsonObject usuarioPrincipal = Utilerias.obtenerPrincipal(token);
+		JsonObject resultado = null;
+		JsonObject cuentaDatosElemento = null;
+		JsonObject usuarioRequest = null;
+		JsonObject cuentaDatosRequest = null;
+		
+		JsonObject usuario = null;
+		JsonObject cuentaDatos = null;
+		
+		String usuClave = Utilerias.obtenerStringPropiedad(usuarioPrincipal, "usuClave");
+		String fechaSis = Utilerias.obtenerFechaSis();
+		
+		usuarioRequest = new JsonObject();
+		usuarioRequest.addProperty("Usu_Clave", usuClave);
+		usuarioRequest.addProperty("FechaSis",fechaSis);		
+		usuario = this.usuarioServicio.usuarioConsultar(usuarioRequest);
+		usuario = Utilerias.obtenerJsonObjectPropiedad(usuario, "usuario");
+		
+		cuentaDatosRequest = new JsonObject();
+		cuentaDatosRequest.addProperty("Cue_Numero", Utilerias.obtenerStringPropiedad(usuario, "Usu_CuCaCo"));
+		cuentaDatosRequest.addProperty("FechaSis", fechaSis);
+		cuentaDatosRequest.addProperty("Cue_Client", "");
+		cuentaDatos = this.cuentaServicio.cuentaDatosConsultar(cuentaDatosRequest);
+		cuentaDatos = Utilerias.obtenerJsonObjectPropiedad(cuentaDatos, "cuenta");
+		
+		cuentaDatosElemento = new JsonObject();
+		cuentaDatosElemento.addProperty("cueNumero", Utilerias.obtenerStringPropiedad(cuentaDatos, "Cue_Numero"));
+		cuentaDatosElemento.addProperty("cueMoneda", Utilerias.obtenerStringPropiedad(cuentaDatos, "Cue_Moneda"));
+		cuentaDatosElemento.addProperty("monDescri", Utilerias.obtenerStringPropiedad(cuentaDatos, "Mon_Descri"));
+		cuentaDatosElemento.addProperty("monAbrevi", Utilerias.obtenerStringPropiedad(cuentaDatos, "Mon_Abrevi"));
+		cuentaDatosElemento.addProperty("tipDescri", Utilerias.obtenerStringPropiedad(cuentaDatos, "Tip_Descri"));
+		cuentaDatosElemento.addProperty("cueDispon", Utilerias.obtenerDoublePropiedad(cuentaDatos, "Cue_Dispon"));
+		cuentaDatosElemento.addProperty("cueClabe", Utilerias.obtenerStringPropiedad(cuentaDatos, "Cue_Clabe"));
+		cuentaDatosElemento.addProperty("cueTipo", Utilerias.obtenerStringPropiedad(cuentaDatos, "Cue_Tipo"));
+		cuentaDatosElemento.addProperty("cueReteni", Utilerias.obtenerDoublePropiedad(cuentaDatos, "Cue_Reteni"));
 		
 		
+		resultado = new JsonObject();
+		resultado.add("cuentaDatos", cuentaDatosElemento);
+		
+		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON).build();
 	}
 	
 	@Path("/autoriza")
