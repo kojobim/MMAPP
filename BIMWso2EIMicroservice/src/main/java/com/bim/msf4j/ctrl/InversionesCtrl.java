@@ -2336,7 +2336,13 @@ public class InversionesCtrl extends BimBaseCtrl {
 		String usuNombre = Utilerias.obtenerStringPropiedad(principalResultadoObjeto, "usuNombre");
 		String usuEmail = Utilerias.obtenerStringPropiedad(principalResultadoObjeto, "usuEmail");
 		
+		JsonObject datosCuentaOrigenConsultar = null;
 		JsonObject inversionCede = Utilerias.obtenerJsonObjectPropiedad(datosInversionCede, "inversion");
+		JsonObject consultaCuentaOrigenOpResultado = null;
+		JsonObject cuenta = null;
+		Double corMonDia = null;
+		Double corMoLiDi = null;	
+		Double montoAcumulado = null;
 		
 		String cpRSAToken = Utilerias.obtenerStringPropiedad(inversionCede, "cpRSAToken");
 		
@@ -2461,10 +2467,40 @@ public class InversionesCtrl extends BimBaseCtrl {
 			bimMessageDTO.addMergeVariable("valor", diaAmo.toString());
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
-		
-		String fotNumero = InversionesCedeFormulasEnum.validarProducto(producto);
+
 		
 		String fechaSis = Utilerias.obtenerFechaSis();
+		
+		datosCuentaOrigenConsultar = new JsonObject();
+		datosCuentaOrigenConsultar.addProperty("Cor_Usuari", usuNumero);
+		datosCuentaOrigenConsultar.addProperty("Cor_Cuenta", invCuenta);
+		datosCuentaOrigenConsultar.addProperty("Tip_Consul", ConsultaInversionPagareCuentaTipoC1);
+		datosCuentaOrigenConsultar.addProperty("FechaSis", fechaSis);
+		
+		consultaCuentaOrigenOpResultado = this.cuentaServicio.cuentaOrigenConsultar(datosCuentaOrigenConsultar);
+		if(logger.isDebugEnabled()) {
+			logger.info("consultaCuentaOrigenOpResultado" + consultaCuentaOrigenOpResultado);
+			}
+		
+		cuenta = Utilerias.obtenerJsonObjectPropiedad(consultaCuentaOrigenOpResultado, "cuenta");
+		corMonDia = Utilerias.obtenerDoublePropiedad(cuenta, "Cor_MonDia");
+		corMoLiDi = Utilerias.obtenerDoublePropiedad(cuenta, "Cor_MoLiDi");	
+		if(corMoLiDi == null || "0".equals(corMoLiDi.toString())){
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.78");
+			throw new ForbiddenException(bimMessageDTO.toString());
+		}
+
+		montoAcumulado = corMonDia + monto;		
+		
+		/**
+		 * REGLA DE NEGOCIO: Validar el monto maximo Diario permitido para inversiones, depende de cada usuario.
+		 */
+		if(corMoLiDi < montoAcumulado) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.77");
+			throw new ForbiddenException(bimMessageDTO.toString());
+		}
+		
+		String fotNumero = InversionesCedeFormulasEnum.validarProducto(producto);
 		
 		JsonObject datosTasaInversionesCedeConsultar = new JsonObject();
 		datosTasaInversionesCedeConsultar.addProperty("Tas_Plazo", plaNumero);
@@ -2722,9 +2758,20 @@ public class InversionesCtrl extends BimBaseCtrl {
 		/**
 		 * REGLA DE NEGOCIO: Envio de correo con plantilla establecida por BIM y encriptado de digito verificador
 		 */
-
-		String asunto = Utilerias.obtenerPropiedadPlantilla("mail.alta_inversion_cede_valor.asunto");
-		String plantilla = Utilerias.obtenerPlantilla("alta-inversion-cede-valor");
+		
+		String asuntoProducto = null;
+		String plantillaProducto = null;
+		
+		if("CEDE_VALOR".equals(producto)){
+			asuntoProducto = "mail.alta_inversion_cede_valor.asunto";
+			plantillaProducto = "alta-inversion-cede-valor";
+		}else{
+			asuntoProducto = "mail.alta_inversion_cede_fija.asunto";
+			plantillaProducto = "alta-inversion-cede-fija";
+		}
+		
+		String asunto = Utilerias.obtenerPropiedadPlantilla(asuntoProducto);
+		String plantilla = Utilerias.obtenerPlantilla(plantillaProducto);
 
 		SimpleDateFormat sdfTemp = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		Date fechaSisRedu = null;
@@ -2755,6 +2802,9 @@ public class InversionesCtrl extends BimBaseCtrl {
 		emailTemplateDTO.addMergeVariable("Inv_FecVen", invFecVen);
 		emailTemplateDTO.addMergeVariable("Tas_Referencia", tasEsquema);
 		emailTemplateDTO.addMergeVariable("Inv_ISR", invISR.toString());
+		emailTemplateDTO.addMergeVariable("Inv_Tasa", invTasa.toString());
+		emailTemplateDTO.addMergeVariable("Inv_CanNet", String.valueOf(formatter.format(invCanNet)));
+		emailTemplateDTO.addMergeVariable("Inv_CanNet", String.valueOf(formatter.format(invCanTot)));
 		emailTemplateDTO.addMergeVariable("NumTransac", folTransa);
 		emailTemplateDTO.addMergeVariable("Usu_Nombre", usuNombre);
 		emailTemplateDTO.addMergeVariable("FechaSis", fechaSisRedu != null ? sdf.format(fechaSisRedu) : "");
