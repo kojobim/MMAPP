@@ -826,4 +826,37 @@ public class Utilerias {
 				return calendario.getTime();
 		}
 	}
+	
+	public static String validaNumeroPlazoCategoria(String plaNumero, String producto) {
+		
+		switch(producto) {
+			case "CEDE_FIJA":
+				switch(plaNumero) {
+					case "01":
+						return "01";								
+					case "02":
+						return "02";					
+					case "03":
+						return "03";								
+					case "04":
+						return "04";								
+					default:
+						return null;
+				}			
+			case "CEDE_VALOR":
+				switch(plaNumero) {
+					case "19":
+						return "19";								
+					case "20":
+						return "20";					
+					case "21":
+						return "21";								
+					case "22":
+						return "22";								
+					default:
+						return null;				}
+			default:
+				return null;
+		}
+	}
 }
