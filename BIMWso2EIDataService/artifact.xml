@@ -4,7 +4,7 @@
     </artifact>
     <artifact name="UsuarioServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/UsuarioServicio.dbs</file>
-	</artifact>
+    </artifact>
     <artifact name="InversionesServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/InversionesServicio.dbs</file>
     </artifact>
@@ -37,13 +37,13 @@
     </artifact>
     <artifact name="SaldoServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/SaldoServicio.dbs</file>
-    </artifact>    
+    </artifact>
     <artifact name="TransaccionServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/TransaccionServicio.dbs</file>
-    </artifact>   
+    </artifact>
     <artifact name="MovimientosServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/MovimientosServicio.dbs</file>
-    </artifact>   
+    </artifact>
     <artifact name="CuentaDestinoServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/CuentaDestinoServicio.dbs</file>
     </artifact>
@@ -67,5 +67,8 @@
     </artifact>
     <artifact name="AmortizacionServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
         <file>dataservice/AmortizacionServicio.dbs</file>
+    </artifact>
+    <artifact name="CoDiServicio" groupId="com.bim.dataservice" version="1.0.0" type="service/dataservice" serverRole="DataServicesServer">
+        <file>dataservice/CoDiServicio.dbs</file>
     </artifact>
 </artifacts>

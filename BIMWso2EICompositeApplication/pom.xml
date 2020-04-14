@@ -40,6 +40,7 @@
     <com.bim.dataservice_._TransferenciasBIMServicio>capp/DataServicesServer</com.bim.dataservice_._TransferenciasBIMServicio>
     <com.bim.dataservice_._PasswordServicio>capp/DataServicesServer</com.bim.dataservice_._PasswordServicio>
     <com.bim.dataservice_._AmortizacionServicio>capp/DataServicesServer</com.bim.dataservice_._AmortizacionServicio>
+	<com.bim.dataservice_._CoDiServicio>capp/DataServicesServer</com.bim.dataservice_._CoDiServicio>
   </properties>
   <dependencies>
     <dependency>
@@ -56,6 +57,13 @@
 <!--       <version>1.0.0</version> -->
 <!--       <type>dbs</type> -->
 <!--     </dependency> -->
+
+    <dependency>
+      <groupId>com.bim.dataservice</groupId>
+      <artifactId>CoDiServicio</artifactId>
+      <version>1.0.0</version>
+      <type>dbs</type>
+    </dependency>
 
     <dependency>
       <groupId>com.bim.dataservice</groupId>

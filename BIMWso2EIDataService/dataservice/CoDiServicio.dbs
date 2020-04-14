@@ -1,0 +1,91 @@
+<data name="CoDiServicio" serviceGroup="CoDiServicio" serviceNamespace="CoDiServicio">
+    <description>capa de servicios para encapsulado CoDi</description>
+    <config id="BIMDB">
+        <property name="carbon_datasource_name">bim_db</property>
+    </config>
+    <query id="aceptarPagoCoDiSQL" useConfig="BIMDB">
+        <sql>
+    		EXECUTE SPCODIABALT
+                           @Cod_NumTra = :codNumTra,
+                           @Cod_TipAvi = :codTipAvi,
+                           @Cod_FoEsCD = :codFoEsCD,
+                           @Cod_Monto  = :codMonto,
+                           @Cod_Concep = :codConcep,
+                           @Cod_RefNum = :codRefNum,
+                           @Cod_NumCeC = :codNumCeC,
+                           @Cod_DigVeC = :codDigVeC,
+                           @Cod_BancoC = :codBancoC,
+                           @Cod_TipCuC = :codTipCuC,
+                           @Cod_CuentC = :codCuentC,
+                           @Cod_NumCeV = :codNumCeV,
+                           @Cod_DigVeV = :codDigVeV,
+                           @Cod_BancoV = :codBancoV,
+                           @Cod_TipCuV = :codTipCuV,
+                           @Cod_CuentV = :codCuentV,
+                           @Cod_NombrV = :codNombrV,
+                           @NumTransac = :numTransa,
+                           @Transaccio = :transaccio,
+                           @Usuario = :usuario,
+                           @FechaSis = :fechaSis,
+                           @SucOrigen = :sucOrigen,
+                           @SucDestino = :sucDestino,
+                           @Modulo = :modulo</sql>
+        <param name="codNumTra" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codTipAvi" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codFoEsCD" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codMonto" paramType="SCALAR" sqlType="NUMERIC" type="IN"/>
+        <param name="codConcep" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codRefNum" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codNumCeC" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codDigVeC" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codBancoC" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codTipCuC" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codCuentC" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codNumCeV" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codDigVeV" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codBancoV" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codTipCuV" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codCuentV" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="codNombrV" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="numTransa" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="transaccio" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="usuario" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="fechaSis" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucOrigen" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="sucDestino" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <param name="modulo" paramType="SCALAR" sqlType="STRING" type="IN"/>
+        <result defaultNamespace="http://bem.com/aceptarPagoCoDiNE" element="operacion">
+            <element column="Err_Codigo" name="Err_Codigo" xsdType="xs:string" optional="true"/>
+            <element column="Err_Mensaj" name="Err_Mensaj" xsdType="xs:string" optional="true"/>
+            <element column="Cod_Numero" name="Cod_Numero" xsdType="xs:string" optional="true"/>
+        </result>
+    </query>
+    <operation returnRequestStatus="true" name="aceptarPagoCoDiOp">
+        <call-query href="aceptarPagoCoDiSQL">
+            <with-param name="codNumTra" query-param="Cod_NumTra"/>
+            <with-param name="codTipAvi" query-param="Cod_TipAvi"/>
+            <with-param name="codFoEsCD" query-param="Cod_FoEsCD"/>
+            <with-param name="codMonto" query-param="Cod_Monto"/>
+            <with-param name="codConcep" query-param="Cod_Concep"/>
+            <with-param name="codRefNum" query-param="CodRefNum"/>
+            <with-param name="codNumCeC" query-param="Cod_NumCeC"/>
+            <with-param name="codDigVeC" query-param="Cod_DigVeC"/>
+            <with-param name="codBancoC" query-param="Cod_BancoC"/>
+            <with-param name="codTipCuC" query-param="Cod_TipCuC"/>
+            <with-param name="codCuentC" query-param="Cod_CuentC"/>
+            <with-param name="codNumCeV" query-param="Cod_NumCeV"/>
+            <with-param name="codDigVeV" query-param="Cod_DigVeV"/>
+            <with-param name="codBancoV" query-param="Cod_BancoV"/>
+            <with-param name="codTipCuV" query-param="Cod_TipCuV"/>
+            <with-param name="codCuentV" query-param="Cod_CuentV"/>
+            <with-param name="codNombrV" query-param="Cod_NombrV"/>
+            <with-param name="numTransa" query-param="NumTransac"/>
+            <with-param name="transaccio" query-param="Transaccio"/>
+            <with-param name="usuario" query-param="Usuario"/>
+            <with-param name="fechaSis" query-param="FechaSis"/>
+            <with-param name="sucOrigen" query-param="SucOrigen"/>
+            <with-param name="sucDestino" query-param="CucDestino"/>
+            <with-param name="modulo" query-param="Modulo"/>
+        </call-query>
+    </operation>
+</data>
