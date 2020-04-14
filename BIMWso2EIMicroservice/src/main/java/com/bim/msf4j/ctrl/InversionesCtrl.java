@@ -2109,7 +2109,8 @@ public class InversionesCtrl extends BimBaseCtrl {
 
 		correoServicio.enviarCorreo(usuEmail, asunto, cuerpo);
 
-		return Response.ok(resultado.toString(), MediaType.APPLICATION_JSON)
+		return Response.status(Response.Status.CREATED)
+				.type(MediaType.APPLICATION_JSON).entity(resultado.toString())
 				.build();
 	}
 	
@@ -2390,9 +2391,14 @@ public class InversionesCtrl extends BimBaseCtrl {
 		}
 		
 		String plaProduc = InversionesCedeTiposEnum.validarProducto(producto);
+		String plaNumValido = Utilerias.validaNumeroPlazoCategoria(plaNumero, producto);
 		
 		if (plaProduc == null) {
 			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.71");
+			throw new BadRequestException(bimMessageDTO.toString());
+		}
+		if (plaNumValido == null) {
+			BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.76");
 			throw new BadRequestException(bimMessageDTO.toString());
 		}
 		
