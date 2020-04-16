@@ -375,7 +375,7 @@ public class TransferenciasBIMCtrl extends BimBaseCtrl {
 				throw new BadRequestException(bimMessageDTO.toString());
 			}
 			
-			if(trbDurTra <= 0) {
+			if("T".equals(trbTipDur) && trbDurTra <= 0) {
 				BimMessageDTO bimMessageDTO = new BimMessageDTO("BIM.MENSAJ.69");
 				bimMessageDTO.addMergeVariable("nombrePropiedad", "trbDurTra");
 				throw new BadRequestException(bimMessageDTO.toString());
